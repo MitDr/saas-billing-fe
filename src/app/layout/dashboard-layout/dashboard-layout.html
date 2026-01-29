@@ -1,0 +1,50 @@
+<!--<div class="flex">-->
+<!--  <app-sidebar [isCollapsed]="isCollapsed"></app-sidebar>-->
+<!--  <app-dashboard-header-->
+<!--    [isCollapsed]="isCollapsed"-->
+<!--    (toggle)="toggleSidebar()"-->
+<!--  ></app-dashboard-header>-->
+<!--  <main class="flex-1 p-8">-->
+<!--    <router-outlet></router-outlet>-->
+<!--  </main>-->
+<!--</div>-->
+<!--<div class="flex h-screen">-->
+<!--  <app-sidebar [isCollapsed]="isCollapsed"></app-sidebar>-->
+
+<!--  <div class="flex flex-col flex-1">-->
+<!--    <app-dashboard-header-->
+<!--      [isCollapsed]="isCollapsed"-->
+<!--      (toggle)="toggleSidebar()"-->
+<!--    ></app-dashboard-header>-->
+
+<!--    <main class="flex-1 p-8">-->
+<!--&lt;!&ndash;      <router-outlet></router-outlet>&ndash;&gt;-->
+<!--    </main>-->
+<!--  </div>-->
+<!--</div>-->
+  <nz-layout class="h-screen !flex-row">
+
+    <!-- SIDEBAR -->
+    <app-sidebar
+      [isCollapsed]="isCollapsed"
+      class="flex"
+    ></app-sidebar>
+
+    <!-- RIGHT SIDE -->
+    <nz-layout>
+      <!-- HEADER -->
+      <app-dashboard-header
+        [isCollapsed]="isCollapsed"
+        (toggle)="toggleSidebar()"
+      ></app-dashboard-header>
+
+      <!-- CONTENT -->
+      <nz-content class="m-6">
+        <div class="p-6 bg-white h-full">
+          <router-outlet></router-outlet>
+        </div>
+      </nz-content>
+
+    </nz-layout>
+
+  </nz-layout>
