@@ -1,38 +1,62 @@
  <nz-sider class="min-h-screen shadow-[2px_0_6px_rgba(0,21,41,0.35)]"
     nzCollapsible
-    nzWidth="256px"
+    nzWidth="15rem"
     nzBreakpoint="md"
     [nzCollapsed]="isCollapsed()"
     [nzTrigger]="null"
   >
    <div class="h-16 px-6 flex items-center bg-[#001529]">
      <img alt="ant" class="h-8 w-8" src="https://ng.ant.design/assets/img/logo.svg" />
-     @if (!isCollapsed()) {
-       <h1 class="ml-5 !text-white text-sm font-semibold">
-         Ant Design of Angular
+       <h1 class="ml-5 !mb-0 !text-white text-sm font-semibold sidebar-title">
+         SaaS Billing
        </h1>
-     }
    </div>
     <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed()">
-      <li nz-submenu nzOpen nzTitle="Dashboard" nzIcon="dashboard">
-        <ul>
+      @for (item of menu(); track item) {
+        @if (!item.children) {
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/welcome">Welcome</a>
+            <a [routerLink]="item.path">
+              @if (item.icon) {
+                <span nz-icon [nzType]="item.icon"></span>
+                <span>{{item.title}}</span>
+              }
+            </a>
           </li>
-          <li nz-menu-item nzMatchRouter>
-            <a>Monitor</a>
+        } @else {
+          <li nz-submenu [nzTitle]="item.title" [nzIcon]="item.icon ?? null">
+            <ul>
+              @for (child of item.children; track child){
+                <li nz-menu-item nzMatchRouter>
+                  @if (child.icon){
+                    <span class="m-2" nz-icon [nzType]="child.icon!"></span>
+                  }
+                  <a [routerLink]="child.path">{{child.title}}</a>
+                </li>
+              }
+            </ul>
           </li>
-          <li nz-menu-item nzMatchRouter>
-            <a>Workplace</a>
-          </li>
-        </ul>
-      </li>
-      <li nz-submenu nzOpen nzTitle="Form" nzIcon="form">
-        <ul>
-          <li nz-menu-item nzMatchRouter>
-            <a>Basic Form</a>
-          </li>
-        </ul>
-      </li>
+        }
+      }
+
+<!--      <li nz-submenu nzOpen nzTitle="Dashboard" nzIcon="dashboard">-->
+<!--        <ul>-->
+<!--          <li nz-menu-item nzMatchRouter>-->
+<!--            <a routerLink="/welcome">Welcome</a>-->
+<!--          </li>-->
+<!--          <li nz-menu-item nzMatchRouter>-->
+<!--            <a>Monitor</a>-->
+<!--          </li>-->
+<!--          <li nz-menu-item nzMatchRouter>-->
+<!--            <a>Workplace</a>-->
+<!--          </li>-->
+<!--        </ul>-->
+<!--      </li>-->
+<!--      <li nz-submenu nzOpen nzTitle="Form" nzIcon="form">-->
+<!--        <ul>-->
+<!--          <li nz-menu-item nzMatchRouter>-->
+<!--            <a>Basic Form</a>-->
+<!--          </li>-->
+<!--        </ul>-->
+<!--      </li>-->
     </ul>
   </nz-sider>

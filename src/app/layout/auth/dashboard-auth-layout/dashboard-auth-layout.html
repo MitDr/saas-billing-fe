@@ -1,0 +1,27 @@
+<nz-layout class="h-screen !flex-row">
+
+  <!-- SIDEBAR -->
+  <app-sidebar
+    [isCollapsed]="isCollapsed"
+    class="flex"
+    [menu]="APP_MENU"
+  ></app-sidebar>
+
+  <!-- RIGHT SIDE -->
+  <nz-layout>
+    <!-- HEADER -->
+    <app-dashboard-header
+      [isCollapsed]="isCollapsed"
+      (toggle)="toggleSidebar()"
+    ></app-dashboard-header>
+
+    <!-- CONTENT -->
+    <nz-content class="m-6">
+      <div class="p-6 bg-white overflow-auto">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+
+  </nz-layout>
+
+</nz-layout>

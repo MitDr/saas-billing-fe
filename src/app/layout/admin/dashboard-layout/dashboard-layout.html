@@ -28,6 +28,7 @@
     <app-sidebar
       [isCollapsed]="isCollapsed"
       class="flex"
+      [menu]="ADMIN_SIDEBAR_MENU"
     ></app-sidebar>
 
     <!-- RIGHT SIDE -->
@@ -40,7 +41,7 @@
 
       <!-- CONTENT -->
       <nz-content class="m-6">
-        <div class="p-6 bg-white h-full">
+        <div class="p-6 bg-white h-full overflow-auto">
           <router-outlet></router-outlet>
         </div>
       </nz-content>

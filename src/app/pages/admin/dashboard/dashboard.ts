@@ -6,8 +6,6 @@ import {NzCardComponent} from 'ng-zorro-antd/card';
 @Component({
   selector: 'app-dashboard',
   imports: [
-    NzHeaderComponent,
-    NzButtonComponent,
     NzCardComponent
   ],
   templateUrl: './dashboard.html',

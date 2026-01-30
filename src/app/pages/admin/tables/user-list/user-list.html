@@ -1,0 +1,57 @@
+
+<h1 class="text-2xl font-semibold mb-6">
+  USER LIST
+</h1>
+<div class="send-request">
+  <button
+    nz-button
+    nzType="primary"
+    [disabled]="setOfCheckedId.size === 0"
+    [nzLoading]="loading">
+<!--    (click)="sendRequest()"-->
+<!--  >-->
+    Send Request
+  </button>
+  <span>Selected {{ setOfCheckedId.size }} items</span>
+</div>
+  <nz-table ngSkipHydration #basicTable [nzData]="users" [nzShowPagination]="true" nzShowSizeChanger [nzBordered]="true">
+    <thead>
+    <tr>
+      <th
+        [nzChecked]="checked"
+        [nzIndeterminate]="indeterminate"
+        nzLabel="Select all"
+        (nzCheckedChange)="onAllChecked($event)"
+      >
+      </th>
+      <th>Id</th>
+      <th>Username</th>
+      <th>Email</th>
+      <th>Role</th>
+      <th>Created Date</th>
+      <th>Modified Date</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (item of basicTable.data; track item) {
+        <tr>
+          <td
+            [nzChecked]="setOfCheckedId.has(item.id)"
+            [nzLabel]="item.username"
+            (nzCheckedChange)="onItemChecked(item.id, $event)"
+          >
+          </td>
+          <td>{{item.id}}</td>
+          <td>{{item.username}}</td>
+          <td>{{item.email}}</td>
+          <td><nz-tag [nzColor]="item.role == 'USER' ? 'red': 'blue'">{{item.role}}</nz-tag></td>
+          <td>{{item.createdDate}}</td>
+          <td>{{item.modifiedDate}}</td>
+          <td>
+            <a class="mr-2">Edit</a>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </nz-table>
