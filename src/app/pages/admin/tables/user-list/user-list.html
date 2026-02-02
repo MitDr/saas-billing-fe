@@ -2,21 +2,33 @@
 <h1 class="text-2xl font-semibold mb-6">
   USER LIST
 </h1>
-<div class="send-request">
-  <button
-    nz-button
-    nzType="primary"
-    [disabled]="setOfCheckedId.size === 0"
-    [nzLoading]="loading">
-<!--    (click)="sendRequest()"-->
-<!--  >-->
-    Send Request
-  </button>
-  <span>Selected {{ setOfCheckedId.size }} items</span>
+<div class="table-toolbar flex mb-16 flex-wrap gap-8 justify-between">
+  <div class="left">
+    <button
+      nz-button
+      nzDanger
+      [disabled]="setOfCheckedId.size === 0 || editing()"
+      (click)="multipleDelete()">
+      Delete
+    </button>
+
+    <span class="ml-2">
+      Selected {{ setOfCheckedId.size }}
+    </span>
+  </div>
 </div>
-  <nz-table ngSkipHydration #basicTable [nzData]="users" [nzShowPagination]="true" nzShowSizeChanger [nzBordered]="true">
+<div class="table-wrapper">
+  <nz-table
+    ngSkipHydration
+    #basicTable
+    [nzData]="users"
+    [nzShowPagination]="true"
+    nzShowSizeChanger
+    [nzBordered]="true"
+  >
     <thead>
     <tr>
+
       <th
         [nzChecked]="checked"
         [nzIndeterminate]="indeterminate"
@@ -42,16 +54,45 @@
             (nzCheckedChange)="onItemChecked(item.id, $event)"
           >
           </td>
-          <td>{{item.id}}</td>
-          <td>{{item.username}}</td>
-          <td>{{item.email}}</td>
-          <td><nz-tag [nzColor]="item.role == 'USER' ? 'red': 'blue'">{{item.role}}</nz-tag></td>
-          <td>{{item.createdDate}}</td>
-          <td>{{item.modifiedDate}}</td>
-          <td>
-            <a class="mr-2">Edit</a>
-          </td>
+          @if (!editCache[item.id].edit){
+            <td>{{item.id}}</td>
+            <td>{{item.username}}</td>
+            <td>{{item.email}}</td>
+            <td><nz-tag [nzColor]="item.role == 'USER' ? 'red': 'blue'">{{item.role}}</nz-tag></td>
+            <td>{{item.createdDate}}</td>
+            <td>{{item.modifiedDate}}</td>
+            <td>
+              <a class="mr-2" (click)="startEdit(item.id)">Edit</a>
+            </td>
+          } @else {
+            <td>{{item.id}}</td>
+            <td><input class="min-w-140 w-full" type="text" nz-input [(ngModel)]="editCache[item.id].data.username"></td>
+            <td><input class="min-w-140 w-full" type="text" nz-input [(ngModel)]="editCache[item.id].data.email"></td>
+            <td>
+              <nz-select
+              class="w-full"
+              [(ngModel)]="editCache[item.id].data.role">
+              @for (r of ROLE; track r.value) {
+                <nz-option
+                  [nzLabel]="r.label"
+                  [nzValue]="r.value">
+                </nz-option>
+              }
+              </nz-select>
+            </td>
+
+            <!--            <td><nz-tag [nzColor]="item.role == 'USER' ? 'red': 'blue'">{{item.role}}</nz-tag></td>-->
+            <td>{{item.createdDate}}</td>
+            <td>{{item.modifiedDate}}</td>
+<!--            <td><input class="min-w-140 w-full" type="text" nz-input [(ngModel)]="editCache[item.id].data.createdDate"></td>-->
+<!--            <td><input class="min-w-140 w-full" type="text" nz-input [(ngModel)]="editCache[item.id].data.modifiedDate"></td>-->
+            <td>
+              <a (click)="saveEdit(item.id)" class="save mr-2">Save</a>
+              <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?" (nzOnConfirm)="cancelEdit(item.id)">Cancel</a>
+            </td>
+          }
         </tr>
       }
     </tbody>
   </nz-table>
+</div>
