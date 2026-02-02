@@ -1,0 +1,120 @@
+<div class="table-toolbar flex justify-between mb-4 flex-wrap gap-3">
+  <div class="left">
+    @if (showBulkDelete()) {
+      <button
+        (click)="onBulkDelete()"
+        [disabled]="setOfCheckedId().size === 0 || editing()"
+        nz-button
+        nzDanger
+      >
+        Delete ({{ setOfCheckedId().size }})
+      </button>
+    }
+  </div>
+  <ng-content select="[table-toolbar]"></ng-content>
+</div>
+<div class="ant-table-wrapper">
+  <nz-table
+    #nzTable
+    [nzData]="data()"
+    [nzFrontPagination]="true"
+    [nzLoading]="loading()"
+    [nzPageSizeOptions]="pageSizeOptions()"
+    ngSkipHydration
+    nzBordered
+    nzShowSizeChanger
+  >
+    <thead class="ant-table-thead">
+    <tr class="ant-table-row">
+      @if (showBulkDelete()) {
+        <th
+          (nzCheckedChange)="onAllChecked($event)"
+          [(nzChecked)]="checked"
+          [nzIndeterminate]="indeterminate()"
+          nzLabel="Select all"
+          class="ant-table-cell"
+        ></th>
+      }
+
+
+      @for (col of columns(); track col.key) {
+        <th class="ant-table-cell">{{ col.title }}</th>
+      }
+
+      @if (rowActions().length > 0 || true) {
+        <th class="ant-table-cell">Action</th>
+      }
+    </tr>
+    </thead>
+
+    <tbody class="ant-table-tbody">
+      @for (item of nzTable.data; track item.id) {
+        <tr class="ant-table-row">
+          @if (showBulkDelete()) {
+            <td
+              [nzChecked]="setOfCheckedId().has(item.id)"
+              (nzCheckedChange)="onItemChecked(item.id, $event)"
+              class="ant-table-cell"
+            >
+            </td>
+          }
+
+
+          @for (col of columns(); track col.key) {
+            <td class="ant-table-cell">
+              @if (editCache()[item.id]?.edit && col.editable) {
+                @switch (col.type) {
+                  @case ('text') {
+                    <input nz-input [(ngModel)]="editCache()[item.id].data[col.key]"/>
+                  }
+                  @case ('select') {
+                    <nz-select [(ngModel)]="editCache()[item.id].data[col.key]">
+                      @for (opt of col.options; track opt.value) {
+                        <nz-option [nzLabel]="opt.label" [nzValue]="opt.value"></nz-option>
+                      }
+                    </nz-select>
+                  }
+                  @default {
+                    {{ editCache()[item.id].data[col.key] }}
+                  }
+                }
+              } @else {
+                @if (col.type === 'select') {
+                  <nz-tag class="ant-tag" [nzColor]="(item[col.key] === 'USER' ? 'red' : 'blue')">
+                    {{ item[col.key] }}
+                  </nz-tag>
+                } @else if (col.template) {
+                  <ng-container *ngTemplateOutlet="col.template; context: { $implicit: item }"></ng-container>
+                } @else {
+                  {{ item[col.key] }}
+                }
+              }
+            </td>
+          }
+
+          <td>
+            @if (!editCache()[item.id]?.edit) {
+              @for (action of rowActions(); track action.label) {
+                <a class="mr-2" [class.text-red-500]="action.danger" (click)="action.action(item)">
+                  {{ action.label }}
+                </a>
+              }
+              <a class="mr-2" (click)="startEdit(item.id)">Edit</a>
+            } @else {
+              <a class="mr-2 text-green-600" (click)="saveEdit(item.id)">Save</a>
+              <a nz-popconfirm
+                 nzPopconfirmTitle="Sure to cancel?"
+                 (nzOnConfirm)="cancelEdit(item.id)">Cancel</a>
+            }
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td [colSpan]="columns().length + 2" class="text-center py-8 text-gray-500">
+            No data
+          </td>
+        </tr>
+      }
+    </tbody>
+  </nz-table>
+</div>

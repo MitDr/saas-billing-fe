@@ -1,4 +1,4 @@
-import {Component, input, OnInit, signal} from '@angular/core';
+import {Component, signal} from '@angular/core';
 import {User} from '../../../../core/interface/user';
 import {NzTableModule} from 'ng-zorro-antd/table';
 import {NzTagComponent} from 'ng-zorro-antd/tag';
@@ -6,7 +6,9 @@ import {NzPopconfirmDirective} from 'ng-zorro-antd/popconfirm';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzInputDirective} from 'ng-zorro-antd/input';
 import {FormsModule} from '@angular/forms';
-import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
+import {NzOptionComponent} from 'ng-zorro-antd/select';
+import {EditableDataTable} from '../../../../shell/components/editable-data-table/editable-data-table';
+import {ColumnConfig} from '../../../../core/interface/column-config';
 
 @Component({
   selector: 'app-user-list',
@@ -18,99 +20,144 @@ import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
     NzInputDirective,
     FormsModule,
     NzOptionComponent,
-    NzSelectComponent,
+    EditableDataTable,
   ],
   templateUrl: './user-list.html',
   styleUrl: './user-list.css',
 })
-export class UserList implements OnInit{
+export class UserList {
+  users = signal<User[]>(FAKE_USERS);
+  checked = false;
+  protected readonly USER_COLUMNS: ColumnConfig<User>[] = [
+    {key: 'id', title: 'Id', editable: false},
+    {key: 'username', title: 'Username', editable: true, type: 'text'},
+    {key: 'email', title: 'Email', editable: true, type: 'text'},
+    {
+      key: 'role',
+      title: 'Role',
+      editable: true,
+      type: 'select',
+      options: ROLE_OPTIONS
+    },
+    {key: 'createdDate', title: 'Created Date', editable: false},
+    {key: 'modifiedDate', title: 'Modified Date', editable: false},
+  ];
 
-  users:User[]=FAKE_USERS;
-
-  checked= false;
-  loading= false;
-  indeterminate = false;
-  listOfCurrentData:User[] = [];
-  setOfCheckedId= new Set<number>;
-  editing = signal(false);
-  ROLE = ROLE_OPTIONS
-
-  editCache: {
-    [key: string]:{
-      edit: boolean;
-      data: User
-    }
-  } = {}
-
-  updateCheckedSet(id:number, checked:boolean){
-    if (checked){
-      this.setOfCheckedId.add(id);
-    }
-    else{
-      this.setOfCheckedId.delete(id);
-    }
+  onSaveUser(updatedUser: User) {
+    // gọi API hoặc update signal
+    this.users.update(list =>
+      list.map(u => u.id === updatedUser.id ? updatedUser : u)
+    );
   }
 
-  onCurrentPageDataChange(listOfCurrentPageData: User[]){
-    this.listOfCurrentData = listOfCurrentPageData;
-    this.refreshCheckedStatus();
+  onDeleteUser(user: User) {
+    this.users.update(list => list.filter(u => u.id !== user.id));
   }
 
-  refreshCheckedStatus(){
-    const listOfEnabledData = this.listOfCurrentData;
-    this.checked = listOfEnabledData.every(({ id }) => this.setOfCheckedId.has(id));
-    this.indeterminate = listOfEnabledData.some(({ id }) => this.setOfCheckedId.has(id)) && !this.checked;
+  onBulkDelete(ids: number[]) {
+    this.users.update(list =>
+      list.filter(u => !ids.includes(u.id))
+    );
   }
 
-  onItemChecked(id: number, checked: boolean): void {
-    this.updateCheckedSet(id, checked);
-    this.refreshCheckedStatus();
-  }
 
-  onAllChecked(checked: boolean): void {
-    this.users
-      .forEach(({ id }) => this.updateCheckedSet(id, checked));
-    this.refreshCheckedStatus();
-  }
-
-  startEdit(id: number){
-    this.editCache[id].edit = true;
-    this.editing.update(()=>true);
-  }
-
-  cancelEdit(id: number){
-    const index = this.users.findIndex(item => item.id === id);
-    this.editCache[id] = {
-      data: {...this.users[index]
-      },
-      edit: false
-    };
-    this.editing.update(()=>false);
-  }
-
-  saveEdit(id: number){
-    const index = this.users.findIndex(item => item.id === id);
-    Object.assign(this.users[index], this.editCache[id].data);
-    this.editCache[id].edit = false;
-    this.editing.update(()=>false)
-  }
-
-  updateEditCache(){
-    this.users.forEach(item => {
-      this.editCache[item.id] = {
-        edit: false,
-        data: { ...item }
-      };
-    });
-  }
-
-  ngOnInit(): void {
-    this.updateEditCache();
-  }
-
-  multipleDelete(){
-    console.log("Delete");
-  }
+  // users: User[] = FAKE_USERS;
+  // loading = false;
+  // indeterminate = false;
+  // listOfCurrentData: User[] = [];
+  // setOfCheckedId = new Set<number>;
+  // editing = signal(false);
+  // ROLE = ROLE_OPTIONS
+  // editCache: {
+  //   [key: string]: {
+  //     edit: boolean;
+  //     data: User
+  //   }
+  // } = {}
+  // checked = false;
+  // // }
+  // protected readonly USER_COLUMN = USER_COLUMNS;
+  //
+  // updateCheckedSet(id: number, checked: boolean) {
+  //   if (checked) {
+  //     this.setOfCheckedId.add(id);
+  //   } else {
+  //     this.setOfCheckedId.delete(id);
+  //   }
+  // }
+  //
+  // onCurrentPageDataChange(listOfCurrentPageData: User[]) {
+  //   this.listOfCurrentData = listOfCurrentPageData;
+  //   this.refreshCheckedStatus();
+  // }
+  //
+  // refreshCheckedStatus() {
+  //   const listOfEnabledData = this.listOfCurrentData;
+  //   this.checked = listOfEnabledData.every(({id}) => this.setOfCheckedId.has(id));
+  //   this.indeterminate = listOfEnabledData.some(({id}) => this.setOfCheckedId.has(id)) && !this.checked;
+  // }
+  //
+  // onItemChecked(id: number, checked: boolean): void {
+  //   this.updateCheckedSet(id, checked);
+  //   this.refreshCheckedStatus();
+  // }
+  //
+  // onAllChecked(checked: boolean): void {
+  //   this.users
+  //     .forEach(({id}) => this.updateCheckedSet(id, checked));
+  //   this.refreshCheckedStatus();
+  // }
+  //
+  // startEdit(id: number) {
+  //   this.editCache[id].edit = true;
+  //   this.editing.update(() => true);
+  // }
+  //
+  // cancelEdit(id: number) {
+  //   const index = this.users.findIndex(item => item.id === id);
+  //   this.editCache[id] = {
+  //     data: {
+  //       ...this.users[index]
+  //     },
+  //     edit: false
+  //   };
+  //   this.editing.update(() => false);
+  // }
+  //
+  // saveEdit(id: number) {
+  //   const index = this.users.findIndex(item => item.id === id);
+  //   Object.assign(this.users[index], this.editCache[id].data);
+  //   this.editCache[id].edit = false;
+  //   this.editing.update(() => false)
+  // }
+  //
+  // updateEditCache() {
+  //   this.users.forEach(item => {
+  //     this.editCache[item.id] = {
+  //       edit: false,
+  //       data: {...item}
+  //     };
+  //   });
+  // }
+  //
+  // ngOnInit(): void {
+  //   this.updateEditCache();
+  // }
+  //
+  // multipleDelete() {
+  //   console.log("Delete");
+  // }
+  //
+  // onSave(event: { row: User }) {
+  //   console.log('Nhận từ table:', event.row);
+  //
+  //   // Sau này thay bằng gọi API
+  //   const index = this.users.findIndex(u => u.id === event.row.id);
+  //
+  //   if (index !== -1) {
+  //     this.users[index] = event.row;
+  //   }
+  // }
 }
 
 export const FAKE_USERS: User[] = [
@@ -247,7 +294,7 @@ export const FAKE_USERS: User[] = [
 export type Role = 'ADMIN' | 'USER';
 
 export const ROLE_OPTIONS = [
-  { label: 'Admin', value: 'ADMIN', color: 'blue' },
-  { label: 'User', value: 'USER', color: 'green' }
+  {label: 'Admin', value: 'ADMIN', color: 'blue'},
+  {label: 'User', value: 'USER', color: 'green'}
 ];
 
