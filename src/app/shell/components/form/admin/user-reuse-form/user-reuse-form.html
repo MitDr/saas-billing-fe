@@ -1,0 +1,53 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="formGroup()" nz-form>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="username">Username</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Username phải từ 4-20 ký tự!">
+      <input nz-input formControlName="username" id="username" autocomplete="username" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">E-mail</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Email không hợp lệ!">
+      <input nz-input formControlName="email" id="email" autocomplete="email" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="password">Password</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Vui lòng nhập password!">
+      <input nz-input type="password" formControlName="password" id="password" autocomplete="new-password" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="checkPassword">Confirm Password</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="checkPasswordErrorTpl">
+      <input nz-input type="password" formControlName="checkPassword" id="checkPassword" autocomplete="new-password" />
+      <ng-template #checkPasswordErrorTpl let-control>
+        @if (control.errors?.['required']) { Vui lòng xác nhận password! }
+        @if (control.errors?.['confirm']) { Hai password không khớp nhau! }
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="role">Role</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Role là bắt buộc!">
+      <nz-select formControlName="role" nzPlaceHolder="Chọn role">
+        @for (opt of options; track opt.value) {
+          <nz-option [nzLabel]="opt.label" [nzValue]="opt.value"></nz-option>
+        }
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item nz-row class="register-area">
+    <nz-form-control [nzSpan]="14" [nzOffset]="6">
+<!--      <button nz-button nzType="primary" [nzLoading]="isLoading" [disabled]="formGroup()?.invalid">-->
+      <button nz-button nzType="primary" [disabled]="formGroup()?.invalid">
+        {{ submitLabel() }}
+      </button>
+    </nz-form-control>
+  </nz-form-item>
+</form>

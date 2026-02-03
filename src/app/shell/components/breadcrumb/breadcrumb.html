@@ -1,0 +1,20 @@
+<nz-breadcrumb>
+  @for (route of routes(); track route) {
+    <nz-breadcrumb-item>
+      @if (route.activable) {
+        <a [routerLink]="route.route">{{route.name}}</a>
+      } @else {
+        {{route.name}}
+      }
+    </nz-breadcrumb-item>
+  }
+<!--  <nz-breadcrumb-item>-->
+<!--    <a routerLink="/admin/dashboard">Dashboard</a>-->
+<!--  </nz-breadcrumb-item>-->
+<!--  <nz-breadcrumb-item>-->
+<!--    Tables-->
+<!--  </nz-breadcrumb-item>-->
+<!--  <nz-breadcrumb-item>-->
+<!--    <a routerLink="/admin/tables/users">Users</a>-->
+<!--  </nz-breadcrumb-item>-->
+</nz-breadcrumb>

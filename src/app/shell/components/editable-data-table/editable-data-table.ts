@@ -9,6 +9,8 @@ import {NzPopconfirmDirective} from 'ng-zorro-antd/popconfirm';
 import {NzInputDirective} from 'ng-zorro-antd/input';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NgTemplateOutlet} from '@angular/common';
+import {Breadcrumb} from '../breadcrumb/breadcrumb';
+import {BreadCrumbInterface} from '../../../core/interface/bread-crumb-interface';
 
 @Component({
   selector: ' app-editable-data-table',
@@ -24,6 +26,7 @@ import {NgTemplateOutlet} from '@angular/common';
     NgTemplateOutlet,
     NzThSelectionComponent,
     NzTdAddOnComponent,
+    Breadcrumb,
   ],
   templateUrl: './editable-data-table.html',
   styleUrl: './editable-data-table.css',
@@ -36,6 +39,7 @@ export class EditableDataTable<T extends { id: number }> {
   loading = input<boolean>(false);
   pageSizeOptions = input<number[]>([10, 20, 50, 100]);
   showBulkDelete = input<boolean>(true);
+  routes = input<BreadCrumbInterface[]>();
 
   // Outputs
   saveRow = output<T>();
@@ -63,7 +67,7 @@ export class EditableDataTable<T extends { id: number }> {
         cache[item.id] = {edit: false, data: {...item}};
       });
       this.editCache.set(cache);
-    }, {allowSignalWrites: true});
+    });
   }
 
   updateCheckedSet(id: number, checked: boolean): void {

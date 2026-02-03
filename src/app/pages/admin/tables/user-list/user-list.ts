@@ -9,18 +9,17 @@ import {FormsModule} from '@angular/forms';
 import {NzOptionComponent} from 'ng-zorro-antd/select';
 import {EditableDataTable} from '../../../../shell/components/editable-data-table/editable-data-table';
 import {ColumnConfig} from '../../../../core/interface/column-config';
+import {USER_ROUTE_CONSTANT} from '../../../../core/constant/user-list-constant';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-user-list',
   imports: [
     NzTableModule,
-    NzTagComponent,
-    NzPopconfirmDirective,
     NzButtonComponent,
-    NzInputDirective,
     FormsModule,
-    NzOptionComponent,
     EditableDataTable,
+    RouterLink,
   ],
   templateUrl: './user-list.html',
   styleUrl: './user-list.css',
@@ -28,6 +27,8 @@ import {ColumnConfig} from '../../../../core/interface/column-config';
 export class UserList {
   users = signal<User[]>(FAKE_USERS);
   checked = false;
+  createRoute = '/admin/tables/users/create'
+  userListRouting = USER_ROUTE_CONSTANT;
   protected readonly USER_COLUMNS: ColumnConfig<User>[] = [
     {key: 'id', title: 'Id', editable: false},
     {key: 'username', title: 'Username', editable: true, type: 'text'},

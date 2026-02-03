@@ -1,6 +1,12 @@
-<h1 class="text-2xl font-semibold mb-6">
-  USER LIST
-</h1>
+<div class="mb-4 flex justify-between">
+  <h1 class="text-2xl font-semibold mb-6">
+    USER LIST
+  </h1>
+  <ng-container class="mb-4">
+    <button nz-button nzType="primary" [routerLink]="createRoute">+ Add User</button>
+  </ng-container>
+
+</div>
 <!--<div class="table-toolbar flex mb-16 flex-wrap gap-8 justify-between">-->
 <!--  <div class="left">-->
 <!--    <button-->
@@ -103,9 +109,7 @@
   (deleteRow)="onDeleteUser($event)"
   (saveRow)="onSaveUser($event)"
   [columns]="USER_COLUMNS"
-  [data]="users()">
+  [data]="users()"
+  [routes]="userListRouting">
 </app-editable-data-table>
-<ng-container>
-  <button nz-button nzType="primary">+ Add User</button>
-</ng-container>
 

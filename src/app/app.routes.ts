@@ -7,6 +7,8 @@ import {DashboardLayout} from './layout/admin/dashboard-layout/dashboard-layout'
 import {DashboardAuthLayout} from './layout/auth/dashboard-auth-layout/dashboard-auth-layout';
 import {AuthDashboard} from './pages/auth/auth-dashboard/auth-dashboard';
 import {UserList} from './pages/admin/tables/user-list/user-list';
+import {UserForm} from './pages/admin/tables/user-form/user-form';
+import {UserCreate} from './pages/admin/tables/user-create/user-create';
 
 export const routes: Routes = [
   {
@@ -30,6 +32,10 @@ export const routes: Routes = [
       {
         path: 'tables/users',
         component: UserList
+      },
+      {
+        path: 'tables/users/create',
+        component: UserCreate
       }
     ]
   },

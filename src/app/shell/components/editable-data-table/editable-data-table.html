@@ -11,6 +11,9 @@
       </button>
     }
   </div>
+  <div class="right">
+    <app-breadcrumb [routes]="routes()"></app-breadcrumb>
+  </div>
   <ng-content select="[table-toolbar]"></ng-content>
 </div>
 <div class="ant-table-wrapper">

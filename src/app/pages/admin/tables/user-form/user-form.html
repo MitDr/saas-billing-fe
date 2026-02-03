@@ -1,0 +1,69 @@
+<div class="page-container">
+  <h1 class="text-2xl font-semibold mb-6">Create User</h1>
+  <div class="flex justify-end mb-4 flex-wrap gap-3">
+    <div class="right">
+      <app-breadcrumb [routes]="route"></app-breadcrumb>
+    </div>
+  </div>
+  <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="username">Username</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid Username!">
+        <input nz-input formControlName="username" id="username" autocomplete="username"/>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">E-mail</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid E-mail!">
+        <input nz-input formControlName="email" id="email" autocomplete="email" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="password" nzRequired>Password</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your password!">
+        <input nz-input type="password" id="password" formControlName="password" autocomplete="new-password" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="checkPassword" nzRequired>Confirm Password</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorTpl">
+        <input nz-input type="password" formControlName="checkPassword" id="checkPassword" autocomplete="new-password" />
+        <ng-template #errorTpl let-control>
+          @if (control.errors?.['required']) {
+            Please confirm your password!
+          }
+          @if (control.errors?.['confirm']) {
+            Two passwords that you enter is inconsistent!
+          }
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="role">Role</nz-form-label>
+      <nz-form-control [nzSm]="3" [nzXs]="24" nzErrorTip="The input is not valid Role!">
+        <nz-select formControlName="role" nzPlaceHolder="Select Role" nzId="role">
+          @for (opt of options; track opt.value) {
+            <nz-option [nzLabel]="opt.label" [nzValue]="opt.value" nzId="role"></nz-option>
+          }
+        </nz-select>
+        <ng-template #roleErrorTpl let-control>
+          @if (control.hasError('required')){
+            <ng-container >
+              Role is required!
+            </ng-container>
+          } @else if (control.hasError('pattern')) {
+            <ng-container >
+              Role must be ADMIN or USER!
+            </ng-container>
+          }
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item nz-row class="register-area">
+      <nz-form-control [nzSpan]="14" [nzOffset]="6">
+        <button nz-button nzType="primary">Create</button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</div>
+
