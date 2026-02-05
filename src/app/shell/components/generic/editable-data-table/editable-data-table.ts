@@ -1,6 +1,6 @@
 import {Component, computed, effect, input, output, signal} from '@angular/core';
-import {ColumnConfig} from '../../../core/interface/column-config';
-import {RowAction} from '../../../core/interface/row-action';
+import {ColumnConfig} from '../../../../core/interface/column-config';
+import {RowAction} from '../../../../core/interface/row-action';
 import {NzTableComponent, NzTdAddOnComponent, NzThSelectionComponent} from 'ng-zorro-antd/table';
 import {FormsModule} from '@angular/forms';
 import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
@@ -10,7 +10,8 @@ import {NzInputDirective} from 'ng-zorro-antd/input';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NgTemplateOutlet} from '@angular/common';
 import {Breadcrumb} from '../breadcrumb/breadcrumb';
-import {BreadCrumbInterface} from '../../../core/interface/bread-crumb-interface';
+import {BreadCrumbInterface} from '../../../../core/interface/bread-crumb-interface';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: ' app-editable-data-table',
@@ -27,6 +28,7 @@ import {BreadCrumbInterface} from '../../../core/interface/bread-crumb-interface
     NzThSelectionComponent,
     NzTdAddOnComponent,
     Breadcrumb,
+    RouterLink,
   ],
   templateUrl: './editable-data-table.html',
   styleUrl: './editable-data-table.css',
@@ -40,6 +42,7 @@ export class EditableDataTable<T extends { id: number }> {
   pageSizeOptions = input<number[]>([10, 20, 50, 100]);
   showBulkDelete = input<boolean>(true);
   routes = input<BreadCrumbInterface[]>();
+  viewRoute = input.required<string>();
 
   // Outputs
   saveRow = output<T>();
@@ -118,6 +121,10 @@ export class EditableDataTable<T extends { id: number }> {
 
   onBulkDelete(): void {
     this.bulkDelete.emit(Array.from(this.setOfCheckedId()));
+  }
+
+  getNestedValue(obj: any, path: string): any {
+    return path.split('.').reduce((o, k) => (o || {})[k], obj);
   }
 
 }

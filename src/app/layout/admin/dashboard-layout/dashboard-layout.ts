@@ -1,8 +1,8 @@
 import {Component, input} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 import {Dashboard} from '../../../pages/admin/dashboard/dashboard';
-import {Sidebar} from '../../../shell/components/sidebar/sidebar';
-import {DashboardHeader} from '../../../shell/components/dashboard-header/dashboard-header';
+import {Sidebar} from '../../../shell/components/layout/sidebar/sidebar';
+import {DashboardHeader} from '../../../shell/components/layout/dashboard-header/dashboard-header';
 import {NzContentComponent, NzLayoutComponent} from 'ng-zorro-antd/layout';
 import {ADMIN_SIDEBAR_MENU} from '../../../core/constant/dashboard.sidebar.menu';
 

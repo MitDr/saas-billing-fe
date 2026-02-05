@@ -1,0 +1,140 @@
+<nz-card class="tenant-card" [nzBordered]="false">
+  <div class="flex items-start gap-6">
+    <div class="flex-1">
+      <!-- Tên Tenant + Status -->
+      <h2 class="text-2xl font-bold flex items-center gap-3">
+        {{ tenant().name }}
+        @if (tenant().softDelete) {
+          <nz-tag nzColor="red">Deleted</nz-tag>
+        } @else {
+          <nz-tag nzColor="green">Active</nz-tag>
+        }
+      </h2>
+
+      <!-- Email + Creator ngắn gọn -->
+      <p class="text-gray-500 mt-1">
+        {{ tenant().email }}
+        <span class="ml-4 text-sm text-gray-400">
+          Created by <strong>{{ tenant().creator?.username || 'N/A' }}</strong>
+        </span>
+      </p>
+
+      <!-- Thông tin chính (không có phần users count nữa) -->
+      <nz-descriptions nzBordered nzSize="small" [nzColumn]="2" class="mt-6">
+        <nz-descriptions-item nzTitle="Tenant ID">
+          #{{ tenant().id }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="API Key">
+          <div class="flex items-center gap-3">
+            <!-- Hiển thị API Key đã mask -->
+            <nz-tag nzColor="processing" class="font-mono">
+              {{ maskApiKey(tenant().apiKey) }}
+            </nz-tag>
+
+            <!-- Nút Copy -->
+            <button
+              nz-button
+              nzType="text"
+              nzShape="circle"
+              nz-tooltip
+              nzTooltipTitle="Copy API Key"
+              (click)="copyApiKey(tenant().apiKey)"
+            >
+              <span nz-icon nzType="copy"></span>
+            </button>
+
+            <!-- Nút Refresh -->
+            <button
+              nz-button
+              nzType="text"
+              nzShape="circle"
+              nz-tooltip
+              nzTooltipTitle="Refresh / Regenerate API Key"
+              nz-popconfirm
+              nzPopconfirmTitle="Bạn có chắc muốn tạo lại API Key mới? API Key cũ sẽ không còn hiệu lực."
+              nzPopconfirmOkText="Có, tạo mới"
+              nzPopconfirmCancelText="Hủy"
+              (nzOnConfirm)="refreshApiKey()"
+            >
+              <span nz-icon nzType="sync" class="text-orange-600"></span>
+            </button>
+          </div>
+        </nz-descriptions-item>
+
+<!--        <nz-descriptions-item nzTitle="API Key">-->
+<!--          <nz-tag nzColor="processing">-->
+<!--            {{ maskApiKey(tenant().apiKey) }}-->
+<!--          </nz-tag>-->
+<!--        </nz-descriptions-item>-->
+
+        <nz-descriptions-item nzTitle="Stripe Account">
+          <nz-tag nzColor="magenta">
+            {{ tenant().stripeAccountId || 'Not connected' }}
+          </nz-tag>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Current Balance">
+          <span class="font-medium text-green-600">
+            ${{ (tenant().currentAmount || 0) | number:'1.0-0' }}
+          </span>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Pending Amount">
+          <span class="font-medium text-orange-600">
+            ${{ (tenant().pendingAmount || 0) | number:'1.0-0' }}
+          </span>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Created Date">
+          {{ tenant().createdDate }}
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Last Modified">
+          {{ tenant().modifiedDate }}
+        </nz-descriptions-item>
+      </nz-descriptions>
+
+      <!-- Actions -->
+      <div class="mt-8 flex flex-wrap gap-3">
+        <button nz-button nzType="primary" [routerLink]="['/tenants', tenant().id, 'edit']">
+          <span nz-icon nzType="edit"></span>
+          Edit Tenant
+        </button>
+
+<!--        <button nz-button nzDanger (click)="confirmDelete()">-->
+        <button nz-button nzDanger>
+          <span nz-icon nzType="delete"></span>
+          Delete Tenant
+        </button>
+
+        @if (tenant().stripeAccountId) {
+          <button nz-button nzType="default">
+            <span nz-icon nzType="link"></span>
+            View in Stripe
+          </button>
+        }
+      </div>
+
+      <!-- Phần Users: tái sử dụng User Card -->
+      @if (tenant().users?.length) {
+        <div class="mt-10">
+          <h3 class="text-xl font-semibold mb-6 flex items-center gap-3">
+            <span nz-icon nzType="team" class="text-blue-600"></span>
+            Users in this Tenant ({{ tenant().users.length }})
+          </h3>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            @for (user of tenant().users; track user.id) {
+              <app-user-card [user]="user" [deleteButton]="false"></app-user-card>
+            }
+          </div>
+        </div>
+      } @else {
+        <div class="mt-10 text-center text-gray-500 py-8">
+          <nz-icon nzType="team" nzTheme="outline" class="text-4xl opacity-50"></nz-icon>
+          <p class="mt-3">No users in this tenant yet.</p>
+        </div>
+      }
+    </div>
+  </div>
+</nz-card>

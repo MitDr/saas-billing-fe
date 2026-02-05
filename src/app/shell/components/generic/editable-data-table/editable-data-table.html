@@ -82,12 +82,19 @@
                   }
                 }
               } @else {
-                @if (col.type === 'select') {
+                @if (col.type === 'custom' || col.path) {
+                  @let value = col.path ? getNestedValue(item, col.path) : item[col.key];
+                  {{value}}
+                }
+                @else if (col.type === 'select') {
                   <nz-tag class="ant-tag" [nzColor]="(item[col.key] === 'USER' ? 'red' : 'blue')">
                     {{ item[col.key] }}
                   </nz-tag>
-                } @else if (col.template) {
+                }
+                @else if (col.template) {
                   <ng-container *ngTemplateOutlet="col.template; context: { $implicit: item }"></ng-container>
+                } @else if (col.type === 'text') {
+                  {{ item[col.key] }}
                 } @else {
                   {{ item[col.key] }}
                 }
@@ -103,6 +110,9 @@
                 </a>
               }
               <a class="mr-2" (click)="startEdit(item.id)">Edit</a>
+              <a routerLink="{{viewRoute()}}{{ item.id }}" class="text-blue-600 hover:underline">
+                View
+              </a>
             } @else {
               <a class="mr-2 text-green-600" (click)="saveEdit(item.id)">Save</a>
               <a nz-popconfirm

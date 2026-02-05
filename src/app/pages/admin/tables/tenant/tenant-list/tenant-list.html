@@ -1,0 +1,18 @@
+<div class="mb-4 flex justify-between">
+  <h1 class="text-2xl font-semibold mb-6">
+    Tenant LIST
+  </h1>
+  <ng-container class="mb-4">
+    <button nz-button nzType="primary" [routerLink]="createRoute">+ Add Tenant</button>
+  </ng-container>
+
+</div>
+<app-editable-data-table
+  (bulkDelete)="onBulkDelete($event)"
+  (deleteRow)="onDeleteTenant($event)"
+  (saveRow)="onSaveTenant($event)"
+  [columns]="TENANT_COLUMNS"
+  [data]="tenants()"
+  [routes]="tenantListRouting"
+  viewRoute="/admin/tables/tenants/">
+</app-editable-data-table>

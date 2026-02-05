@@ -1,0 +1,23 @@
+<div class="page-container">
+  <nz-page-header
+    [nzTitle]="'User Detail'"
+    [nzSubtitle]="'ID: ' + (user()?.id || '')"
+    nzBackRouterLink="admin/tables/users"
+  >
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item><a routerLink="/admin/tables/users">Users</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>User Detail</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-page-header>
+
+  <div class="mt-8">
+    @if (user(); as u) {
+      <app-user-card [user]="u" [deleteButton]="true"></app-user-card>
+    } @else {
+      <div class="text-center py-16">
+        <nz-spin nzSize="large"></nz-spin>
+        <p class="mt-4 text-gray-500">Loading user information...</p>
+      </div>
+    }
+  </div>
+</div>

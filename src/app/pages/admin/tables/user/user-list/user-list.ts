@@ -1,5 +1,5 @@
 import {Component, signal} from '@angular/core';
-import {User} from '../../../../core/interface/user';
+import {User} from '../../../../../core/interface/user';
 import {NzTableModule} from 'ng-zorro-antd/table';
 import {NzTagComponent} from 'ng-zorro-antd/tag';
 import {NzPopconfirmDirective} from 'ng-zorro-antd/popconfirm';
@@ -7,9 +7,9 @@ import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzInputDirective} from 'ng-zorro-antd/input';
 import {FormsModule} from '@angular/forms';
 import {NzOptionComponent} from 'ng-zorro-antd/select';
-import {EditableDataTable} from '../../../../shell/components/editable-data-table/editable-data-table';
-import {ColumnConfig} from '../../../../core/interface/column-config';
-import {USER_ROUTE_CONSTANT} from '../../../../core/constant/user-list-constant';
+import {EditableDataTable} from '../../../../../shell/components/generic/editable-data-table/editable-data-table';
+import {ColumnConfig} from '../../../../../core/interface/column-config';
+import {USER_ROUTE_CONSTANT} from '../../../../../core/constant/user-list-constant';
 import {RouterLink} from '@angular/router';
 
 @Component({

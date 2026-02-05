@@ -8,6 +8,8 @@ export interface ColumnConfig<T = any> {
   options?: { label: string; value: any; color?: string }[];
   width?: string;
   template?: TemplateRef<any>;
+  path?: string;
+  render?: (item: T) => string | number | boolean;
 }
 
 
