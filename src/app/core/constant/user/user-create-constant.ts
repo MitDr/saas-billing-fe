@@ -1,6 +1,6 @@
-import {BreadCrumbInterface} from '../interface/bread-crumb-interface';
+import {BreadCrumbInterface} from '../../interface/bread-crumb-interface';
 
-export const USER_ROUTE_CONSTANT: BreadCrumbInterface[] = [
+export const USER_CREATE_ROUTE_CONSTANT: BreadCrumbInterface[] = [
   {
     name: "Dashboard",
     route: "/admin/dashboard",
@@ -14,6 +14,11 @@ export const USER_ROUTE_CONSTANT: BreadCrumbInterface[] = [
   {
     name: "Users",
     route: "/admin/tables/users",
+    activable: true
+  },
+  {
+    name: "Create",
+    route: "/admin/tables/users/create",
     activable: true
   }
 ]

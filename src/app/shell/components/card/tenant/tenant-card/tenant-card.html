@@ -96,7 +96,7 @@
 
       <!-- Actions -->
       <div class="mt-8 flex flex-wrap gap-3">
-        <button nz-button nzType="primary" [routerLink]="['/tenants', tenant().id, 'edit']">
+        <button nz-button nzType="primary" [routerLink]="['/admin/tables/tenants', tenant().id, 'edit']">
           <span nz-icon nzType="edit"></span>
           Edit Tenant
         </button>
@@ -107,12 +107,12 @@
           Delete Tenant
         </button>
 
-        @if (tenant().stripeAccountId) {
-          <button nz-button nzType="default">
-            <span nz-icon nzType="link"></span>
-            View in Stripe
-          </button>
-        }
+<!--        @if (tenant().stripeAccountId) {-->
+<!--          <button nz-button nzType="default">-->
+<!--            <span nz-icon nzType="link"></span>-->
+<!--            View in Stripe-->
+<!--          </button>-->
+<!--        }-->
       </div>
 
       <!-- Phần Users: tái sử dụng User Card -->

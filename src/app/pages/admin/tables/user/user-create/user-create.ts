@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import {NonNullableFormBuilder, Validators} from '@angular/forms';
-import { USER_CREATE_ROUTE_CONSTANT } from "../../../../../core/constant/user-create-constant";
+import { USER_CREATE_ROUTE_CONSTANT } from "../../../../../core/constant/user/user-create-constant";
 import {UserReuseForm} from '../../../../../shell/components/form/admin/user-reuse-form/user-reuse-form';
 import {Breadcrumb} from '../../../../../shell/components/generic/breadcrumb/breadcrumb';
 

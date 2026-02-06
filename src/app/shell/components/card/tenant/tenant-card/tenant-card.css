@@ -5,6 +5,17 @@
   box-shadow: 0 6px 24px rgba(0,0,0,0.08);
 }
 
+button[nz-button] {
+  display: inline-flex;
+  align-items: center;
+  /*gap: 8px; !* khoảng cách icon - text *!*/
+}
+
+button[nz-button] span[nz-icon] {
+  font-size: 16px; /* kích thước icon chuẩn */
+  vertical-align: middle;
+}
+
 .users-section {
   margin-top: 2.5rem;
 }

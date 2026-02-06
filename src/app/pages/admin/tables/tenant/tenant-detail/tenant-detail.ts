@@ -1,9 +1,9 @@
 import {Component, effect, inject, signal} from '@angular/core';
 import {ActivatedRoute, RouterLink} from '@angular/router';
-import {User} from '../../../../../core/interface/user';
+import {User} from '../../../../../core/interface/entity/user';
 import {FAKE_USERS} from '../../user/user-list/user-list';
 import {FAKE_TENANTS} from '../tenant-list/tenant-list';
-import {Tenant} from '../../../../../core/interface/tenant';
+import {Tenant} from '../../../../../core/interface/entity/tenant';
 import {NzBreadCrumbComponent, NzBreadCrumbItemComponent} from 'ng-zorro-antd/breadcrumb';
 import {NzPageHeaderComponent} from 'ng-zorro-antd/page-header';
 import {NzSpinComponent} from 'ng-zorro-antd/spin';

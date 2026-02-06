@@ -12,6 +12,7 @@ import {NgTemplateOutlet} from '@angular/common';
 import {Breadcrumb} from '../breadcrumb/breadcrumb';
 import {BreadCrumbInterface} from '../../../../core/interface/bread-crumb-interface';
 import {RouterLink} from '@angular/router';
+import {NzAvatarComponent} from 'ng-zorro-antd/avatar';
 
 @Component({
   selector: ' app-editable-data-table',
@@ -29,6 +30,7 @@ import {RouterLink} from '@angular/router';
     NzTdAddOnComponent,
     Breadcrumb,
     RouterLink,
+    NzAvatarComponent,
   ],
   templateUrl: './editable-data-table.html',
   styleUrl: './editable-data-table.css',
@@ -125,6 +127,18 @@ export class EditableDataTable<T extends { id: number }> {
 
   getNestedValue(obj: any, path: string): any {
     return path.split('.').reduce((o, k) => (o || {})[k], obj);
+  }
+
+  getOptionLabel(col: ColumnConfig<T>, value: any): string {
+    if (!col.options) return value?.toString() || 'N/A';
+    const option = col.options.find(opt => opt.value === value);
+    return option?.label || value?.toString() || 'N/A';
+  }
+
+  getOptionColor(col: ColumnConfig<T>, value: any): string {
+    if (!col.options) return 'default';
+    const option = col.options.find(opt => opt.value === value);
+    return option?.color || 'default';
   }
 
 }

@@ -4,7 +4,7 @@ import {NzCardComponent} from 'ng-zorro-antd/card';
 import {NzDescriptionsComponent, NzDescriptionsItemComponent} from 'ng-zorro-antd/descriptions';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzTagComponent} from 'ng-zorro-antd/tag';
-import {Tenant} from '../../../../../core/interface/tenant';
+import {Tenant} from '../../../../../core/interface/entity/tenant';
 import {DecimalPipe} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {UserCard} from '../../user/user-card/user-card';

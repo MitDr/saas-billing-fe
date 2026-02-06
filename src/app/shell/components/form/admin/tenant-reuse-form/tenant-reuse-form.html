@@ -1,0 +1,143 @@
+<form nz-form [formGroup]="formGroup()" (ngSubmit)="onSubmit()">
+  <!-- Tiêu đề động -->
+<!--  <h2 class="text-2xl font-semibold mb-6">-->
+<!--    {{ isEditMode() ? 'Edit Tenant' : 'Create New Tenant' }}-->
+<!--  </h2>-->
+
+  <!-- Tenant Name -->
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="name">Tenant Name</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Tên tenant từ 3-50 ký tự">
+      <input nz-input formControlName="name" id="name" placeholder="Ví dụ: Công ty ABC Tenant" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Email -->
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">Email liên hệ</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Email không hợp lệ">
+      <input nz-input formControlName="email" id="email" placeholder="email@tenant.com" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Creator -->
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="creatorId">Creator</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Chọn người tạo tenant">
+      <nz-select
+        formControlName="creatorId"
+        nzPlaceHolder="Chọn user làm creator"
+        nzShowSearch
+      >
+        @for (user of availableUsers(); track user.id) {
+          <nz-option
+            [nzValue]="user.id"
+            [nzLabel]="user.username + ' (' + user.email + ')'"
+          ></nz-option>
+        }
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Users multi-select -->
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24">Assign Users</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <nz-select
+        formControlName="users"
+        nzMode="multiple"
+        nzPlaceHolder="Chọn users để gán vào tenant (tùy chọn)"
+        nzShowSearch
+        [nzMaxTagCount]="3"
+        [nzMaxTagPlaceholder]="maxTagTpl"
+      >
+        @for (user of availableUsers(); track user.id) {
+          <nz-option
+            [nzValue]="user.id"
+            [nzLabel]="user.username + ' (' + user.email + ')'"
+          ></nz-option>
+        }
+      </nz-select>
+      <p class="text-xs text-gray-500 mt-1">
+        Các user được chọn sẽ tự động thuộc tenant này.
+      </p>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Template cho max tag placeholder -->
+  <ng-template #maxTagTpl let-omitted>
+    {{ getMaxTagPlaceholder(omitted.length) }}
+  </ng-template>
+
+  <!-- Current & Pending Amount -->
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24">Current Balance</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input nz-input type="number" formControlName="currentAmount" placeholder="0" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24">Pending Amount</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input nz-input type="number" formControlName="pendingAmount" placeholder="0" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- API Key (chỉ hiển thị khi edit) -->
+  @if (isEditMode()) {
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24">API Key (Readonly)</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24">
+        <div class="flex items-center gap-3">
+          <nz-tag
+            nzColor="processing"
+            class="font-mono cursor-pointer"
+            nz-tooltip
+          >
+            {{ maskApiKey(formGroup()?.getRawValue()?.apiKey ?? '') }}
+          </nz-tag>
+
+          @if(!isEditMode()){
+            <button
+              nz-button
+              nzType="text"
+              nzShape="circle"
+              (click)="copyApiKey(formGroup()?.getRawValue()?.apiKey ?? '')"
+              nz-tooltip
+              nzTooltipTitle="Copy full API Key"
+            >
+              <span nz-icon nzType="copy"></span>
+            </button>
+          }
+          <button
+            nz-button
+            nzType="text"
+            nzShape="circle"
+            nz-popconfirm
+            nzPopconfirmTitle="Tạo lại API Key mới? Key cũ sẽ vô hiệu hóa."
+            (nzOnConfirm)="refreshApiKey()"
+            nz-tooltip
+            nzTooltipTitle="Regenerate API Key"
+          >
+            <span nz-icon nzType="sync" class="text-orange-600"></span>
+          </button>
+        </div>
+      </nz-form-control>
+    </nz-form-item>
+  }
+
+  <!-- Submit button -->
+  <nz-form-item nz-row class="mt-8">
+    <nz-form-control [nzSpan]="14" [nzOffset]="6">
+      <button
+        nz-button
+        nzType="primary"
+        [nzLoading]="isLoading()"
+        [disabled]="formGroup()?.invalid || isLoading()"
+      >
+        {{ submitLabel() }}
+      </button>
+    </nz-form-control>
+  </nz-form-item>
+</form>

@@ -1,4 +1,4 @@
-import {BreadCrumbInterface} from '../interface/bread-crumb-interface';
+import {BreadCrumbInterface} from '../../interface/bread-crumb-interface';
 
 export const TENANT_ROUTE_CONSTANT: BreadCrumbInterface[] = [
   {

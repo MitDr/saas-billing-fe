@@ -1,0 +1,13 @@
+<div class="page-container">
+  <h1 class="text-2xl font-semibold mb-6">Create User</h1>
+  <div class="flex justify-end mb-4">
+    <app-breadcrumb [routes]="route"></app-breadcrumb>
+  </div>
+
+  <app-tenant-reuse-form
+    [formGroup]="tenantForm"
+    [submitLabel]="'Create'"
+    [isLoading]="isSubmitting"
+    (submitted)="onSubmitted()"
+  ></app-tenant-reuse-form>
+</div>

@@ -1,0 +1,17 @@
+<div class="mb-4 flex justify-between">
+  <h1 class="text-2xl font-semibold mb-6">
+    PRICE LIST
+  </h1>
+  <ng-container class="mb-4">
+    <button nz-button nzType="primary" [routerLink]="createRoute">+ Add Price</button>
+  </ng-container>
+</div>
+<app-editable-data-table
+  (bulkDelete)="onBulkDelete($event)"
+  (deleteRow)="onDeletePrice($event)"
+  (saveRow)="onSavePrice($event)"
+  [columns]="PRICE_COLUMNS"
+  [data]="prices()"
+  [routes]="priceListRouting"
+  viewRoute="/admin/tables/prices/">
+</app-editable-data-table>

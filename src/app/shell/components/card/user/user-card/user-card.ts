@@ -5,7 +5,7 @@ import {NzDescriptionsComponent, NzDescriptionsItemComponent} from 'ng-zorro-ant
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {RouterLink} from '@angular/router';
 import {NzTagComponent} from 'ng-zorro-antd/tag';
-import {User} from '../../../../../core/interface/user';
+import {User} from '../../../../../core/interface/entity/user';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 
 @Component({

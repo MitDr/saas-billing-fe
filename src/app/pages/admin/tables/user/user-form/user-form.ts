@@ -19,7 +19,7 @@ import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {Subject, takeUntil} from 'rxjs';
 import {OptionInterface} from '../../../../../core/interface/option-interface';
 import {Breadcrumb} from '../../../../../shell/components/generic/breadcrumb/breadcrumb';
-import {USER_CREATE_ROUTE_CONSTANT} from '../../../../../core/constant/user-create-constant';
+import {USER_CREATE_ROUTE_CONSTANT} from '../../../../../core/constant/user/user-create-constant';
 
 @Component({
   selector: 'app-user-form',

@@ -1,6 +1,6 @@
-import {ROLE_OPTIONS} from '../../pages/admin/tables/user/user-list/user-list';
-import {User} from '../interface/user';
-import {ColumnConfig} from '../interface/column-config';
+import {ROLE_OPTIONS} from '../../../pages/admin/tables/user/user-list/user-list';
+import {User} from '../../interface/entity/user';
+import {ColumnConfig} from '../../interface/column-config';
 
 export const USER_COLUMNS: ColumnConfig<User>[] = [
   {

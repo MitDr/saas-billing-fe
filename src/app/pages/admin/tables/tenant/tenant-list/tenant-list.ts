@@ -1,11 +1,11 @@
 import {Component, signal} from '@angular/core';
-import {Tenant} from '../../../../../core/interface/tenant';
+import {Tenant} from '../../../../../core/interface/entity/tenant';
 import {ColumnConfig} from '../../../../../core/interface/column-config';
-import {TENANT_ROUTE_CONSTANT} from '../../../../../core/constant/tenant-list-constant';
+import {TENANT_ROUTE_CONSTANT} from '../../../../../core/constant/tenant/tenant-list-constant';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {RouterLink} from '@angular/router';
 import {EditableDataTable} from '../../../../../shell/components/generic/editable-data-table/editable-data-table';
-import {USER_ROUTE_CONSTANT} from '../../../../../core/constant/user-list-constant';
+import {USER_ROUTE_CONSTANT} from '../../../../../core/constant/user/user-list-constant';
 
 @Component({
   selector: 'app-tenant-list',
@@ -30,7 +30,7 @@ protected readonly TENANT_COLUMNS: ColumnConfig<Tenant>[]= [
   {key: 'pendingAmount', title: 'Pending Amount', editable: false, type: 'text'},
   {key: 'createdDate', title: 'Created Date', editable: false},
   {key: 'modifiedDate', title: 'Modified Date', editable: false},
-  {key: 'softDelete', title: 'Soft Delete', editable: false, type: 'select'},
+  {key: 'softDelete', title: 'Soft Delete', editable: true, type: 'select', options: SOFTDELETEOPTIONS},
   {key: 'creator', title: 'Creator', editable: false, type: 'custom', path: 'creator.username'},
   {key: 'users', title: 'Num of User', editable: false, type:'custom', path: 'users.length'}
 ];
@@ -49,8 +49,6 @@ protected readonly TENANT_COLUMNS: ColumnConfig<Tenant>[]= [
   onBulkDelete(ids: number[]){
     this.tenants.update(list=> list.filter(u=>!ids.includes(u.id)))
   }
-
-  protected readonly userListRouting = USER_ROUTE_CONSTANT;
 }
 
 export const FAKE_TENANTS: Tenant[] = [
@@ -131,3 +129,8 @@ export const FAKE_TENANTS: Tenant[] = [
     "softDelete": false
   }
 ]
+
+export const SOFTDELETEOPTIONS = [
+  {label: 'True', value: true, color: 'blue'},
+  {label: 'False', value: false, color: 'green'}
+];

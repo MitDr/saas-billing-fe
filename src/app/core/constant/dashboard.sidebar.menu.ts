@@ -12,6 +12,26 @@ export const ADMIN_SIDEBAR_MENU: MenuItem[] =[
     path: '/admin/tables',
     children: [
       {
+        title: 'Feature',
+        icon: 'bulb',
+        path: '/admin/tables/features',
+      },
+      {
+        title: 'Plan',
+        icon: 'book',
+        path: '/admin/tables/plans',
+      },
+      {
+        title: 'Plan Group',
+        icon: 'group',
+        path: '/admin/tables/plan-groups'
+      },
+      {
+        title: 'Price',
+        icon: 'exception',
+        path: '/admin/tables/prices'
+      },
+      {
         title: 'Users',
         icon: 'user',
         path: '/admin/tables/users',
@@ -26,6 +46,7 @@ export const ADMIN_SIDEBAR_MENU: MenuItem[] =[
         icon: 'wallet',
         path: '/admin/tables/subscriptions',
       },
+
     ]
   }
 ]

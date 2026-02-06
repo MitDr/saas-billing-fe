@@ -86,17 +86,32 @@
                   @let value = col.path ? getNestedValue(item, col.path) : item[col.key];
                   {{value}}
                 }
-                @else if (col.type === 'select') {
-                  <nz-tag class="ant-tag" [nzColor]="(item[col.key] === 'USER' ? 'red' : 'blue')">
-                    {{ item[col.key] }}
+                @else if (col.type === 'select' || col.type === 'tag') {
+                  <nz-tag
+                    class="ant-tag"
+                    [nzColor]="getOptionColor(col, item[col.key])"
+                  >
+                    {{ getOptionLabel(col, item[col.key]) }}
                   </nz-tag>
                 }
                 @else if (col.template) {
                   <ng-container *ngTemplateOutlet="col.template; context: { $implicit: item }"></ng-container>
                 } @else if (col.type === 'text') {
                   {{ item[col.key] }}
+                } @else if(col.type === 'avatar'){
+                  @let avatarUrl = col.path ? getNestedValue(item, col.path) : item[col.key];
+                  <nz-avatar
+                    [nzSize]="col.avatarSize || 32"
+                    [nzSrc]="avatarUrl || ''"
+                    nzText="U"
+                    class="bg-gray-300"
+                  ></nz-avatar>
+                  <!-- Nếu muốn fallback text khi không có ảnh -->
+<!--                  @if (!avatarUrl) {-->
+<!--                    <span class="ml-2 text-gray-500">No avatar</span>-->
+<!--                  }-->
                 } @else {
-                  {{ item[col.key] }}
+                  {{item[col.key]}}
                 }
               }
             </td>

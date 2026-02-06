@@ -4,7 +4,7 @@ import {NzBreadCrumbComponent, NzBreadCrumbItemComponent} from 'ng-zorro-antd/br
 import {UserCard} from '../../../../../shell/components/card/user/user-card/user-card';
 import {NzSpinComponent} from 'ng-zorro-antd/spin';
 import {ActivatedRoute, RouterLink} from '@angular/router';
-import {User} from '../../../../../core/interface/user';
+import {User} from '../../../../../core/interface/entity/user';
 import {FAKE_USERS} from '../user-list/user-list';
 
 @Component({
