@@ -1,16 +1,15 @@
-import {Component, signal} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {User} from '../../../../../core/interface/entity/user';
 import {NzTableModule} from 'ng-zorro-antd/table';
-import {NzTagComponent} from 'ng-zorro-antd/tag';
-import {NzPopconfirmDirective} from 'ng-zorro-antd/popconfirm';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
-import {NzInputDirective} from 'ng-zorro-antd/input';
 import {FormsModule} from '@angular/forms';
-import {NzOptionComponent} from 'ng-zorro-antd/select';
 import {EditableDataTable} from '../../../../../shell/components/generic/editable-data-table/editable-data-table';
 import {ColumnConfig} from '../../../../../core/interface/column-config';
 import {USER_ROUTE_CONSTANT} from '../../../../../core/constant/user/user-list-constant';
 import {RouterLink} from '@angular/router';
+import {ListData} from '../../../../../core/interface/list-data';
+import {UserService} from '../../../../../core/service/user.service';
+import {NzMessageService} from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-user-list',
@@ -25,7 +24,13 @@ import {RouterLink} from '@angular/router';
   styleUrl: './user-list.css',
 })
 export class UserList {
-  users = signal<User[]>(FAKE_USERS);
+
+  // State phân trang
+  currentPage = signal(1);   // 1-based (khớp API)
+  pageSize = signal(5);
+  userPageResponse = signal<ListData<User> | null>(null);
+  loading = signal(false);
+  // users = signal<User[]>(FAKE_USERS);
   checked = false;
   createRoute = '/admin/tables/users/create'
   userListRouting = USER_ROUTE_CONSTANT;
@@ -43,24 +48,81 @@ export class UserList {
     {key: 'createdDate', title: 'Created Date', editable: false},
     {key: 'modifiedDate', title: 'Modified Date', editable: false},
   ];
+  // }
+  private userService = inject(UserService);
+  private message = inject(NzMessageService);
 
-  onSaveUser(updatedUser: User) {
-    // gọi API hoặc update signal
-    this.users.update(list =>
-      list.map(u => u.id === updatedUser.id ? updatedUser : u)
-    );
+  // Tương tự cho delete và bulk delete
+
+
+  // page = signal(0);           // page 0-based (API dùng 0)
+  // size = signal(10);
+  // users = signal<ListData<User>>(FAKE_USER)
+  // loading = signal(false);
+
+  // Columns giữ nguyên
+  constructor() {
+    // Load ban đầu
+    this.loadUsers();
   }
 
-  onDeleteUser(user: User) {
-    this.users.update(list => list.filter(u => u.id !== user.id));
+  loadUsers() {
+    this.loading.set(true);
+    // API page 1-based, nhưng backend thường 0-based → -1
+    this.userService.getUsers(this.currentPage(), this.pageSize()).subscribe({
+      next: (response) => {
+        this.userPageResponse.set(response);
+        this.loading.set(false);
+      },
+      error: (err) => {
+        this.loading.set(false);
+        this.message.error('Không thể tải danh sách user');
+        console.error(err);
+      }
+    });
   }
 
-  onBulkDelete(ids: number[]) {
-    this.users.update(list =>
-      list.filter(u => !ids.includes(u.id))
-    );
+  // Khi đổi trang
+  onPageChange(newPage: number) {
+    this.currentPage.set(newPage);
+    this.loadUsers();
   }
 
+  // Khi đổi size
+  onSizeChange(newSize: number) {
+    this.pageSize.set(newSize);
+    this.currentPage.set(1); // reset về trang 1
+    this.loadUsers();
+  }
+
+  // onSaveUser(updatedUser: User) {
+  //   // gọi API hoặc update signal
+  //   this.users.update(list =>
+  //     list.map(u => u.id === updatedUser.id ? updatedUser : u)
+  //   );
+  // }
+  //
+  // onDeleteUser(user: User) {
+  //   this.users.update(list => list.filter(u => u.id !== user.id));
+  // }
+  //
+  // onBulkDelete(ids: number[]) {
+  //   this.users.update(list =>
+  //     list.filter(u => !ids.includes(u.id))
+  //   );
+  // }
+
+  //
+  // loadTenants(page: number, size: number) {
+  //   this.loading.set(true);
+  //   this.tenantService.getTenants(page, size).subscribe({
+  //     next: (res) => {
+  //       this.tenantsData.set(res.data);  // giả sử res.data là phần phân trang
+  //       this.loading.set(false);
+  //     },
+  //     error: () => this.loading.set(false),
+  //   });
+  // }
 
   // users: User[] = FAKE_USERS;
   // loading = false;
@@ -158,9 +220,111 @@ export class UserList {
   //   if (index !== -1) {
   //     this.users[index] = event.row;
   //   }
-  // }
+
+  onSaveRow(updatedUser: User) {
+    // this.userService.updateUser(updatedUser).subscribe({
+    //   next: () => {
+    //     this.message.success('Cập nhật thành công');
+    //     this.loadUsers();  // ← gọi lại API load toàn bộ list
+    //   },
+    //   error: () => {
+    //     this.message.error('Cập nhật thất bại');
+    //     // Optional: rollback cache nếu cần
+    //   }
+    // });
+    console.log('calling api')
+  }
 }
 
+export const FAKE_USER: ListData<User> = {
+  "content": [
+    {
+      "id": 6,
+      "username": "Lonnng5",
+      "email": "ttlong13015@gmail.com",
+      "role": "USER",
+      "createdDate": "07-10-2025 21:16:51",
+      "modifiedDate": "08-01-2026 21:20:34"
+    },
+    {
+      "id": 5,
+      "username": "Lonnng4",
+      "email": "ttlong13014@gmail.com",
+      "role": "USER",
+      "createdDate": "07-10-2025 21:16:47",
+      "modifiedDate": "07-10-2025 21:24:24"
+    },
+    {
+      "id": 4,
+      "username": "Lonnng3",
+      "email": "ttlong13013@gmail.com",
+      "role": "USER",
+      "createdDate": "07-10-2025 21:16:43",
+      "modifiedDate": "07-10-2025 21:24:15"
+    },
+    {
+      "id": 3,
+      "username": "Lonnng2",
+      "email": "ttlong13012@gmail.com",
+      "role": "USER",
+      "createdDate": "07-10-2025 21:16:40",
+      "modifiedDate": "07-10-2025 21:22:15"
+    },
+    {
+      "id": 2,
+      "username": "Lonnng1",
+      "email": "ttlong13011@gmail.com",
+      "role": "USER",
+      "createdDate": "07-10-2025 21:16:36",
+      "modifiedDate": "07-10-2025 21:17:36"
+    },
+    {
+      "id": 1,
+      "username": "Lonnng",
+      "email": "ttlong1301@gmail.com",
+      "role": "ADMIN",
+      "createdDate": "07-10-2025 21:16:32",
+      "modifiedDate": "07-10-2025 21:16:32"
+    },
+    {
+      "id": 4,
+      "username": "Lonnng3",
+      "email": "ttlong13013@gmail.com",
+      "role": "USER",
+      "createdDate": "07-10-2025 21:16:43",
+      "modifiedDate": "07-10-2025 21:24:15"
+    },
+    {
+      "id": 3,
+      "username": "Lonnng2",
+      "email": "ttlong13012@gmail.com",
+      "role": "USER",
+      "createdDate": "07-10-2025 21:16:40",
+      "modifiedDate": "07-10-2025 21:22:15"
+    },
+    {
+      "id": 2,
+      "username": "Lonnng1",
+      "email": "ttlong13011@gmail.com",
+      "role": "USER",
+      "createdDate": "07-10-2025 21:16:36",
+      "modifiedDate": "07-10-2025 21:17:36"
+    },
+    {
+      "id": 1,
+      "username": "Lonnng",
+      "email": "ttlong1301@gmail.com",
+      "role": "ADMIN",
+      "createdDate": "07-10-2025 21:16:32",
+      "modifiedDate": "07-10-2025 21:16:32"
+    }
+  ],
+  "page": 1,
+  "size": 10,
+  "totalElements": 20,
+  "totalPages": 2,
+  "last": false
+}
 export const FAKE_USERS: User[] = [
   {
     id: 1,

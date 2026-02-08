@@ -3,7 +3,7 @@
     USER LIST
   </h1>
   <ng-container class="mb-4">
-    <button nz-button nzType="primary" [routerLink]="createRoute">+ Add User</button>
+    <button [routerLink]="createRoute" nz-button nzType="primary">+ Add User</button>
   </ng-container>
 
 </div>
@@ -104,13 +104,34 @@
 <!--    </tbody>-->
 <!--  </nz-table>-->
 <!--</div>-->
+<!--<app-editable-data-table-->
+<!--  (bulkDelete)="onBulkDelete($event)"-->
+<!--  (deleteRow)="onDeleteUser($event)"-->
+<!--  (saveRow)="onSaveUser($event)"-->
+<!--  [columns]="USER_COLUMNS"-->
+<!--  [data]="users()"-->
+<!--  [routes]="userListRouting"-->
+<!--  viewRoute="/admin/tables/users/">-->
+<!--</app-editable-data-table>-->
+<!--<app-editable-data-table-->
+<!--  (pageChange)="onPageChange($event)"-->
+<!--  (sizeChange)="onSizeChange($event)"-->
+<!--  [columns]="USER_COLUMNS"-->
+<!--  [data]="users()"-->
+<!--  [routes]="userListRouting"-->
+<!--  viewRoute="/admin/tables/users/">-->
+<!--</app-editable-data-table>-->
 <app-editable-data-table
-  (bulkDelete)="onBulkDelete($event)"
-  (deleteRow)="onDeleteUser($event)"
-  (saveRow)="onSaveUser($event)"
+  (pageChange)="onPageChange($event)"
+  (saveRow)="onSaveRow($event)"
+  (sizeChange)="onSizeChange($event)"
   [columns]="USER_COLUMNS"
-  [data]="users()"
+  [data]="userPageResponse()"
+  [loading]="loading()"
   [routes]="userListRouting"
+  [showBulkDelete]="true"
   viewRoute="/admin/tables/users/">
+  >
+  <!-- Toolbar nếu cần -->
 </app-editable-data-table>
 

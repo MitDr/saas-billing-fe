@@ -13,6 +13,7 @@ import {Breadcrumb} from '../breadcrumb/breadcrumb';
 import {BreadCrumbInterface} from '../../../../core/interface/bread-crumb-interface';
 import {RouterLink} from '@angular/router';
 import {NzAvatarComponent} from 'ng-zorro-antd/avatar';
+import {ListData} from '../../../../core/interface/list-data';
 
 @Component({
   selector: ' app-editable-data-table',
@@ -37,19 +38,34 @@ import {NzAvatarComponent} from 'ng-zorro-antd/avatar';
 })
 export class EditableDataTable<T extends { id: number }> {
   // Inputs
-  data = input.required<T[]>();
+  data = input.required<ListData<T> | null>();
   columns = input.required<ColumnConfig<T>[]>();
   rowActions = input<RowAction<T>[]>([]);
   loading = input<boolean>(false);
-  pageSizeOptions = input<number[]>([10, 20, 50, 100]);
+  pageSizeOptions = input<number[]>([5, 10, 20, 50, 100]);
   showBulkDelete = input<boolean>(true);
   routes = input<BreadCrumbInterface[]>();
   viewRoute = input.required<string>();
 
+  pageChange = output<number>();
+  sizeChange = output<number>();
+
+  // Computed lấy mảng thật
+  tableData = computed(() => this.data()?.content ?? []);
+
+  // Tổng số record
+  totalItems = computed(() => this.data()?.totalElements ?? 0);
+
+  // Trang hiện tại (nz-table dùng 1-based)
+  currentPage = computed(() => this.data()?.page ?? 1);
+
+  // Size hiện tại
+  currentSize = computed(() => this.data()?.size ?? 5);
+
   // Outputs
   saveRow = output<T>();
-  deleteRow = output<T>();
-  bulkDelete = output<number[]>();
+  // deleteRow = output<T>();
+  // bulkDelete = output<number[]>();
 
   // State
   editCache = signal<Record<string | number, { edit: boolean; data: T }>>({});
@@ -58,8 +74,8 @@ export class EditableDataTable<T extends { id: number }> {
   setOfCheckedId = signal<Set<number>>(new Set());
 
   // Computed
-  allChecked = computed(() => this.data().every(item => this.setOfCheckedId().has(item.id)));
-  someChecked = computed(() => this.data().some(item => this.setOfCheckedId().has(item.id)) && !this.allChecked());
+  allChecked = computed(() => this.data()?.content.every(item => this.setOfCheckedId().has(item.id)));
+  someChecked = computed(() => this.data()?.content.some(item => this.setOfCheckedId().has(item.id)) && !this.allChecked());
 
   editing = computed(() => Object.values(this.editCache()).some(c => c.edit));
 
@@ -68,7 +84,7 @@ export class EditableDataTable<T extends { id: number }> {
     effect(() => {
       const data = this.data();
       const cache: any = {};
-      data.forEach(item => {
+      data?.content.forEach(item => {
         cache[item.id] = {edit: false, data: {...item}};
       });
       this.editCache.set(cache);
@@ -88,7 +104,7 @@ export class EditableDataTable<T extends { id: number }> {
   onAllChecked(checked: boolean): void {
     const set = new Set<number>();
     if (checked) {
-      this.data().forEach(item => set.add(item.id));
+      this.data()?.content.forEach(item => set.add(item.id));
     }
     this.setOfCheckedId.set(set);
   }
@@ -105,7 +121,7 @@ export class EditableDataTable<T extends { id: number }> {
 
   cancelEdit(id: number): void {
     const cache = {...this.editCache()};
-    const original = this.data().find(item => item.id === id)!;
+    const original = this.data()?.content.find(item => item.id === id)!;
     cache[id] = {edit: false, data: {...original}};
     this.editCache.set(cache);
   }
@@ -113,17 +129,14 @@ export class EditableDataTable<T extends { id: number }> {
   saveEdit(id: number): void {
     const cache = this.editCache();
     const editedRow = cache[id].data;
-    this.saveRow.emit(editedRow as T);
+    this.saveRow.emit(editedRow as T);  // ← emit ra ngoài
 
-    // Cập nhật cache
-    const newCache = {...cache};
-    newCache[id].edit = false;
-    this.editCache.set(newCache);
   }
 
-  onBulkDelete(): void {
-    this.bulkDelete.emit(Array.from(this.setOfCheckedId()));
-  }
+  //
+  // onBulkDelete(): void {
+  //   this.bulkDelete.emit(Array.from(this.setOfCheckedId()));
+  // }
 
   getNestedValue(obj: any, path: string): any {
     return path.split('.').reduce((o, k) => (o || {})[k], obj);

@@ -1,8 +1,16 @@
 <div class="table-toolbar flex justify-between mb-4 flex-wrap gap-3">
   <div class="left">
     @if (showBulkDelete()) {
+      <!--      <button-->
+        <!--        (click)="onBulkDelete()"-->
+        <!--        [disabled]="setOfCheckedId().size === 0 || editing()"-->
+        <!--        nz-button-->
+        <!--        nzDanger-->
+        <!--      >-->
+        <!--        Delete ({{ setOfCheckedId().size }})-->
+        <!--      </button>-->
+        <!--    }-->
       <button
-        (click)="onBulkDelete()"
         [disabled]="setOfCheckedId().size === 0 || editing()"
         nz-button
         nzDanger
@@ -19,13 +27,21 @@
 <div class="ant-table-wrapper">
   <nz-table
     #nzTable
-    [nzData]="data()"
-    [nzFrontPagination]="true"
+    (nzPageIndexChange)="pageChange.emit($event)"
+    (nzPageSizeChange)="sizeChange.emit($event)"
+    [nzData]="tableData()"
+    [nzFrontPagination]="false"
     [nzLoading]="loading()"
+    [nzPageIndex]="currentPage()"
     [nzPageSizeOptions]="pageSizeOptions()"
+    [nzPageSize]="currentSize()"
+    [nzTotal]="totalItems()"
+
     ngSkipHydration
     nzBordered
+    nzShowQuickJumper
     nzShowSizeChanger
+    nzSize="middle"
   >
     <thead class="ant-table-thead">
     <tr class="ant-table-row">
@@ -84,21 +100,19 @@
               } @else {
                 @if (col.type === 'custom' || col.path) {
                   @let value = col.path ? getNestedValue(item, col.path) : item[col.key];
-                  {{value}}
-                }
-                @else if (col.type === 'select' || col.type === 'tag') {
+                  {{ value }}
+                } @else if (col.type === 'select' || col.type === 'tag') {
                   <nz-tag
                     class="ant-tag"
                     [nzColor]="getOptionColor(col, item[col.key])"
                   >
                     {{ getOptionLabel(col, item[col.key]) }}
                   </nz-tag>
-                }
-                @else if (col.template) {
+                } @else if (col.template) {
                   <ng-container *ngTemplateOutlet="col.template; context: { $implicit: item }"></ng-container>
                 } @else if (col.type === 'text') {
                   {{ item[col.key] }}
-                } @else if(col.type === 'avatar'){
+                } @else if (col.type === 'avatar') {
                   @let avatarUrl = col.path ? getNestedValue(item, col.path) : item[col.key];
                   <nz-avatar
                     [nzSize]="col.avatarSize || 32"
@@ -107,11 +121,11 @@
                     class="bg-gray-300"
                   ></nz-avatar>
                   <!-- Nếu muốn fallback text khi không có ảnh -->
-<!--                  @if (!avatarUrl) {-->
-<!--                    <span class="ml-2 text-gray-500">No avatar</span>-->
-<!--                  }-->
+                    <!--                  @if (!avatarUrl) {-->
+                    <!--                    <span class="ml-2 text-gray-500">No avatar</span>-->
+                    <!--                  }-->
                 } @else {
-                  {{item[col.key]}}
+                  {{ item[col.key] }}
                 }
               }
             </td>
@@ -130,6 +144,7 @@
               </a>
             } @else {
               <a class="mr-2 text-green-600" (click)="saveEdit(item.id)">Save</a>
+              <!--              <a class="mr-2 text-green-600" (click)="saveEdit(item.id)">Save</a>-->
               <a nz-popconfirm
                  nzPopconfirmTitle="Sure to cancel?"
                  (nzOnConfirm)="cancelEdit(item.id)">Cancel</a>

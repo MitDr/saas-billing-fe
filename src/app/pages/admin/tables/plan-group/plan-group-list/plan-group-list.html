@@ -1,17 +1,17 @@
-<div class="mb-4 flex justify-between">
-  <h1 class="text-2xl font-semibold mb-6">
-    PLAN GROUP LIST
-  </h1>
-  <ng-container class="mb-4">
-    <button nz-button nzType="primary" [routerLink]="createRoute">+ Add Plan Group</button>
-  </ng-container>
-</div>
-<app-editable-data-table
-  (bulkDelete)="onBulkDelete($event)"
-  (deleteRow)="onDeletePlanGroup($event)"
-  (saveRow)="onSavePlanGroup($event)"
-  [columns]="PLAN_GROUP_COLUMNS"
-  [data]="planGroups()"
-  [routes]="planGroupListRouting"
-  viewRoute="/admin/tables/plan-groups/">
-</app-editable-data-table>
+<!--<div class="mb-4 flex justify-between">-->
+<!--  <h1 class="text-2xl font-semibold mb-6">-->
+<!--    PLAN GROUP LIST-->
+<!--  </h1>-->
+<!--  <ng-container class="mb-4">-->
+<!--    <button nz-button nzType="primary" [routerLink]="createRoute">+ Add Plan Group</button>-->
+<!--  </ng-container>-->
+<!--</div>-->
+<!--<app-editable-data-table-->
+<!--  (bulkDelete)="onBulkDelete($event)"-->
+<!--  (deleteRow)="onDeletePlanGroup($event)"-->
+<!--  (saveRow)="onSavePlanGroup($event)"-->
+<!--  [columns]="PLAN_GROUP_COLUMNS"-->
+<!--  [data]="planGroups()"-->
+<!--  [routes]="planGroupListRouting"-->
+<!--  viewRoute="/admin/tables/plan-groups/">-->
+<!--</app-editable-data-table>-->
