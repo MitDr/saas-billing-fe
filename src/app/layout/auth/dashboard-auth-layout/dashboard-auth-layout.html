@@ -3,16 +3,17 @@
   <!-- SIDEBAR -->
   <app-sidebar
     [isCollapsed]="isCollapsed"
-    class="flex"
     [menu]="APP_MENU"
+    class="flex"
   ></app-sidebar>
 
   <!-- RIGHT SIDE -->
   <nz-layout>
     <!-- HEADER -->
     <app-dashboard-header
-      [isCollapsed]="isCollapsed"
+      (logout)="onLogout()"
       (toggle)="toggleSidebar()"
+      [isCollapsed]="isCollapsed"
     ></app-dashboard-header>
 
     <!-- CONTENT -->

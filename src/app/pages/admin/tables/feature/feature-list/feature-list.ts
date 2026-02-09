@@ -1,13 +1,14 @@
-import {Component, signal} from '@angular/core';
-import {Tenant} from '../../../../../core/interface/entity/tenant';
-import {FAKE_TENANTS, SOFTDELETEOPTIONS} from '../../tenant/tenant-list/tenant-list';
-import {TENANT_ROUTE_CONSTANT} from '../../../../../core/constant/tenant/tenant-list-constant';
+import {Component, inject, signal} from '@angular/core';
+import {SOFTDELETEOPTIONS} from '../../tenant/tenant-list/tenant-list';
 import {Feature} from '../../../../../core/interface/entity/feature';
 import {ColumnConfig} from '../../../../../core/interface/column-config';
-import {FEATURE_ROUTE_CONSTANT} from '../../../../../core/constant/feature/feature-list-constant';
 import {EditableDataTable} from '../../../../../shell/components/generic/editable-data-table/editable-data-table';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {RouterLink} from '@angular/router';
+import {ListData} from '../../../../../core/interface/list-data';
+import {FEATURE_ROUTE_CONSTANT} from '../../../../../core/constant/feature/feature-list-constant';
+import {NzMessageService} from 'ng-zorro-antd/message';
+import {FeatureService} from '../../../../../core/service/feature-service';
 
 @Component({
   selector: 'app-feature-list',
@@ -20,37 +21,80 @@ import {RouterLink} from '@angular/router';
   styleUrl: './feature-list.css',
 })
 export class FeatureList {
-  features = signal<Feature[]>(FAKE_FEATURES);
+  // State phân trang
+  currentPage = signal(1);   // 1-based (khớp API)
+  pageSize = signal(5);
+  userPageResponse = signal<ListData<Feature> | null>(null);
+  loading = signal(false);
+
   checked = false;
-  createRoute = '/admin/tables/features/create'
+  createRoute = '/admin/tables/users/features'
   featureListRouting = FEATURE_ROUTE_CONSTANT;
 
   protected readonly FEATURE_COLUMNS: ColumnConfig<Feature>[] = [
     {key: 'id', title: 'Id', editable: false},
-    {key: 'name', title:'Name', editable: true, type: 'text'},
+    {key: 'name', title: 'Name', editable: true, type: 'text'},
     {key: 'code', title: 'Code', editable: true, type: 'text'},
     {key: 'description', title: 'Description', 'editable': true, 'type': 'text'},
     {key: 'status', title: 'Status', editable: true, type: 'select', options: FEATURESTATUSOPTIONS},
     {key: 'createdDate', title: 'Created Date', editable: false},
     {key: 'modifiedDate', title: 'Modified Date', editable: false},
-    {key: 'entitlements', title: 'Num of Entitlements', editable: false},
-    {key: 'plans', title: 'Num of Plans', editable: false},
-    {key: 'tenant', title: 'Tenant\'s name', editable: false, type: 'custom', path:'tenant.name'},
+    {key: 'entitlements', title: 'Num of Entitlements', editable: false, type: 'custom', path: 'entitlements.length'},
+    {key: 'plans', title: 'Num of Plans', editable: false, type: 'custom', path: 'plans.length'},
+    {key: 'tenant', title: 'Tenant\'s name', editable: false, type: 'custom', path: 'tenant.name'},
     {key: 'softDelete', title: 'Soft Delete', editable: true, type: 'select', options: SOFTDELETEOPTIONS},
   ]
 
-  onSaveFeature(updatedFeature: Feature) {
-    // gọi API hoặc update signal
-    this.features.update(list =>
-      list.map(u => u.id === updatedFeature.id ? updatedFeature : u)
-    );
-  }
-  onDeleteFeature(feature: Feature){
-    this.features.update(u => u.filter(u=> u.id !== feature.id));
+  private featureService = inject(FeatureService);
+  private message = inject(NzMessageService);
+
+  // Columns giữ nguyên
+  constructor() {
+    // Load ban đầu
+    this.loadFeatures();
   }
 
-  onBulkDelete(ids: number[]){
-    this.features.update(list=> list.filter(u=>!ids.includes(u.id)))
+  loadFeatures() {
+    this.loading.set(true);
+    // API page 1-based, nhưng backend thường 0-based → -1
+    this.featureService.getFeature(this.currentPage(), this.pageSize()).subscribe({
+      next: (response) => {
+        this.userPageResponse.set(response);
+        this.loading.set(false);
+      },
+      error: (err) => {
+        this.loading.set(false);
+        this.message.error('Không thể tải danh sách user');
+        console.error(err);
+      }
+    });
+  }
+
+  // Khi đổi trang
+  onPageChange(newPage: number) {
+    this.currentPage.set(newPage);
+    this.loadFeatures();
+  }
+
+  // Khi đổi size
+  onSizeChange(newSize: number) {
+    this.pageSize.set(newSize);
+    this.currentPage.set(1); // reset về trang 1
+    this.loadFeatures();
+  }
+
+  onSaveRow(updateFeature: Feature) {
+    // this.userService.updateUser(updatedUser).subscribe({
+    //   next: () => {
+    //     this.message.success('Cập nhật thành công');
+    //     this.loadUsers();  // ← gọi lại API load toàn bộ list
+    //   },
+    //   error: () => {
+    //     this.message.error('Cập nhật thất bại');
+    //     // Optional: rollback cache nếu cần
+    //   }
+    // });
+    console.log('calling api')
   }
 }
 
@@ -116,7 +160,7 @@ export const FAKE_FEATURES: Feature[] = [
     "softDelete": false
   }
 ]
-export  const FEATURESTATUSOPTIONS = [
+export const FEATURESTATUSOPTIONS = [
   {label: 'Active', value: 'ACTIVE', color: 'green'},
   {label: 'Inactive', value: 'INACTIVE', color: 'red'}
 ]

@@ -1,7 +1,49 @@
-<nz-header class=" !p-0">
-        <div class="h-16 bg-white px-0 shadow-[0_1px_4px_rgba(0,21,41,0.08)]" >
-          <span class="h-16 px-6 items-center text-xl cursor-pointer transition-all" (click)="onToggle()">
-            <nz-icon class="trigger" [nzType]="isCollapsed() ? 'menu-unfold' : 'menu-fold'" />
-          </span>
-        </div>
+<nz-header class="!p-0">
+  <div class="h-16 bg-white px-4 shadow flex items-center justify-between">
+
+    <!-- Nút collapse -->
+    <span (click)="onToggle()"
+          class="h-16 flex items-center text-xl cursor-pointer">
+      <nz-icon [nzType]="isCollapsed() ? 'menu-unfold' : 'menu-fold'"/>
+    </span>
+
+    <!-- Menu phải -->
+    <div class="flex items-center gap-6">
+
+
+      <ul class="border-0" nz-menu nzMode="horizontal">
+        <li nz-menu-item routerLink="/docs">
+          <nz-icon nzType="file-text"/>
+          Docs
+        </li>
+
+        <li nz-menu-item routerLink="/faq">
+          <nz-icon nzType="question-circle"/>
+          FAQ
+        </li>
+      </ul>
+      <!-- Dropdown user -->
+      <a [nzDropdownMenu]="menu" nz-dropdown>
+        <nz-avatar nzIcon="user"></nz-avatar>
+        <span class="ml-2">Tài khoản</span>
+        <nz-icon nzType="down"/>
+      </a>
+
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu>
+          <li nz-menu-item>
+            <a routerLink="/profile">Thông tin cá nhân</a>
+          </li>
+
+          <li nz-menu-divider></li>
+
+          <!-- Logout chỉ emit event -->
+          <li (click)="logout.emit()" nz-menu-item>
+            Đăng xuất
+          </li>
+        </ul>
+      </nz-dropdown-menu>
+
+    </div>
+  </div>
 </nz-header>

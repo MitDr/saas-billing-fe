@@ -22,32 +22,33 @@
 <!--    </main>-->
 <!--  </div>-->
 <!--</div>-->
-  <nz-layout class="h-screen !flex-row">
+<nz-layout class="h-screen !flex-row">
 
-    <!-- SIDEBAR -->
-    <app-sidebar
+  <!-- SIDEBAR -->
+  <app-sidebar
+    [isCollapsed]="isCollapsed"
+    [menu]="ADMIN_SIDEBAR_MENU"
+    class="flex"
+  ></app-sidebar>
+
+  <!-- RIGHT SIDE -->
+  <nz-layout>
+    <!-- HEADER -->
+    <app-dashboard-header
+      (logout)="onLogout()"
+      (toggle)="toggleSidebar()"
       [isCollapsed]="isCollapsed"
-      class="flex"
-      [menu]="ADMIN_SIDEBAR_MENU"
-    ></app-sidebar>
+    ></app-dashboard-header>
 
-    <!-- RIGHT SIDE -->
-    <nz-layout>
-      <!-- HEADER -->
-      <app-dashboard-header
-        [isCollapsed]="isCollapsed"
-        (toggle)="toggleSidebar()"
-      ></app-dashboard-header>
-
-      <!-- CONTENT -->
-      <nz-content class="m-6">
-        <div class="p-6 bg-white h-full overflow-auto">
-          <div class="content-wrapper">
-            <router-outlet></router-outlet>
-          </div>
+    <!-- CONTENT -->
+    <nz-content class="m-6">
+      <div class="p-6 bg-white h-full overflow-auto">
+        <div class="content-wrapper">
+          <router-outlet></router-outlet>
         </div>
-      </nz-content>
-
-    </nz-layout>
+      </div>
+    </nz-content>
 
   </nz-layout>
+
+</nz-layout>

@@ -6,12 +6,16 @@
 <!--    <button nz-button nzType="primary" [routerLink]="createRoute">+ Add Feature</button>-->
 <!--  </ng-container>-->
 <!--</div>-->
-<!--<app-editable-data-table-->
-<!--  (bulkDelete)="onBulkDelete($event)"-->
-<!--  (deleteRow)="onDeleteFeature($event)"-->
-<!--  (saveRow)="onSaveFeature($event)"-->
-<!--  [columns]="FEATURE_COLUMNS"-->
-<!--  [data]="features()"-->
-<!--  [routes]="featureListRouting"-->
-<!--  viewRoute="/admin/tables/features/">-->
-<!--</app-editable-data-table>-->
+<app-editable-data-table
+  (pageChange)="onPageChange($event)"
+  (saveRow)="onSaveRow($event)"
+  (sizeChange)="onSizeChange($event)"
+  [columns]="FEATURE_COLUMNS"
+  [data]="userPageResponse()"
+  [loading]="loading()"
+  [routes]="featureListRouting"
+  [showBulkDelete]="true"
+  viewRoute="/admin/tables/users/">
+  >
+  <!-- Toolbar nếu cần -->
+</app-editable-data-table>

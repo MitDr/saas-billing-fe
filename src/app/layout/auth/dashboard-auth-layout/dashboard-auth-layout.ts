@@ -1,13 +1,15 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {DashboardHeader} from '../../../shell/components/layout/dashboard-header/dashboard-header';
 import {NzContentComponent, NzLayoutComponent} from 'ng-zorro-antd/layout';
-import {RouterOutlet} from '@angular/router';
+import {RouterModule, RouterOutlet} from '@angular/router';
 import {Sidebar} from '../../../shell/components/layout/sidebar/sidebar';
-import {ADMIN_SIDEBAR_MENU, APP_MENU} from '../../../core/constant/dashboard.sidebar.menu';
+import {APP_MENU} from '../../../core/constant/dashboard.sidebar.menu';
+import {AuthService} from '../../../core/service/auth-service';
 
 @Component({
   selector: 'app-dashboard-auth-layout',
   imports: [
+    RouterModule,
     DashboardHeader,
     NzContentComponent,
     NzLayoutComponent,
@@ -19,11 +21,18 @@ import {ADMIN_SIDEBAR_MENU, APP_MENU} from '../../../core/constant/dashboard.sid
 })
 export class DashboardAuthLayout {
   isCollapsed = false;
+  auth = inject(AuthService);
+  protected readonly APP_MENU = APP_MENU;
 
   toggleSidebar() {
     this.isCollapsed = !this.isCollapsed;
   }
 
-  protected readonly ADMIN_SIDEBAR_MENU = ADMIN_SIDEBAR_MENU;
-  protected readonly APP_MENU = APP_MENU;
+  onLogout() {
+    this.auth.logout().subscribe({
+      next: () => {
+        // không cần làm gì thêm
+      }
+    });
+  }
 }

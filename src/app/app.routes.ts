@@ -1,13 +1,11 @@
-import { Routes } from '@angular/router';
-import {HOME_ROUTES} from './pages/home/home.route';
-import {PublicLayout} from './layout/public-layout/public-layout';
+import {Routes} from '@angular/router';
+import {PublicLayout} from './layout/public/public-layout/public-layout';
 import {Home} from './pages/home/home';
 import {Dashboard} from './pages/admin/dashboard/dashboard';
 import {DashboardLayout} from './layout/admin/dashboard-layout/dashboard-layout';
 import {DashboardAuthLayout} from './layout/auth/dashboard-auth-layout/dashboard-auth-layout';
 import {AuthDashboard} from './pages/auth/auth-dashboard/auth-dashboard';
 import {UserList} from './pages/admin/tables/user/user-list/user-list';
-import {UserForm} from './pages/admin/tables/user/user-form/user-form';
 import {UserCreate} from './pages/admin/tables/user/user-create/user-create';
 import {UserDetail} from './pages/admin/tables/user/user-detail/user-detail';
 import {TenantList} from './pages/admin/tables/tenant/tenant-list/tenant-list';
@@ -18,6 +16,9 @@ import {FeatureList} from './pages/admin/tables/feature/feature-list/feature-lis
 import {PlanList} from './pages/admin/tables/plan/plan-list/plan-list';
 import {PlanGroupList} from './pages/admin/tables/plan-group/plan-group-list/plan-group-list';
 import {PriceList} from './pages/admin/tables/price/price-list/price-list';
+import {AuthFormLayout} from './layout/public/auth-form-layout/auth-form-layout';
+import {Login} from './pages/public/login/login';
+import {adminGuard, authGuard} from './core/auth/guard/auth-guard';
 
 export const routes: Routes = [
   {
@@ -31,8 +32,19 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'auth',
+    component: AuthFormLayout,
+    children: [
+      {
+        path: 'login',
+        component: Login
+      }
+    ]
+  },
+  {
     path: 'admin',
     component: DashboardLayout,
+    canActivate: [adminGuard],
     children: [
       {
         path: 'dashboard',
@@ -92,6 +104,7 @@ export const routes: Routes = [
   {
     path: 'app',
     component: DashboardAuthLayout,
+    canActivate: [authGuard],
     children: [
       {
         path: 'dashboard',
