@@ -33,17 +33,18 @@ export class PlanList {
 
   protected readonly PLAN_COLUMNS: ColumnConfig<Plan>[] = [
     {key: 'id', title: 'Id', editable: false},
-    {key: 'name', title:'Name', editable: true, type: 'text'},
+    {key: 'name', title: 'Name', editable: true, type: 'text'},
     {key: 'image', title: 'image', editable: false, type: 'avatar'},
     {key: 'status', title: 'Status', editable: true, type: 'select', options: PLANSTATUSOPTIONS},
-    {key: 'planGroup', title: 'num of planGroup', editable: false},
-    {key: 'prices', title: 'num of price', editable: false},
+    {key: 'planGroup', title: 'planGroup\'s name', editable: false, type: 'custom', path: 'planGroup.name'},
+    {key: 'prices', title: 'num of price', editable: false, type: 'custom', path: 'prices.length'},
     {key: 'features', title: 'num of feature', editable: false, type: 'custom', path: 'features.length'},
     {key: 'createdDate', title: 'Created Date', editable: false},
     {key: 'modifiedDate', title: 'Modified Date', editable: false},
-    {key: 'tenant', title: 'Tenant\'s name', editable: false, type: 'custom', path:'tenant.name'},
+    {key: 'tenant', title: 'Tenant\'s name', editable: false, type: 'custom', path: 'tenant.name'},
     {key: 'softDelete', title: 'Soft Delete', editable: true, type: 'select', options: SOFTDELETEOPTIONS},
   ]
+  protected readonly featureListRouting = FEATURE_ROUTE_CONSTANT;
   private planService = inject(PlanService);
   private message = inject(NzMessageService);
 
@@ -59,7 +60,7 @@ export class PlanList {
     });
   }
 
-  loadPlans(page: number, size: number){
+  loadPlans(page: number, size: number) {
     this.loading.set(true);
 
     this.planService.getPlans(page, size).subscribe({  // page 0-based cho backend
@@ -117,8 +118,6 @@ export class PlanList {
     //   }
     // });
   }
-
-  protected readonly featureListRouting = FEATURE_ROUTE_CONSTANT;
 }
 
 export const FAKE_PLAN: Plan[] = [

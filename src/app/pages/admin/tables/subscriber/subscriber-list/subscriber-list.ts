@@ -1,6 +1,5 @@
 import {Component, effect, inject, signal} from '@angular/core';
 import {ListData} from '../../../../../core/interface/list-data';
-import {Tenant} from '../../../../../core/interface/entity/tenant';
 import {Subscriber} from '../../../../../core/interface/entity/subscriber';
 import {ColumnConfig} from '../../../../../core/interface/column-config';
 import {SUBSCRIBER_ROUTE_CONSTANT} from '../../../../../core/constant/subscriber/subscriber-list-constant';
@@ -36,53 +35,58 @@ export class SubscriberList {
     {key: 'id', title: 'Id', editable: false},
     {key: 'name', title: 'Name', editable: true},
     {key: 'name', title: 'Email', editable: true},
-    {key: 'subscriptions', title: 'subscriptions', editable: false},
+    {
+      key: 'subscriptions',
+      title: 'Num of subscriptions',
+      editable: false,
+      type: 'custom',
+      path: 'subscriptions.length'
+    },
     {key: 'createdDate', title: 'Created Date', editable: false},
     {key: 'modifiedDate', title: 'Modified Date', editable: false},
     {key: 'tenant', title: 'Subscriber\'s tenant', type: "custom", path: 'tenant.name', editable: false},
-    {key: 'softDelete', title: 'Soft Deleted', type: 'select', options: SOFTDELETEOPTIONS,editable: true }
+    {key: 'softDelete', title: 'Soft Deleted', type: 'select', options: SOFTDELETEOPTIONS, editable: true}
   ]
-
+  protected readonly tenantListRouting = TENANT_ROUTE_CONSTANT;
   private subscriberService = inject(SubscriberService);
   private message = inject(NzMessageService);
 
   constructor() {
-    effect(()=>{
+    effect(() => {
       const page = this.currentPage();
       const size = this.pageSize();
       this.loadSubscribers(page, size)
     });
   }
 
-  private loadSubscribers(page: number, size: number){
+  onPageChange(newPage: number) {
+    this.currentPage.set(newPage);
+  }
+
+  onSizeChange(newSize: number) {
+    this.pageSize.set(newSize);
+  }
+
+  onSaveRow(updateSubscriber: Subscriber) {
+
+  }
+
+  OnBulkDelete(ids: number[]) {
+
+  }
+
+  private loadSubscribers(page: number, size: number) {
     this.loading.set(true);
 
     this.subscriberService.getSubscribers(page, size).subscribe({
-      next:(response)=>{
+      next: (response) => {
         this.subscriberPage.set(response);
         this.loading.set(false);
       },
-      error: (err) =>{
+      error: (err) => {
         this.message.error('Không thể tải danh sách subscribers');
         this.loading.set(false);
       }
     })
   }
-
-  onPageChange(newPage: number){
-    this.currentPage.set(newPage);
-  }
-
-  onSizeChange(newSize: number){
-    this.pageSize.set(newSize);
-  }
-
-  onSaveRow(updateSubscriber: Subscriber){
-
-  }
-  OnBulkDelete(ids: number[]){
-
-  }
-
-  protected readonly tenantListRouting = TENANT_ROUTE_CONSTANT;
 }
