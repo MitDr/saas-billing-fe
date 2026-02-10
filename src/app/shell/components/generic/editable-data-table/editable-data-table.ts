@@ -65,7 +65,7 @@ export class EditableDataTable<T extends { id: number }> {
   // Outputs
   saveRow = output<T>();
   // deleteRow = output<T>();
-  // bulkDelete = output<number[]>();
+  bulkDelete = output<number[]>();
 
   // State
   editCache = signal<Record<string | number, { edit: boolean; data: T }>>({});
@@ -130,13 +130,11 @@ export class EditableDataTable<T extends { id: number }> {
     const cache = this.editCache();
     const editedRow = cache[id].data;
     this.saveRow.emit(editedRow as T);  // ← emit ra ngoài
-
   }
 
-  //
-  // onBulkDelete(): void {
-  //   this.bulkDelete.emit(Array.from(this.setOfCheckedId()));
-  // }
+  onBulkDelete(): void {
+    this.bulkDelete.emit(Array.from(this.setOfCheckedId()));
+  }
 
   getNestedValue(obj: any, path: string): any {
     return path.split('.').reduce((o, k) => (o || {})[k], obj);

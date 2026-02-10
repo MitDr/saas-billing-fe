@@ -11,11 +11,12 @@
   (saveRow)="onSaveRow($event)"
   (sizeChange)="onSizeChange($event)"
   [columns]="FEATURE_COLUMNS"
-  [data]="userPageResponse()"
+  (bulkDelete)="onBulkDelete($event)"
+  [data]="featurePage()"
   [loading]="loading()"
   [routes]="featureListRouting"
   [showBulkDelete]="true"
-  viewRoute="/admin/tables/users/">
+  viewRoute="/admin/tables/features/">
   >
   <!-- Toolbar nếu cần -->
 </app-editable-data-table>

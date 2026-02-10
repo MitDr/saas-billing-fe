@@ -9,6 +9,7 @@ import {NzPageHeaderComponent} from 'ng-zorro-antd/page-header';
 import {NzSpinComponent} from 'ng-zorro-antd/spin';
 import {UserCard} from '../../../../../shell/components/card/user/user-card/user-card';
 import {TenantCard} from '../../../../../shell/components/card/tenant/tenant-card/tenant-card';
+import {TenantService} from '../../../../../core/service/tenant-service';
 
 @Component({
   selector: 'app-tenant-detail',
@@ -18,13 +19,14 @@ import {TenantCard} from '../../../../../shell/components/card/tenant/tenant-car
     NzPageHeaderComponent,
     NzSpinComponent,
     RouterLink,
-    UserCard,
     TenantCard
   ],
   templateUrl: './tenant-detail.html',
   styleUrl: './tenant-detail.css',
 })
 export class TenantDetail {
+  tenantService = inject(TenantService);
+
   private route = inject(ActivatedRoute);
 
   tenant = signal<Tenant | null>(null);

@@ -1,4 +1,4 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, effect, inject, signal} from '@angular/core';
 import {User} from '../../../../../core/interface/entity/user';
 import {NzTableModule} from 'ng-zorro-antd/table';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
@@ -10,6 +10,7 @@ import {RouterLink} from '@angular/router';
 import {ListData} from '../../../../../core/interface/list-data';
 import {UserService} from '../../../../../core/service/user.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
+import {Feature} from '../../../../../core/interface/entity/feature';
 
 @Component({
   selector: 'app-user-list',
@@ -24,7 +25,6 @@ import {NzMessageService} from 'ng-zorro-antd/message';
   styleUrl: './user-list.css',
 })
 export class UserList {
-
   // State phân trang
   currentPage = signal(1);   // 1-based (khớp API)
   pageSize = signal(5);
@@ -62,11 +62,18 @@ export class UserList {
 
   // Columns giữ nguyên
   constructor() {
-    // Load ban đầu
-    this.loadUsers();
+    // Effect tự động load khi currentPage hoặc pageSize thay đổi
+    effect(() => {
+      // Lấy giá trị để effect phụ thuộc
+      const page = this.currentPage();
+      const size = this.pageSize();
+
+      // console.log('[EFFECT] Reload features - page:', page, 'size:', size);
+      this.loadUsers(page, size);
+    });
   }
 
-  loadUsers() {
+  loadUsers(page:number, size:number) {
     this.loading.set(true);
     // API page 1-based, nhưng backend thường 0-based → -1
     this.userService.getUsers(this.currentPage(), this.pageSize()).subscribe({
@@ -82,20 +89,56 @@ export class UserList {
     });
   }
 
-  // Khi đổi trang
+// Khi đổi trang
   onPageChange(newPage: number) {
+    console.log('[PAGE] Changed to:', newPage);
     this.currentPage.set(newPage);
-    this.loadUsers();
+    // Không cần gọi loadFeatures nữa → effect tự chạy
   }
 
   // Khi đổi size
   onSizeChange(newSize: number) {
+    console.log('[SIZE] Changed to:', newSize);
     this.pageSize.set(newSize);
     this.currentPage.set(1); // reset về trang 1
-    this.loadUsers();
+    // Effect tự reload
   }
 
-  // onSaveUser(updatedUser: User) {
+  onSaveRow(updateUser: User) {
+    // this.userService.updateUser(updatedUser).subscribe({
+    //   next: () => {
+    //     this.message.success('Cập nhật thành công');
+    //     this.loadUsers();  // ← gọi lại API load toàn bộ list
+    //   },
+    //   error: () => {
+    //     this.message.error('Cập nhật thất bại');
+    //     // Optional: rollback cache nếu cần
+    //   }
+    // });
+    console.log('calling api')
+  }
+
+  onBulkDelete(ids: number[]) {
+    // if (ids.length === 0) return;
+    //
+    // this.modal.confirm({
+    //   nzTitle: 'Xác nhận xóa',
+    //   nzContent: `Xóa ${ids.length} feature?`,
+    //   nzOkText: 'Xóa',
+    //   nzOkDanger: true,
+    //   nzOnOk: () => {
+    //     this.featureService.bulkDelete(ids).subscribe({
+    //       next: () => {
+    //         this.message.success('Xóa thành công');
+    //         this.currentPage.set(this.currentPage()); // trigger reload
+    //       },
+    //       error: () => this.message.error('Xóa thất bại')
+    //     });
+    //   }
+    // });
+  }
+
+  onSaveUser(updatedUser: User) {
   //   // gọi API hoặc update signal
   //   this.users.update(list =>
   //     list.map(u => u.id === updatedUser.id ? updatedUser : u)
@@ -110,7 +153,7 @@ export class UserList {
   //   this.users.update(list =>
   //     list.filter(u => !ids.includes(u.id))
   //   );
-  // }
+  }
 
   //
   // loadTenants(page: number, size: number) {
@@ -221,7 +264,7 @@ export class UserList {
   //     this.users[index] = event.row;
   //   }
 
-  onSaveRow(updatedUser: User) {
+  // onSaveRow(updatedUser: User) {
     // this.userService.updateUser(updatedUser).subscribe({
     //   next: () => {
     //     this.message.success('Cập nhật thành công');
@@ -232,8 +275,8 @@ export class UserList {
     //     // Optional: rollback cache nếu cần
     //   }
     // });
-    console.log('calling api')
-  }
+    // console.log('calling api')
+  // }
 }
 
 export const FAKE_USER: ListData<User> = {

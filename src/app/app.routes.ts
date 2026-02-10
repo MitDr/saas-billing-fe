@@ -19,6 +19,8 @@ import {PriceList} from './pages/admin/tables/price/price-list/price-list';
 import {AuthFormLayout} from './layout/public/auth-form-layout/auth-form-layout';
 import {Login} from './pages/public/login/login';
 import {adminGuard, authGuard} from './core/auth/guard/auth-guard';
+import {SubscriberList} from './pages/admin/tables/subscriber/subscriber-list/subscriber-list';
+import {SubscriptionList} from './pages/admin/tables/subscription/subscription-list/subscription-list';
 
 export const routes: Routes = [
   {
@@ -44,7 +46,7 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: DashboardLayout,
-    canActivate: [adminGuard],
+    // canActivate: [adminGuard],
     children: [
       {
         path: 'dashboard',
@@ -94,17 +96,27 @@ export const routes: Routes = [
         path: 'tables/plan-groups',
         component: PlanGroupList
       },
+      //Price
       {
         path: 'tables/prices',
         component: PriceList
-
+      },
+      //Subscribers
+      {
+        path: 'tables/subscribers',
+        component: SubscriberList
+      },
+      //Subscriptions
+      {
+        path: 'tables/subscriptions',
+        component: SubscriptionList
       }
     ]
   },
   {
     path: 'app',
     component: DashboardAuthLayout,
-    canActivate: [authGuard],
+    // canActivate: [authGuard],
     children: [
       {
         path: 'dashboard',

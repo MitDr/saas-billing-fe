@@ -5,14 +5,15 @@ import {ListData} from '../interface/list-data';
 import {catchError} from 'rxjs/operators';
 import {Feature} from '../interface/entity/feature';
 import {HttpParams} from '@angular/common/http';
+import {Price} from '../interface/entity/price';
 
 @Injectable({
   providedIn: 'root'
 })
-export class FeatureService {
+export class PriceService {
   api = inject(ApiClientService);
 
-  getFeatures(page: number = 1, size: number = 5): Observable<ListData<Feature>> {
+  getPrices(page: number = 1, size: number = 5): Observable<ListData<Price>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString())
@@ -20,14 +21,14 @@ export class FeatureService {
       .set('all', 'false')
     // .set()
 
-    return this.api.get<ListData<Feature>>("/admin/features", params)
+    return this.api.get<ListData<Price>>("/admin/prices", params)
       .pipe(
         map(response => {
-          return response as ListData<Feature>;
+          return response as ListData<Price>;
         }),
         catchError(error => {
-          console.error('Get features error:', error);
-          return throwError(() => new Error('Không thể lấy danh sách features'));
+          console.error('Get prices error:', error);
+          return throwError(() => new Error('Không thể lấy danh sách prices'));
         })
       )
 

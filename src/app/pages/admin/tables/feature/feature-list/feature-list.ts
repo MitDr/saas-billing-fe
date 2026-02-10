@@ -1,4 +1,4 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, effect, inject, signal} from '@angular/core';
 import {SOFTDELETEOPTIONS} from '../../tenant/tenant-list/tenant-list';
 import {Feature} from '../../../../../core/interface/entity/feature';
 import {ColumnConfig} from '../../../../../core/interface/column-config';
@@ -14,8 +14,6 @@ import {FeatureService} from '../../../../../core/service/feature-service';
   selector: 'app-feature-list',
   imports: [
     EditableDataTable,
-    NzButtonComponent,
-    RouterLink
   ],
   templateUrl: './feature-list.html',
   styleUrl: './feature-list.css',
@@ -24,11 +22,11 @@ export class FeatureList {
   // State phân trang
   currentPage = signal(1);   // 1-based (khớp API)
   pageSize = signal(5);
-  userPageResponse = signal<ListData<Feature> | null>(null);
+  featurePage = signal<ListData<Feature> | null>(null);
   loading = signal(false);
 
   checked = false;
-  createRoute = '/admin/tables/users/features'
+  createRoute = '/admin/tables/features/create'
   featureListRouting = FEATURE_ROUTE_CONSTANT;
 
   protected readonly FEATURE_COLUMNS: ColumnConfig<Feature>[] = [
@@ -50,37 +48,47 @@ export class FeatureList {
 
   // Columns giữ nguyên
   constructor() {
-    // Load ban đầu
-    this.loadFeatures();
+    // Effect tự động load khi currentPage hoặc pageSize thay đổi
+    effect(() => {
+      // Lấy giá trị để effect phụ thuộc
+      const page = this.currentPage();
+      const size = this.pageSize();
+
+      // console.log('[EFFECT] Reload features - page:', page, 'size:', size);
+      this.loadFeatures(page, size);
+    });
   }
 
-  loadFeatures() {
+  private loadFeatures(page: number, size: number) {
     this.loading.set(true);
-    // API page 1-based, nhưng backend thường 0-based → -1
-    this.featureService.getFeature(this.currentPage(), this.pageSize()).subscribe({
+
+    this.featureService.getFeatures(page, size).subscribe({  // page 0-based cho backend
       next: (response) => {
-        this.userPageResponse.set(response);
+        // console.log('[API] Features loaded:', response);
+        this.featurePage.set(response);
         this.loading.set(false);
       },
       error: (err) => {
+        // console.error('[API] Load features error:', err);
+        this.message.error('Không thể tải danh sách features');
         this.loading.set(false);
-        this.message.error('Không thể tải danh sách user');
-        console.error(err);
       }
     });
   }
 
   // Khi đổi trang
   onPageChange(newPage: number) {
+    console.log('[PAGE] Changed to:', newPage);
     this.currentPage.set(newPage);
-    this.loadFeatures();
+    // Không cần gọi loadFeatures nữa → effect tự chạy
   }
 
   // Khi đổi size
   onSizeChange(newSize: number) {
+    console.log('[SIZE] Changed to:', newSize);
     this.pageSize.set(newSize);
     this.currentPage.set(1); // reset về trang 1
-    this.loadFeatures();
+    // Effect tự reload
   }
 
   onSaveRow(updateFeature: Feature) {
@@ -95,6 +103,27 @@ export class FeatureList {
     //   }
     // });
     console.log('calling api')
+  }
+
+  // Bulk delete (tương tự)
+  onBulkDelete(ids: number[]) {
+    // if (ids.length === 0) return;
+    //
+    // this.modal.confirm({
+    //   nzTitle: 'Xác nhận xóa',
+    //   nzContent: `Xóa ${ids.length} feature?`,
+    //   nzOkText: 'Xóa',
+    //   nzOkDanger: true,
+    //   nzOnOk: () => {
+    //     this.featureService.bulkDelete(ids).subscribe({
+    //       next: () => {
+    //         this.message.success('Xóa thành công');
+    //         this.currentPage.set(this.currentPage()); // trigger reload
+    //       },
+    //       error: () => this.message.error('Xóa thất bại')
+    //     });
+    //   }
+    // });
   }
 }
 

@@ -5,7 +5,6 @@
   <ng-container class="mb-4">
     <button [routerLink]="createRoute" nz-button nzType="primary">+ Add User</button>
   </ng-container>
-
 </div>
 <!--<div class="table-toolbar flex mb-16 flex-wrap gap-8 justify-between">-->
 <!--  <div class="left">-->
@@ -125,6 +124,7 @@
   (pageChange)="onPageChange($event)"
   (saveRow)="onSaveRow($event)"
   (sizeChange)="onSizeChange($event)"
+  (bulkDelete)="onBulkDelete($event)"
   [columns]="USER_COLUMNS"
   [data]="userPageResponse()"
   [loading]="loading()"

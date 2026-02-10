@@ -42,6 +42,11 @@ export const ADMIN_SIDEBAR_MENU: MenuItem[] =[
         path: '/admin/tables/tenants',
       },
       {
+        title: 'Subscriber',
+        icon: 'team',
+        path: '/admin/tables/subscribers',
+      },
+      {
         title: 'Subscription',
         icon: 'wallet',
         path: '/admin/tables/subscriptions',

@@ -1,0 +1,22 @@
+<div class="mb-4 flex justify-between">
+  <h1 class="text-2xl font-semibold mb-6">
+    SUBSCRIBER LIST
+  </h1>
+  <ng-container class="mb-4">
+    <button nz-button nzType="primary" [routerLink]="createRoute">+ Add Subscriber</button>
+  </ng-container>
+</div>
+<app-editable-data-table
+  (pageChange)="onPageChange($event)"
+  (saveRow)="onSaveRow($event)"
+  (sizeChange)="onSizeChange($event)"
+  [columns]="SUBSCRIBER_COLUMNS"
+  (bulkDelete)="OnBulkDelete($event)"
+  [data]="subscriberPage()"
+  [loading]="loading()"
+  [routes]="subscriberListRouting"
+  [showBulkDelete]="true"
+  viewRoute="/admin/tables/subscribers/">
+  >
+  <!-- Toolbar nếu cần -->
+</app-editable-data-table>
