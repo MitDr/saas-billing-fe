@@ -14,6 +14,8 @@ import {BreadCrumbInterface} from '../../../../core/interface/bread-crumb-interf
 import {RouterLink} from '@angular/router';
 import {NzAvatarComponent} from 'ng-zorro-antd/avatar';
 import {ListData} from '../../../../core/interface/list-data';
+import {NzDatePickerComponent} from 'ng-zorro-antd/date-picker';
+import {NzTimePickerComponent} from 'ng-zorro-antd/time-picker';
 
 @Component({
   selector: ' app-editable-data-table',
@@ -32,6 +34,8 @@ import {ListData} from '../../../../core/interface/list-data';
     Breadcrumb,
     RouterLink,
     NzAvatarComponent,
+    NzDatePickerComponent,
+    NzTimePickerComponent,
   ],
   templateUrl: './editable-data-table.html',
   styleUrl: './editable-data-table.css',

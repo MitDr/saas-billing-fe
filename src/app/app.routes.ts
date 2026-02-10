@@ -21,6 +21,7 @@ import {Login} from './pages/public/login/login';
 import {adminGuard, authGuard} from './core/auth/guard/auth-guard';
 import {SubscriberList} from './pages/admin/tables/subscriber/subscriber-list/subscriber-list';
 import {SubscriptionList} from './pages/admin/tables/subscription/subscription-list/subscription-list';
+import {Register} from './pages/public/register/register/register';
 
 export const routes: Routes = [
   {
@@ -40,6 +41,10 @@ export const routes: Routes = [
       {
         path: 'login',
         component: Login
+      },
+      {
+        path: 'register',
+        component: Register
       }
     ]
   },

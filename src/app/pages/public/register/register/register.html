@@ -1,0 +1,51 @@
+<div class="page-container">
+  <h1 class="text-2xl font-bold text-gray-800 mb-2">Welcome</h1>
+  <p class="text-gray-500 mb-8">Sign up to your account</p>
+
+  <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="username">Username</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid Username!">
+        <input nz-input formControlName="username" id="username" autocomplete="username"/>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">E-mail</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid E-mail!">
+        <input nz-input formControlName="email" id="email" autocomplete="email" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="password" nzRequired>Password</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your password!">
+        <input nz-input type="password" id="password" formControlName="password" autocomplete="new-password" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="checkPassword" nzRequired>Confirm Password</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorTpl">
+        <input nz-input type="password" formControlName="checkPassword" id="checkPassword" autocomplete="new-password" />
+        <ng-template #errorTpl let-control>
+          @if (control.errors?.['required']) {
+            Please confirm your password!
+          }
+          @if (control.errors?.['confirm']) {
+            Two passwords that you enter is inconsistent!
+          }
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item nz-row class="register-area">
+      <nz-form-control [nzSpan]="14" [nzOffset]="6">
+        <button nz-button nzType="primary">Register</button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+  <p class="mt-6 text-center text-sm text-gray-600">
+    Already have an account?
+    <a class="text-indigo-600 hover:text-indigo-800 font-medium" href="/auth/login">
+      Sign in
+    </a>
+  </p>
+</div>
+

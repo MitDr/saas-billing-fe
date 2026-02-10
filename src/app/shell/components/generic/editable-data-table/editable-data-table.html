@@ -124,8 +124,27 @@
                     <!--                  @if (!avatarUrl) {-->
                     <!--                    <span class="ml-2 text-gray-500">No avatar</span>-->
                     <!--                  }-->
+                } @else if (col.type === 'date-time') {
+                  <div class="flex gap-2">
+                    <!-- Date Picker -->
+                    <nz-date-picker
+                      [(ngModel)]="editCache()[item.id].data[col.key]"
+                      [nzFormat]="col.dateFormat || 'dd-MM-yyyy HH:mm:ss'"
+                      nzAllowClear
+                      nzPlaceHolder="Chọn ngày"
+                    ></nz-date-picker>
+
+<!--                    &lt;!&ndash; Time Picker &ndash;&gt;-->
+<!--                    <nz-time-picker-->
+<!--                      [(ngModel)]="editCache()[item.id].data[col.key]"-->
+<!--                      [nzFormat]="col.timeFormat || 'HH:mm:ss'"-->
+<!--                      nzAllowClear-->
+<!--                      nzPlaceHolder="Chọn giờ"-->
+<!--                    ></nz-time-picker>-->
+
+                  </div>
                 } @else {
-                  {{ item[col.key] }}
+                  {{ item[col.key]}}
                 }
               }
             </td>
