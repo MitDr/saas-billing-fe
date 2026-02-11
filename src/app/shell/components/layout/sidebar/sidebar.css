@@ -12,3 +12,43 @@
   transform: translateX(-8px);
   max-width: 0;
 }
+
+/* Giới hạn chiều cao submenu inline (accordion) + scroll khi dài */
+:host ::ng-deep .ant-menu-sub {
+  max-height: 70vh !important;           /* Giới hạn 50% chiều cao màn hình – đổi thành 40vh hoặc 400px nếu muốn */
+  overflow-y: auto !important;           /* Tự scroll dọc khi quá dài */
+  overflow-x: hidden !important;
+  background: #001529 !important;        /* Giữ màu dark theme */
+  padding: 4px 0 !important;
+}
+
+/* Làm đẹp scrollbar cho submenu inline */
+:host ::ng-deep .ant-menu-sub::-webkit-scrollbar {
+  width: 6px;
+}
+
+:host ::ng-deep .ant-menu-sub::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+:host ::ng-deep .ant-menu-sub::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+:host ::ng-deep .ant-menu-sub::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Optional: Khi sidebar collapse, submenu inline vẫn đẹp */
+:host ::ng-deep .ant-menu-inline-collapsed .ant-menu-sub {
+  max-height: 100vh !important;
+  overflow-y: auto !important;
+}
+
+/* Đảm bảo menu chính vẫn scroll tốt */
+.overflow-auto {
+  flex: 1 1 auto;
+  overflow-y: auto !important;
+  overflow-x: hidden;
+}

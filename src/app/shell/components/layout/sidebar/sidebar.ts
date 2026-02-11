@@ -4,6 +4,7 @@ import {NzMenuDirective, NzMenuItemComponent, NzSubMenuComponent} from 'ng-zorro
 import {RouterLink} from '@angular/router';
 import {MenuItem} from '../../../../core/interface/MenuItem';
 import {NzIconDirective, NzIconModule} from 'ng-zorro-antd/icon';
+import {NzDropdownDirective, NzDropdownMenuComponent} from 'ng-zorro-antd/dropdown';
 
 @Component({
   selector: 'app-sidebar',
@@ -14,7 +15,9 @@ import {NzIconDirective, NzIconModule} from 'ng-zorro-antd/icon';
     NzMenuItemComponent,
     RouterLink,
     NzIconDirective,
-    NzIconModule
+    NzIconModule,
+    NzDropdownDirective,
+    NzDropdownMenuComponent
   ],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css',

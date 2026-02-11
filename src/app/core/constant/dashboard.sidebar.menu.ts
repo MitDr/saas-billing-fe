@@ -12,9 +12,34 @@ export const ADMIN_SIDEBAR_MENU: MenuItem[] =[
     path: '/admin/tables',
     children: [
       {
+        title: 'Entitlements',
+        icon: 'eye',
+        path: '/admin/tables/entitlements',
+      },
+      {
         title: 'Feature',
         icon: 'bulb',
         path: '/admin/tables/features',
+      },
+      {
+        title: 'Image',
+        icon: 'picture',
+        path: '/admin/tables/images'
+      },
+      {
+        title: 'Invoice',
+        icon: 'file-done',
+        path: '/admin/tables/invoices'
+      },
+      {
+        title: 'Payment',
+        icon: 'credit-card',
+        path: '/admin/tables/payments'
+      },
+      {
+        title: 'Payout',
+        icon: 'dollar',
+        path: '/admin/tables/payouts'
       },
       {
         title: 'Plan',
@@ -32,16 +57,6 @@ export const ADMIN_SIDEBAR_MENU: MenuItem[] =[
         path: '/admin/tables/prices'
       },
       {
-        title: 'Users',
-        icon: 'user',
-        path: '/admin/tables/users',
-      },
-      {
-        title: 'Tenant',
-        icon: 'container',
-        path: '/admin/tables/tenants',
-      },
-      {
         title: 'Subscriber',
         icon: 'team',
         path: '/admin/tables/subscribers',
@@ -51,7 +66,26 @@ export const ADMIN_SIDEBAR_MENU: MenuItem[] =[
         icon: 'wallet',
         path: '/admin/tables/subscriptions',
       },
-
+      {
+        title: 'Tenant',
+        icon: 'container',
+        path: '/admin/tables/tenants',
+      },
+      {
+        title: 'Users',
+        icon: 'user',
+        path: '/admin/tables/users',
+      },
+      {
+        title: 'Webhook Endpoint',
+        icon: 'solution',
+        path: '/admin/tables/webhook-endpoints',
+      },
+      {
+        title: 'Webhook Log',
+        icon: 'file-protect',
+        path: '/admin/tables/webhook-logs',
+      },
     ]
   }
 ]

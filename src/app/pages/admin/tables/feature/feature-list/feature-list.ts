@@ -14,6 +14,8 @@ import {FeatureService} from '../../../../../core/service/feature-service';
   selector: 'app-feature-list',
   imports: [
     EditableDataTable,
+    NzButtonComponent,
+    RouterLink,
   ],
   templateUrl: './feature-list.html',
   styleUrl: './feature-list.css',

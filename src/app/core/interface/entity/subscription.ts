@@ -19,5 +19,6 @@ export interface Subscription{
   "invoices": number,
   "tenant": TenantDTO,
   "metadata": any,
-  "trial": boolean
+  "trial": boolean,
+  "softDelete": boolean,
 }

@@ -22,6 +22,13 @@ import {adminGuard, authGuard} from './core/auth/guard/auth-guard';
 import {SubscriberList} from './pages/admin/tables/subscriber/subscriber-list/subscriber-list';
 import {SubscriptionList} from './pages/admin/tables/subscription/subscription-list/subscription-list';
 import {Register} from './pages/public/register/register/register';
+import {EntitlementList} from './pages/admin/tables/entitlement/entitlement-list/entitlement-list';
+import {ImageList} from './pages/admin/tables/image/image-list/image-list';
+import {InvoiceList} from './pages/admin/tables/invoice/invoice-list/invoice-list';
+import {PaymentList} from './pages/admin/tables/payment/payment-list/payment-list';
+import {PayoutList} from './pages/admin/tables/payout/payout-list/payout-list';
+import {WebhookEndpointList} from './pages/admin/tables/webhook-endpoint/webhook-endpoint-list/webhook-endpoint-list';
+import {WebhookLogList} from './pages/admin/tables/webhook-log/webhook-log-list/webhook-log-list';
 
 export const routes: Routes = [
   {
@@ -115,6 +122,41 @@ export const routes: Routes = [
       {
         path: 'tables/subscriptions',
         component: SubscriptionList
+      },
+      //Entitlement
+      {
+        path: 'tables/entitlements',
+        component: EntitlementList
+      },
+      //Image
+      {
+        path: 'tables/images',
+        component: ImageList
+      },
+      //Invoice
+      {
+        path: 'tables/invoices',
+        component: InvoiceList
+      },
+      //Payment
+      {
+        path: 'tables/payments',
+        component: PaymentList
+      },
+      //Payout
+      {
+        path: 'tables/payouts',
+        component: PayoutList
+      },
+      //Webhook Endpoints
+      {
+        path: 'tables/webhook-endpoints',
+        component: WebhookEndpointList,
+      },
+      //Webhook Log
+      {
+        path: 'tables/webhook-logs',
+        component: WebhookLogList
       }
     ]
   },
