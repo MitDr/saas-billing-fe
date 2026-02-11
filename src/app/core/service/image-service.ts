@@ -1,4 +1,4 @@
-import {Inject, Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {ApiClientService} from './api-client-service';
 import {map, Observable, throwError} from 'rxjs';
 import {ListData} from '../interface/list-data';
@@ -10,7 +10,7 @@ import {catchError} from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ImageService {
-  api:ApiClientService = Inject(ApiClientService);
+  api = inject(ApiClientService)
 
   getImages(page: number = 1, size: number = 5): Observable<ListData<Image>> {
     let params = new HttpParams()

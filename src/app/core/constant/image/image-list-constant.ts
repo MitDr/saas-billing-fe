@@ -13,7 +13,7 @@ export const IMAGE_ROUTE_CONSTANT: BreadCrumbInterface[] = [
   },
   {
     name: "Images",
-    route: "/admin/tables/Images",
+    route: "/admin/tables/images",
     activable: true
   }
 ]
