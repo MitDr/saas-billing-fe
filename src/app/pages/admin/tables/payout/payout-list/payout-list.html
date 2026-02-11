@@ -1,0 +1,22 @@
+<div class="mb-4 flex justify-between">
+  <h1 class="text-2xl font-semibold mb-6">
+    PAYOUT LIST
+  </h1>
+  <ng-container class="mb-4">
+    <button nz-button nzType="primary" [routerLink]="createRoute">+ Add Payout</button>
+  </ng-container>
+</div>
+<app-editable-data-table
+  (pageChange)="onPageChange($event)"
+  (saveRow)="onSaveRow($event)"
+  (sizeChange)="onSizeChange($event)"
+  [columns]="PAYOUT_COLUMNS"
+  (bulkDelete)="onBulkDelete($event)"
+  [data]="payoutPage()"
+  [loading]="loading()"
+  [routes]="payoutListRouting"
+  [showBulkDelete]="true"
+  viewRoute="/admin/tables/payouts/">
+  >
+  <!-- Toolbar nếu cần -->
+</app-editable-data-table>
