@@ -44,17 +44,17 @@ export class UserService {
     //   })
     // );
   }
-}
+// }
 
 // Update một user (PUT)
-//   updateUser(updatedUser: User): Observable<User> {
-//     return this.http.put<User>(`${this.apiUrl}/${updatedUser.id}`, updatedUser).pipe(
-//       catchError(error => {
-//         console.error('Update user error:', error);
-//         return throwError(() => new Error('Cập nhật user thất bại'));
-//       })
-//     );
-//   }
+  updateUser(updatedUser: User): Observable<User> {
+    return this.api.put<User>(`/admin/users/${updatedUser.id}`, updatedUser).pipe(
+      catchError(error => {
+        console.error('Update user error:', error);
+        return throwError(() => new Error('Cập nhật user thất bại'));
+      })
+    );
+  }
 //
 //   // Delete một user (DELETE)
 //   deleteUser(id: number): Observable<void> {
@@ -77,4 +77,4 @@ export class UserService {
 //       })
 //     );
 //   }
-// }
+}

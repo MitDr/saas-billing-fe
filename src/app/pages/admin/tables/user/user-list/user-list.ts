@@ -11,6 +11,7 @@ import {ListData} from '../../../../../core/interface/list-data';
 import {UserService} from '../../../../../core/service/user.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {Feature} from '../../../../../core/interface/entity/feature';
+import {UserRequest} from '../../../../../core/interface/request/user-request';
 
 @Component({
   selector: 'app-user-list',
@@ -116,6 +117,7 @@ export class UserList {
     //   }
     // });
     console.log('calling api')
+    console.log(updateUser)
   }
 
   onBulkDelete(ids: number[]) {

@@ -1,6 +1,7 @@
 import {SubscriberDTO} from '../DTO/SubscriberDTO';
 import {PriceDTO} from '../DTO/PriceDTO';
 import {TenantDTO} from '../DTO/TenantDTO';
+import {InvoiceDTO} from '../DTO/InvoiceDTO';
 
 export interface Subscription{
   "id": number,
@@ -16,7 +17,7 @@ export interface Subscription{
   "modifiedDate": string,
   "subscriber": SubscriberDTO,
   "price": PriceDTO,
-  "invoices": number,
+  "invoices": InvoiceDTO,
   "tenant": TenantDTO,
   "metadata": any,
   "trial": boolean,

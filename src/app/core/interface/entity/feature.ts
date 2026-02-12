@@ -1,4 +1,6 @@
 import {TenantDTO} from '../DTO/TenantDTO';
+import {PlanDTO} from '../DTO/planDTO';
+import {EntitlementDTO} from '../DTO/EntitlementDTO';
 
 export interface Feature {
   id: number;
@@ -8,8 +10,8 @@ export interface Feature {
   status: 'ACTIVE' | 'INACTIVE';
   createdDate: string;
   modifiedDate: string;
-  entitlements: number;
-  plans: number;
+  entitlements: EntitlementDTO;
+  plans: PlanDTO;
   tenant: TenantDTO;
   softDelete: boolean;
 }

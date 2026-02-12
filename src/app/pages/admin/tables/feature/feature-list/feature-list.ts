@@ -128,69 +128,6 @@ export class FeatureList {
     // });
   }
 }
-
-export const FAKE_FEATURES: Feature[] = [
-  {
-    "id": 3,
-    "code": "aaa",
-    "name": "API access2",
-    "description": "Access to all apis",
-    "status": "INACTIVE",
-    "createdDate": "05-01-2026 22:09:24",
-    "modifiedDate": "05-01-2026 22:13:54",
-    "entitlements": 0,
-    "plans": 0,
-    "tenant": {
-      "id": 2,
-      "name": "Long3's tenant",
-      "email": "ttlong13013@gmail.com",
-      "createdDate": "07-10-2025 21:24:12",
-      "modifiedDate": "29-12-2025 22:31:59",
-      "softDelete": false
-    },
-    "softDelete": false
-  },
-  {
-    "id": 2,
-    "code": "api_v11_11",
-    "name": "API access",
-    "description": "Access to all apis",
-    "status": "ACTIVE",
-    "createdDate": "07-10-2025 21:26:04",
-    "modifiedDate": "07-10-2025 21:26:04",
-    "entitlements": 1,
-    "plans": 5,
-    "tenant": {
-      "id": 2,
-      "name": "Long3's tenant",
-      "email": "ttlong13013@gmail.com",
-      "createdDate": "07-10-2025 21:24:12",
-      "modifiedDate": "29-12-2025 22:31:59",
-      "softDelete": false
-    },
-    "softDelete": false
-  },
-  {
-    "id": 1,
-    "code": "api_v1_1",
-    "name": "API access",
-    "description": "Access to all apis",
-    "status": "ACTIVE",
-    "createdDate": "07-10-2025 21:25:31",
-    "modifiedDate": "07-10-2025 21:25:31",
-    "entitlements": 2,
-    "plans": 5,
-    "tenant": {
-      "id": 2,
-      "name": "Long3's tenant",
-      "email": "ttlong13013@gmail.com",
-      "createdDate": "07-10-2025 21:24:12",
-      "modifiedDate": "29-12-2025 22:31:59",
-      "softDelete": false
-    },
-    "softDelete": false
-  }
-]
 export const FEATURESTATUSOPTIONS = [
   {label: 'Active', value: 'ACTIVE', color: 'green'},
   {label: 'Inactive', value: 'INACTIVE', color: 'red'}

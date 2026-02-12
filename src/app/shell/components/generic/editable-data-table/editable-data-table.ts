@@ -84,7 +84,6 @@ export class EditableDataTable<T extends { id: number }> {
   editing = computed(() => Object.values(this.editCache()).some(c => c.edit));
 
   constructor() {
-    // Tự động rebuild editCache khi data thay đổi
     effect(() => {
       const data = this.data();
       const cache: any = {};
