@@ -1,0 +1,26 @@
+<div class="page-container">
+  <nz-page-header
+    [nzSubtitle]="'ID: ' + (price()?.id || '')"
+    [nzTitle]="'Price Detail'"
+  >
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item><a routerLink="/admin/tables/prices">Prices</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>Price Detail</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-page-header>
+
+  <div class="mt-8">
+    @if (price(); as pr) {
+      <app-price-card
+        [price]="pr"
+        (load)="loadPrice($event)"
+        (deleteButton)="onDelete($event)">
+      </app-price-card>
+    } @else {
+      <div class="text-center py-16">
+        <nz-spin nzSize="large"></nz-spin>
+        <p class="mt-4 text-gray-500">Loading price information...</p>
+      </div>
+    }
+  </div>
+</div>

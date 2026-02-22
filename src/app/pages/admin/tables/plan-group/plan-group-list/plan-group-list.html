@@ -3,7 +3,7 @@
     PLAN GROUP LIST
   </h1>
   <ng-container class="mb-4">
-    <button nz-button nzType="primary" [routerLink]="createRoute">+ Add Plan Group</button>
+    <button [routerLink]="createRoute" nz-button nzType="primary">+ Add Plan Group</button>
   </ng-container>
 </div>
 <!--<app-editable-data-table-->
@@ -16,16 +16,56 @@
 <!--  viewRoute="/admin/tables/plan-groups/">-->
 <!--</app-editable-data-table>-->
 <app-editable-data-table
+  (bulkDelete)="onBulkDelete($event)"
   (pageChange)="onPageChange($event)"
   (saveRow)="onSaveRow($event)"
   (sizeChange)="onSizeChange($event)"
-  [columns]="PLAN_GROUP_COLUMNS"
-  (bulkDelete)="onBulkDelete($event)"
+  [columns]="getColumns()"
   [data]="planGroupPage()"
   [loading]="loading()"
   [routes]="planGroupListRouting"
   [showBulkDelete]="true"
+  [showSoftDelete]="false"
+  entityName="plan group(s)"
   viewRoute="/admin/tables/plan-groups/">
   >
   <!-- Toolbar nếu cần -->
+  <div class="flex gap-3 items-center flex-wrap mb-4" table-toolbar>
+
+    <!-- 🔍 Search -->
+    <nz-input-wrapper class="w-64">
+      <input
+        (ngModelChange)="onSearchChange($event)"
+        [ngModel]="search()"
+        nz-input
+        placeholder="Search price..."
+      />
+    </nz-input-wrapper>
+
+    <!-- 🏢 Tenant Filter -->
+    <nz-select
+      (ngModelChange)="onTenantChange($event)"
+      [ngModel]="tenantFilter()"
+      class="w-52"
+      nzAllowClear
+      nzPlaceHolder="Tenant"
+    >
+      @for (tenant of tenants(); track tenant.id) {
+        <nz-option
+          [nzLabel]="tenant.name"
+          [nzValue]="tenant.id">
+        </nz-option>
+      }
+    </nz-select>
+
+    <!-- 🔄 Reset -->
+    <button
+      (click)="resetFilters()"
+      nz-button
+      nzType="default"
+    >
+      Reset
+    </button>
+
+  </div>
 </app-editable-data-table>

@@ -1,0 +1,70 @@
+<nz-card [nzBordered]="false" class="tenant-card">
+  <div class="flex items-start gap-6">
+    <div class="flex-1">
+      <!-- Tên Tenant + Status -->
+      <h2 class="text-2xl font-bold flex items-center gap-3">
+        ImageID: {{ image().id }}
+      </h2>
+      <!-- Thông tin chính (không có phần users count nữa) -->
+      <nz-descriptions [nzColumn]="2" class="mt-6" nzBordered nzSize="small">
+        <nz-descriptions-item nzTitle="Image ID">
+          #{{ image().id }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="URL">
+          {{ image().url }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Public Id">
+          {{ image().publicId }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Created Date">
+          {{ image().createdDate }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Modified Date">
+          {{ image().modifiedDate }}
+        </nz-descriptions-item>
+      </nz-descriptions>
+
+      <!-- Actions -->
+      <div class="mt-8 flex flex-wrap gap-3">
+        <button [routerLink]="['/admin/tables/images', image().id, 'edit']"
+                class="!inline-flex !items-center" nz-button
+                nzType="primary">
+          <span nz-icon nzType="edit"></span>
+          Edit Image
+        </button>
+
+        <!--        <button nz-button nzDanger (click)="confirmDelete()">-->
+
+        <button (click)="onDelete()" class="!inline-flex !items-center"
+                nz-button nzDanger>
+          <span nz-icon nzType="delete"></span>
+          Delete Image
+        </button>
+
+        <!--        @if (tenant().stripeAccountId) {-->
+        <!--          <button nz-button nzType="default">-->
+        <!--            <span nz-icon nzType="link"></span>-->
+        <!--            View in Stripe-->
+        <!--          </button>-->
+        <!--        }-->
+      </div>
+      <!--      Phần tenant-->
+      @if (image().tenant) {
+        <div class="mt-10">
+          <h3 class="text-xl font-semibold mb-6 flex items-center gap-3">
+            <span nz-icon nzType="container" class="text-blue-600"></span>
+            Tenant of this entitlement ({{ image().tenant.name }})
+          </h3>
+          <div class="grid grid-cols-1 gap-6">
+            <app-tenant-dto-card [tenant]="image().tenant"></app-tenant-dto-card>
+          </div>
+        </div>
+      } @else {
+        <div class="mt-10 text-center text-gray-500 py-8">
+          <nz-icon nzType="container" nzTheme="outline" class="text-4xl opacity-50"></nz-icon>
+          <p class="mt-3">No tenant in this entitlement yet.</p>
+        </div>
+      }
+    </div>
+  </div>
+</nz-card>

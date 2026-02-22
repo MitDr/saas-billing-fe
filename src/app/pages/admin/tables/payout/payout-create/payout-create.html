@@ -1,0 +1,15 @@
+<div class="page-container">
+  <h1 class="text-2xl font-semibold mb-6">Create Payout</h1>
+  <div class="flex justify-end mb-4">
+    <app-breadcrumb [routes]="route"></app-breadcrumb>
+  </div>
+
+  <app-payout-reuse-form
+    (submitted)="onSubmitted()"
+    [availableTenants]="availableTenant()"
+    [formGroup]="payoutForm"
+    [isEditMode]="false"
+    [isLoading]="isSubmitting"
+    [submitLabel]="'Create'"
+  ></app-payout-reuse-form>
+</div>

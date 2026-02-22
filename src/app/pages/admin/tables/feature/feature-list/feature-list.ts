@@ -1,4 +1,4 @@
-import {Component, effect, inject, signal} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {SOFTDELETEOPTIONS} from '../../tenant/tenant-list/tenant-list';
 import {Feature} from '../../../../../core/interface/entity/feature';
 import {ColumnConfig} from '../../../../../core/interface/column-config';
@@ -7,8 +7,12 @@ import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {RouterLink} from '@angular/router';
 import {ListData} from '../../../../../core/interface/list-data';
 import {FEATURE_ROUTE_CONSTANT} from '../../../../../core/constant/feature/feature-list-constant';
-import {NzMessageService} from 'ng-zorro-antd/message';
 import {FeatureService} from '../../../../../core/service/feature-service';
+import {FeatureRequest} from '../../../../../core/interface/request/feature-request';
+import {GenericListComponent} from '../../../../../core/generic/base-list-component';
+import {NzInputDirective, NzInputWrapperComponent} from 'ng-zorro-antd/input';
+import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-feature-list',
@@ -16,118 +20,99 @@ import {FeatureService} from '../../../../../core/service/feature-service';
     EditableDataTable,
     NzButtonComponent,
     RouterLink,
+    NzInputDirective,
+    NzInputWrapperComponent,
+    NzOptionComponent,
+    NzSelectComponent,
+    ReactiveFormsModule,
+    FormsModule,
   ],
   templateUrl: './feature-list.html',
   styleUrl: './feature-list.css',
 })
-export class FeatureList {
-  // State phân trang
-  currentPage = signal(1);   // 1-based (khớp API)
-  pageSize = signal(5);
+export class FeatureList extends GenericListComponent<Feature, FeatureRequest> {
   featurePage = signal<ListData<Feature> | null>(null);
-  loading = signal(false);
-
   checked = false;
   createRoute = '/admin/tables/features/create'
-  featureListRouting = FEATURE_ROUTE_CONSTANT;
-
-  protected readonly FEATURE_COLUMNS: ColumnConfig<Feature>[] = [
-    {key: 'id', title: 'Id', editable: false},
-    {key: 'name', title: 'Name', editable: true, type: 'text'},
-    {key: 'code', title: 'Code', editable: true, type: 'text'},
-    {key: 'description', title: 'Description', 'editable': true, 'type': 'text'},
-    {key: 'status', title: 'Status', editable: true, type: 'select', options: FEATURESTATUSOPTIONS},
-    {key: 'createdDate', title: 'Created Date', editable: false},
-    {key: 'modifiedDate', title: 'Modified Date', editable: false},
-    {key: 'entitlements', title: 'Num of Entitlements', editable: false, type: 'custom', path: 'entitlements.length'},
-    {key: 'plans', title: 'Num of Plans', editable: false, type: 'custom', path: 'plans.length'},
-    {key: 'tenant', title: 'Tenant\'s name', editable: false, type: 'custom', path: 'tenant.name'},
-    {key: 'softDelete', title: 'Soft Delete', editable: true, type: 'select', options: SOFTDELETEOPTIONS},
-  ]
-
+  featureListRouting = FEATURE_ROUTE_CONSTANT
   private featureService = inject(FeatureService);
-  private message = inject(NzMessageService);
 
-  // Columns giữ nguyên
-  constructor() {
-    // Effect tự động load khi currentPage hoặc pageSize thay đổi
-    effect(() => {
-      // Lấy giá trị để effect phụ thuộc
-      const page = this.currentPage();
-      const size = this.pageSize();
-
-      // console.log('[EFFECT] Reload features - page:', page, 'size:', size);
-      this.loadFeatures(page, size);
-    });
+  getDataPage() {
+    return this.featurePage;
   }
 
-  private loadFeatures(page: number, size: number) {
-    this.loading.set(true);
+  override getColumns(): ColumnConfig<Feature>[] {
+    return [
+      {key: 'id', title: 'Id', editable: false},
+      {key: 'name', title: 'Name', editable: true, type: 'text'},
+      {key: 'code', title: 'Code', editable: true, type: 'text'},
+      {key: 'description', title: 'Description', 'editable': true, 'type': 'text'},
+      {key: 'status', title: 'Status', editable: true, type: 'select', options: FEATURESTATUSOPTIONS},
+      // {key: 'createdDate', title: 'Created Date', editable: false},
+      // {key: 'modifiedDate', title: 'Modified Date', editable: false},
+      {key: 'entitlements', title: 'Num of Entitlements', editable: false, type: 'custom', path: 'entitlements.length'},
+      {key: 'plans', title: 'Num of Plans', editable: false, type: 'custom', path: 'plans.length'},
+      {key: 'tenant', title: 'Tenant\'s name', editable: false, type: 'custom', path: 'tenant.name'},
+      {key: 'softDelete', title: 'Soft Delete', editable: false, type: 'select', options: SOFTDELETEOPTIONS},
 
-    this.featureService.getFeatures(page, size).subscribe({  // page 0-based cho backend
+    ];
+  }
+
+  getCreateRoute() {
+    return this.createRoute;
+  }
+
+  getRoutingConstant() {
+    return this.featureListRouting;
+  }
+
+  getService() {
+    return this.featureService;
+  }
+
+
+  mapToUpdatePayload(updatedFeature: Feature): FeatureRequest {
+    const result: FeatureRequest = {
+      code: updatedFeature.code,
+      name: updatedFeature.name,
+      status: updatedFeature.status,
+      tenantId: updatedFeature.tenant.id
+    }
+
+    if (updatedFeature.description) {
+      result.description = updatedFeature.description
+    }
+
+    return result
+  }
+
+  protected loadData(page: number, size: number, search?: string, softDelete?: boolean | null, tenantId?: number | null, sort?: string) {
+    this.loading.set(true);
+    this.featureService.getFeatures(page, size, search, softDelete, tenantId).subscribe({ // No sort for Price
       next: (response) => {
-        // console.log('[API] Features loaded:', response);
+        // Sync queryParams (nếu cần, copy từ cũ)
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: {
+            page,
+            size: this.pageSize(),
+            search: this.search() || null,
+            softDelete: this.softDeleteFilter(),
+            tenantId: this.tenantFilter()
+          },
+          queryParamsHandling: 'merge'
+        });
         this.featurePage.set(response);
         this.loading.set(false);
       },
-      error: (err) => {
-        // console.error('[API] Load features error:', err);
-        this.message.error('Không thể tải danh sách features');
+      error: () => {
+        this.message.error('Không thể tải danh sách prices');
         this.loading.set(false);
       }
     });
   }
-
-  // Khi đổi trang
-  onPageChange(newPage: number) {
-    console.log('[PAGE] Changed to:', newPage);
-    this.currentPage.set(newPage);
-    // Không cần gọi loadFeatures nữa → effect tự chạy
-  }
-
-  // Khi đổi size
-  onSizeChange(newSize: number) {
-    console.log('[SIZE] Changed to:', newSize);
-    this.pageSize.set(newSize);
-    this.currentPage.set(1); // reset về trang 1
-    // Effect tự reload
-  }
-
-  onSaveRow(updateFeature: Feature) {
-    // this.userService.updateUser(updatedUser).subscribe({
-    //   next: () => {
-    //     this.message.success('Cập nhật thành công');
-    //     this.loadUsers();  // ← gọi lại API load toàn bộ list
-    //   },
-    //   error: () => {
-    //     this.message.error('Cập nhật thất bại');
-    //     // Optional: rollback cache nếu cần
-    //   }
-    // });
-    console.log('calling api')
-  }
-
-  // Bulk delete (tương tự)
-  onBulkDelete(ids: number[]) {
-    // if (ids.length === 0) return;
-    //
-    // this.modal.confirm({
-    //   nzTitle: 'Xác nhận xóa',
-    //   nzContent: `Xóa ${ids.length} feature?`,
-    //   nzOkText: 'Xóa',
-    //   nzOkDanger: true,
-    //   nzOnOk: () => {
-    //     this.featureService.bulkDelete(ids).subscribe({
-    //       next: () => {
-    //         this.message.success('Xóa thành công');
-    //         this.currentPage.set(this.currentPage()); // trigger reload
-    //       },
-    //       error: () => this.message.error('Xóa thất bại')
-    //     });
-    //   }
-    // });
-  }
 }
+
 export const FEATURESTATUSOPTIONS = [
   {label: 'Active', value: 'ACTIVE', color: 'green'},
   {label: 'Inactive', value: 'INACTIVE', color: 'red'}

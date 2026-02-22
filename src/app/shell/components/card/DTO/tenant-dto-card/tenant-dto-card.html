@@ -1,0 +1,51 @@
+<nz-card [nzBordered]="false" class="user-card">
+  <div class="flex items-start gap-6">
+    <div class="flex-1">
+      <h2 class="text-2xl font-bold flex items-center gap-3">
+        {{ tenant().name }}
+        <!--        @if (user().role === 'ADMIN') {-->
+        <!--          <nz-tag nzColor="red">ADMIN</nz-tag>-->
+        <!--        } @else {-->
+        <!--          <nz-tag nzColor="green">USER</nz-tag>-->
+        <!--        }-->
+      </h2>
+      <p class="text-gray-500 mt-1">{{ tenant().email }}</p>
+      <nz-descriptions [nzColumn]="numberOfColumn()" class="mt-6" nzBordered nzSize="small">
+        <nz-descriptions-item nzTitle="User ID">
+          {{ tenant().id }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Created Date">
+          {{ tenant().createdDate }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Last Modified">
+          {{ tenant().modifiedDate }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Soft Delete">
+          <nz-tag [nzColor]="tenant().softDelete ? 'geekblue' : 'green'">
+            {{ tenant().softDelete }}
+          </nz-tag>
+        </nz-descriptions-item>
+        <!--        <nz-descriptions-item nzTitle="Status" [nzSpan]="2">-->
+        <!--          <nz-tag color="green">Active</nz-tag>-->
+        <!--        </nz-descriptions-item>-->
+      </nz-descriptions>
+
+      <!--      <div class="mt-6 flex gap-3">-->
+      <!--        <button nz-button nzType="primary" [routerLink]="['/users', user().id, 'edit']">-->
+      <!--          <span nz-icon nzType="edit"></span>-->
+      <!--          Edit User-->
+      <!--        </button>-->
+      <!--        <button nz-button nzDanger>-->
+      <!--          <span nz-icon nzType="delete"></span>-->
+      <!--          Delete-->
+      <!--        </button>-->
+      <!--        <button (click)="onRemoveUser()" class="!inline-flex !items-center"-->
+      <!--                nz-button-->
+      <!--                nzDanger>-->
+      <!--          <span nz-icon nzType="delete"></span>-->
+      <!--          Remove-->
+      <!--        </button>-->
+      <!--      </div>-->
+    </div>
+  </div>
+</nz-card>

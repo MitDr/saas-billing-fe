@@ -3,20 +3,71 @@
     SUBSCRIBER LIST
   </h1>
   <ng-container class="mb-4">
-    <button nz-button nzType="primary" [routerLink]="createRoute">+ Add Subscriber</button>
+    <button [routerLink]="createRoute" nz-button nzType="primary">+ Add Subscriber</button>
   </ng-container>
 </div>
 <app-editable-data-table
+  (bulkDelete)="onBulkDelete($event)"
+  (bulkSoftDelete)="onBulkSoftDelete($event)"
   (pageChange)="onPageChange($event)"
   (saveRow)="onSaveRow($event)"
   (sizeChange)="onSizeChange($event)"
-  [columns]="SUBSCRIBER_COLUMNS"
-  (bulkDelete)="OnBulkDelete($event)"
+  [columns]="getColumns()"
   [data]="subscriberPage()"
   [loading]="loading()"
   [routes]="subscriberListRouting"
   [showBulkDelete]="true"
   viewRoute="/admin/tables/subscribers/">
   >
+  <div class="flex gap-3 items-center flex-wrap mb-4" table-toolbar>
+
+    <!-- 🔍 Search -->
+    <nz-input-wrapper class="w-64">
+      <input
+        (ngModelChange)="onSearchChange($event)"
+        [ngModel]="search()"
+        nz-input
+        placeholder="Search Subscriber..."
+      />
+    </nz-input-wrapper>
+
+    <!-- 🗑 Soft Delete Filter -->
+    <nz-select
+      (ngModelChange)="onSoftDeleteChange($event)"
+      [ngModel]="softDeleteFilter()"
+      class="w-44"
+      nzAllowClear
+      nzPlaceHolder="Soft Delete"
+    >
+      <nz-option [nzValue]="false" nzLabel="Active"></nz-option>
+      <nz-option [nzValue]="true" nzLabel="Deleted"></nz-option>
+    </nz-select>
+
+    <!-- 🏢 Tenant Filter -->
+    <nz-select
+      (ngModelChange)="onTenantChange($event)"
+      [ngModel]="tenantFilter()"
+      class="w-52"
+      nzAllowClear
+      nzPlaceHolder="Tenant"
+    >
+      @for (tenant of tenants(); track tenant.id) {
+        <nz-option
+          [nzLabel]="tenant.name"
+          [nzValue]="tenant.id">
+        </nz-option>
+      }
+    </nz-select>
+
+    <!-- 🔄 Reset -->
+    <button
+      (click)="resetFilters()"
+      nz-button
+      nzType="default"
+    >
+      Reset
+    </button>
+
+  </div>
   <!-- Toolbar nếu cần -->
 </app-editable-data-table>

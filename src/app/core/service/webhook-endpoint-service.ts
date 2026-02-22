@@ -1,35 +1,77 @@
 import {inject, Injectable} from '@angular/core';
 import {ApiClientService} from './api-client-service';
-import {map, Observable, throwError} from 'rxjs';
+import {Observable, throwError} from 'rxjs';
 import {WebhookEndpoint} from '../interface/entity/webhook-endpoint';
 import {ListData} from '../interface/list-data';
 import {HttpParams} from '@angular/common/http';
-import {Feature} from '../interface/entity/feature';
 import {catchError} from 'rxjs/operators';
+import {WebhookEndpointRequest} from '../interface/request/webhook-endpoint-request';
 
 @Injectable({
   providedIn: 'root'
 })
-export class WebhookEndpointService{
+export class WebhookEndpointService {
   api = inject(ApiClientService);
 
-  getWebhookEndpoints(page: number = 1, size: number = 5): Observable<ListData<WebhookEndpoint>>{
+  getWebhookEndpoints(
+    page: number = 1,
+    size: number = 5,
+    search?: string,
+    tenantId?: number | null,
+    sort: string = 'id,asc'
+  ): Observable<ListData<WebhookEndpoint>> {
+
     let params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString())
-      .set('sort', 'id,asc')
-      .set('all', 'false')
-    // .set()
+      .set('sort', sort);
 
-    return this.api.get<ListData<WebhookEndpoint>>("/admin/webhook-endpoints", params)
-      .pipe(
-        map(response => {
-          return response as ListData<WebhookEndpoint>;
-        }),
-        catchError(error => {
-          console.error('Get webhook endpoints error:', error);
-          return throwError(() => new Error('Không thể lấy danh sách webhook endpoints'));
-        })
-      )
+    if (search) {
+      params = params.set('search', search);
+    }
+
+    if (tenantId) {
+      params = params
+        .set('tenantId', tenantId.toString())
+        .set('filterByTenant', 'true');
+    }
+
+    return this.api.get<ListData<WebhookEndpoint>>('/admin/webhook-endpoints', params);
+  }
+
+  getWebhookEndpoint(id: number): Observable<WebhookEndpoint> {
+    return this.api.get<WebhookEndpoint>(`/admin/webhook-endpoints/${id}`).pipe(
+      catchError(error => {
+        console.error('Get webhook endpoint error:', error);
+        return throwError(() => new Error('Không thể lấy webhook endpoint'));
+      })
+    );
+  }
+
+  update(updateWebhookEndpoint: WebhookEndpointRequest, id: number): Observable<WebhookEndpoint> {
+    return this.api.put<WebhookEndpoint>(`/admin/webhook-endpoints/${id}`, updateWebhookEndpoint).pipe(
+      catchError(error => {
+        console.error('Update user error:', error);
+        return throwError(() => new Error('Cập nhật user thất bại'));
+      })
+    );
+  }
+
+  bulkDelete(ids: number[]): Observable<void> {
+    return this.api.deletes<void>(`/admin/webhook-endpoints`, ids).pipe(
+      catchError(error => {
+        console.error('Bulk delete error:', error);
+        return throwError(() => new Error('Xóa hàng loạt thất bại'));
+      })
+    );
+  }
+
+  deleteWebhookEndpoint(id: number): Observable<void> {
+    return this.api.delete<void>(`/admin/webhook-endpoints/${id}`).pipe(
+      catchError(error => {
+        console.error('Delete webhook endpoint error:', error);
+        return throwError(() => new Error('Xóa webhook endpoint thất bại'));
+      })
+    );
   }
 }

@@ -1,20 +1,36 @@
-<h1 class="text-2xl font-semibold mb-6">
-  Dashboard
-</h1>
+<div class="page-container">
+  <nz-page-header nzSubtitle="Tổng quan hệ thống" nzTitle="Dashboard">
+    <!--    <nz-breadcrumb nz-page-header-breadcrumb>-->
+    <!--      <nz-breadcrumb-item>Admin</nz-breadcrumb-item>-->
+    <!--      <nz-breadcrumb-item>Dashboard</nz-breadcrumb-item>-->
+    <!--    </nz-breadcrumb>-->
+  </nz-page-header>
 
-<div class="grid grid-cols-3 gap-6">
-  <nz-card>
-    <p class="text-gray-400">Users</p>
-    <p class="text-3xl font-bold">1,240</p>
-  </nz-card>
-
-  <nz-card>
-    <p class="text-gray-400">Revenue</p>
-    <p class="text-3xl font-bold">$12,300</p>
-  </nz-card>
-
-  <nz-card>
-    <p class="text-gray-400">Errors</p>
-    <p class="text-3xl font-bold">3</p>
-  </nz-card>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="col-span-1 md:col-span-2 lg:col-span-4">
+      <h2 class="text-xl font-semibold mb-4">System Overview</h2>
+      <app-system-summary-carousel
+        [loading]="load()"
+        [systemSummary]="systemSummary()!"
+      ></app-system-summary-carousel>
+    </div>
+  </div>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <div>
+      <h2 class="text-xl font-semibold mb-4">Revenue Summary</h2>
+      <app-revenue-summary-carousel
+        [loading]="load()"
+        [revenueSummary]="revenueSummary()!"
+      ></app-revenue-summary-carousel>
+    </div>
+    <div>
+      <h2 class="text-xl font-semibold mb-4">Subscription Summary</h2>
+      <app-subscription-overvie-carousel
+        [loading]="load()"
+        [overview]="subscriptionSummary()!"
+      ></app-subscription-overvie-carousel>
+    </div>
+  </div>
 </div>
+
+

@@ -1,0 +1,79 @@
+<nz-spin [nzSpinning]="loading()">
+  <nz-carousel
+    [nzAutoPlaySpeed]="6000"
+    [nzDotPosition]="'bottom'"
+    nzAutoPlay
+  >
+    <!-- Slide 1: Total Tenants & Subscribers -->
+    <div nz-carousel-content>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
+        <nz-card class="shadow-sm" nzHoverable>
+          <nz-statistic
+            [nzValue]="systemSummary()?.totalTenants ?? 0"
+            nzTitle="Total Tenants"
+          >
+            <ng-template nzPrefix>
+              <span class="text-2xl" nz-icon nzType="apartment"></span>
+            </ng-template>
+          </nz-statistic>
+        </nz-card>
+
+        <nz-card class="shadow-sm" nzHoverable>
+          <nz-statistic
+            [nzValue]="systemSummary()?.totalSubscribers ?? 0"
+            nzTitle="Total Subscribers"
+          >
+            <ng-template nzPrefix>
+              <span class="text-2xl" nz-icon nzType="user"></span>
+            </ng-template>
+          </nz-statistic>
+        </nz-card>
+      </div>
+    </div>
+
+    <!-- Slide 2: Subscriptions -->
+    <div nz-carousel-content>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
+        <nz-card class="shadow-sm" nzHoverable>
+          <nz-statistic
+            [nzValue]="systemSummary()?.totalSubscriptions ?? 0"
+            nzTitle="Total Subscriptions"
+          >
+            <ng-template nzPrefix>
+              <span class="text-2xl" nz-icon nzType="file-text"></span>
+            </ng-template>
+          </nz-statistic>
+        </nz-card>
+
+        <nz-card class="shadow-sm" nzHoverable>
+          <nz-statistic
+            [nzValue]="systemSummary()?.activeSubscriptions ?? 0"
+            nzTitle="Active Subscriptions"
+          >
+            <ng-template nzPrefix>
+              <span class="text-2xl text-green-600" nz-icon nzType="check-circle"></span>
+            </ng-template>
+          </nz-statistic>
+        </nz-card>
+      </div>
+    </div>
+
+    <!-- Slide 3: Total Revenue All Tenants -->
+    <div nz-carousel-content>
+      <div class="p-4">
+        <nz-card class="shadow-sm" nzHoverable>
+          <nz-statistic
+            [nzPrefix]="'$'"
+            [nzSuffix]="'USD'"
+            [nzValue]="systemSummary()?.totalRevenueAllTenants ?? 0"
+            nzTitle="Total Revenue (All Tenants)"
+          >
+            <ng-template nzPrefix>
+              <span class="text-2xl text-yellow-600" nz-icon nzType="dollar"></span>
+            </ng-template>
+          </nz-statistic>
+        </nz-card>
+      </div>
+    </div>
+  </nz-carousel>
+</nz-spin>

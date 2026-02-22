@@ -1,0 +1,10 @@
+nz-card {
+  background: #f9f9f9;
+  border: 1px solid #e8e8e8;
+}
+
+label[nz-checkbox] {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}

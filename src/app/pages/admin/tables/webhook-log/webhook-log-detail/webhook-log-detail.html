@@ -1,0 +1,26 @@
+<div class="page-container">
+  <nz-page-header
+    [nzSubtitle]="'ID: ' + (webhookLog()?.id || '')"
+    [nzTitle]="'Webhook Log Detail'"
+  >
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item><a routerLink="/admin/tables/webhook-logs">Webhook Log</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>Webhook Log Detail</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-page-header>
+
+  <div class="mt-8">
+    @if (webhookLog(); as wen) {
+      <app-webhook-log-card
+        [webhookLog]="wen"
+        (load)="loadWebhookLog($event)"
+        (deleteButton)="onDelete($event)">
+      </app-webhook-log-card>
+    } @else {
+      <div class="text-center py-16">
+        <nz-spin nzSize="large"></nz-spin>
+        <p class="mt-4 text-gray-500">Loading webhook endpoint information...</p>
+      </div>
+    }
+  </div>
+</div>

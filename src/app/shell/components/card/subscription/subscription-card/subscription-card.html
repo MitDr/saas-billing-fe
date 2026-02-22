@@ -1,0 +1,250 @@
+<nz-card [nzBordered]="false" class="tenant-card">
+  <div class="flex items-start gap-6">
+    <div class="flex-1">
+      <!-- Tên Tenant + Status -->
+      <h2 class="text-2xl font-bold flex items-center gap-3">
+        Subscription ID: #{{ subscription().id }}
+        @if (subscription().softDelete) {
+          <nz-tag nzColor="orange">Soft Deleted</nz-tag>
+        } @else {
+          <nz-tag nzColor="green">Active</nz-tag>
+        }
+      </h2>
+      <nz-descriptions [nzColumn]="2" class="mt-6" nzBordered nzSize="small">
+        <nz-descriptions-item nzTitle="Subscription ID">
+          #{{ subscription().id }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Status">
+          @switch (subscription().status) {
+
+            @case ('ACTIVE') {
+              <nz-tag nzColor="green">Active</nz-tag>
+            }
+            @case ('DRAFT') {
+              <nz-tag nzColor="red">Draft</nz-tag>
+            }
+            @case ('PENDING') {
+              <nz-tag nzColor="blue">Pending</nz-tag>
+            }
+            @case ('ENDED') {
+              <nz-tag nzColor="yellow">Ended</nz-tag>
+            }
+            @case ('CANCEL') {
+              <nz-tag nzColor="orange">Cancel</nz-tag>
+            }
+          }
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Trial">
+          <span class="font-medium text-orange-600">
+            {{ subscription().trial }}
+          </span>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Quantity">
+          {{ subscription().quantity }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Start Date">
+          {{ subscription().startDate }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="End Date">
+          {{ subscription().endDate }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Cancel At End">
+          <span class="font-medium text-orange-600">
+            {{ subscription().cancelAtPeriodEnd }}
+          </span>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Due Date">
+          {{ subscription().dueDate }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Created Date">
+          {{ subscription().createdDate }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Last Modified">
+          {{ subscription().modifiedDate }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Soft Delete">
+          <nz-tag [nzColor]="subscription().softDelete ? 'geekblue' : 'green'">
+            {{ subscription().softDelete }}
+          </nz-tag>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Metadata">
+          <pre>{{ metadataObject | json }}</pre>
+        </nz-descriptions-item>
+      </nz-descriptions>
+
+
+      <!-- Actions -->
+      <div class="mt-8 flex flex-wrap gap-3">
+        <button [routerLink]="['/admin/tables/subscriptions', subscription().id, 'edit']"
+                class="!inline-flex !items-center" nz-button
+                nzType="primary">
+          <span nz-icon nzType="edit"></span>
+          Edit Subscription
+        </button>
+
+        <!--        <button nz-button nzDanger (click)="confirmDelete()">-->
+
+        <button (click)="onDelete()" class="!inline-flex !items-center"
+                nz-button nzDanger>
+          <span nz-icon nzType="delete"></span>
+          Delete Subscription
+        </button>
+
+        <!--        @if (tenant().stripeAccountId) {-->
+        <!--          <button nz-button nzType="default">-->
+        <!--            <span nz-icon nzType="link"></span>-->
+        <!--            View in Stripe-->
+        <!--          </button>-->
+        <!--        }-->
+      </div>
+
+      <!--      Phần subscriber-->
+      @if (subscription().subscriber) {
+        <div class="mt-10">
+          <h3 class="text-xl font-semibold mb-6 flex items-center gap-3">
+            <span nz-icon nzType="team" class="text-blue-600"></span>
+            Subscriber of this Subscription ({{ subscription().subscriber.name }})
+          </h3>
+          <div class="grid grid-cols-1 gap-6">
+            <app-subscriber-dto-card [subscriber]="subscription().subscriber"></app-subscriber-dto-card>
+          </div>
+        </div>
+      } @else {
+        <div class="mt-10 text-center text-gray-500 py-8">
+          <nz-icon nzType="team" nzTheme="outline" class="text-4xl opacity-50"></nz-icon>
+          <p class="mt-3">No subscriber in this Subscription yet.</p>
+        </div>
+      }
+
+      <!--      @if (feature().entitlements?.length) {-->
+      <!--        <div class="mt-10">-->
+      <!--          <h3 class="text-xl font-semibold mb-6 flex items-center gap-3">-->
+      <!--            <span nz-icon nzType="eye" class="text-blue-600"></span>-->
+      <!--            Entitlement in this Feature ({{ feature().entitlements.length }})-->
+      <!--          </h3>-->
+      <!--          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">-->
+      <!--            @for (ent of feature().entitlements; track ent.id; let last = $last) {-->
+      <!--              <div-->
+      <!--                [class.lg:col-span-2]="feature().entitlements.length % 2 === 1 && last"-->
+      <!--              >-->
+      <!--                <app-entitlement-dto-card-->
+      <!--                  [numberOfColumn]="1"-->
+      <!--                  [entitlementDto]="ent">-->
+      <!--                </app-entitlement-dto-card>-->
+      <!--              </div>-->
+      <!--            }-->
+      <!--          </div>-->
+
+      <!--        </div>-->
+      <!--      } @else {-->
+      <!--        <div class="mt-10 text-center text-gray-500 py-8">-->
+      <!--          <nz-icon nzType="eye" nzTheme="outline" class="text-4xl opacity-50"></nz-icon>-->
+      <!--          <p class="mt-3">No plan in this feature yet.</p>-->
+      <!--        </div>-->
+      <!--      }-->
+      <!--      @if (feature().plans?.length) {-->
+      <!--        <div class="mt-10">-->
+      <!--          <h3 class="text-xl font-semibold mb-6 flex items-center gap-3">-->
+      <!--            <span nz-icon nzType="book" class="text-blue-600"></span>-->
+      <!--            plans in this Feature ({{ feature().plans.length }})-->
+      <!--          </h3>-->
+      <!--          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">-->
+      <!--            @for (pla of feature().plans; track pla.id) {-->
+      <!--              <app-plan-dto-card (planRemove)="onPlanRemoved($event)" [removable]="true" [numberOfColumn]="1"-->
+      <!--                                 [plan]="pla"></app-plan-dto-card>-->
+      <!--            }-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--      } @else {-->
+      <!--        <div class="mt-10 text-center text-gray-500 py-8">-->
+      <!--          <nz-icon nzType="book" nzTheme="outline" class="text-4xl opacity-50"></nz-icon>-->
+      <!--          <p class="mt-3">No plan in this feature yet.</p>-->
+      <!--        </div>-->
+      <!--      }-->
+      <!--      phan price-->
+      @if (subscription().price) {
+        <div class="mt-10">
+          <h3 class="text-xl font-semibold mb-6 flex items-center gap-3">
+            <span nz-icon nzType="exception" class="text-blue-600"></span>
+            Price of this Subscription (#{{ subscription().price.id }})
+          </h3>
+          <div class="grid grid-cols-1 gap-6">
+            <app-price-dto-card [price]="subscription().price"></app-price-dto-card>
+          </div>
+        </div>
+      } @else {
+        <div class="mt-10 text-center text-gray-500 py-8">
+          <nz-icon nzType="exception" nzTheme="outline" class="text-4xl opacity-50"></nz-icon>
+          <p class="mt-3">No price in this Subscription yet.</p>
+        </div>
+      }
+      <!--      phan invoices-->
+      @if (subscription().invoices?.length) {
+        <div class="mt-10">
+          <h3 class="text-xl font-semibold mb-6 flex items-center gap-3">
+            <span nz-icon nzType="file-done" class="text-blue-600"></span>
+            Invoices in this Subscription ({{ subscription().invoices.length }})
+          </h3>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            @for (inv of subscription().invoices; track inv.id; let last = $last) {
+              <div
+                [class.lg:col-span-2]="subscription().invoices.length % 2 === 1 && last"
+              >
+                <app-invoice-dto-card
+                  (planRemove)="onInvoiceRemoved($event)"
+                  [removable]="true"
+                  [numberOfColumn]="1"
+                  [invoice]="inv">
+                </app-invoice-dto-card>
+              </div>
+            }
+          </div>
+
+        </div>
+      } @else {
+        <div class="mt-10 text-center text-gray-500 py-8">
+          <nz-icon nzType="file-done" nzTheme="outline" class="text-4xl opacity-50"></nz-icon>
+          <p class="mt-3">No invoice in this subscription yet.</p>
+        </div>
+      }
+
+      <!--      Phần tenant-->
+      @if (subscription().tenant) {
+        <div class="mt-10">
+          <h3 class="text-xl font-semibold mb-6 flex items-center gap-3">
+            <span nz-icon nzType="container" class="text-blue-600"></span>
+            Tenant of this Subscription ({{ subscription().tenant.name }})
+          </h3>
+          <div class="grid grid-cols-1 gap-6">
+            <app-tenant-dto-card [tenant]="subscription().tenant"></app-tenant-dto-card>
+          </div>
+        </div>
+      } @else {
+        <div class="mt-10 text-center text-gray-500 py-8">
+          <nz-icon nzType="container" nzTheme="outline" class="text-4xl opacity-50"></nz-icon>
+          <p class="mt-3">No tenant in this Subscription yet.</p>
+        </div>
+      }
+      <!-- Phần Users: tái sử dụng User Card -->
+      <!--      @if (tenant().users?.length) {-->
+      <!--        <div class="mt-10">-->
+      <!--          <h3 class="text-xl font-semibold mb-6 flex items-center gap-3">-->
+      <!--            <span nz-icon nzType="team" class="text-blue-600"></span>-->
+      <!--            Users in this Tenant ({{ tenant().users.length }})-->
+      <!--          </h3>-->
+
+      <!--          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">-->
+      <!--            @for (user of tenant().users; track user.id) {-->
+      <!--              <app-user-dto-card [user]="user" (userRemove)="onRemoveUser($event)"></app-user-dto-card>-->
+      <!--            }-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--      } @else {-->
+      <!--        <div class="mt-10 text-center text-gray-500 py-8">-->
+      <!--          <nz-icon nzType="team" nzTheme="outline" class="text-4xl opacity-50"></nz-icon>-->
+      <!--          <p class="mt-3">No users in this tenant yet.</p>-->
+      <!--        </div>-->
+      <!--      }-->
+    </div>
+  </div>
+</nz-card>

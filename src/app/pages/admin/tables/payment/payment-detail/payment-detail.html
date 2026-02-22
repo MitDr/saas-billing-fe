@@ -1,0 +1,25 @@
+<div class="page-container">
+  <nz-page-header
+    [nzSubtitle]="'ID: ' + (payment()?.id || '')"
+    [nzTitle]="'Payment Detail'"
+  >
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item><a routerLink="/admin/tables/payments">Payments</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>Payment Detail</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-page-header>
+
+  <div class="mt-8">
+    @if (payment(); as pmt) {
+      <app-payment-card
+        [payment]="pmt"
+        (deleteButton)="onDelete($event)">
+      </app-payment-card>
+    } @else {
+      <div class="text-center py-16">
+        <nz-spin nzSize="large"></nz-spin>
+        <p class="mt-4 text-gray-500">Loading entitlement information...</p>
+      </div>
+    }
+  </div>
+</div>

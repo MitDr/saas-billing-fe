@@ -1,14 +1,35 @@
 <div class="page-container">
-  <h1 class="text-2xl font-semibold mb-6">Create User</h1>
-  <div class="flex justify-end mb-4">
-    <app-breadcrumb [routes]="TENANT_ROUTE_CONSTANT"></app-breadcrumb>
-  </div>
+  <nz-page-header
+    [nzSubtitle]="'ID: ' + (tenant()?.id || '')"
+    [nzTitle]="'Update Tenant'"
+  >
+    <div class="flex justify-end mb-4">
+      <app-breadcrumb [routes]="routing"></app-breadcrumb>
+    </div>
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item><a routerLink="/admin/tables/tenants">Tenant</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>Update Tenant</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-page-header>
 
-  <app-tenant-reuse-form
-    [formGroup]="tenantForm"
-    [isLoading]="isSubmitting()"
-    [isEditMode]="true"
-    (submitted)="onSubmitted()"
-  ></app-tenant-reuse-form>
+  @if (!loading()) {
+    @if (tenant(); as te) {
+      <app-tenant-reuse-form
+        [formGroup]="tenantForm"
+        [availableUsers]="availableUsers()"
+        [isEditMode]="true"
+        [initCreator]="te.creator"
+        [initUsers]="te.users"
+        [submitLabel]="'Update'"
+        [apiKey]="te.apiKey"
+        (refreshAPI)="onRefreshAPI()"
+        (submitted)="onSubmitted()"
+      ></app-tenant-reuse-form>
+    } @else {
+      <div>User not found</div>
+    }
+  } @else {
+    <nz-spin nzTip="Loading user..."></nz-spin>
+  }
 </div>
 

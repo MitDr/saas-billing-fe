@@ -1,0 +1,195 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="formGroup()" nz-form>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="amount" nzRequired>Amount</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Amount is required">
+      <input formControlName="amount" id="amount" nz-input placeholder="Description" type="number"/>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="currency" nzRequired>Currency</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Currency is required">
+      <nz-select formControlName="currency" nzPlaceHolder="currency">
+        @for (opt of currencyOption; track opt.value) {
+          <nz-option [nzLabel]="opt.label" [nzValue]="opt.value"></nz-option>
+        }
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="status" nzRequired>Status</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Status is required">
+      <nz-select formControlName="status" nzPlaceHolder="status">
+        @for (opt of statusOption; track opt.value) {
+          <nz-option [nzLabel]="opt.label" [nzValue]="opt.value"></nz-option>
+        }
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="paymentIntentId">Payment Intent</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Payment Intent is required">
+      <input formControlName="paymentIntentId" id="paymentIntentId" nz-input placeholder="Payment Intent" type="text"/>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="chargeId">Charge ID</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Charge ID is required">
+      <input formControlName="chargeId" id="chargeId" nz-input placeholder="Charge ID" type="text"/>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="balanceTransactionId">Balance Transaction</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Balance Transaction is required">
+      <input formControlName="balanceTransactionId" id="balanceTransactionId" nz-input placeholder="Balance Transaction"
+             type="text"/>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="paymentMethod">Payment Method</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Payment Method is required">
+      <input formControlName="paymentMethod" id="paymentMethod" nz-input placeholder="Payment Method"
+             type="text"/>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="availableOn">Available On</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <nz-date-picker
+        [nzFormat]="'dd-MM-yyyy HH:mm:ss'"
+        class="w-full" formControlName="availableOn"
+        id="availableOn"
+        nzAllowClear
+        nzPlaceHolder="Choose available on"
+        nzShowTime
+      ></nz-date-picker>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Tenant</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <button (click)="openTenantModal()" nz-button nzType="default" type="button">
+        <span nz-icon nzType="container"></span> Choose Tenant
+      </button>
+
+      @if (selectedTenant(); as tenant) {
+        <nz-card class="mt-3" nzHoverable>
+          <nz-card-meta
+            nzTitle="{{ tenant.name }}"
+            nzDescription="{{ tenant.id }} • {{ tenant.email }}"
+          ></nz-card-meta>
+          <button type="button" nz-button nzType="link" nzDanger (click)="clearTenant()">Delete</button>
+        </nz-card>
+      } @else {
+        <p class="text-gray-500 mt-2">Tenant is not chosen</p>
+      }
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24">Invoice</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <button (click)="openInvoiceModal()" nz-button nzType="default" type="button">
+        <span nz-icon nzType="container"></span> Choose Invoice
+      </button>
+
+      @if (selectedInvoice(); as inv) {
+        <nz-card class="mt-3" nzHoverable>
+          <nz-card-meta
+            nzTitle="{{ inv.id }}"
+            [nzDescription]="getInvoiceDescription(inv)"
+          ></nz-card-meta>
+          <button type="button" nz-button nzType="link" nzDanger (click)="clearTenant()">Delete</button>
+        </nz-card>
+      } @else {
+        <p class="text-gray-500 mt-2">Invoice is not chosen</p>
+      }
+    </nz-form-control>
+  </nz-form-item>
+  <div formArrayName="metadata">
+    <div *ngFor="let item of metadataList.controls; let i = index" [formGroupName]="i">
+
+      <nz-form-item>
+        <nz-form-label [nzSm]="6">Key</nz-form-label>
+        <nz-form-control [nzSm]="7">
+          <input formControlName="key" nz-input placeholder="Key"/>
+        </nz-form-control>
+
+        <nz-form-label [nzSm]="3">Value</nz-form-label>
+        <nz-form-control [nzSm]="6">
+          <input formControlName="value" nz-input placeholder="Value"/>
+        </nz-form-control>
+
+        <button (click)="removeMetadata(i)" nz-button nzType="default" type="button">
+          X
+        </button>
+      </nz-form-item>
+
+    </div>
+  </div>
+  <button (click)="addMetadata()" nz-button nzType="dashed" type="button">
+    + Add Metadata
+  </button>
+  <nz-form-item class="mt-8" nz-row>
+    <nz-form-control [nzOffset]="6" [nzSpan]="14">
+      <button
+        [disabled]="formGroup()?.invalid || isLoading()"
+        [nzLoading]="isLoading()"
+        nz-button
+        nzType="primary"
+      >
+        {{ submitLabel() }}
+      </button>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+
+<nz-modal
+  (nzOnCancel)="isTenantModalOpen.set(false)"
+  (nzOnOk)="isTenantModalOpen.set(false)"
+  [nzVisible]="isTenantModalOpen()"
+  nzCancelText="Đóng"
+  nzOkText="Xác nhận"
+  nzTitle="Chọn Tenant"
+>
+  <ng-template nzModalContent>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
+      @if (availableTenants().length === 0) {
+        <p class="text-center text-gray-500 py-10">Không có tenant nào để chọn</p>
+      } @else {
+        @for (tenant of availableTenants(); track tenant.id) {
+          <nz-card nzHoverable (click)="selectTenant(tenant)">
+            <nz-card-meta
+              nzTitle="{{ tenant.name }}"
+              nzDescription="{{ tenant.id }} • {{ tenant.email}}"
+            ></nz-card-meta>
+          </nz-card>
+        }
+      }
+    </div>
+  </ng-template>
+</nz-modal>
+
+<nz-modal
+  (nzOnCancel)="isInvoiceModalOpen.set(false)"
+  (nzOnOk)="isInvoiceModalOpen.set(false)"
+  [nzVisible]="isInvoiceModalOpen()"
+  nzCancelText="Đóng"
+  nzOkText="Xác nhận"
+  nzTitle="Chọn Invoice"
+>
+  <ng-template nzModalContent>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
+      @if (availableTenants().length === 0) {
+        <p class="text-center text-gray-500 py-10">Không có invoice nào để chọn</p>
+      } @else {
+        @for (inv of availableInvoice(); track inv.id) {
+          <nz-card nzHoverable (click)="selectInvoice(inv)">
+            <nz-card-meta
+              nzTitle="{{ inv.id }}"
+              [nzDescription]="getInvoiceDescription(inv)"
+            ></nz-card-meta>
+          </nz-card>
+        }
+      }
+    </div>
+  </ng-template>
+</nz-modal>

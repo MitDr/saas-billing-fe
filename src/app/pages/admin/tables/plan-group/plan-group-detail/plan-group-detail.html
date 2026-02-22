@@ -1,0 +1,26 @@
+<div class="page-container">
+  <nz-page-header
+    [nzSubtitle]="'ID: ' + (planGroup()?.id || '')"
+    [nzTitle]="'Plan Group Detail'"
+  >
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item><a routerLink="/admin/tables/plan-groups">Plan Group</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>Plan Group Detail</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-page-header>
+
+  <div class="mt-8">
+    @if (planGroup(); as pg) {
+      <app-plan-group-card
+        [planGroup]="pg"
+        (load)="loadPlanGroup($event)"
+        (deleteButton)="onDelete($event)">
+      </app-plan-group-card>
+    } @else {
+      <div class="text-center py-16">
+        <nz-spin nzSize="large"></nz-spin>
+        <p class="mt-4 text-gray-500">Loading plan group information...</p>
+      </div>
+    }
+  </div>
+</div>

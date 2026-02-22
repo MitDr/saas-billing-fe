@@ -1,11 +1,11 @@
-<nz-card class="tenant-card" [nzBordered]="false">
+<nz-card [nzBordered]="false" class="entity-card">
   <div class="flex items-start gap-6">
     <div class="flex-1">
       <!-- Tên Tenant + Status -->
       <h2 class="text-2xl font-bold flex items-center gap-3">
         {{ tenant().name }}
         @if (tenant().softDelete) {
-          <nz-tag nzColor="red">Deleted</nz-tag>
+          <nz-tag nzColor="orange">Soft Deleted</nz-tag>
         } @else {
           <nz-tag nzColor="green">Active</nz-tag>
         }
@@ -20,56 +20,54 @@
       </p>
 
       <!-- Thông tin chính (không có phần users count nữa) -->
-      <nz-descriptions nzBordered nzSize="small" [nzColumn]="2" class="mt-6">
+      <nz-descriptions [nzColumn]="2" class="mt-6" nzBordered nzSize="small">
         <nz-descriptions-item nzTitle="Tenant ID">
           #{{ tenant().id }}
         </nz-descriptions-item>
         <nz-descriptions-item nzTitle="API Key">
           <div class="flex items-center gap-3">
             <!-- Hiển thị API Key đã mask -->
-            <nz-tag nzColor="processing" class="font-mono">
+            <nz-tag class="font-mono" nzColor="processing">
               {{ maskApiKey(tenant().apiKey) }}
             </nz-tag>
 
             <!-- Nút Copy -->
             <button
-              nz-button
-              nzType="text"
-              nzShape="circle"
-              nz-tooltip
-              nzTooltipTitle="Copy API Key"
               (click)="copyApiKey(tenant().apiKey)"
+              nz-button
+              nz-tooltip
+              nzShape="circle"
+              nzTooltipTitle="Copy API Key"
+              nzType="text"
             >
               <span nz-icon nzType="copy"></span>
             </button>
 
             <!-- Nút Refresh -->
             <button
-              nz-button
-              nzType="text"
-              nzShape="circle"
-              nz-tooltip
-              nzTooltipTitle="Refresh / Regenerate API Key"
-              nz-popconfirm
-              nzPopconfirmTitle="Bạn có chắc muốn tạo lại API Key mới? API Key cũ sẽ không còn hiệu lực."
-              nzPopconfirmOkText="Có, tạo mới"
-              nzPopconfirmCancelText="Hủy"
               (nzOnConfirm)="refreshApiKey()"
+              nz-button
+              nz-popconfirm
+              nz-tooltip
+              nzPopconfirmTitle="Bạn có chắc muốn tạo lại API Key mới? API Key cũ sẽ không còn hiệu lực."
+              nzShape="circle"
+              nzTooltipTitle="Refresh / Regenerate API Key"
+              nzType="text"
             >
-              <span nz-icon nzType="sync" class="text-orange-600"></span>
+              <span class="text-orange-600" nz-icon nzType="sync"></span>
             </button>
           </div>
         </nz-descriptions-item>
 
-<!--        <nz-descriptions-item nzTitle="API Key">-->
-<!--          <nz-tag nzColor="processing">-->
-<!--            {{ maskApiKey(tenant().apiKey) }}-->
-<!--          </nz-tag>-->
-<!--        </nz-descriptions-item>-->
+        <!--        <nz-descriptions-item nzTitle="API Key">-->
+        <!--          <nz-tag nzColor="processing">-->
+        <!--            {{ maskApiKey(tenant().apiKey) }}-->
+        <!--          </nz-tag>-->
+        <!--        </nz-descriptions-item>-->
 
         <nz-descriptions-item nzTitle="Stripe Account">
           <nz-tag nzColor="magenta">
-            {{ tenant().stripeAccountId || 'Not connected' }}
+            {{ tenant().stripeAccountId }}
           </nz-tag>
         </nz-descriptions-item>
 
@@ -96,23 +94,26 @@
 
       <!-- Actions -->
       <div class="mt-8 flex flex-wrap gap-3">
-        <button nz-button nzType="primary" [routerLink]="['/admin/tables/tenants', tenant().id, 'edit']">
+        <button [routerLink]="['/admin/tables/tenants', tenant().id, 'edit']" class="!inline-flex !items-center"
+                nz-button
+                nzType="primary">
           <span nz-icon nzType="edit"></span>
           Edit Tenant
         </button>
 
-<!--        <button nz-button nzDanger (click)="confirmDelete()">-->
-        <button nz-button nzDanger>
+        <button (click)="onDelete()" class="!inline-flex !items-center"
+                nz-button
+                nzDanger>
           <span nz-icon nzType="delete"></span>
           Delete Tenant
         </button>
-
-<!--        @if (tenant().stripeAccountId) {-->
-<!--          <button nz-button nzType="default">-->
-<!--            <span nz-icon nzType="link"></span>-->
-<!--            View in Stripe-->
-<!--          </button>-->
-<!--        }-->
+        <!--        @if (tenant().stripeAccountId) {-->
+        <!--          <button nz-button nzType="default"-->
+        <!--                  class="!inline-flex !items-center">-->
+        <!--            <span nz-icon nzType="link"></span>-->
+        <!--            Update Account Link-->
+        <!--          </button>-->
+        <!--        }-->
       </div>
 
       <!-- Phần Users: tái sử dụng User Card -->
@@ -125,7 +126,9 @@
 
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             @for (user of tenant().users; track user.id) {
-              <app-user-card [user]="user" [deleteButton]="false"></app-user-card>
+              <app-user-dto-card [numberOfColumn]="1" [user]="user"
+                                 (userRemove)="onRemoveUser($event)">
+              </app-user-dto-card>
             }
           </div>
         </div>

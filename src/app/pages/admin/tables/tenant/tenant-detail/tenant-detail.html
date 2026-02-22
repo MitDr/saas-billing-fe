@@ -1,8 +1,7 @@
 <div class="page-container">
   <nz-page-header
-    [nzTitle]="'Tenant Detail'"
     [nzSubtitle]="'ID: ' + (tenant()?.id || '')"
-    nzBackRouterLink="admin/tables/tenants"
+    [nzTitle]="'Tenant Detail'"
   >
     <nz-breadcrumb nz-page-header-breadcrumb>
       <nz-breadcrumb-item><a routerLink="/admin/tables/tenants">Tenants</a></nz-breadcrumb-item>
@@ -11,12 +10,17 @@
   </nz-page-header>
 
   <div class="mt-8">
-    @if (tenant(); as t) {
-      <app-tenant-card [tenant]="t"></app-tenant-card>
+    @if (tenant(); as tenant) {
+      <app-tenant-card
+        [tenant]="tenant"
+        (load)="loadTenant($event)"
+        (refreshApi)="$event"
+        (deleteButton)="onDelete($event)">
+      </app-tenant-card>
     } @else {
       <div class="text-center py-16">
         <nz-spin nzSize="large"></nz-spin>
-        <p class="mt-4 text-gray-500">Loading user information...</p>
+        <p class="mt-4 text-gray-500">Loading tenant information...</p>
       </div>
     }
   </div>

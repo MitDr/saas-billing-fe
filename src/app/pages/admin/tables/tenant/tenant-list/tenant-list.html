@@ -3,7 +3,7 @@
     Tenant LIST
   </h1>
   <ng-container class="mb-4">
-    <button nz-button nzType="primary" [routerLink]="createRoute">+ Add Tenant</button>
+    <button [routerLink]="createRoute" nz-button nzType="primary">+ Add Tenant</button>
   </ng-container>
 
 </div>
@@ -17,16 +17,49 @@
 <!--  viewRoute="/admin/tables/tenants/">-->
 <!--</app-editable-data-table>-->
 <app-editable-data-table
+  (bulkDelete)="onBulkDelete($event)"
+  (bulkSoftDelete)="onBulkSoftDelete($event)"
   (pageChange)="onPageChange($event)"
   (saveRow)="onSaveRow($event)"
   (sizeChange)="onSizeChange($event)"
   [columns]="TENANT_COLUMNS"
-  (bulkDelete)="onBulkDelete($event)"
   [data]="tenantPageResponse()"
   [loading]="loading()"
   [routes]="tenantListRouting"
   [showBulkDelete]="true"
   viewRoute="/admin/tables/tenants/">
   >
+  <div class="flex gap-3 items-center flex-wrap mb-4" table-toolbar>
+    <nz-input-wrapper class="w-64">
+      <input
+        (ngModelChange)="search.set($event); currentPage.set(1)"
+        [ngModel]="search()"
+        nz-input
+        placeholder="Search price..."
+      />
+    </nz-input-wrapper>
+
+    <!-- 🗑 Soft Delete Filter -->
+    <nz-select
+      (ngModelChange)="softDeleteFilter.set($event); currentPage.set(1)"
+      [ngModel]="softDeleteFilter()"
+      class="w-44"
+      nzAllowClear
+      nzPlaceHolder="Soft Delete"
+    >
+      <nz-option [nzValue]="false" nzLabel="Active"></nz-option>
+      <nz-option [nzValue]="true" nzLabel="Deleted"></nz-option>
+    </nz-select>
+
+    <!-- 🔄 Reset -->
+    <button
+      (click)="resetFilters()"
+      nz-button
+      nzType="default"
+    >
+      Reset
+    </button>
+
+  </div>
   <!-- Toolbar nếu cần -->
 </app-editable-data-table>

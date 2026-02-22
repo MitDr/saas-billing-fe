@@ -3,20 +3,44 @@
     WEBHOOK LOG LIST
   </h1>
   <ng-container class="mb-4">
-    <button nz-button nzType="primary" [routerLink]="createRoute">+ Add Webhook Log</button>
+    <button [routerLink]="createRoute" nz-button nzType="primary">+ Add Webhook Log</button>
   </ng-container>
 </div>
 <app-editable-data-table
+  (bulkDelete)="onBulkDelete($event)"
   (pageChange)="onPageChange($event)"
   (saveRow)="onSaveRow($event)"
   (sizeChange)="onSizeChange($event)"
-  [columns]="WEBHOOK_LOG_COLUMNS"
-  (bulkDelete)="onBulkDelete($event)"
+  [columns]="getColumns()"
   [data]="webhookLogPage()"
   [loading]="loading()"
   [routes]="webhookLogListRouting"
   [showBulkDelete]="true"
+  [showSoftDelete]="false"
   viewRoute="/admin/tables/webhook-logs/">
   >
+
+  <div class="flex gap-3 items-center flex-wrap mb-4" table-toolbar>
+
+    <!-- 🔍 Search -->
+    <nz-input-wrapper class="w-64">
+      <input
+        (ngModelChange)="onSearchChange($event)"
+        [ngModel]="search()"
+        nz-input
+        placeholder="Search Webhook Log..."
+      />
+    </nz-input-wrapper>
+
+    <!-- 🔄 Reset -->
+    <button
+      (click)="resetFilters()"
+      nz-button
+      nzType="default"
+    >
+      Reset
+    </button>
+
+  </div>
   <!-- Toolbar nếu cần -->
 </app-editable-data-table>

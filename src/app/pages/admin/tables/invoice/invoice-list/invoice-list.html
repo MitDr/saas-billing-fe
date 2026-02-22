@@ -3,20 +3,72 @@
     INVOICE LIST
   </h1>
   <ng-container class="mb-4">
-    <button nz-button nzType="primary" [routerLink]="createRoute">+ Add Invoice</button>
+    <button [routerLink]="createRoute" nz-button nzType="primary">+ Add Invoice</button>
   </ng-container>
 </div>
 <app-editable-data-table
+  (bulkDelete)="onBulkDelete($event)"
+  (bulkSoftDelete)="onBulkSoftDelete($event)"
   (pageChange)="onPageChange($event)"
   (saveRow)="onSaveRow($event)"
   (sizeChange)="onSizeChange($event)"
-  [columns]="INVOICE_COLUMNS"
-  (bulkDelete)="onBulkDelete($event)"
+  [columns]="getColumns()"
   [data]="invoicePage()"
   [loading]="loading()"
   [routes]="invoiceListRouting"
   [showBulkDelete]="true"
+  entityName="invoice(s)"
   viewRoute="/admin/tables/invoices/">
   >
   <!-- Toolbar nếu cần -->
+  <div class="flex mb-4 gap-3 items-center flex-wrap" table-toolbar>
+
+    <!-- 🔍 Search -->
+    <nz-input-wrapper class="w-64">
+      <input
+        (ngModelChange)="onSearchChange($event.target.value)"
+        [ngModel]="search()"
+        nz-input
+        placeholder="Search price..."
+      />
+    </nz-input-wrapper>
+
+    <!-- 🗑 Soft Delete Filter -->
+    <nz-select
+      (ngModelChange)="onSoftDeleteChange($event)"
+      [ngModel]="softDeleteFilter()"
+      class="w-44"
+      nzAllowClear
+      nzPlaceHolder="Soft Delete"
+    >
+      <nz-option [nzValue]="false" nzLabel="Active"></nz-option>
+      <nz-option [nzValue]="true" nzLabel="Deleted"></nz-option>
+    </nz-select>
+
+    <!-- 🏢 Tenant Filter -->
+    <nz-select
+      (ngModelChange)="onTenantChange($event)"
+      [ngModel]="tenantFilter()"
+      class="w-52"
+      nzAllowClear
+      nzPlaceHolder="Tenant"
+    >
+      @for (tenant of tenants(); track tenant.id) {
+        <nz-option
+          [nzLabel]="tenant.name"
+          [nzValue]="tenant.id">
+        </nz-option>
+      }
+    </nz-select>
+
+    <!-- 🔄 Reset -->
+    <button
+      (click)="resetFilters()"
+      nz-button
+      nzType="default"
+    >
+      Reset
+    </button>
+
+  </div>
 </app-editable-data-table>

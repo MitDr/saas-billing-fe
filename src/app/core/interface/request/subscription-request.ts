@@ -1,0 +1,16 @@
+export interface SubscriptionRequest {
+  status: "ACTIVE" | 'DRAFT' | 'PENDING' | 'ENDED' | 'CANCEL',
+  defaultPaymentMethod?: string,
+  quantity: number,
+  isTrial: boolean,
+  startDate: string,
+  endDate: string,
+  cancelAtPeriodEnd: boolean,
+  cancelDate?: string,
+  dueDate: string,
+  subscriberId: number,
+  priceId: number,
+  invoices?: number[],
+  tenantId: number,
+  metadata?: any,
+}

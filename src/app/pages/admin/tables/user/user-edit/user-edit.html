@@ -1,0 +1,30 @@
+<div class="page-container">
+  <nz-page-header
+    [nzSubtitle]="'ID: ' + (user()?.id || '')"
+    [nzTitle]="'Update User'"
+  >
+    <div class="flex justify-end mb-4">
+      <app-breadcrumb [routes]="routing"></app-breadcrumb>
+    </div>
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item><a routerLink="/admin/tables/users">Users</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>Update User</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-page-header>
+
+  @if (!loading()) {
+    @if (user(); as us) {
+      <app-user-reuse-form
+        [formGroup]="userForm"
+        [isEditMode]="true"
+        [submitLabel]="'Update'"
+        (submitted)="onSubmitted()"
+      ></app-user-reuse-form>
+    } @else {
+      <div>User not found</div>
+    }
+  } @else {
+    <nz-spin nzTip="Loading user..."></nz-spin>
+  }
+</div>
+

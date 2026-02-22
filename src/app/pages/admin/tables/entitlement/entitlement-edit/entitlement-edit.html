@@ -1,0 +1,36 @@
+<div class="page-container">
+  <nz-page-header
+    [nzSubtitle]="'ID: ' + (entitlement()?.id || '')"
+    [nzTitle]="'Update Entitlement'"
+  >
+    <div class="flex justify-end mb-4">
+      <app-breadcrumb [routes]="routing"></app-breadcrumb>
+    </div>
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item><a routerLink="/admin/tables/entitlements">Entitlements</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>Update Entitlement</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-page-header>
+
+  @if (!loading()) {
+    @if (entitlement(); as ent) {
+      <app-entitlement-reuse-form
+        [formGroup]="entitlementForm"
+        [availableSubscription]="availableSubscription()"
+        [availableFeatures]="availableFeature()"
+        [availableTenants]="availableTenant()"
+        [isEditMode]="true"
+        [initFeature]="initFeature() "
+        [initSubscription]="initSubscription()"
+        [initTenant]="initTenant()"
+        [submitLabel]="'Update'"
+        (submitted)="onSubmitted()"
+      ></app-entitlement-reuse-form>
+    } @else {
+      <div>Entitlement not found</div>
+    }
+  } @else {
+    <nz-spin nzTip="Loading Entitlement..."></nz-spin>
+  }
+</div>
+

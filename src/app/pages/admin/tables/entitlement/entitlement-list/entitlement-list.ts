@@ -1,128 +1,136 @@
-import {Component, effect, inject, signal} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {ListData} from '../../../../../core/interface/list-data';
-import {ENTITLEMENT_ROUTE_CONSTANT} from '../../../../../core/constant/entitlement/entitlement-list-constant';
 import {Entitlement} from '../../../../../core/interface/entity/entitlement';
 import {ColumnConfig} from '../../../../../core/interface/column-config';
 import {SOFTDELETEOPTIONS} from '../../tenant/tenant-list/tenant-list';
-import {NzMessageService} from 'ng-zorro-antd/message';
-import {EntitlementService} from '../../../../../core/service/entitlement-service';
 import {EditableDataTable} from '../../../../../shell/components/generic/editable-data-table/editable-data-table';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {RouterLink} from '@angular/router';
+import {EntitlementRequest} from '../../../../../core/interface/request/entitlement-request';
+import {NzInputDirective, NzInputWrapperComponent} from 'ng-zorro-antd/input';
+import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {GenericListComponent} from '../../../../../core/generic/base-list-component';
+import {ENTITLEMENT_ROUTE_CONSTANT} from '../../../../../core/constant/entitlement/entitlement-list-constant';
+import {EntitlementService} from '../../../../../core/service/entitlement-service';
 
 @Component({
   selector: 'app-entitlement-list',
   imports: [
     EditableDataTable,
     NzButtonComponent,
-    RouterLink
+    RouterLink,
+    NzInputDirective,
+    NzInputWrapperComponent,
+    NzOptionComponent,
+    NzSelectComponent,
+    ReactiveFormsModule,
+    FormsModule
   ],
   templateUrl: './entitlement-list.html',
   styleUrl: './entitlement-list.css',
 })
-export class EntitlementList {
-  currentPage = signal(1);   // 1-based (khớp API)
-  pageSize = signal(5);
+export class EntitlementList extends GenericListComponent<Entitlement, EntitlementRequest> {
   entitlementPage = signal<ListData<Entitlement> | null>(null);
-  loading = signal(false);
-
   checked = false;
-  createRoute = '/admin/tables/features/create'
+  createRoute = '/admin/tables/entitlements/create'
   entitlementListRouting = ENTITLEMENT_ROUTE_CONSTANT;
-
-  protected readonly ENTITLEMENT_COLUMNS: ColumnConfig<Entitlement>[] = [
-    {key: "id", title: 'Id', editable: false},
-    {key: 'startDate', title: 'Start Date', editable: true, type: 'date-time'},
-    {key: 'endDate', title: 'End Date', editable: true, type: 'date-time'},
-    {key: 'status', title: 'Status', editable: true, type: 'select', options: ENTITLEMENTSTATUSOPTION},
-    {key: 'createdDate', title: 'Created Date', editable: false, type: 'text'},
-    {key: 'modifiedDate', title: 'Modified Date', editable: false, type: 'text'},
-    {key: 'subscription', title: 'Subscriptions\'s Id', editable: false, type: "custom", path: 'subscription.id'},
-    {key: 'feature', title: 'Feature\'s Id', editable: false, type: 'custom', path: 'feature.id'},
-    {key: 'subscriber', title: 'Subscriber\'s Name', editable: false, type: 'custom', path: 'subscriber.name'},
-    {key: 'tenant', title: 'Tenant\'s Name', editable: false, type: 'custom', path: 'tenant.name'},
-    {key: 'softDelete', title: 'Soft Delete', editable: true, type: "select", options: SOFTDELETEOPTIONS}
-  ]
-
   private entitlementService = inject(EntitlementService);
-  private message = inject(NzMessageService);
 
-  constructor() {
-    effect(() => {
-      const page = this.currentPage();
-      const size = this.pageSize();
-
-      this.loadEntitlements(page, size);
-    });
+  getDataPage() {
+    return this.entitlementPage;
   }
 
-  onPageChange(newPage: number) {
-    console.log('[PAGE] Changed to:', newPage);
-    this.currentPage.set(newPage);
-    // Không cần gọi loadFeatures nữa → effect tự chạy
+  getColumns(): ColumnConfig<Entitlement>[] {
+    return [
+      {key: "id", title: 'Id', editable: false},
+      {key: 'startDate', title: 'Start Date', editable: true, type: 'date-time'},
+      {key: 'endDate', title: 'End Date', editable: true, type: 'date-time'},
+      {key: 'status', title: 'Status', editable: true, type: 'select', options: ENTITLEMENTSTATUSOPTION},
+      // {key: 'createdDate', title: 'Created Date', editable: false, type: 'text'},
+      // {key: 'modifiedDate', title: 'Modified Date', editable: false, type: 'text'},
+      {key: 'subscription', title: 'Subscriptions\'s Id', editable: false, type: "custom", path: 'subscription.id'},
+      {key: 'feature', title: 'Feature\'s Id', editable: false, type: 'custom', path: 'feature.id'},
+      {key: 'subscriber', title: 'Subscriber\'s Name', editable: false, type: 'custom', path: 'subscriber.name'},
+      {key: 'tenant', title: 'Tenant\'s Name', editable: false, type: 'custom', path: 'tenant.name'},
+      {key: 'softDelete', title: 'Soft Delete', editable: false, type: "select", options: SOFTDELETEOPTIONS}
+    ]
   }
 
-  // Khi đổi size
-  onSizeChange(newSize: number) {
-    console.log('[SIZE] Changed to:', newSize);
-    this.pageSize.set(newSize);
-    this.currentPage.set(1); // reset về trang 1
-    // Effect tự reload
+  getCreateRoute() {
+    return this.createRoute;
   }
 
-  onSaveRow(updateEntitlement: Entitlement) {
-    // this.userService.updateUser(updatedUser).subscribe({
-    //   next: () => {
-    //     this.message.success('Cập nhật thành công');
-    //     this.loadUsers();  // ← gọi lại API load toàn bộ list
-    //   },
-    //   error: () => {
-    //     this.message.error('Cập nhật thất bại');
-    //     // Optional: rollback cache nếu cần
-    //   }
-    // });
-    console.log('calling api')
+  getRoutingConstant() {
+    return this.entitlementListRouting;
   }
 
-  // Bulk delete (tương tự)
-  onBulkDelete(ids: number[]) {
-    // if (ids.length === 0) return;
-    //
-    // this.modal.confirm({
-    //   nzTitle: 'Xác nhận xóa',
-    //   nzContent: `Xóa ${ids.length} feature?`,
-    //   nzOkText: 'Xóa',
-    //   nzOkDanger: true,
-    //   nzOnOk: () => {
-    //     this.featureService.bulkDelete(ids).subscribe({
-    //       next: () => {
-    //         this.message.success('Xóa thành công');
-    //         this.currentPage.set(this.currentPage()); // trigger reload
-    //       },
-    //       error: () => this.message.error('Xóa thất bại')
-    //     });
-    //   }
-    // });
+  getService() {
+    return this.entitlementService;
   }
 
-  private loadEntitlements(page: number, size: number) {
+  onSearchChange(value: string) {
+    this.search.set(value);
+    this.currentPage.set(1);
+    this.syncUrl({page: 1});
+  }
+
+  onSoftDeleteChange(value: boolean | null) {
+    this.softDeleteFilter.set(value);
+    this.currentPage.set(1);
+    this.syncUrl({page: 1});
+  }
+
+  onTenantChange(value: number | null) {
+    this.tenantFilter.set(value);
+    this.currentPage.set(1);
+    this.syncUrl({page: 1});
+  }
+
+
+  protected loadData(page: number, size: number, search?: string, softDelete?: boolean | null, tenantId?: number | null, sort?: string) {
     this.loading.set(true);
-
-    this.entitlementService.getEntitlements(page, size).subscribe({  // page 0-based cho backend
+    this.entitlementService.getEntitlements(page, size, search, softDelete, tenantId).subscribe({ // No sort for Price
       next: (response) => {
+        // Sync queryParams (nếu cần, copy từ cũ)
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: {
+            page,
+            size: this.pageSize(),
+            search: this.search() || null,
+            softDelete: this.softDeleteFilter(),
+            tenantId: this.tenantFilter()
+          },
+          queryParamsHandling: 'merge'
+        });
         this.entitlementPage.set(response);
         this.loading.set(false);
       },
-      error: (err) => {
-        this.message.error('Không thể tải danh sách entitlements');
+      error: () => {
+        this.message.error('Không thể tải danh sách prices');
         this.loading.set(false);
       }
     });
+  }
+
+  protected mapToUpdatePayload(entitlement: Entitlement): EntitlementRequest {
+    return {
+      startDate: entitlement.startDate,
+      endDate: entitlement.endDate,
+      status: entitlement.status,
+      subscriptionId: entitlement.subscription.id,
+      featureId: entitlement.feature.id,
+      tenantId: entitlement.tenant.id,
+      // softDelete: entitlement.softDelete
+      // password: nếu có field password trong form edit, thêm vào đây
+      // password: user.password || undefined
+    };
   }
 }
 
 export const ENTITLEMENTSTATUSOPTION = [
   {label: 'Active', value: 'ACTIVE', color: 'green'},
-  {label: 'Expire', value: 'EXPIRE', color: 'red'},
+  {label: 'Expired', value: 'EXPIRED', color: 'red'},
   {label: 'Revoked', value: 'REVOKED', color: 'orange'}
 ]

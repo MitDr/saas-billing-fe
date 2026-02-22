@@ -18,7 +18,6 @@ import {PlanGroupList} from './pages/admin/tables/plan-group/plan-group-list/pla
 import {PriceList} from './pages/admin/tables/price/price-list/price-list';
 import {AuthFormLayout} from './layout/public/auth-form-layout/auth-form-layout';
 import {Login} from './pages/public/login/login';
-import {adminGuard, authGuard} from './core/auth/guard/auth-guard';
 import {SubscriberList} from './pages/admin/tables/subscriber/subscriber-list/subscriber-list';
 import {SubscriptionList} from './pages/admin/tables/subscription/subscription-list/subscription-list';
 import {Register} from './pages/public/register/register/register';
@@ -29,6 +28,40 @@ import {PaymentList} from './pages/admin/tables/payment/payment-list/payment-lis
 import {PayoutList} from './pages/admin/tables/payout/payout-list/payout-list';
 import {WebhookEndpointList} from './pages/admin/tables/webhook-endpoint/webhook-endpoint-list/webhook-endpoint-list';
 import {WebhookLogList} from './pages/admin/tables/webhook-log/webhook-log-list/webhook-log-list';
+import {EntitlementDetail} from './pages/admin/tables/entitlement/entitlement-detail/entitlement-detail';
+import {ImageDetail} from './pages/admin/tables/image/image-detail/image-detail';
+import {InvoiceDetail} from './pages/admin/tables/invoice/invoice-detail/invoice-detail';
+import {FeatureDetail} from './pages/admin/tables/feature/feature-detail/feature-detail';
+import {PaymentDetail} from './pages/admin/tables/payment/payment-detail/payment-detail';
+import {PayoutDetail} from './pages/admin/tables/payout/payout-detail/payout-detail';
+import {PlanDetail} from './pages/admin/tables/plan/plan-detail/plan-detail';
+import {PlanGroupDetail} from './pages/admin/tables/plan-group/plan-group-detail/plan-group-detail';
+import {PriceDetail} from './pages/admin/tables/price/price-detail/price-detail';
+import {SubscriberDetail} from './pages/admin/tables/subscriber/subscriber-detail/subscriber-detail';
+import {SubscriptionDetail} from './pages/admin/tables/subscription/subscription-detail/subscription-detail';
+import {
+  WebhookEndpointDetail
+} from './pages/admin/tables/webhook-endpoint/webhook-endpoint-detail/webhook-endpoint-detail';
+import {WebhookLogDetail} from './pages/admin/tables/webhook-log/webhook-log-detail/webhook-log-detail';
+import {UserEdit} from './pages/admin/tables/user/user-edit/user-edit';
+import {EntitlementEdit} from './pages/admin/tables/entitlement/entitlement-edit/entitlement-edit';
+import {EntitlementCreate} from './pages/admin/tables/entitlement/entitlement-create/entitlement-create';
+import {FeatureCreate} from './pages/admin/tables/feature/feature-create/feature-create';
+import {FeatureEdit} from './pages/admin/tables/feature/feature-edit/feature-edit';
+import {ImageEdit} from './pages/admin/tables/image/image-edit/image-edit';
+import {ImageCreate} from './pages/admin/tables/image/image-create/image-create';
+import {InvoiceCreate} from './pages/admin/tables/invoice/invoice-create/invoice-create';
+import {InvoiceEdit} from './pages/admin/tables/invoice/invoice-edit/invoice-edit';
+import {PaymentCreate} from './pages/admin/tables/payment/payment-create/payment-create';
+import {PaymentEdit} from './pages/admin/tables/payment/payment-edit/payment-edit';
+import {PayoutCreate} from './pages/admin/tables/payout/payout-create/payout-create';
+import {PayoutEdit} from './pages/admin/tables/payout/payout-edit/payout-edit';
+import {PlanEdit} from './pages/admin/tables/plan/plan-edit/plan-edit';
+import {PlanCreate} from './pages/admin/tables/plan/plan-create/plan-create';
+import {PlanGroupCreate} from './pages/admin/tables/plan-group/plan-group-create/plan-group-create';
+import {PlanGroupEdit} from './pages/admin/tables/plan-group/plan-group-edit/plan-group-edit';
+import {PriceCreate} from './pages/admin/tables/price/price-create/price-create';
+import {PriceEdit} from './pages/admin/tables/price/price-edit/price-edit';
 
 export const routes: Routes = [
   {
@@ -76,6 +109,10 @@ export const routes: Routes = [
         path: 'tables/users/:id',
         component: UserDetail,
       },
+      {
+        path: 'tables/users/:id/edit',
+        component: UserEdit
+      },
       //Tenants
       {
         path: 'tables/tenants',
@@ -98,65 +135,190 @@ export const routes: Routes = [
         path: 'tables/features',
         component: FeatureList,
       },
+      {
+        path: 'tables/features/create',
+        component: FeatureCreate,
+      },
+      {
+        path: 'tables/features/:id',
+        component: FeatureDetail,
+      },
+      {
+        path: 'tables/features/:id/edit',
+        component: FeatureEdit
+      },
       //Plan
       {
         path: 'tables/plans',
         component: PlanList
+      },
+      {
+        path: 'tables/plans/create',
+        component: PlanCreate
+      },
+      {
+        path: 'tables/plans/:id',
+        component: PlanDetail
+      },
+      {
+        path: 'tables/plans/:id/edit',
+        component: PlanEdit
       },
       //Plan-group
       {
         path: 'tables/plan-groups',
         component: PlanGroupList
       },
+      {
+        path: 'tables/plan-groups/create',
+        component: PlanGroupCreate
+      },
+      {
+        path: 'tables/plan-groups/:id',
+        component: PlanGroupDetail
+      },
+      {
+        path: 'tables/plan-groups/:id/edit',
+        component: PlanGroupEdit
+      },
       //Price
       {
         path: 'tables/prices',
         component: PriceList
+      },
+      {
+        path: 'tables/prices/create',
+        component: PriceCreate
+      },
+      {
+        path: 'tables/prices/:id',
+        component: PriceDetail
+      },
+      {
+        path: 'tables/prices/:id/edit',
+        component: PriceEdit
       },
       //Subscribers
       {
         path: 'tables/subscribers',
         component: SubscriberList
       },
+      {
+        path: 'tables/subscribers/:id',
+        component: SubscriberDetail
+      },
       //Subscriptions
       {
         path: 'tables/subscriptions',
         component: SubscriptionList
+      },
+      {
+        path: 'tables/subscriptions/:id',
+        component: SubscriptionDetail
       },
       //Entitlement
       {
         path: 'tables/entitlements',
         component: EntitlementList
       },
+      {
+        path: 'tables/entitlements/create',
+        component: EntitlementCreate
+      },
+      {
+        path: 'tables/entitlements/:id',
+        component: EntitlementDetail,
+      },
+
+      {
+        path: 'tables/entitlements/:id/edit',
+        component: EntitlementEdit
+      },
       //Image
       {
         path: 'tables/images',
         component: ImageList
+      },
+      {
+        path: 'tables/images/create',
+        component: ImageCreate
+      },
+      {
+        path: 'tables/images/:id',
+        component: ImageDetail,
+      },
+      {
+        path: 'tables/images/:id/edit',
+        component: ImageEdit
       },
       //Invoice
       {
         path: 'tables/invoices',
         component: InvoiceList
       },
+      {
+        path: 'tables/invoices/create',
+        component: InvoiceCreate
+      },
+      {
+        path: 'tables/invoices/:id',
+        component: InvoiceDetail,
+      },
+      {
+        path: 'tables/invoices/:id/edit',
+        component: InvoiceEdit
+      },
       //Payment
       {
         path: 'tables/payments',
         component: PaymentList
+      },
+      {
+        path: 'tables/payments/create',
+        component: PaymentCreate
+      },
+      {
+        path: 'tables/payments/:id',
+        component: PaymentDetail,
+      },
+      {
+        path: 'tables/payments/:id/edit',
+        component: PaymentEdit
       },
       //Payout
       {
         path: 'tables/payouts',
         component: PayoutList
       },
+      {
+        path: 'tables/payouts/create',
+        component: PayoutCreate
+      },
+      {
+        path: 'tables/payouts/:id',
+        component: PayoutDetail
+      },
+      {
+        path: 'tables/payouts/:id/edit',
+        component: PayoutEdit
+      },
       //Webhook Endpoints
       {
         path: 'tables/webhook-endpoints',
         component: WebhookEndpointList,
       },
+      {
+        path: 'tables/webhook-endpoints/:id',
+        component: WebhookEndpointDetail
+      },
       //Webhook Log
       {
         path: 'tables/webhook-logs',
         component: WebhookLogList
+      },
+      {
+        path: 'tables/webhook-logs/:id',
+        component: WebhookLogDetail
       }
     ]
   },

@@ -121,17 +121,37 @@
 <!--  viewRoute="/admin/tables/users/">-->
 <!--</app-editable-data-table>-->
 <app-editable-data-table
+  (bulkDelete)="onBulkDelete($event)"
   (pageChange)="onPageChange($event)"
   (saveRow)="onSaveRow($event)"
   (sizeChange)="onSizeChange($event)"
-  (bulkDelete)="onBulkDelete($event)"
-  [columns]="USER_COLUMNS"
+  [columns]="getColumns()"
   [data]="userPageResponse()"
   [loading]="loading()"
   [routes]="userListRouting"
   [showBulkDelete]="true"
+  [showSoftDelete]="false"
+  entityName="user(s)"
   viewRoute="/admin/tables/users/">
   >
+  <div class="flex gap-3 items-center flex-wrap mb-4" table-toolbar>
+    <nz-input-wrapper class="w-64">
+      <input
+        (ngModelChange)="onSearchChange($event)"
+        [ngModel]="search()"
+        nz-input
+        placeholder="Search User..."
+      />
+    </nz-input-wrapper>
+
+    <button
+      (click)="resetFilters()"
+      nz-button
+      nzType="default"
+    >
+      Reset
+    </button>
+  </div>
   <!-- Toolbar nếu cần -->
 </app-editable-data-table>
 

@@ -1,29 +1,42 @@
 <div class="table-toolbar flex justify-between mb-4 flex-wrap gap-3">
   <div class="left">
     @if (showBulkDelete()) {
-      <!--      <button-->
-        <!--        (click)="onBulkDelete()"-->
-        <!--        [disabled]="setOfCheckedId().size === 0 || editing()"-->
-        <!--        nz-button-->
-        <!--        nzDanger-->
-        <!--      >-->
-        <!--        Delete ({{ setOfCheckedId().size }})-->
-        <!--      </button>-->
-        <!--    }-->
       <button
+        (click)="showConfirm()"
         [disabled]="setOfCheckedId().size === 0 || editing()"
         nz-button
         nzDanger
+        class="!mr-2"
       >
         Delete ({{ setOfCheckedId().size }})
       </button>
     }
+    @if (showSoftDelete()) {
+      <button
+        (click)="softDelete()"
+        [disabled]="setOfCheckedId().size === 0 || editing()"
+        nz-button
+        class="!mr-2"
+        nzType="default"
+      >
+        Soft Delete ({{ setOfCheckedId().size }})
+      </button>
+    }
+    <!--      <button-->
+    <!--      -->
+    <!--        [disabled]="setOfCheckedId().size === 0 || editing()"-->
+    <!--        nz-button-->
+    <!--        nzDanger-->
+    <!--      >-->
+    <!--        Delete ({{ setOfCheckedId().size }})-->
+    <!--      </button>-->
+    <!--    }-->
   </div>
   <div class="right">
     <app-breadcrumb [routes]="routes()"></app-breadcrumb>
   </div>
-  <ng-content select="[table-toolbar]"></ng-content>
 </div>
+<ng-content select="[table-toolbar]"></ng-content>
 <div class="ant-table-wrapper">
   <nz-table
     #nzTable
@@ -96,8 +109,9 @@
                   @case ('date-time') {
                     <div class="flex gap-2">
                       <nz-date-picker
+                        nzShowTime
                         [(ngModel)]="editCache()[item.id].data[col.key]"
-                        [nzFormat]="col.dateFormat || 'dd-MM-yyyy HH:mm:ss'"
+                        [nzFormat]="'dd-MM-yyyy HH:mm:ss'"
                         nzAllowClear
                         nzPlaceHolder="Chọn ngày"
                       ></nz-date-picker>
@@ -110,7 +124,11 @@
               } @else {
                 @if (col.type === 'custom' || col.path) {
                   @let value = col.path ? getNestedValue(item, col.path) : item[col.key];
-                  {{ value }}
+                  @if (col.formatUUID) {
+                    {{ formatUuid(value) }}
+                  } @else {
+                    {{ value }}
+                  }
                 } @else if (col.type === 'select' || col.type === 'tag') {
                   <nz-tag
                     class="ant-tag"
@@ -121,7 +139,11 @@
                 } @else if (col.template) {
                   <ng-container *ngTemplateOutlet="col.template; context: { $implicit: item }"></ng-container>
                 } @else if (col.type === 'text') {
-                  {{ item[col.key] }}
+                  @if (col.formatUUID) {
+                    {{ formatUuid(item[col.key]) }}
+                  } @else {
+                    {{ item[col.key] }}
+                  }
                 } @else if (col.type === 'avatar') {
                   @let avatarUrl = col.path ? getNestedValue(item, col.path) : item[col.key];
                   <nz-avatar
@@ -134,6 +156,8 @@
                     <!--                  @if (!avatarUrl) {-->
                     <!--                    <span class="ml-2 text-gray-500">No avatar</span>-->
                     <!--                  }-->
+                } @else if (col.type === 'date-time' && col.dateFormat) {
+                  {{ formatDateString(item[col.key], col.dateFormat) }}
                 } @else {
                   {{ item[col.key] }}
                 }

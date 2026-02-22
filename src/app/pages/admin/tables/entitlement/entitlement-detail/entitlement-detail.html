@@ -1,0 +1,25 @@
+<div class="page-container">
+  <nz-page-header
+    [nzSubtitle]="'ID: ' + (entitlement()?.id || '')"
+    [nzTitle]="'Entitlement Detail'"
+  >
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item><a routerLink="/admin/tables/entitlements">Entitlement</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>Entitlement Detail</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-page-header>
+
+  <div class="mt-8">
+    @if (entitlement(); as ent) {
+      <app-entitlement-card
+        [entitlement]="ent"
+        (deleteButton)="onDelete($event)">
+      </app-entitlement-card>
+    } @else {
+      <div class="text-center py-16">
+        <nz-spin nzSize="large"></nz-spin>
+        <p class="mt-4 text-gray-500">Loading entitlement information...</p>
+      </div>
+    }
+  </div>
+</div>

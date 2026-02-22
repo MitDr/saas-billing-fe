@@ -1,0 +1,26 @@
+<div class="page-container">
+  <nz-page-header
+    [nzSubtitle]="'ID: ' + (plan()?.id || '')"
+    [nzTitle]="'Plan Detail'"
+  >
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item><a routerLink="/admin/tables/plans">Plans</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>Plan Detail</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-page-header>
+
+  <div class="mt-8">
+    @if (plan(); as pla) {
+      <app-plan-card
+        [plan]="pla"
+        (load)="loadPlan($event)"
+        (deleteButton)="onDelete($event)">
+      </app-plan-card>
+    } @else {
+      <div class="text-center py-16">
+        <nz-spin nzSize="large"></nz-spin>
+        <p class="mt-4 text-gray-500">Loading plan information...</p>
+      </div>
+    }
+  </div>
+</div>

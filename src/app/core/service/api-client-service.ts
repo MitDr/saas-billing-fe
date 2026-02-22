@@ -60,7 +60,7 @@ export class ApiClientService {
         const body = res.body;
 
         // 👉 Message từ backend
-        if (body?.message) {
+        if (body?.message && res.status !== 200) {
           this.message.success(body.message);
         }
 
@@ -90,7 +90,7 @@ export class ApiClientService {
     return this.request<T>('GET', url, null, params);
   }
 
-  post<T>(url: string, body: any) {
+  post<T>(url: string, body?: any) {
     return this.request<T>('POST', url, body);
   }
 
@@ -100,6 +100,10 @@ export class ApiClientService {
 
   delete<T>(url: string) {
     return this.request<T>('DELETE', url);
+  }
+
+  deletes<T>(url: string, body: any) {
+    return this.request<T>('DELETE', url, body);
   }
 
   getCurrentUser(): AuthUser | null {
@@ -121,7 +125,6 @@ export class ApiClientService {
 
   private getAccessToken() {
     const token = localStorage.getItem('accessToken');
-    console.log('[API] getAccessToken:', token ? 'exists' : 'missing');
     return token;
   }
 

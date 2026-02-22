@@ -1,0 +1,79 @@
+<nz-card [nzBordered]="false" class="user-card">
+  <div class="flex items-start gap-6">
+    <div class="flex-1">
+      <h2 class="text-2xl font-bold flex items-center gap-3">
+        #{{ entitlementDto().id }}
+        <!--        @if (user().role === 'ADMIN') {-->
+        <!--          <nz-tag nzColor="red">ADMIN</nz-tag>-->
+        <!--        } @else {-->
+        <!--          <nz-tag nzColor="green">USER</nz-tag>-->
+        <!--        }-->
+      </h2>
+      <!--      <p class="text-gray-500 mt-1">{{ tenant().email }}</p>-->
+      <nz-descriptions [nzColumn]="numberOfColumn()" class="mt-6" nzBordered nzSize="small">
+        <nz-descriptions-item nzTitle="Entitlement ID">
+          {{ entitlementDto().id }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Entitlement Status">
+          <div class="flex items-center gap-3">
+            @switch (entitlementDto().status) {
+              @case ('ACTIVE') {
+                <nz-tag class="font-mono" nzColor="green">
+                  {{ entitlementDto().status }}
+                </nz-tag>
+              }
+              @case ('EXPIRED') {
+                <nz-tag class="font-mono" nzColor="red">
+                  {{ entitlementDto().status }}
+                </nz-tag>
+              }
+              @case ('REVOKED') {
+                <nz-tag class="font-mono" nzColor="orange">
+                  {{ entitlementDto().status }}
+                </nz-tag>
+              }
+            }
+          </div>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Start Date">
+          {{ entitlementDto().startDate }}
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="End Date">
+          {{ entitlementDto().endDate }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Created Date">
+          {{ entitlementDto().createdDate }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Last Modified">
+          {{ entitlementDto().modifiedDate }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Soft Delete">
+          <nz-tag [nzColor]="entitlementDto().softDelete ? 'geekblue' : 'green'">
+            {{ entitlementDto().softDelete }}
+          </nz-tag>
+        </nz-descriptions-item>
+        <!--        <nz-descriptions-item nzTitle="Status" [nzSpan]="2">-->
+        <!--          <nz-tag color="green">Active</nz-tag>-->
+        <!--        </nz-descriptions-item>-->
+      </nz-descriptions>
+
+      <!--      <div class="mt-6 flex gap-3">-->
+      <!--        <button nz-button nzType="primary" [routerLink]="['/users', user().id, 'edit']">-->
+      <!--          <span nz-icon nzType="edit"></span>-->
+      <!--          Edit User-->
+      <!--        </button>-->
+      <!--        <button nz-button nzDanger>-->
+      <!--          <span nz-icon nzType="delete"></span>-->
+      <!--          Delete-->
+      <!--        </button>-->
+      <!--        <button (click)="onRemoveUser()" class="!inline-flex !items-center"-->
+      <!--                nz-button-->
+      <!--                nzDanger>-->
+      <!--          <span nz-icon nzType="delete"></span>-->
+      <!--          Remove-->
+      <!--        </button>-->
+      <!--      </div>-->
+    </div>
+  </div>
+</nz-card>

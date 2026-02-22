@@ -1,0 +1,200 @@
+<nz-card [nzBordered]="false" class="entity-card">
+  <div class="flex items-start gap-6">
+    <div class="flex-1">
+      <!-- Tên Tenant + Status -->
+      <h2 class="text-2xl font-bold flex items-center gap-3">
+        EntitlementID: {{ entitlement().id }}
+        @if (entitlement().softDelete) {
+          <nz-tag nzColor="orange">Soft Deleted</nz-tag>
+        } @else {
+          <nz-tag nzColor="green">Active</nz-tag>
+        }
+      </h2>
+
+      <!-- Email + Creator ngắn gọn -->
+      <!--      <p class="text-gray-500 mt-1">-->
+      <!--        {{ tenant().email }}-->
+      <!--        <span class="ml-4 text-sm text-gray-400">-->
+      <!--          Created by <strong>{{ tenant().creator?.username || 'N/A' }}</strong>-->
+      <!--        </span>-->
+      <!--      </p>-->
+
+      <!-- Thông tin chính (không có phần users count nữa) -->
+      <nz-descriptions [nzColumn]="2" class="mt-6" nzBordered nzSize="small">
+        <nz-descriptions-item nzTitle="Tenant ID">
+          #{{ entitlement().id }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Entitlement Status">
+          <div class="flex items-center gap-3">
+            @switch (entitlement().status) {
+              @case ('ACTIVE') {
+                <nz-tag class="font-mono" nzColor="green">
+                  {{ entitlement().status }}
+                </nz-tag>
+              }
+              @case ('EXPIRED') {
+                <nz-tag class="font-mono" nzColor="red">
+                  {{ entitlement().status }}
+                </nz-tag>
+              }
+              @case ('REVOKED') {
+                <nz-tag class="font-mono" nzColor="orange">
+                  {{ entitlement().status }}
+                </nz-tag>
+              }
+            }
+          </div>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Start Date">
+          {{ entitlement().startDate }}
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="End Date">
+          {{ entitlement().endDate }}
+        </nz-descriptions-item>
+        <!--        <nz-descriptions-item nzTitle="Stripe Account">-->
+        <!--          <nz-tag nzColor="magenta">-->
+        <!--            {{ tenant().stripeAccountId || 'Not connected' }}-->
+        <!--          </nz-tag>-->
+        <!--        </nz-descriptions-item>-->
+
+        <!--        <nz-descriptions-item nzTitle="Current Balance">-->
+        <!--          <span class="font-medium text-green-600">-->
+        <!--            ${{ (tenant().currentAmount || 0) | number:'1.0-0' }}-->
+        <!--          </span>-->
+        <!--        </nz-descriptions-item>-->
+
+        <!--        <nz-descriptions-item nzTitle="Pending Amount">-->
+        <!--          <span class="font-medium text-orange-600">-->
+        <!--            ${{ (tenant().pendingAmount || 0) | number:'1.0-0' }}-->
+        <!--          </span>-->
+        <!--        </nz-descriptions-item>-->
+        <nz-descriptions-item nzTitle="Created Date">
+          {{ entitlement().createdDate }}
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Last Modified">
+          {{ entitlement().modifiedDate }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Soft Delete">
+          <nz-tag [nzColor]="entitlement().softDelete ? 'geekblue' : 'green'">
+            {{ entitlement().softDelete }}
+          </nz-tag>
+        </nz-descriptions-item>
+      </nz-descriptions>
+      <!-- Actions -->
+      <div class="mt-8 flex flex-wrap gap-3">
+        <button [routerLink]="['/admin/tables/entitlements', entitlement().id, 'edit']"
+                class="!inline-flex !items-center" nz-button
+                nzType="primary">
+          <span nz-icon nzType="edit"></span>
+          Edit Tenant
+        </button>
+
+        <!--        <button nz-button nzDanger (click)="confirmDelete()">-->
+
+        <button (click)="onDelete()" class="!inline-flex !items-center"
+                nz-button nzDanger>
+          <span nz-icon nzType="delete"></span>
+          Delete Tenant
+        </button>
+
+        <!--        @if (tenant().stripeAccountId) {-->
+        <!--          <button nz-button nzType="default">-->
+        <!--            <span nz-icon nzType="link"></span>-->
+        <!--            View in Stripe-->
+        <!--          </button>-->
+        <!--        }-->
+      </div>
+
+      <!--      Phần Subscription-->
+      @if (entitlement().subscription) {
+        <div class="mt-10">
+          <h3 class="text-xl font-semibold mb-6 flex items-center gap-3">
+            <span nz-icon nzType="wallet" class="text-blue-600"></span>
+            Subscription of this entitlement (#{{ entitlement().subscription.id }})
+          </h3>
+          <div class="grid grid-cols-1 gap-6">
+            <app-subscription-dto-card [subscription]="entitlement().subscription"></app-subscription-dto-card>
+          </div>
+        </div>
+      } @else {
+        <div class="mt-10 text-center text-gray-500 py-8">
+          <nz-icon nzType="wallet" nzTheme="outline" class="text-4xl opacity-50"></nz-icon>
+          <p class="mt-3">No subscription in this entitlement yet.</p>
+        </div>
+      }
+      <!--      Phần Feature-->
+      @if (entitlement().feature) {
+        <div class="mt-10">
+          <h3 class="text-xl font-semibold mb-6 flex items-center gap-3">
+            <span nz-icon nzType="bulb" class="text-blue-600"></span>
+            Feature of this entitlement (#{{ entitlement().feature.id }})
+          </h3>
+          <div class="grid grid-cols-1 gap-6">
+            <app-feature-dto-card [feature]="entitlement().feature"></app-feature-dto-card>
+          </div>
+        </div>
+      } @else {
+        <div class="mt-10 text-center text-gray-500 py-8">
+          <nz-icon nzType="bulb" nzTheme="outline" class="text-4xl opacity-50"></nz-icon>
+          <p class="mt-3">No feature in this entitlement yet.</p>
+        </div>
+      }
+      <!--      Phần Subscriber-->
+      @if (entitlement().subscriber) {
+        <div class="mt-10">
+          <h3 class="text-xl font-semibold mb-6 flex items-center gap-3">
+            <span nz-icon nzType="team" class="text-blue-600"></span>
+            Subscriber of this entitlement (#{{ entitlement().subscriber.id }})
+          </h3>
+          <div class="grid grid-cols-1 gap-6">
+            <app-subscriber-dto-card [subscriber]="entitlement().subscriber"></app-subscriber-dto-card>
+          </div>
+        </div>
+      } @else {
+        <div class="mt-10 text-center text-gray-500 py-8">
+          <nz-icon nzType="team" nzTheme="outline" class="text-4xl opacity-50"></nz-icon>
+          <p class="mt-3">No feature in this entitlement yet.</p>
+        </div>
+      }
+      <!--      Phần tenant-->
+      @if (entitlement().tenant) {
+        <div class="mt-10">
+          <h3 class="text-xl font-semibold mb-6 flex items-center gap-3">
+            <span nz-icon nzType="container" class="text-blue-600"></span>
+            Tenant of this entitlement ({{ entitlement().tenant.name }})
+          </h3>
+          <div class="grid grid-cols-1 gap-6">
+            <app-tenant-dto-card [tenant]="entitlement().tenant"></app-tenant-dto-card>
+          </div>
+        </div>
+      } @else {
+        <div class="mt-10 text-center text-gray-500 py-8">
+          <nz-icon nzType="container" nzTheme="outline" class="text-4xl opacity-50"></nz-icon>
+          <p class="mt-3">No tenant in this entitlement yet.</p>
+        </div>
+      }
+      <!-- Phần Users: tái sử dụng User Card -->
+      <!--      @if (tenant().users?.length) {-->
+      <!--        <div class="mt-10">-->
+      <!--          <h3 class="text-xl font-semibold mb-6 flex items-center gap-3">-->
+      <!--            <span nz-icon nzType="team" class="text-blue-600"></span>-->
+      <!--            Users in this Tenant ({{ tenant().users.length }})-->
+      <!--          </h3>-->
+
+      <!--          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">-->
+      <!--            @for (user of tenant().users; track user.id) {-->
+      <!--              <app-user-dto-card [user]="user" (userRemove)="onRemoveUser($event)"></app-user-dto-card>-->
+      <!--            }-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--      } @else {-->
+      <!--        <div class="mt-10 text-center text-gray-500 py-8">-->
+      <!--          <nz-icon nzType="team" nzTheme="outline" class="text-4xl opacity-50"></nz-icon>-->
+      <!--          <p class="mt-3">No users in this tenant yet.</p>-->
+      <!--        </div>-->
+      <!--      }-->
+    </div>
+  </div>
+</nz-card>

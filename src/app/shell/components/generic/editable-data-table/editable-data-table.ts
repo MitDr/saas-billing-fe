@@ -1,4 +1,4 @@
-import {Component, computed, effect, input, output, signal} from '@angular/core';
+import {Component, computed, effect, inject, input, output, signal} from '@angular/core';
 import {ColumnConfig} from '../../../../core/interface/column-config';
 import {RowAction} from '../../../../core/interface/row-action';
 import {NzTableComponent, NzTdAddOnComponent, NzThSelectionComponent} from 'ng-zorro-antd/table';
@@ -8,7 +8,7 @@ import {NzTagComponent} from 'ng-zorro-antd/tag';
 import {NzPopconfirmDirective} from 'ng-zorro-antd/popconfirm';
 import {NzInputDirective} from 'ng-zorro-antd/input';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
-import {NgTemplateOutlet} from '@angular/common';
+import {DatePipe, formatDate, NgTemplateOutlet} from '@angular/common';
 import {Breadcrumb} from '../breadcrumb/breadcrumb';
 import {BreadCrumbInterface} from '../../../../core/interface/bread-crumb-interface';
 import {RouterLink} from '@angular/router';
@@ -16,6 +16,7 @@ import {NzAvatarComponent} from 'ng-zorro-antd/avatar';
 import {ListData} from '../../../../core/interface/list-data';
 import {NzDatePickerComponent} from 'ng-zorro-antd/date-picker';
 import {NzTimePickerComponent} from 'ng-zorro-antd/time-picker';
+import {NzModalModule, NzModalService} from 'ng-zorro-antd/modal';
 
 @Component({
   selector: ' app-editable-data-table',
@@ -36,6 +37,8 @@ import {NzTimePickerComponent} from 'ng-zorro-antd/time-picker';
     NzAvatarComponent,
     NzDatePickerComponent,
     NzTimePickerComponent,
+    NzModalModule,
+    DatePipe
   ],
   templateUrl: './editable-data-table.html',
   styleUrl: './editable-data-table.css',
@@ -48,40 +51,37 @@ export class EditableDataTable<T extends { id: number }> {
   loading = input<boolean>(false);
   pageSizeOptions = input<number[]>([5, 10, 20, 50, 100]);
   showBulkDelete = input<boolean>(true);
+  showSoftDelete = input<boolean>(true);
   routes = input<BreadCrumbInterface[]>();
   viewRoute = input.required<string>();
-
+  entityName = input<string>('thưc thể');
   pageChange = output<number>();
   sizeChange = output<number>();
-
   // Computed lấy mảng thật
   tableData = computed(() => this.data()?.content ?? []);
-
+  isVisible = false;
   // Tổng số record
   totalItems = computed(() => this.data()?.totalElements ?? 0);
-
   // Trang hiện tại (nz-table dùng 1-based)
   currentPage = computed(() => this.data()?.page ?? 1);
-
   // Size hiện tại
   currentSize = computed(() => this.data()?.size ?? 5);
-
   // Outputs
   saveRow = output<T>();
   // deleteRow = output<T>();
   bulkDelete = output<number[]>();
-
+  bulkSoftDelete = output<number[]>();
   // State
   editCache = signal<Record<string | number, { edit: boolean; data: T }>>({});
   checked = signal(false);
   indeterminate = signal(false);
   setOfCheckedId = signal<Set<number>>(new Set());
-
   // Computed
   allChecked = computed(() => this.data()?.content.every(item => this.setOfCheckedId().has(item.id)));
   someChecked = computed(() => this.data()?.content.some(item => this.setOfCheckedId().has(item.id)) && !this.allChecked());
-
   editing = computed(() => Object.values(this.editCache()).some(c => c.edit));
+  modalService = inject(NzModalService);
+  protected readonly Date = Date;
 
   constructor() {
     effect(() => {
@@ -91,6 +91,8 @@ export class EditableDataTable<T extends { id: number }> {
         cache[item.id] = {edit: false, data: {...item}};
       });
       this.editCache.set(cache);
+
+      console.log(this.data())
     });
   }
 
@@ -132,16 +134,30 @@ export class EditableDataTable<T extends { id: number }> {
   saveEdit(id: number): void {
     const cache = this.editCache();
     const editedRow = cache[id].data;
-    this.saveRow.emit(editedRow as T);  // ← emit ra ngoài
+
+    const transformedRow = this.transformDates(editedRow);
+    this.saveRow.emit(transformedRow as T);  // ← emit ra ngoài
   }
 
-  onBulkDelete(): void {
-    this.bulkDelete.emit(Array.from(this.setOfCheckedId()));
-  }
+  // onBulkDelete(): void {
+  //   this.bulkDelete.emit(Array.from(this.setOfCheckedId()));
+  // }
 
-  getNestedValue(obj: any, path: string): any {
+  // getNestedValue(obj: any, path: string): any {
+  //   return path.split('.').reduce((o, k) => (o || {})[k], obj);
+  // }
+
+  getNestedValue(obj: any, path?: string): any {
+    if (!path) return obj; // Nếu path undefined, trả obj gốc (hoặc item[col.key])
     return path.split('.').reduce((o, k) => (o || {})[k], obj);
   }
+
+  // getNestedValue(obj: any, path: string): any {
+  //   return path.split('.').reduce((acc, key) => {
+  //     if (acc == null) return undefined;
+  //     return acc[key];
+  //   }, obj);
+  // }
 
   getOptionLabel(col: ColumnConfig<T>, value: any): string {
     if (!col.options) return value?.toString() || 'N/A';
@@ -154,5 +170,89 @@ export class EditableDataTable<T extends { id: number }> {
     const option = col.options.find(opt => opt.value === value);
     return option?.color || 'default';
   }
+
+  showConfirm(): void {
+    this.modalService.confirm({
+      nzTitle: 'Xác nhận xóa',
+      nzContent: `Xóa ${this.setOfCheckedId().size} ${this.entityName()} ?`,
+      nzOkText: 'Xóa',
+      nzOkDanger: true,
+      nzOnOk: () => {
+        // set.delete(id);
+        this.bulkDelete.emit(Array.from(this.setOfCheckedId()));
+        this.setOfCheckedId.set(new Set);
+      }
+    });
+  }
+
+  softDelete(): void {
+    this.modalService.confirm({
+      nzTitle: 'Xác nhận xóa mềm',
+      nzContent: `Xóa ${this.setOfCheckedId().size} ${this.entityName()} ?`,
+      nzOkText: 'Xóa',
+      nzOkDanger: true,
+      nzOnOk: () => {
+        // set.delete(id);
+        this.bulkSoftDelete.emit(Array.from(this.setOfCheckedId()));
+        this.setOfCheckedId.set(new Set);
+      }
+    });
+  }
+
+  formatDateString(dateStr: unknown, format: string): string {
+    if (!dateStr || typeof dateStr !== 'string') return '';
+
+    const [datePart, timePart] = dateStr.split(' ');
+    if (!datePart || !timePart) return '';
+
+    const [day, month, year] = datePart.split('-');
+    const [hour, minute, second] = timePart.split(':');
+
+    const date = new Date(
+      Number(year),
+      Number(month) - 1,
+      Number(day),
+      Number(hour),
+      Number(minute),
+      Number(second)
+    );
+
+    return formatDate(date, format, 'en-US');
+  }
+
+  formatUuid(uuid: unknown): string {
+    if (!uuid || typeof uuid !== 'string') return '';
+
+    if (!uuid) return '';
+    return uuid.slice(0, 8) + '...' + uuid.slice(-4);
+  }
+
+  private formatDate(date: Date): string {
+    const pad = (n: number) => n < 10 ? '0' + n : n;
+
+    return `${pad(date.getDate())}-${pad(date.getMonth() + 1)}-${date.getFullYear()} `
+      + `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+  }
+
+  private transformDates(obj: any): any {
+    if (obj instanceof Date) {
+      return this.formatDate(obj);
+    }
+
+    if (Array.isArray(obj)) {
+      return obj.map(item => this.transformDates(item));
+    }
+
+    if (obj !== null && typeof obj === 'object') {
+      const newObj: any = {};
+      for (const key in obj) {
+        newObj[key] = this.transformDates(obj[key]);
+      }
+      return newObj;
+    }
+
+    return obj;
+  }
+
 
 }

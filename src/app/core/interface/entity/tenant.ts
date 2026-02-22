@@ -8,6 +8,7 @@ export interface Tenant {
   currentAmount: number;
   pendingAmount: number;
   stripeAccountId: string;
+  stripeOnboarded: boolean,
   createdDate: string;
   modifiedDate: string;
   creator: User;

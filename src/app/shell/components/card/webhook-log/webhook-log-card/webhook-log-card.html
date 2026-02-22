@@ -1,0 +1,156 @@
+<nz-card [nzBordered]="false" class="tenant-card">
+  <div class="flex items-start gap-6">
+    <div class="flex-1">
+      <!-- Tên Tenant + Status -->
+      <h2 class="text-2xl font-bold flex items-center gap-3">
+        Webhook Log ID: #{{ webhookLog().id }}
+        @switch (webhookLog().status) {
+          @case ('SUCCESS') {
+            <nz-tag class="font-mono" nzColor="green">
+              Success
+            </nz-tag>
+          }
+          @case ('FAILED') {
+            <nz-tag class="font-mono" nzColor="red">
+              Failed
+            </nz-tag>
+          }
+          @case ('NO_RESPONSE') {
+            <nz-tag class="font-mono" nzColor="gray">
+              No_Response
+            </nz-tag>
+          }
+        }
+      </h2>
+      <!-- Thông tin chính (không có phần users count nữa) -->
+      <nz-descriptions [nzColumn]="1" class="mt-6" nzBordered nzSize="small">
+        <nz-descriptions-item nzTitle="Webhook Log ID">
+          #{{ webhookLog().id }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Response Code">
+          <span class="font-medium text-orange-600">
+            {{ webhookLog().responseCode }}
+          </span>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Webhook Log Status">
+          <div class="flex items-center gap-3">
+            @switch (webhookLog().status) {
+              @case ('SUCCESS') {
+                <nz-tag class="font-mono" nzColor="green">
+                  Success
+                </nz-tag>
+              }
+              @case ('FAILED') {
+                <nz-tag class="font-mono" nzColor="red">
+                  Failed
+                </nz-tag>
+              }
+              @case ('NO_RESPONSE') {
+                <nz-tag class="font-mono" nzColor="gray">
+                  No_Response
+                </nz-tag>
+              }
+            }
+          </div>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Event Type">
+          <div class="flex items-center gap-3">
+            @switch (webhookLog().eventType) {
+              @case ('PAYMENT_SUCCESS') {
+                <nz-tag class="font-mono" nzColor="green">
+                  Payment_Success
+                </nz-tag>
+              }
+              @case ('SUBSCRIPTION_CREATED') {
+                <nz-tag class="font-mono" nzColor="blue">
+                  Subscription_Created
+                </nz-tag>
+              }
+              @case ('SUBSCRIPTION_CANCELLED') {
+                <nz-tag class="font-mono" nzColor="gray">
+                  Subscription_Cancelled
+                </nz-tag>
+              }
+              @case ('SUBSCRIPTION_RENEWED') {
+                <nz-tag class="font-mono" nzColor="orange">
+                  Subscription_Renewed
+                </nz-tag>
+              }
+              @case ('SUBSCRIPTION_RENEWAL_FAILED') {
+                <nz-tag class="font-mono" nzColor="red">
+                  Subscription_Renewal_Failed
+                </nz-tag>
+              }
+            }
+          </div>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Response Body">
+          {{ webhookLog().responseBody }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Created Date">
+          {{ webhookLog().createdDate }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Data">
+          <pre>{{ metadataObject | json }}</pre>
+        </nz-descriptions-item>
+      </nz-descriptions>
+
+
+      <!-- Actions -->
+      <div class="mt-8 flex flex-wrap gap-3">
+        <button [routerLink]="['/admin/tables/features', webhookLog().id, 'edit']"
+                class="!inline-flex !items-center" nz-button
+                nzType="primary">
+          <span nz-icon nzType="edit"></span>
+          Edit Webhook Log
+        </button>
+
+        <!--        <button nz-button nzDanger (click)="confirmDelete()">-->
+
+        <button (click)="onDelete()" class="!inline-flex !items-center"
+                nz-button nzDanger>
+          <span nz-icon nzType="delete"></span>
+          Delete Webhook Log
+        </button>
+      </div>
+
+      @if (webhookLog().webhookEndpoint) {
+        <div class="mt-10">
+          <h3 class="text-xl font-semibold mb-6 flex items-center gap-3">
+            <span nz-icon nzType="solution" class="text-blue-600"></span>
+            Endpoint of this Log (#{{ webhookLog().webhookEndpoint.id }})
+          </h3>
+          <div class="grid grid-cols-1 gap-6">
+            <app-webhook-endpoint-dto-card
+              [webhookEndpoint]="webhookLog().webhookEndpoint"></app-webhook-endpoint-dto-card>
+          </div>
+        </div>
+      } @else {
+        <div class="mt-10 text-center text-gray-500 py-8">
+          <nz-icon nzType="solution" nzTheme="outline" class="text-4xl opacity-50"></nz-icon>
+          <p class="mt-3">No endpoint in this log yet.</p>
+        </div>
+      }
+      <!-- Phần Users: tái sử dụng User Card -->
+      <!--      @if (tenant().users?.length) {-->
+      <!--        <div class="mt-10">-->
+      <!--          <h3 class="text-xl font-semibold mb-6 flex items-center gap-3">-->
+      <!--            <span nz-icon nzType="team" class="text-blue-600"></span>-->
+      <!--            Users in this Tenant ({{ tenant().users.length }})-->
+      <!--          </h3>-->
+
+      <!--          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">-->
+      <!--            @for (user of tenant().users; track user.id) {-->
+      <!--              <app-user-dto-card [user]="user" (userRemove)="onRemoveUser($event)"></app-user-dto-card>-->
+      <!--            }-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--      } @else {-->
+      <!--        <div class="mt-10 text-center text-gray-500 py-8">-->
+      <!--          <nz-icon nzType="team" nzTheme="outline" class="text-4xl opacity-50"></nz-icon>-->
+      <!--          <p class="mt-3">No users in this tenant yet.</p>-->
+      <!--        </div>-->
+      <!--      }-->
+    </div>
+  </div>
+</nz-card>

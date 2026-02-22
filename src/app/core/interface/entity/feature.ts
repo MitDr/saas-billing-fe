@@ -10,8 +10,8 @@ export interface Feature {
   status: 'ACTIVE' | 'INACTIVE';
   createdDate: string;
   modifiedDate: string;
-  entitlements: EntitlementDTO;
-  plans: PlanDTO;
+  entitlements: EntitlementDTO[];
+  plans: PlanDTO[];
   tenant: TenantDTO;
   softDelete: boolean;
 }

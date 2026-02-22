@@ -1,0 +1,34 @@
+<div class="page-container">
+  <nz-page-header
+    [nzSubtitle]="'ID: ' + (payment()?.id || '')"
+    [nzTitle]="'Update Payment'"
+  >
+    <div class="flex justify-end mb-4">
+      <app-breadcrumb [routes]="routing"></app-breadcrumb>
+    </div>
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item><a routerLink="/admin/tables/payments">Payments</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>Update Payment</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-page-header>
+
+  @if (!loading()) {
+    @if (payment(); as pay) {
+      <app-payment-reuse-form
+        [formGroup]="paymentForm"
+        [availableInvoice]="availableInvoice()"
+        [availableTenants]="availableTenant()"
+        [isEditMode]="true"
+        [initInvoice]="initInvoice() "
+        [initTenant]="initTenant()"
+        [submitLabel]="'Update'"
+        (submitted)="onSubmitted()"
+      ></app-payment-reuse-form>
+    } @else {
+      <div>Payment not found</div>
+    }
+  } @else {
+    <nz-spin nzTip="Loading Paymnet..."></nz-spin>
+  }
+</div>
+

@@ -1,0 +1,27 @@
+<div class="p-4">
+  <!-- Search input -->
+  <input (ngModelChange)="filterUsers()" [(ngModel)]="searchValue" class="mb-4 w-full" nz-input
+         placeholder="Tìm username/email"/>
+
+  <!-- List card with scroll -->
+  <div class="max-h-[400px] overflow-y-auto">
+    @for (user of filteredUsers(); track user.id) {
+      <nz-card class="mb-2 cursor-pointer hover:shadow-md transition-shadow" [nzHoverable]="true">
+        <nz-card-meta
+          nzTitle="{{ user.username }} (ID: {{ user.id }})"
+          [nzDescription]="user.email + ' - Role: ' + user.role"
+        ></nz-card-meta>
+        <label nz-checkbox [ngModel]="setOfCheckedId().has(user.id)"
+               (ngModelChange)="onItemChecked(user.id, $event)"></label>
+      </nz-card>
+    } @empty {
+      <p class="text-center text-gray-500">No users found</p>
+    }
+  </div>
+
+  <!-- Buttons -->
+  <div class="mt-4 flex justify-end gap-2">
+    <button (click)="modalRef.close()" nz-button nzType="default">Cancel</button>
+    <button (click)="onOk()" nz-button nzType="primary">OK</button>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+<div class="page-container">
+  <nz-page-header
+    [nzSubtitle]="'ID: ' + (planGroup()?.id || '')"
+    [nzTitle]="'Update Plan Group'"
+  >
+    <div class="flex justify-end mb-4">
+      <app-breadcrumb [routes]="routing"></app-breadcrumb>
+    </div>
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item><a routerLink="/admin/tables/plan-groups">Plan-groups</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>Update Plan Group</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-page-header>
+
+  @if (!loading()) {
+    @if (planGroup(); as pl) {
+      <app-plan-group-reuse-form
+        [formGroup]="planGroupForm"
+        [availableTenants]="availableTenant()"
+        [availablePlans]="availablePlan()"
+        [isEditMode]="true"
+        [initPlans]="initPlan()"
+        [initTenant]="initTenant()"
+        [submitLabel]="'Update'"
+        (submitted)="onSubmitted()"
+      ></app-plan-group-reuse-form>
+    } @else {
+      <div>Plan Group not found</div>
+    }
+  } @else {
+    <nz-spin nzTip="Loading Plan Group..."></nz-spin>
+  }
+</div>

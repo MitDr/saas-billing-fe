@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import {Component, inject, input, output} from '@angular/core';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzCardComponent} from 'ng-zorro-antd/card';
 import {NzDescriptionsComponent, NzDescriptionsItemComponent} from 'ng-zorro-antd/descriptions';
@@ -10,6 +10,11 @@ import {RouterLink} from '@angular/router';
 import {UserCard} from '../../user/user-card/user-card';
 import {NzPopconfirmDirective} from 'ng-zorro-antd/popconfirm';
 import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzTooltipDirective} from 'ng-zorro-antd/tooltip';
+import {UserDtoCard} from '../../DTO/user-dto-card/user-dto-card';
+import {TenantService} from '../../../../../core/service/tenant-service';
+import {TenantRequest} from '../../../../../core/interface/request/tenant-request';
+import {NzModalService} from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-tenant-card',
@@ -23,14 +28,20 @@ import {NzMessageService} from 'ng-zorro-antd/message';
     DecimalPipe,
     RouterLink,
     UserCard,
-    NzPopconfirmDirective
+    NzPopconfirmDirective,
+    NzTooltipDirective,
+    UserDtoCard,
   ],
   templateUrl: './tenant-card.html',
   styleUrl: './tenant-card.css',
 })
 export class TenantCard {
   tenant = input.required<Tenant>()
-
+  tenantService = inject(TenantService);
+  refreshApi = output<number>();
+  modalService = inject(NzModalService);
+  deleteButton = output<number>();
+  load = output<number>();
   private message = inject(NzMessageService);
 
 // Hàm copy
@@ -49,28 +60,8 @@ export class TenantCard {
       });
   }
 
-// Hàm refresh (placeholder - bạn sẽ thay bằng API call thật)
   refreshApiKey(): void {
-    this.message.info('Đang gửi yêu cầu refresh API Key...');
-
-    // Ví dụ gọi API (bạn thay bằng service thật)
-    // this.tenantService.refreshApiKey(this.tenant().id).subscribe({
-    //   next: (newKey) => {
-    //     // Cập nhật tenant với key mới (nếu có response)
-    //     this.tenant.update(t => ({ ...t, apiKey: newKey.apiKey }));
-    //     this.message.success('API Key đã được tạo mới thành công!');
-    //   },
-    //   error: () => {
-    //     this.message.error('Refresh API Key thất bại');
-    //   }
-    // });
-
-    // Demo giả lập
-    setTimeout(() => {
-      this.message.success('API Key mới đã được tạo (demo)');
-      // Nếu bạn dùng signal cho tenant, có thể update:
-      // this.tenant.update(t => ({ ...t, apiKey: 'sk_new_fake_key_xxx' }));
-    }, 1500);
+    this.refreshApi.emit(this.tenant().id)
   }
 
   maskApiKey(key: string): string {
@@ -78,5 +69,53 @@ export class TenantCard {
     const start = key.slice(0, 6);
     const end = key.slice(-4);
     return `${start}...${end}`;
+  }
+
+  onDelete() {
+    this.modalService.confirm({
+      nzTitle: 'Xác nhận xóa',
+      nzContent: `Xóa tenant #${this.tenant().id} ?`,
+      nzOkText: 'Xóa',
+      nzOkDanger: true,
+      nzOnOk: () => {
+        this.deleteButton.emit(this.tenant().id);
+      }
+    });
+  }
+
+  onRemoveUser(id: number) {
+    if (id === this.tenant().creator.id) {
+      this.message.error('Cannot remove creator');
+      return;
+    }
+    this.tenantService.updateTenant(this.removeUserAndMapTenantToTenantRequest(this.tenant(), id), this.tenant().id).subscribe({
+      next: () => {
+        this.message.success('Updated successfully');
+        this.load.emit(this.tenant().id);
+      },
+      error: () => {
+        this.message.error('Update failed');
+        this.load.emit(this.tenant().id);
+      }
+    });
+  }
+
+  removeUserAndMapTenantToTenantRequest(updatedTenant: Tenant, id: number): TenantRequest {
+    const result: TenantRequest = {
+      name: updatedTenant.name,
+      email: updatedTenant.email,
+      currentAmount: updatedTenant.currentAmount,
+      pendingAmount: updatedTenant.pendingAmount,
+      creatorId: updatedTenant.creator.id,
+    }
+    if (updatedTenant.stripeAccountId) {
+      result.stripeAccountId = updatedTenant.stripeAccountId;
+    }
+    if (updatedTenant.users.length > 0) {
+      result.users = updatedTenant.users
+        .filter(user => user.id !== id)
+        .map(user => user.id);
+    }
+    return result;
   }
 }

@@ -3,21 +3,28 @@ import {Tenant} from '../../../../../core/interface/entity/tenant';
 import {ColumnConfig} from '../../../../../core/interface/column-config';
 import {TENANT_ROUTE_CONSTANT} from '../../../../../core/constant/tenant/tenant-list-constant';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
-import {RouterLink} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {EditableDataTable} from '../../../../../shell/components/generic/editable-data-table/editable-data-table';
-import {USER_ROUTE_CONSTANT} from '../../../../../core/constant/user/user-list-constant';
 import {ListData} from '../../../../../core/interface/list-data';
-import {User} from '../../../../../core/interface/entity/user';
 import {TenantService} from '../../../../../core/service/tenant-service';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {FEATURE_ROUTE_CONSTANT} from '../../../../../core/constant/feature/feature-list-constant';
+import {TenantRequest} from '../../../../../core/interface/request/tenant-request';
+import {NzInputDirective, NzInputWrapperComponent} from 'ng-zorro-antd/input';
+import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-tenant-list',
   imports: [
     NzButtonComponent,
     RouterLink,
-    EditableDataTable
+    EditableDataTable,
+    NzInputDirective,
+    NzInputWrapperComponent,
+    NzOptionComponent,
+    NzSelectComponent,
+    ReactiveFormsModule,
+    FormsModule
   ],
   templateUrl: './tenant-list.html',
   styleUrl: './tenant-list.css',
@@ -27,181 +34,195 @@ export class TenantList {
   pageSize = signal(5);
   tenantPageResponse = signal<ListData<Tenant> | null>(null);
   loading = signal(false);
+  search = signal<string>('');
+  softDeleteFilter = signal<boolean | null>(null);
+
 
   checked = false;
   createRoute = '/admin/tables/tenants/create'
   tenantListRouting = TENANT_ROUTE_CONSTANT;
-  protected readonly TENANT_COLUMNS: ColumnConfig<Tenant>[]= [
+  router = inject(Router);
+  route = inject(ActivatedRoute);
+  protected readonly TENANT_COLUMNS: ColumnConfig<Tenant>[] = [
     {key: 'id', title: 'Id', editable: false},
     {key: 'name', title: 'Name', editable: true, type: 'text'},
     {key: 'email', title: 'Email', editable: true, type: 'text'},
-    {key: 'currentAmount', title: 'Current Amount', editable: false, type: 'text'},
-    {key: 'pendingAmount', title: 'Pending Amount', editable: false, type: 'text'},
-    {key: 'createdDate', title: 'Created Date', editable: false},
-    {key: 'modifiedDate', title: 'Modified Date', editable: false},
-    {key: 'softDelete', title: 'Soft Delete', editable: true, type: 'select', options: SOFTDELETEOPTIONS},
+    {key: 'currentAmount', title: 'Current Amount', editable: true, type: 'text'},
+    {key: 'pendingAmount', title: 'Pending Amount', editable: true, type: 'text'},
+    // {key: 'createdDate', title: 'Created Date', editable: false},
+    // {key: 'modifiedDate', title: 'Modified Date', editable: false},
     {key: 'creator', title: 'Creator', editable: false, type: 'custom', path: 'creator.username'},
-    {key: 'users', title: 'Num of User', editable: false, type:'custom', path: 'users.length'}
-  ];
+    {key: 'users', title: 'Num of User', editable: false, type: 'custom', path: 'users.length'},
+    {key: 'softDelete', title: 'Soft Delete', editable: false, type: 'select', options: SOFTDELETEOPTIONS}
 
+  ];
   private tenantService = inject(TenantService);
   private message = inject(NzMessageService);
 
   constructor() {
+    this.route.queryParams.subscribe(params => {
+      const page = Number(params['page']) || 1;
+      const size = Number(params['size']) || 5;
+      const search = params['search'] || '';
+      const softDelete = params['softDelete'] || null;
+      const tenantId = params['tenantId'] || null;
+
+      this.currentPage.set(page);
+      this.pageSize.set(size);
+      this.search.set(search);
+      this.softDeleteFilter.set(softDelete);
+    });
+
     effect(() => {
-      const page = this.currentPage();
-      const size = this.pageSize();
-      this.loadTenants(page, size);
+      this.loadTenants(
+        this.currentPage(),
+        this.pageSize(),
+        this.search(),
+        this.softDeleteFilter()
+      );
     });
   }
 
-  private loadTenants(page: number, size: number) {
-      this.loading.set(true);
+  resetFilters() {
+    this.search.set('');
+    this.softDeleteFilter.set(null);
+    this.currentPage.set(1);
+  }
 
-      this.tenantService.getTenants(page, size).subscribe({  // page 0-based cho backend
-        next: (response) => {
-          // console.log('[API] Features loaded:', response);
-          this.tenantPageResponse.set(response);
-          this.loading.set(false);
-        },
-        error: (err) => {
-          // console.error('[API] Load features error:', err);
-          this.message.error('Không thể tải danh sách tenants');
-          this.loading.set(false);
-        }
-      });
-    }
-
-  // Khi đổi trang
   onPageChange(newPage: number) {
-    console.log('[PAGE] Changed to:', newPage);
-    this.currentPage.set(newPage);
-    // Không cần gọi loadFeatures nữa → effect tự chạy
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        page: newPage,
+        size: this.pageSize(),
+        search: this.search(),
+        softDelete: this.softDeleteFilter(),
+      },
+      queryParamsHandling: 'merge'
+    });
   }
 
   // Khi đổi size
   onSizeChange(newSize: number) {
-    console.log('[SIZE] Changed to:', newSize);
-    this.pageSize.set(newSize);
-    this.currentPage.set(1); // reset về trang 1
-    // Effect tự reload
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        page: 1,
+        size: newSize,
+        search: this.search(),
+        softDelete: this.softDeleteFilter(),
+      },
+      queryParamsHandling: 'merge'
+    });
   }
 
   onSaveRow(updatedTenant: Tenant) {
-  //   // gọi API hoặc update signal
-  //   this.tenants.update(list =>
-  //     list.map(u => u.id === updatedTenant.id ? updatedTenant : u)
-  //   );
-  // }
-  //
-  // onDeleteTenant(tenant: Tenant){
-  //   this.tenants.update(list => list.filter(u=> u.id !== tenant.id));
-  // }
-  //
-  // onBulkDelete(ids: number[]){
-  //   this.tenants.update(list=> list.filter(u=>!ids.includes(u.id)))
+    this.tenantService.updateTenant(this.mapToUpdatePayload(updatedTenant), updatedTenant.id).subscribe({
+      next: () => {
+        this.message.success('Updated successfully');
+        this.loadTenants(
+          this.currentPage(),
+          this.pageSize(),
+          this.search(),
+          this.softDeleteFilter()
+        );
+      },
+      error: () => {
+        this.message.error('Update failed');
+        this.loadTenants(
+          this.currentPage(),
+          this.pageSize(),
+          this.search(),
+          this.softDeleteFilter()
+        );
+      }
+    });
   }
+
   onBulkDelete(ids: number[]) {
-    // if (ids.length === 0) return;
-    //
-    // this.modal.confirm({
-    //   nzTitle: 'Xác nhận xóa',
-    //   nzContent: `Xóa ${ids.length} feature?`,
-    //   nzOkText: 'Xóa',
-    //   nzOkDanger: true,
-    //   nzOnOk: () => {
-    //     this.featureService.bulkDelete(ids).subscribe({
-    //       next: () => {
-    //         this.message.success('Xóa thành công');
-    //         this.currentPage.set(this.currentPage()); // trigger reload
-    //       },
-    //       error: () => this.message.error('Xóa thất bại')
-    //     });
-    //   }
-    // });
+    if (ids.length === 0) return;
+    console.log(ids)
+    this.tenantService.bulkDelete(ids).subscribe({
+      next: () => {
+        this.loadTenants(
+          this.currentPage(),
+          this.pageSize(),
+          this.search(),
+          this.softDeleteFilter()
+        );
+      },
+      error: () => this.message.error('Delete Failed')
+    });
   }
 
-  protected readonly featureListRouting = FEATURE_ROUTE_CONSTANT;
+  onBulkSoftDelete(ids: number[]) {
+    if (ids.length === 0) return;
+    this.tenantService.bulkSoftDelete({ids: ids, softDelete: true}).subscribe({
+      next: () => {
+        this.loadTenants(
+          this.currentPage(),
+          this.pageSize(),
+          this.search(),
+          this.softDeleteFilter()
+        );
+      },
+      error: () => this.message.error('Soft Delete Failed')
+    })
+  }
+
+  private loadTenants(
+    page: number,
+    size: number,
+    search?: string,
+    softDelete?: boolean | null,
+    tenantId?: number | null,
+  ) {
+    this.loading.set(true);
+
+    this.tenantService.getTenants(
+      page,
+      size,
+      search,
+      softDelete,
+    ).subscribe({
+      next: (response) => {
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: {
+            page: page,
+            size: this.pageSize(),
+            search: this.search() || null,
+            softDelete: this.softDeleteFilter(),
+          },
+          queryParamsHandling: 'merge'
+        });
+        this.tenantPageResponse.set(response);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.message.error('Không thể tải danh sách tenants');
+        this.loading.set(false);
+      }
+    });
+  }
+
+  private mapToUpdatePayload(updatedTenant: Tenant): TenantRequest {
+    const result: TenantRequest = {
+      name: updatedTenant.name,
+      email: updatedTenant.email,
+      currentAmount: updatedTenant.currentAmount,
+      pendingAmount: updatedTenant.pendingAmount,
+      creatorId: updatedTenant.creator.id,
+    }
+    if (updatedTenant.stripeAccountId) {
+      result.stripeAccountId = updatedTenant.stripeAccountId;
+    }
+    if (updatedTenant.users.length > 0) {
+      result.users = updatedTenant.users.map(user => user.id);
+    }
+    return result;
+  }
 }
-
-export const FAKE_TENANTS: Tenant[] = [
-  {
-    "id": 2,
-    "name": "Long3's tenant",
-    "email": "long3@gmail.com",
-    "apiKey": "sk_kNSGegEeecXFE9Isa_ICBG",
-    "currentAmount": 6771,
-    "pendingAmount": 68246,
-    "stripeAccountId": "acct_1SF",
-    "createdDate": "07-10-2025 21:24:12",
-    "modifiedDate": "08-01-2026 20:52:07",
-    "creator": {
-      "id": 4,
-      "username": "Lonnng3",
-      "email": "long3@gmail.com",
-      "role": "USER",
-      "createdDate": "07-10-2025 21:16:43",
-      "modifiedDate": "07-10-2025 21:24:15"
-    },
-    "users": [
-      {
-        "id": 4,
-        "username": "Lonnng3",
-        "email": "long3@gmail.com",
-        "role": "USER",
-        "createdDate": "07-10-2025 21:16:43",
-        "modifiedDate": "07-10-2025 21:24:15"
-      },
-      {
-        "id": 5,
-        "username": "Lonnng4",
-        "email": "long4@gmail.com",
-        "role": "USER",
-        "createdDate": "07-10-2025 21:16:47",
-        "modifiedDate": "07-10-2025 21:24:24"
-      }
-    ],
-    "softDelete": false
-  },
-  {
-    "id": 1,
-    "name": "Long1's tenant",
-    "email": "long1@gmail.com",
-    "apiKey": "sk_sqQOASCnfl5P9rDyi7mLnMHwN",
-    "currentAmount": 0,
-    "pendingAmount": 0,
-    "stripeAccountId": "acct_1SF",
-    "createdDate": "07-10-2025 21:17:33",
-    "modifiedDate": "07-10-2025 21:17:36",
-    "creator": {
-      "id": 2,
-      "username": "Lonnng1",
-      "email": "long1@gmail.com",
-      "role": "USER",
-      "createdDate": "07-10-2025 21:16:36",
-      "modifiedDate": "07-10-2025 21:17:36"
-    },
-    "users": [
-      {
-        "id": 2,
-        "username": "Lonnng1",
-        "email": "long1@gmail.com",
-        "role": "USER",
-        "createdDate": "07-10-2025 21:16:36",
-        "modifiedDate": "07-10-2025 21:17:36"
-      },
-      {
-        "id": 3,
-        "username": "Lonnng2",
-        "email": "long2@gmail.com",
-        "role": "USER",
-        "createdDate": "07-10-2025 21:16:40",
-        "modifiedDate": "07-10-2025 21:22:15"
-      }
-    ],
-    "softDelete": false
-  }
-]
 
 export const SOFTDELETEOPTIONS = [
   {label: 'True', value: true, color: 'blue'},

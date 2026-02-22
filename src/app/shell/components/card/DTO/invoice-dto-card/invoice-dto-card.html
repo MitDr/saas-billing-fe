@@ -1,0 +1,116 @@
+<nz-card [nzBordered]="false" class="tenant-card">
+  <div class="flex items-start gap-6">
+    <div class="flex-1">
+      <!-- Tên Tenant + Status -->
+      <h2 class="text-2xl font-bold flex items-center gap-3">
+        Number: {{ invoice().invoiceNumber }}
+        @if (invoice().softDelete) {
+          <nz-tag nzColor="orange">Soft Deleted</nz-tag>
+        } @else {
+          <nz-tag nzColor="green">Active</nz-tag>
+        }
+      </h2>
+
+      <!-- Thông tin chính (không có phần users count nữa) -->
+      <nz-descriptions [nzColumn]="numberOfColumn()" class="mt-6" nzBordered nzSize="small">
+        <nz-descriptions-item nzTitle="Invoice ID">
+          #{{ invoice().id }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Invoice Number">
+          <div class="flex items-center gap-3">
+            <!-- Hiển thị API Key đã mask -->
+            <nz-tag class="font-mono" nzColor="processing">
+              {{ maskInvoiceNumber(invoice().invoiceNumber) }}
+            </nz-tag>
+            <!-- Nút Copy -->
+            <button
+              (click)="copyInvoiceNumber(invoice().invoiceNumber)"
+              nz-button
+              nz-tooltip
+              nzShape="circle"
+              nzTooltipTitle="Copy Invoice Number Key"
+              nzType="text"
+            >
+              <span nz-icon nzType="copy"></span>
+            </button>
+          </div>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Invoice Amount">
+          {{ invoice().amount }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Currency">
+          <div class="flex items-center gap-3">
+            @switch (invoice().currency) {
+              @case ('USD') {
+                <nz-tag class="font-mono" nzColor="green">
+                  {{ invoice().currency }}
+                </nz-tag>
+              }
+              @case ('VND') {
+                <nz-tag class="font-mono" nzColor="red">
+                  {{ invoice().currency }}
+                </nz-tag>
+              }
+            }
+          </div>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Tenant Status">
+          <div class="flex items-center gap-3">
+            @switch (invoice().status) {
+              @case ('PAID') {
+                <nz-tag class="font-mono" nzColor="green">
+                  Paid
+                </nz-tag>
+              }
+              @case ('DRAFT') {
+                <nz-tag class="font-mono" nzColor="blue">
+                  Draft
+                </nz-tag>
+              }
+              @case ('UNPAID') {
+                <nz-tag class="font-mono" nzColor="red">
+                  Unpaid
+                </nz-tag>
+              }
+              @case ('VOID') {
+                <nz-tag class="font-mono" nzColor="gray">
+                  Void
+                </nz-tag>
+              }
+            }
+          </div>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Paid Date">
+          {{ invoice().paidDate }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Billing Start">
+          {{ invoice().billingPeriodStart }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Billing End">
+          {{ invoice().billingPeriodEnd }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Created Date">
+          {{ invoice().createdDate }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Last Modified">
+          {{ invoice().modifiedDate }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Soft Delete">
+          <nz-tag [nzColor]="invoice().softDelete ? 'geekblue' : 'green'">
+            {{ invoice().softDelete }}
+          </nz-tag>
+        </nz-descriptions-item>
+      </nz-descriptions>
+      @if (removable()) {
+        <div class="mt-6 flex gap-3">
+          <button (click)="onRemoveInvoice()" class="!inline-flex !items-center"
+                  nz-button
+                  nzDanger>
+            <span nz-icon nzType="delete"></span>
+            Remove
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+</nz-card>

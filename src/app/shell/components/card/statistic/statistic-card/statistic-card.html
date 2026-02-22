@@ -1,0 +1,25 @@
+<nz-card class="shadow-sm" nzHoverable>
+  <nz-statistic
+    [nzPrefix]="prefix()"
+    [nzSuffix]="suffix()"
+    [nzTitle]="title()"
+    [nzValue]="value()"
+  >
+    @if (prefixIcon()) {
+      <ng-template nzInputPrefix>
+        <span nz-icon [nzType]="prefixIcon()" class="text-xl"></span>
+      </ng-template>
+    }
+
+    <!-- Trend thay thế bằng nz-tag + icon -->
+    @if (trend() === 'up') {
+      <nz-tag nzColor="success" class="ml-2">
+        <span nz-icon nzType="arrow-up"></span> +{{ trendValue() }}
+      </nz-tag>
+    } @else if (trend() === 'down') {
+      <nz-tag nzColor="error" class="ml-2">
+        <span nz-icon nzType="arrow-down"></span> {{ trendValue() }}
+      </nz-tag>
+    }
+  </nz-statistic>
+</nz-card>

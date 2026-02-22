@@ -1,8 +1,11 @@
-import { Component, inject } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {NonNullableFormBuilder, Validators} from '@angular/forms';
-import { USER_CREATE_ROUTE_CONSTANT } from "../../../../../core/constant/user/user-create-constant";
+import {USER_CREATE_ROUTE_CONSTANT} from "../../../../../core/constant/user/user-create-constant";
 import {UserReuseForm} from '../../../../../shell/components/form/admin/user-reuse-form/user-reuse-form';
 import {Breadcrumb} from '../../../../../shell/components/generic/breadcrumb/breadcrumb';
+import {UserService} from '../../../../../core/service/user.service';
+import {UserRequest} from '../../../../../core/interface/request/user-request';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-user-create',
@@ -14,11 +17,11 @@ import {Breadcrumb} from '../../../../../shell/components/generic/breadcrumb/bre
   styleUrl: './user-create.css',
 })
 export class UserCreate {
-  private fb = inject(NonNullableFormBuilder);
-
+  userService = inject(UserService);
   route = USER_CREATE_ROUTE_CONSTANT;
   isSubmitting = false;
-
+  router = inject(Router);
+  private fb = inject(NonNullableFormBuilder);
   userForm = this.fb.group({
     username: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(20)]],
     email: ['', [Validators.required, Validators.email]],
@@ -31,10 +34,23 @@ export class UserCreate {
     if (this.userForm.valid) {
       this.isSubmitting = true;
       console.log('Submit create user:', this.userForm.getRawValue());
-      // Gọi API create user ở đây
-      // Ví dụ: this.userService.create(this.userForm.value).subscribe(...);
-      // Sau thành công: reset form hoặc navigate
-      setTimeout(() => { this.isSubmitting = false; }, 2000); // demo loading
+      const formValue = this.userForm.getRawValue();
+
+      const request: UserRequest = {
+        username: formValue.username,
+        email: formValue.email,
+        password: formValue.password,
+        role: formValue.role as 'ADMIN' | 'USER',
+      };
+      this.userService.addUser(request).subscribe({
+        next: () => {
+          this.isSubmitting = false;
+          this.router.navigate(['/admin/tables/users']);
+        },
+        error: () => {
+          this.isSubmitting = false;
+        }
+      });
     }
   }
 }

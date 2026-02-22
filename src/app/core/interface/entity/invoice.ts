@@ -1,5 +1,6 @@
 import {SubscriberDTO} from '../DTO/SubscriberDTO';
 import {TenantDTO} from '../DTO/TenantDTO';
+import {SubscriptionDTO} from '../DTO/SubscriptionDTO';
 
 export interface Invoice {
   "id": number,
@@ -7,7 +8,7 @@ export interface Invoice {
   "amount": number,
   "currency": "VND" | 'USD',
   "status": "PAID" | 'DRAFT' | 'UNPAID' | 'VOID',
-  "paidDate": string,
+  "paidDate"?: string,
   "billingPeriodStart": string,
   "billingPeriodEnd": string,
   "amountUsd": number,
@@ -16,7 +17,7 @@ export interface Invoice {
   "createdDate": string,
   "modifiedDate": string,
   "tenant": TenantDTO,
-  "subscription": SubscriberDTO,
+  "subscription": SubscriptionDTO,
   "softDelete": boolean,
-  "metadata": any
+  "metadata": any;
 }

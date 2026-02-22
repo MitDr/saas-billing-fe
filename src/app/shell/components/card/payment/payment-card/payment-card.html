@@ -1,0 +1,186 @@
+<nz-card [nzBordered]="false" class="tenant-card">
+  <div class="flex items-start gap-6">
+    <div class="flex-1">
+      <!-- Tên Tenant + Status -->
+      <h2 class="text-2xl font-bold flex items-center gap-3">
+        PaymentID: {{ payment().id }}
+        @if (payment().softDelete) {
+          <nz-tag nzColor="orange">Soft Deleted</nz-tag>
+        } @else {
+          <nz-tag nzColor="green">Active</nz-tag>
+        }
+      </h2>
+      <!-- Thông tin chính (không có phần users count nữa) -->
+      <nz-descriptions [nzColumn]="2" class="mt-6" nzBordered nzSize="small">
+        <nz-descriptions-item nzTitle="Payment ID">
+          #{{ payment().id }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Entitlement Status">
+          <div class="flex items-center gap-3">
+            @switch (payment().status) {
+              @case ('PENDING') {
+                <nz-tag class="font-mono" nzColor="blue">
+                  Pending
+                </nz-tag>
+              }
+              @case ('AVAILABLE') {
+                <nz-tag class="font-mono" nzColor="green">
+                  Available
+                </nz-tag>
+              }
+              @case ('REFUNDED') {
+                <nz-tag class="font-mono" nzColor="red">
+                  Refunded
+                </nz-tag>
+              }
+            }
+          </div>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Amount">
+          {{ payment().amount }}
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Currency">
+          <div class="flex items-center gap-3">
+            @switch (payment().currency) {
+              @case ('USD') {
+                <nz-tag class="font-mono" nzColor="green">
+                  {{ payment().currency }}
+                </nz-tag>
+              }
+              @case ('VND') {
+                <nz-tag class="font-mono" nzColor="red">
+                  {{ payment().currency }}
+                </nz-tag>
+              }
+            }
+          </div>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Payment Intent">
+          {{ payment().paymentIntentId }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Charge Id">
+          {{ payment().chargeId }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Balance Transaction">
+          {{ payment().balanceTransactionId }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Available On">
+          {{ payment().availableOn }}
+        </nz-descriptions-item>
+        <!--        <nz-descriptions-item nzTitle="Stripe Account">-->
+        <!--          <nz-tag nzColor="magenta">-->
+        <!--            {{ tenant().stripeAccountId || 'Not connected' }}-->
+        <!--          </nz-tag>-->
+        <!--        </nz-descriptions-item>-->
+
+        <!--        <nz-descriptions-item nzTitle="Current Balance">-->
+        <!--          <span class="font-medium text-green-600">-->
+        <!--            ${{ (tenant().currentAmount || 0) | number:'1.0-0' }}-->
+        <!--          </span>-->
+        <!--        </nz-descriptions-item>-->
+
+        <!--        <nz-descriptions-item nzTitle="Pending Amount">-->
+        <!--          <span class="font-medium text-orange-600">-->
+        <!--            ${{ (tenant().pendingAmount || 0) | number:'1.0-0' }}-->
+        <!--          </span>-->
+        <!--        </nz-descriptions-item>-->
+        <nz-descriptions-item nzTitle="Created Date">
+          {{ payment().createdDate }}
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Last Modified">
+          {{ payment().modifiedDate }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Soft Delete">
+          <nz-tag [nzColor]="payment().softDelete ? 'geekblue' : 'green'">
+            {{ payment().softDelete }}
+          </nz-tag>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Metadata">
+          <pre>{{ metadataObject | json }}</pre>
+        </nz-descriptions-item>
+      </nz-descriptions>
+
+      <!-- Actions -->
+      <div class="mt-8 flex flex-wrap gap-3">
+        <button [routerLink]="['/admin/tables/payments/', payment().id, 'edit']"
+                class="!inline-flex !items-center" nz-button
+                nzType="primary">
+          <span nz-icon nzType="edit"></span>
+          Edit Tenant
+        </button>
+
+        <!--        <button nz-button nzDanger (click)="confirmDelete()">-->
+
+        <button (click)="onDelete()" class="!inline-flex !items-center"
+                nz-button nzDanger>
+          <span nz-icon nzType="delete"></span>
+          Delete Tenant
+        </button>
+
+        <!--        @if (tenant().stripeAccountId) {-->
+        <!--          <button nz-button nzType="default">-->
+        <!--            <span nz-icon nzType="link"></span>-->
+        <!--            View in Stripe-->
+        <!--          </button>-->
+        <!--        }-->
+      </div>
+
+      <!--      Phần Invoice-->
+      @if (payment().invoice) {
+        <div class="mt-10">
+          <h3 class="text-xl font-semibold mb-6 flex items-center gap-3">
+            <span nz-icon nzType="file-done" class="text-blue-600"></span>
+            Invoice of this Payment
+          </h3>
+          <div class="grid grid-cols-1 gap-6">
+            <app-invoice-dto-card [invoice]="payment().invoice"></app-invoice-dto-card>
+          </div>
+        </div>
+      } @else {
+        <div class="mt-10 text-center text-gray-500 py-8">
+          <nz-icon nzType="file-done" nzTheme="outline" class="text-4xl opacity-50"></nz-icon>
+          <p class="mt-3">No tenant in this entitlement yet.</p>
+        </div>
+      }
+      <!--      Phần tenant-->
+      @if (payment().tenant) {
+        <div class="mt-10">
+          <h3 class="text-xl font-semibold mb-6 flex items-center gap-3">
+            <span nz-icon nzType="container" class="text-blue-600"></span>
+            Tenant of this Payment ({{ payment().tenant.name }})
+          </h3>
+          <div class="grid grid-cols-1 gap-6">
+            <app-tenant-dto-card [tenant]="payment().tenant"></app-tenant-dto-card>
+          </div>
+        </div>
+      } @else {
+        <div class="mt-10 text-center text-gray-500 py-8">
+          <nz-icon nzType="container" nzTheme="outline" class="text-4xl opacity-50"></nz-icon>
+          <p class="mt-3">No tenant in this entitlement yet.</p>
+        </div>
+      }
+      <!-- Phần Users: tái sử dụng User Card -->
+      <!--      @if (tenant().users?.length) {-->
+      <!--        <div class="mt-10">-->
+      <!--          <h3 class="text-xl font-semibold mb-6 flex items-center gap-3">-->
+      <!--            <span nz-icon nzType="team" class="text-blue-600"></span>-->
+      <!--            Users in this Tenant ({{ tenant().users.length }})-->
+      <!--          </h3>-->
+
+      <!--          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">-->
+      <!--            @for (user of tenant().users; track user.id) {-->
+      <!--              <app-user-dto-card [user]="user" (userRemove)="onRemoveUser($event)"></app-user-dto-card>-->
+      <!--            }-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--      } @else {-->
+      <!--        <div class="mt-10 text-center text-gray-500 py-8">-->
+      <!--          <nz-icon nzType="team" nzTheme="outline" class="text-4xl opacity-50"></nz-icon>-->
+      <!--          <p class="mt-3">No users in this tenant yet.</p>-->
+      <!--        </div>-->
+      <!--      }-->
+    </div>
+  </div>
+</nz-card>

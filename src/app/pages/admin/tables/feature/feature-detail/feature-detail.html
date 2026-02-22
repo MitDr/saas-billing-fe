@@ -1,0 +1,26 @@
+<div class="page-container">
+  <nz-page-header
+    [nzSubtitle]="'ID: ' + (feature()?.id || '')"
+    [nzTitle]="'Feature Detail'"
+  >
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item><a routerLink="/admin/tables/features">Features</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>Feature Detail</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-page-header>
+
+  <div class="mt-8">
+    @if (feature(); as feat) {
+      <app-feature-card
+        [feature]="feat"
+        (load)="loadFeature($event)"
+        (deleteButton)="onDelete($event)">
+      </app-feature-card>
+    } @else {
+      <div class="text-center py-16">
+        <nz-spin nzSize="large"></nz-spin>
+        <p class="mt-4 text-gray-500">Loading feature information...</p>
+      </div>
+    }
+  </div>
+</div>

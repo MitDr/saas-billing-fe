@@ -1,0 +1,32 @@
+<div class="page-container">
+  <nz-page-header
+    [nzSubtitle]="'ID: ' + (payout()?.id || '')"
+    [nzTitle]="'Update Payout'"
+  >
+    <div class="flex justify-end mb-4">
+      <app-breadcrumb [routes]="routing"></app-breadcrumb>
+    </div>
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item><a routerLink="/admin/tables/payouts">Payout</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>Update Payout</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-page-header>
+
+  @if (!loading()) {
+    @if (payout(); as pay) {
+      <app-payout-reuse-form
+        [formGroup]="payoutForm"
+        [availableTenants]="availableTenant()"
+        [isEditMode]="true"
+        [initTenant]="initTenant()"
+        [submitLabel]="'Update'"
+        (submitted)="onSubmitted()"
+      ></app-payout-reuse-form>
+    } @else {
+      <div>Payout not found</div>
+    }
+  } @else {
+    <nz-spin nzTip="Loading Payout..."></nz-spin>
+  }
+</div>
+

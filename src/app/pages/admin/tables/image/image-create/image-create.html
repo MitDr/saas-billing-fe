@@ -1,0 +1,15 @@
+<div class="page-container">
+  <h1 class="text-2xl font-semibold mb-6">Create Image</h1>
+  <div class="flex justify-end mb-4">
+    <app-breadcrumb [routes]="route"></app-breadcrumb>
+  </div>
+
+  <app-image-reuse-form
+    (submitted)="onSubmitted()"
+    [availableTenants]="availableTenant()"
+    [formGroup]="imageForm"
+    [isEditMode]="false"
+    [isLoading]="isSubmitting"
+    [submitLabel]="'Create'"
+  ></app-image-reuse-form>
+</div>

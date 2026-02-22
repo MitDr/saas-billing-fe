@@ -1,0 +1,16 @@
+<div class="page-container">
+  <h1 class="text-2xl font-semibold mb-6">Create Plan Group</h1>
+  <div class="flex justify-end mb-4">
+    <app-breadcrumb [routes]="route"></app-breadcrumb>
+  </div>
+
+  <app-plan-group-reuse-form
+    (submitted)="onSubmitted()"
+    [availablePlans]="availablePlan()"
+    [availableTenants]="availableTenant()"
+    [formGroup]="planGroupForm"
+    [isEditMode]="false"
+    [isLoading]="isSubmitting"
+    [submitLabel]="'Create'"
+  ></app-plan-group-reuse-form>
+</div>

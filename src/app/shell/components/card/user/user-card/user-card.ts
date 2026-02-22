@@ -1,4 +1,4 @@
-import {Component, input} from '@angular/core';
+import {Component, input, output} from '@angular/core';
 import {NzCardComponent} from 'ng-zorro-antd/card';
 import {NzAvatarComponent} from 'ng-zorro-antd/avatar';
 import {NzDescriptionsComponent, NzDescriptionsItemComponent} from 'ng-zorro-antd/descriptions';
@@ -26,4 +26,10 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
 export class UserCard {
   user = input.required<User>();
   deleteButton = input.required<boolean>();
+
+  deleteUser = output<number>();
+
+  onDeleteUser() {
+    this.deleteUser.emit(this.user().id);
+  }
 }

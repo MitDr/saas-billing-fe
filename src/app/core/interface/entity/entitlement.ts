@@ -7,7 +7,7 @@ export interface Entitlement {
   "id": number,
   "startDate": string,
   "endDate": string,
-  "status": 'ACTIVE' | 'EXPIRE' | 'REVOKED',
+  "status": 'ACTIVE' | 'EXPIRED' | 'REVOKED',
   "createdDate": string,
   "modifiedDate": string,
   "subscription": SubscriptionDTO,

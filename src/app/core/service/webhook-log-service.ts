@@ -1,11 +1,11 @@
 import {inject, Injectable} from '@angular/core';
 import {ApiClientService} from './api-client-service';
-import {map, Observable, throwError} from 'rxjs';
+import {Observable, throwError} from 'rxjs';
 import {ListData} from '../interface/list-data';
-import {Feature} from '../interface/entity/feature';
 import {HttpParams} from '@angular/common/http';
 import {catchError} from 'rxjs/operators';
 import {WebhookLog} from '../interface/entity/webhook-log';
+import {WebhookLogRequest} from '../interface/request/webhook-log-request';
 
 @Injectable({
   providedIn: 'root'
@@ -13,36 +13,71 @@ import {WebhookLog} from '../interface/entity/webhook-log';
 export class WebhookLogService {
   api = inject(ApiClientService);
 
-  getWebhookLog(page: number = 1, size: number = 5): Observable<ListData<WebhookLog>> {
+  getWebhookLogs(
+    page: number = 1,
+    size: number = 5,
+    search?: string,
+    softDelete?: boolean | null,
+    tenantId?: number | null,
+    sort: string = 'id,asc'
+  ): Observable<ListData<WebhookLog>> {
+
     let params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString())
-      .set('sort', 'id,asc')
-      .set('all', 'false')
-    // .set()
+      .set('sort', sort);
 
-    return this.api.get<ListData<WebhookLog>>("/admin/webhook-logs", params)
-      .pipe(
-        map(response => {
-          return response as ListData<WebhookLog>;
-        }),
-        catchError(error => {
-          console.error('Get webhook logs error:', error);
-          return throwError(() => new Error('Không thể lấy danh sách webhook logs'));
-        })
-      )
+    if (search) {
+      params = params.set('search', search);
+    }
 
-    // return this.http.get<any>(this.apiUrl, {headers, params}).pipe(
-    //   map(response => {
-    //     // API của bạn trả { data: { content: ..., page: ..., ... } }
-    //     return response.content as ListData<User>;
-    //   }),
-    //   catchError(error => {
-    //     console.error('Get users error:', error);
-    //     return throwError(() => new Error('Không thể lấy danh sách user'));
-    //   })
-    // );
+    if (softDelete !== null && softDelete !== undefined) {
+      params = params.set('softDelete', softDelete.toString());
+    }
+
+    if (tenantId) {
+      params = params
+        .set('tenantId', tenantId.toString())
+        .set('filterByTenant', 'true');
+    }
+
+    return this.api.get<ListData<WebhookLog>>('/admin/webhook-logs', params);
   }
 
+  getWebhookLog(id: number): Observable<WebhookLog> {
+    return this.api.get<WebhookLog>(`/admin/webhook-logs/${id}`).pipe(
+      catchError(error => {
+        console.error('Get webhook log error:', error);
+        return throwError(() => new Error('Không thể lấy webhook log'));
+      })
+    );
+  }
+
+  update(updatedWebhookLog: WebhookLogRequest, id: number): Observable<WebhookLog> {
+    return this.api.put<WebhookLog>(`/admin/webhook-logs/${id}`, updatedWebhookLog).pipe(
+      catchError(error => {
+        console.error('Update webhook log error:', error);
+        return throwError(() => new Error('Cập nhật webhook log thất bại'));
+      })
+    );
+  }
+
+  bulkDelete(ids: number[]): Observable<void> {
+    return this.api.deletes<void>(`/admin/webhook-logs`, ids).pipe(
+      catchError(error => {
+        console.error('Bulk delete error:', error);
+        return throwError(() => new Error('Xóa hàng loạt thất bại'));
+      })
+    );
+  }
+
+  deleteWebhookLog(id: number): Observable<void> {
+    return this.api.delete<void>(`/admin/webhook-logs/${id}`).pipe(
+      catchError(error => {
+        console.error('Delete webhook log error:', error);
+        return throwError(() => new Error('Xóa webhookg log thất bại'));
+      })
+    );
+  }
 
 }

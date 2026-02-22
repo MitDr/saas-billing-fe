@@ -3,7 +3,7 @@ import {PriceDTO} from '../DTO/PriceDTO';
 import {TenantDTO} from '../DTO/TenantDTO';
 import {InvoiceDTO} from '../DTO/InvoiceDTO';
 
-export interface Subscription{
+export interface Subscription {
   "id": number,
   "status": "ACTIVE" | 'DRAFT' | 'PENDING' | 'ENDED' | 'CANCEL',
   "defaultPaymentMethod": string,
@@ -17,7 +17,7 @@ export interface Subscription{
   "modifiedDate": string,
   "subscriber": SubscriberDTO,
   "price": PriceDTO,
-  "invoices": InvoiceDTO,
+  "invoices": InvoiceDTO[],
   "tenant": TenantDTO,
   "metadata": any,
   "trial": boolean,

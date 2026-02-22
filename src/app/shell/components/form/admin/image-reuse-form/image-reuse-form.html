@@ -1,0 +1,73 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="formGroup()" nz-form>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="url" nzRequired>Url</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="URL is required">
+      <input formControlName="url" id="url" nz-input placeholder="https://..."/>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="publicId" nzRequired>Public Id</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="publicId is required">
+      <input formControlName="publicId" id="publicId" nz-input placeholder="p...."/>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Tenant</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <button (click)="openTenantModal()" nz-button nzType="default" type="button">
+        <span nz-icon nzType="container"></span> Choose Tenant
+      </button>
+
+      @if (selectedTenant(); as tenant) {
+        <nz-card class="mt-3" nzHoverable>
+          <nz-card-meta
+            nzTitle="{{ tenant.name }}"
+            nzDescription="{{ tenant.id }} • {{ tenant.email }}"
+          ></nz-card-meta>
+          <button type="button" nz-button nzType="link" nzDanger (click)="clearTenant()">Delete</button>
+        </nz-card>
+      } @else {
+        <p class="text-gray-500 mt-2">Tenant is not chosen</p>
+      }
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item class="mt-8" nz-row>
+    <nz-form-control [nzOffset]="6" [nzSpan]="14">
+      <button
+        [disabled]="formGroup()?.invalid || isLoading()"
+        [nzLoading]="isLoading()"
+        nz-button
+        nzType="primary"
+      >
+        {{ submitLabel() }}
+      </button>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+
+<nz-modal
+  (nzOnCancel)="isTenantModalOpen.set(false)"
+  (nzOnOk)="isTenantModalOpen.set(false)"
+  [nzVisible]="isTenantModalOpen()"
+  nzCancelText="Đóng"
+  nzOkText="Xác nhận"
+  nzTitle="Chọn Tenant"
+>
+  <ng-template nzModalContent>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
+      @if (availableTenants().length === 0) {
+        <p class="text-center text-gray-500 py-10">Không có tenant nào để chọn</p>
+      } @else {
+        @for (tenant of availableTenants(); track tenant.id) {
+          <nz-card nzHoverable (click)="selectTenant(tenant)">
+            <nz-card-meta
+              nzTitle="{{ tenant.name }}"
+              nzDescription="{{ tenant.id }} • {{ tenant.email}}"
+            ></nz-card-meta>
+          </nz-card>
+        }
+      }
+    </div>
+  </ng-template>
+</nz-modal>

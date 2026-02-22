@@ -3,9 +3,10 @@
     PRICE LIST
   </h1>
   <ng-container class="mb-4">
-    <button nz-button nzType="primary" [routerLink]="createRoute">+ Add Price</button>
+    <button [routerLink]="createRoute" nz-button nzType="primary">+ Add Price</button>
   </ng-container>
 </div>
+
 <!--<app-editable-data-table-->
 <!--  (bulkDelete)="onBulkDelete($event)"-->
 <!--  (deleteRow)="onDeletePrice($event)"-->
@@ -16,16 +17,68 @@
 <!--  viewRoute="/admin/tables/prices/">-->
 <!--</app-editable-data-table>-->
 <app-editable-data-table
+  (bulkDelete)="onBulkDelete($event)"
+  (bulkSoftDelete)="onBulkSoftDelete($event)"
   (pageChange)="onPageChange($event)"
   (saveRow)="onSaveRow($event)"
   (sizeChange)="onSizeChange($event)"
-  [columns]="PRICE_COLUMNS"
-  (bulkDelete)="onBulkDelete($event)"
+  [columns]="getColumns()"
   [data]="pricePage()"
   [loading]="loading()"
-  [routes]="featureListRouting"
+  [routes]="priceListRouting"
   [showBulkDelete]="true"
+  entityName="price(s)"
   viewRoute="/admin/tables/prices/">
   >
   <!-- Toolbar nếu cần -->
+  <div class="flex gap-3 items-center flex-wrap mb-4" table-toolbar>
+
+    <!-- 🔍 Search -->
+    <nz-input-wrapper class="w-64">
+      <input
+        (ngModelChange)="onSearchChange($event)"
+        [ngModel]="search()"
+        nz-input
+        placeholder="Search price..."
+      />
+    </nz-input-wrapper>
+
+    <!-- 🗑 Soft Delete Filter -->
+    <nz-select
+      (ngModelChange)="onSoftDeleteChange($event)"
+      [ngModel]="softDeleteFilter()"
+      class="w-44"
+      nzAllowClear
+      nzPlaceHolder="Soft Delete"
+    >
+      <nz-option [nzValue]="false" nzLabel="Active"></nz-option>
+      <nz-option [nzValue]="true" nzLabel="Deleted"></nz-option>
+    </nz-select>
+
+    <!-- 🏢 Tenant Filter -->
+    <nz-select
+      (ngModelChange)="onTenantChange($event)"
+      [ngModel]="tenantFilter()"
+      class="w-52"
+      nzAllowClear
+      nzPlaceHolder="Tenant"
+    >
+      @for (tenant of tenants(); track tenant.id) {
+        <nz-option
+          [nzLabel]="tenant.name"
+          [nzValue]="tenant.id">
+        </nz-option>
+      }
+    </nz-select>
+
+    <!-- 🔄 Reset -->
+    <button
+      (click)="resetFilters()"
+      nz-button
+      nzType="default"
+    >
+      Reset
+    </button>
+
+  </div>
 </app-editable-data-table>

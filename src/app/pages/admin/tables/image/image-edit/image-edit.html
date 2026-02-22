@@ -1,0 +1,32 @@
+<div class="page-container">
+  <nz-page-header
+    [nzSubtitle]="'ID: ' + (image()?.id || '')"
+    [nzTitle]="'Update Image'"
+  >
+    <div class="flex justify-end mb-4">
+      <app-breadcrumb [routes]="routing"></app-breadcrumb>
+    </div>
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item><a routerLink="/admin/tables/entitlements">Images</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>Update Image</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-page-header>
+
+  @if (!loading()) {
+    @if (image(); as img) {
+      <app-image-reuse-form
+        [formGroup]="imageForm"
+        [availableTenants]="availableTenant()"
+        [isEditMode]="true"
+        [initTenant]="initTenant()"
+        [submitLabel]="'Update'"
+        (submitted)="onSubmitted()"
+      ></app-image-reuse-form>
+    } @else {
+      <div>Image not found</div>
+    }
+  } @else {
+    <nz-spin nzTip="Loading Image..."></nz-spin>
+  }
+</div>
+

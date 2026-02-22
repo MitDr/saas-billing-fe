@@ -1,0 +1,36 @@
+<div class="page-container">
+  <nz-page-header
+    [nzSubtitle]="'ID: ' + (invoice()?.id || '')"
+    [nzTitle]="'Update Invoice'"
+  >
+    <div class="flex justify-end mb-4">
+      <app-breadcrumb [routes]="routing"></app-breadcrumb>
+    </div>
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item><a routerLink="/admin/tables/invoices">Invoices</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>Update Invoice</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-page-header>
+
+  @if (!loading()) {
+    @if (invoice(); as inv) {
+      <app-invoice-reuse-form
+        [formGroup]="invoiceForm"
+        [availableSubscription]="availableSubscription()"
+        [availableSubscriber]="availableSubscriber()"
+        [availableTenants]="availableTenant()"
+        [isEditMode]="true"
+        [initSubscriber]="initSubscriber() "
+        [initSubscription]="initSubscription()"
+        [initTenant]="initTenant()"
+        [submitLabel]="'Update'"
+        (submitted)="onSubmitted()"
+      ></app-invoice-reuse-form>
+    } @else {
+      <div>Invoice not found</div>
+    }
+  } @else {
+    <nz-spin nzTip="Loading Invoice..."></nz-spin>
+  }
+</div>
+
