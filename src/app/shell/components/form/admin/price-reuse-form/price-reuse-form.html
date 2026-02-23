@@ -1,1 +1,184 @@
-<p>price-reuse-form works!</p>
+<form (ngSubmit)="onSubmit()" [formGroup]="formGroup()" nz-form>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="price" nzRequired>Amount</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Amount is required">
+      <input formControlName="price" id="price" nz-input placeholder="Amount" type="number"/>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="currency" nzRequired>Currency</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Currency is required">
+      <nz-select formControlName="currency" nzPlaceHolder="Currency">
+        @for (currency of currencyOption; track currency.value) {
+          <nz-option [nzLabel]="currency.label" [nzValue]="currency.value"></nz-option>
+        }
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="scheme" nzRequired>Scheme</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Scheme is required">
+      <nz-select formControlName="scheme" nzPlaceHolder="Scheme">
+        @for (scheme of schemeOption; track scheme.value) {
+          <nz-option [nzLabel]="scheme.label" [nzValue]="scheme.value"></nz-option>
+        }
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="status" nzRequired>Status</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Status is required">
+      <nz-select formControlName="status" nzPlaceHolder="Status">
+        @for (status of statusOption; track status.value) {
+          <nz-option [nzLabel]="status.label" [nzValue]="status.value"></nz-option>
+        }
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="cycle" nzRequired>Cycle</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Cycle is required">
+      <nz-select formControlName="cycle" nzPlaceHolder="Cycle">
+        @for (option of cycleOption; track option.value) {
+          <nz-option [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+        }
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="cycleCount" nzRequired>Cycle count</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Cycle count is required">
+      <input formControlName="cycleCount" id="cycleCount" nz-input placeholder="Cycle count" type="number"/>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="trialCycle" nzRequired>Trial cycle</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Trial cycle is required">
+      <nz-select formControlName="trialCycle" nzPlaceHolder="trialCycle">
+        @for (option of cycleOption; track option.value) {
+          <nz-option [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+        }
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="trialPeriod" nzRequired>Trial period</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Trial period is required">
+      <input formControlName="trialPeriod" id="trialPeriod" nz-input placeholder="Cycle count" type="number"/>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="dueDelay" nzRequired>Due delay</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Due delay is required">
+      <input formControlName="dueDelay" id="dueDelay" nz-input placeholder="Cycle count" type="number"/>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="maxUnit" nzRequired>Max unit</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Max unit is required">
+      <input formControlName="maxUnit" id="maxUnit" nz-input placeholder="Max Unit" type="number"/>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24">Plan</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <button (click)="openPlanModal()" nz-button nzType="default" type="button">
+        <span nz-icon nzType="container"></span> Choose Plan
+      </button>
+
+      @if (selectedPlans(); as plan) {
+        <nz-card class="mt-3" nzHoverable>
+          <nz-card-meta
+            nzTitle="{{ plan.name }}"
+            nzDescription="{{ plan.id }} • {{ plan.status }}"
+          ></nz-card-meta>
+          <button type="button" nz-button nzType="link" nzDanger (click)="clearTenant()">Delete</button>
+        </nz-card>
+      } @else {
+        <p class="text-gray-500 mt-2">Plan is not chosen</p>
+      }
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Tenant</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <button (click)="openTenantModal()" nz-button nzType="default" type="button">
+        <span nz-icon nzType="container"></span> Choose Tenant
+      </button>
+
+      @if (selectedTenant(); as tenant) {
+        <nz-card class="mt-3" nzHoverable>
+          <nz-card-meta
+            nzTitle="{{ tenant.name }}"
+            nzDescription="{{ tenant.id }} • {{ tenant.email }}"
+          ></nz-card-meta>
+          <button type="button" nz-button nzType="link" nzDanger (click)="clearTenant()">Delete</button>
+        </nz-card>
+      } @else {
+        <p class="text-gray-500 mt-2">Tenant is not chosen</p>
+      }
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item class="mt-8" nz-row>
+    <nz-form-control [nzOffset]="6" [nzSpan]="14">
+      <button
+        [disabled]="formGroup()?.invalid || isLoading()"
+        [nzLoading]="isLoading()"
+        nz-button
+        nzType="primary"
+      >
+        {{ submitLabel() }}
+      </button>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+<nz-modal
+  (nzOnCancel)="isPlansModalOpen.set(false)"
+  (nzOnOk)="isPlansModalOpen.set(false)"
+  [nzVisible]="isPlansModalOpen()"
+  nzCancelText="Đóng"
+  nzOkText="Xác nhận"
+  nzTitle="Chọn Plan"
+>
+  <ng-template nzModalContent>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
+      @if (availablePlans().length === 0) {
+        <p class="text-center text-gray-500 py-10">Không có plan nào để chọn</p>
+      } @else {
+        @for (plan of availablePlans(); track plan.id) {
+          <nz-card nzHoverable (click)="selectPlan(plan)">
+            <nz-card-meta
+              nzTitle="{{ plan.name }}"
+              [nzDescription]="getPlanDescription(plan)"
+            ></nz-card-meta>
+          </nz-card>
+        }
+      }
+    </div>
+  </ng-template>
+</nz-modal>
+<nz-modal
+  (nzOnCancel)="isTenantModalOpen.set(false)"
+  (nzOnOk)="isTenantModalOpen.set(false)"
+  [nzVisible]="isTenantModalOpen()"
+  nzCancelText="Đóng"
+  nzOkText="Xác nhận"
+  nzTitle="Chọn Tenant"
+>
+  <ng-template nzModalContent>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
+      @if (availableTenants().length === 0) {
+        <p class="text-center text-gray-500 py-10">Không có tenant nào để chọn</p>
+      } @else {
+        @for (tenant of availableTenants(); track tenant.id) {
+          <nz-card nzHoverable (click)="selectTenant(tenant)">
+            <nz-card-meta
+              nzTitle="{{ tenant.name }}"
+              nzDescription="{{ tenant.id }} • {{ tenant.email}}"
+            ></nz-card-meta>
+          </nz-card>
+        }
+      }
+    </div>
+  </ng-template>
+</nz-modal>

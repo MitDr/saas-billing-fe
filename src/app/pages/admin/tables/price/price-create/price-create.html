@@ -1,0 +1,16 @@
+<div class="page-container">
+  <h1 class="text-2xl font-semibold mb-6">Create Price</h1>
+  <div class="flex justify-end mb-4">
+    <app-breadcrumb [routes]="route"></app-breadcrumb>
+  </div>
+
+  <app-price-reuse-form
+    (submitted)="onSubmitted()"
+    [availablePlans]="availablePlans()"
+    [availableTenants]="availableTenant()"
+    [formGroup]="priceForm"
+    [isEditMode]="false"
+    [isLoading]="isSubmitting"
+    [submitLabel]="'Create'"
+  ></app-price-reuse-form>
+</div>

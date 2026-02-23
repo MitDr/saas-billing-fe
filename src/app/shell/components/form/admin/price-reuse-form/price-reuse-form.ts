@@ -1,13 +1,38 @@
 import {Component, effect, inject, input, output, signal} from '@angular/core';
 import {OptionInterface} from '../../../../../core/interface/option-interface';
-import {FormGroup, NonNullableFormBuilder} from '@angular/forms';
+import {FormGroup, NonNullableFormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {Tenant} from '../../../../../core/interface/entity/tenant';
 import {Plan} from '../../../../../core/interface/entity/plan';
 import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzFormControlComponent, NzFormDirective, NzFormItemComponent, NzFormLabelComponent} from 'ng-zorro-antd/form';
+import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
+import {NzInputDirective} from 'ng-zorro-antd/input';
+import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
+import {NzButtonComponent} from 'ng-zorro-antd/button';
+import {NzCardComponent, NzCardMetaComponent} from 'ng-zorro-antd/card';
+import {NzIconDirective} from 'ng-zorro-antd/icon';
+import {NzModalComponent, NzModalContentDirective} from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-price-reuse-form',
-  imports: [],
+  imports: [
+    NzFormDirective,
+    ReactiveFormsModule,
+    NzColDirective,
+    NzFormControlComponent,
+    NzFormItemComponent,
+    NzFormLabelComponent,
+    NzInputDirective,
+    NzRowDirective,
+    NzOptionComponent,
+    NzSelectComponent,
+    NzButtonComponent,
+    NzCardComponent,
+    NzCardMetaComponent,
+    NzIconDirective,
+    NzModalComponent,
+    NzModalContentDirective
+  ],
   templateUrl: './price-reuse-form.html',
   styleUrl: './price-reuse-form.css',
 })
@@ -28,11 +53,11 @@ export class PriceReuseForm {
     {label: 'Deactivated', value: 'DEACTIVATED'},
     {label: 'Cancel', value: 'CANCEL'}
   ]
-  
+
   cycleOption: OptionInterface[] = [
-    {label: 'Month', value: 'MONTH'},
     {label: 'Day', value: 'DAY'},
     {label: 'Week', value: 'WEEK'},
+    {label: 'Month', value: 'MONTH'},
     {label: 'Year', value: 'YEAR'}
   ]
 
@@ -153,5 +178,13 @@ export class PriceReuseForm {
       });
       this.message.warning('Vui lòng kiểm tra lại thông tin!');
     }
+  }
+
+  getPlanDescription(plan: Plan): string {
+    return `
+    ${plan.id}
+    Status: ${plan.status}
+    Tenant: ${plan.tenant?.name}
+  `;
   }
 }

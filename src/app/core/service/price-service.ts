@@ -14,6 +14,15 @@ import {SoftDeleteRequest} from '../interface/request/soft-delete-request';
 export class PriceService {
   api = inject(ApiClientService);
 
+  createPrice(request: PriceRequest): Observable<Price> {
+    return this.api.post<Price>('/admin/prices', request).pipe(
+      catchError(error => {
+        console.error('Create price error:', error);
+        return throwError(() => new Error('Tạo price thất bại'));
+      })
+    );
+  }
+
   // getPrices(page: number = 1, size: number = 5): Observable<ListData<Price>> {
   //   let params = new HttpParams()
   //     .set('page', page.toString())
