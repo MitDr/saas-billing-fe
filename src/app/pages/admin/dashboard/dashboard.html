@@ -1,58 +1,56 @@
 <div class="page-container">
   <nz-page-header nzSubtitle="Tổng quan hệ thống" nzTitle="Dashboard">
-    <!--    <nz-breadcrumb nz-page-header-breadcrumb>-->
-    <!--      <nz-breadcrumb-item>Admin</nz-breadcrumb-item>-->
-    <!--      <nz-breadcrumb-item>Dashboard</nz-breadcrumb-item>-->
-    <!--    </nz-breadcrumb>-->
+
   </nz-page-header>
 
-<!--  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">-->
-<!--    <div class="col-span-1 md:col-span-2 lg:col-span-4">-->
-<!--      <h2 class="text-xl font-semibold mb-4">System Overview</h2>-->
-<!--      <app-system-summary-carousel-->
-<!--        [loading]="load()"-->
-<!--        [systemSummary]="systemSummary()!"-->
-<!--      ></app-system-summary-carousel>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">-->
-<!--    <div>-->
-<!--      <h2 class="text-xl font-semibold mb-4">Revenue Summary</h2>-->
-<!--      <app-revenue-summary-carousel-->
-<!--        [loading]="load()"-->
-<!--        [revenueSummary]="revenueSummary()!"-->
-<!--      ></app-revenue-summary-carousel>-->
-<!--    </div>-->
-<!--    <div>-->
-<!--      <h2 class="text-xl font-semibold mb-4">Subscription Summary</h2>-->
-<!--      <app-subscription-overvie-carousel-->
-<!--        [loading]="load()"-->
-<!--        [overview]="subscriptionSummary()!"-->
-<!--      ></app-subscription-overvie-carousel>-->
-<!--    </div>-->
-<!--  </div>-->
-  <div class="mb-10">
-<!--    <h2 class="text-xl font-semibold mb-4">Monthly Recurring Revenue (MRR)</h2>-->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="col-span-1 md:col-span-2 lg:col-span-4">
+      <h2 class="text-xl font-semibold mb-4">System Overview</h2>
+      <app-system-summary-carousel
+        [loading]="load()"
+        [systemSummary]="systemSummary()!"
+        class="carousel-fit"
+      ></app-system-summary-carousel>
+    </div>
+  </div>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!--    <div class="fit-content">-->
+    <!--      <h2 class="text-xl font-semibold mb-4">Revenue Summary</h2>-->
+    <app-revenue-summary-carousel
+      [loading]="load()"
+      [revenueSummary]="revenueSummary()!"
+      class="h-fit"
+    ></app-revenue-summary-carousel>
+    <!--    </div>-->
+    <!--    <div class="fit-content">-->
+    <!--      <h2 class="text-xl font-semibold mb-4">Subscription Summary</h2>-->
+    <app-subscription-overvie-carousel
+      [loading]="load()"
+      [overview]="subscriptionSummary()!"
+    ></app-subscription-overvie-carousel>
+    <!--    </div>-->
+  </div>
+  <div class="mb-6">
+    <h2 class="text-xl font-semibold mb-4">Monthly Recurring Revenue (MRR)</h2>
     <app-mrr-chart
       [data]="mrrRevenue()"
       [loading]="load()"
     ></app-mrr-chart>
   </div>
 </div>
-<nz-card nzTitle="Top Tenants by Revenue" class="shadow-md">
+<nz-card class="shadow-md" nzTitle="Top Tenants by Revenue">
   <app-top-tenant-table
     [data]="topTenants()"
     [loading]="load()"
   ></app-top-tenant-table>
 </nz-card>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    <div class="col-span-1 md:col-span-2 lg:col-span-4">
-      <h2 class="text-xl font-semibold mb-4">Invoice Success Rate</h2>
-      <app-success-rate-carousel
-        [loading]="load()"
-        [data]="invoiceSuccessRate()!!"
-      ></app-success-rate-carousel>
-    </div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+  <div class="col-span-1 md:col-span-2 lg:col-span-4">
+    <h2 class="text-xl font-semibold mb-4">Invoice Success Rate</h2>
+    <app-success-rate-carousel
+      [data]="invoiceSuccessRate()!!"
+      [loading]="load()"
+    ></app-success-rate-carousel>
   </div>
-
+</div>
 

@@ -1,7 +1,7 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {NzCardComponent} from 'ng-zorro-antd/card';
-import {NzPageHeaderComponent} from 'ng-zorro-antd/page-header';
-import {NzBreadCrumbItemComponent} from 'ng-zorro-antd/breadcrumb';
+import {NzPageHeaderBreadcrumbDirective, NzPageHeaderComponent} from 'ng-zorro-antd/page-header';
+import {NzBreadCrumbComponent, NzBreadCrumbItemComponent} from 'ng-zorro-antd/breadcrumb';
 import {RouterLink} from '@angular/router';
 import {NzSpinComponent} from 'ng-zorro-antd/spin';
 import {StatisticCard} from '../../../shell/components/card/statistic/statistic-card/statistic-card';
@@ -20,11 +20,14 @@ import {
 import {SubscriptionSummary} from '../../../core/interface/response/statistic/subscription-overview';
 import {MrrResponse} from '../../../core/interface/response/statistic/mmr-response';
 import {MrrChart} from '../../../shell/components/chart/mrr-chart/mrr-chart';
-import {NgxEchartsDirective, NgxEchartsModule} from 'ngx-echarts';
+import {NgxEchartsModule} from 'ngx-echarts';
 import {TopTenantTable} from '../../../shell/components/table/top-tenant-table/top-tenant-table';
 import {TopTenantResponse} from '../../../core/interface/response/statistic/top-tenant-response';
 import {SuccessRateResponse} from '../../../core/interface/response/statistic/success-rate-response';
 import {SuccessRateCarousel} from '../../../shell/components/carousel/success-rate-carousel/success-rate-carousel';
+import {Breadcrumb} from '../../../shell/components/generic/breadcrumb/breadcrumb';
+import {PRICE_ROUTE_CONSTANT} from '../../../core/constant/price/price-list-constant';
+import {SuccessRateCard} from '../../../shell/components/card/statistic/success-rate-card/success-rate-card';
 
 @Component({
   selector: 'app-dashboard',
@@ -41,7 +44,11 @@ import {SuccessRateCarousel} from '../../../shell/components/carousel/success-ra
     MrrChart,
     NgxEchartsModule,
     TopTenantTable,
-    SuccessRateCarousel
+    SuccessRateCarousel,
+    Breadcrumb,
+    NzBreadCrumbComponent,
+    NzPageHeaderBreadcrumbDirective,
+    SuccessRateCard
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
@@ -53,8 +60,9 @@ export class Dashboard implements OnInit {
   subscriptionSummary = signal<SubscriptionSummary | null>(null);
   mrrRevenue = signal<MrrResponse[]>([]);
   topTenants = signal<TopTenantResponse[]>([]);
-  invoiceSuccessRate = signal<SuccessRateResponse |null>(null);
+  invoiceSuccessRate = signal<SuccessRateResponse | null>(null);
   load = signal(false);
+  protected readonly routing = PRICE_ROUTE_CONSTANT;
 
   constructor() {
     this.load.set(true)
@@ -81,6 +89,17 @@ export class Dashboard implements OnInit {
     })
   }
 
+
+  // private getSubscriptionSummary() {
+  //   this.statisticService.getSubscriptionSummary().subscribe({
+  //     next: (res) => {
+  //       this.subscriptionSummary.set(res);
+  //     },
+  //     error: (err) => {
+  //       console.log(err);
+  //     }
+  //   })
+
   getRevenueSummary() {
     this.statisticService.getRevenueSummary().subscribe({
       next: (res) => {
@@ -92,16 +111,6 @@ export class Dashboard implements OnInit {
     })
   }
 
-
-  // private getSubscriptionSummary() {
-  //   this.statisticService.getSubscriptionSummary().subscribe({
-  //     next: (res) => {
-  //       this.subscriptionSummary.set(res);
-  //     },
-  //     error: (err) => {
-  //       console.log(err);
-  //     }
-  //   })
   // }
   private getMrrRevenues(month: number) {
     // this.statisticService.getSubscriptionSummary().subscribe({
@@ -113,23 +122,23 @@ export class Dashboard implements OnInit {
     //   }
     // })
     const mockData: MrrResponse[] = [
-      { month: "2026-01", mrr: "390.00" },
-      { month: "2025-12", mrr: "387.00" },
-      { month: "2025-11", mrr: "305.00" },
-      { month: "2025-10", mrr: "14.00" },
-      { month: "2025-09", mrr: "0.00" },
-      { month: "2025-08", mrr: "0.00" },
-      { month: "2025-07", mrr: "0.00" },
-      { month: "2025-06", mrr: "0.00" },
-      { month: "2025-05", mrr: "0.00" },
-      { month: "2025-04", mrr: "0.00" },
-      { month: "2025-03", mrr: "0.00" },
-      { month: "2025-02", mrr: "0.00" }
+      {month: "2026-01", mrr: "390.00"},
+      {month: "2025-12", mrr: "387.00"},
+      {month: "2025-11", mrr: "305.00"},
+      {month: "2025-10", mrr: "14.00"},
+      {month: "2025-09", mrr: "0.00"},
+      {month: "2025-08", mrr: "0.00"},
+      {month: "2025-07", mrr: "0.00"},
+      {month: "2025-06", mrr: "0.00"},
+      {month: "2025-05", mrr: "0.00"},
+      {month: "2025-04", mrr: "0.00"},
+      {month: "2025-03", mrr: "0.00"},
+      {month: "2025-02", mrr: "0.00"}
     ];
     this.mrrRevenue.set(mockData);
   }
 
-  private getTopTenant(num: number){
+  private getTopTenant(num: number) {
     const mockData: TopTenantResponse[] = [
       {
         "id": 2,
@@ -148,7 +157,7 @@ export class Dashboard implements OnInit {
     this.topTenants.set(mockData);
   }
 
-  private getInvoiceSuccessRate(){
+  private getInvoiceSuccessRate() {
     const mockData: SuccessRateResponse = {
       "paid": 34,
       "unpaid": 0,

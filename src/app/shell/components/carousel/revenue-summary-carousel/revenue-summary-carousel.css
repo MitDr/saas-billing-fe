@@ -1,24 +1,5 @@
-:host ::ng-deep nz-carousel {
-  height: auto !important; /* Xóa chiều cao cố định nếu có */
-  overflow: hidden;
-}
-
-:host ::ng-deep .slick-slide {
-  height: auto !important; /* Đảm bảo slide không cố định chiều cao */
-  padding: 0 !important; /* Xóa padding thừa */
-  margin: 0 !important;
-}
-
 :host ::ng-deep .slick-list {
+  max-height: 200px;
   padding: 0 !important;
   margin: 0 !important;
-}
-
-:host ::ng-deep .slick-track {
-  display: flex;
-  align-items: stretch;
-}
-
-:host ::ng-deep nz-card {
-  height: 100% !important; /* Card lấp đầy slide */
 }

@@ -27,15 +27,17 @@ export class MrrChart {
 
     if (mrrData.length === 0) {
       return {
-        title: { text: 'No MRR data available', left: 'center', top: 'center' },
-        xAxis: { show: false },
-        yAxis: { show: false },
+        title: {text: 'No MRR data available', left: 'center', top: 'center'},
+        xAxis: {show: false},
+        yAxis: {show: false},
         series: []
       };
     }
 
-    const months = mrrData.map(d => d.month);
-    const values = mrrData.map(d => parseFloat(d.mrr) || 0);
+    const sortedData = [...mrrData].reverse();
+
+    const months = sortedData.map(d => d.month);
+    const values = sortedData.map(d => parseFloat(d.mrr) || 0);
 
     return {
       tooltip: {
@@ -70,7 +72,7 @@ export class MrrChart {
       yAxis: {
         type: 'value',
         name: 'MRR ($)',
-        axisLabel: { formatter: '${value}' }
+        axisLabel: {formatter: '${value}'}
       },
       series: [{
         name: 'MRR',
@@ -79,8 +81,8 @@ export class MrrChart {
         symbol: 'circle',
         symbolSize: 8,
         data: values,
-        itemStyle: { color: '#52c41a' },
-        areaStyle: { color: 'rgba(82, 196, 26, 0.2)' },
+        itemStyle: {color: '#52c41a'},
+        areaStyle: {color: 'rgba(82, 196, 26, 0.2)'},
         label: {
           show: true,
           position: 'top',

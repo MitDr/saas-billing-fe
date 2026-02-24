@@ -1,94 +1,97 @@
-<nz-spin [nzSpinning]="loading()">
-  <nz-carousel [nzAutoPlaySpeed]="6000" [nzDotPosition]="'bottom'" nzAutoPlay>
-    <!-- Slide 1: Total & Monthly Revenue -->
-    <div nz-carousel-content>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
-        <nz-card class="shadow-sm" nzHoverable>
-          <nz-statistic
-            [nzPrefix]="'$'"
-            [nzSuffix]="'USD'"
-            [nzValue]="revenueSummary()?.totalRevenue ?? 0"
-            nzTitle="Total Revenue"
-          >
-            <ng-template nzPrefix>
-              <span class="text-2xl text-yellow-600" nz-icon nzType="dollar"></span>
-            </ng-template>
-          </nz-statistic>
-        </nz-card>
+<nz-card class="shadow-md" nzTitle="Monthly Recurring Revenue (MRR)">
+  <nz-spin [nzSpinning]="loading()">
+    <!--    <nz-carousel [nzAutoPlaySpeed]="6000" [nzDotPosition]="'bottom'" nzAutoPlay>-->
+    <nz-carousel [nzDotPosition]="'bottom'">
+      <!-- Slide 1: Total & Monthly Revenue -->
+      <div class="!overflow-hidden" nz-carousel-content>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
+          <nz-card class="shadow-sm" nzHoverable>
+            <nz-statistic
+              [nzPrefix]="'$'"
+              [nzSuffix]="'USD'"
+              [nzValue]="revenueSummary()?.totalRevenue ?? 0"
+              nzTitle="Total Revenue"
+            >
+              <ng-template nzPrefix>
+                <span class="text-2xl text-yellow-600" nz-icon nzType="dollar"></span>
+              </ng-template>
+            </nz-statistic>
+          </nz-card>
 
-        <nz-card class="shadow-sm" nzHoverable>
-          <nz-statistic
-            [nzPrefix]="'$'"
-            [nzSuffix]="'USD'"
-            [nzValue]="revenueSummary()?.revenueThisMonth ?? 0"
-            nzTitle="Revenue This Month"
-          >
-            <ng-template nzPrefix>
-              <span class="text-2xl text-green-600" nz-icon nzType="calendar"></span>
-            </ng-template>
-          </nz-statistic>
-        </nz-card>
+          <nz-card class="shadow-sm" nzHoverable>
+            <nz-statistic
+              [nzPrefix]="'$'"
+              [nzSuffix]="'USD'"
+              [nzValue]="revenueSummary()?.revenueThisMonth ?? 0"
+              nzTitle="Revenue This Month"
+            >
+              <ng-template nzPrefix>
+                <span class="text-2xl text-green-600" nz-icon nzType="calendar"></span>
+              </ng-template>
+            </nz-statistic>
+          </nz-card>
+        </div>
       </div>
-    </div>
 
-    <!-- Slide 2: Last Month & Expected Recurring -->
-    <div nz-carousel-content>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
-        <nz-card class="shadow-sm" nzHoverable>
-          <nz-statistic
-            [nzPrefix]="'$'"
-            [nzSuffix]="'USD'"
-            [nzValue]="revenueSummary()?.revenueLastMonth ?? 0"
-            nzTitle="Revenue Last Month"
-          >
-            <ng-template nzPrefix>
-              <span class="text-2xl" nz-icon nzType="history"></span>
-            </ng-template>
-          </nz-statistic>
-        </nz-card>
+      <!-- Slide 2: Last Month & Expected Recurring -->
+      <div nz-carousel-content>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
+          <nz-card class="shadow-sm" nzHoverable>
+            <nz-statistic
+              [nzPrefix]="'$'"
+              [nzSuffix]="'USD'"
+              [nzValue]="revenueSummary()?.revenueLastMonth ?? 0"
+              nzTitle="Revenue Last Month"
+            >
+              <ng-template nzPrefix>
+                <span class="text-2xl" nz-icon nzType="history"></span>
+              </ng-template>
+            </nz-statistic>
+          </nz-card>
 
-        <nz-card class="shadow-sm" nzHoverable>
-          <nz-statistic
-            [nzPrefix]="'$'"
-            [nzSuffix]="'USD'"
-            [nzValue]="revenueSummary()?.expectedRecurringRevenue ?? 0"
-            nzTitle="Expected Recurring Revenue"
-          >
-            <ng-template nzPrefix>
-              <span class="text-2xl text-blue-600" nz-icon nzType="sync"></span>
-            </ng-template>
-          </nz-statistic>
-        </nz-card>
+          <nz-card class="shadow-sm" nzHoverable>
+            <nz-statistic
+              [nzPrefix]="'$'"
+              [nzSuffix]="'USD'"
+              [nzValue]="revenueSummary()?.expectedRecurringRevenue ?? 0"
+              nzTitle="Expected Recurring Revenue"
+            >
+              <ng-template nzPrefix>
+                <span class="text-2xl text-blue-600" nz-icon nzType="sync"></span>
+              </ng-template>
+            </nz-statistic>
+          </nz-card>
+        </div>
       </div>
-    </div>
 
-    <!-- Slide 3: Invoices -->
-    <div nz-carousel-content>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4">
-        <nz-card class="shadow-sm" nzHoverable>
-          <nz-statistic [nzValue]="revenueSummary()?.numberOfInvoices ?? 0" nzTitle="Total Invoices">
-            <ng-template nzPrefix>
-              <span class="text-2xl" nz-icon nzType="file"></span>
-            </ng-template>
-          </nz-statistic>
-        </nz-card>
+      <!-- Slide 3: Invoices -->
+      <div nz-carousel-content>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4">
+          <nz-card class="shadow-sm" nzHoverable>
+            <nz-statistic [nzValue]="revenueSummary()?.numberOfInvoices ?? 0" nzTitle="Total Invoices">
+              <ng-template nzPrefix>
+                <span class="text-2xl" nz-icon nzType="file"></span>
+              </ng-template>
+            </nz-statistic>
+          </nz-card>
 
-        <nz-card class="shadow-sm" nzHoverable>
-          <nz-statistic [nzValue]="revenueSummary()?.paidInvoices ?? 0" nzTitle="Paid Invoices">
-            <ng-template nzPrefix>
-              <span class="text-2xl text-green-600" nz-icon nzType="check-circle"></span>
-            </ng-template>
-          </nz-statistic>
-        </nz-card>
+          <nz-card class="shadow-sm" nzHoverable>
+            <nz-statistic [nzValue]="revenueSummary()?.paidInvoices ?? 0" nzTitle="Paid Invoices">
+              <ng-template nzPrefix>
+                <span class="text-2xl text-green-600" nz-icon nzType="check-circle"></span>
+              </ng-template>
+            </nz-statistic>
+          </nz-card>
 
-        <nz-card class="shadow-sm" nzHoverable>
-          <nz-statistic [nzValue]="revenueSummary()?.unpaidInvoices ?? 0" nzTitle="Unpaid Invoices">
-            <ng-template nzPrefix>
-              <span class="text-2xl text-red-600" nz-icon nzType="close-circle"></span>
-            </ng-template>
-          </nz-statistic>
-        </nz-card>
+          <nz-card class="shadow-sm" nzHoverable>
+            <nz-statistic [nzValue]="revenueSummary()?.unpaidInvoices ?? 0" nzTitle="Unpaid Invoices">
+              <ng-template nzPrefix>
+                <span class="text-2xl text-red-600" nz-icon nzType="close-circle"></span>
+              </ng-template>
+            </nz-statistic>
+          </nz-card>
+        </div>
       </div>
-    </div>
-  </nz-carousel>
-</nz-spin>
+    </nz-carousel>
+  </nz-spin>
+</nz-card>

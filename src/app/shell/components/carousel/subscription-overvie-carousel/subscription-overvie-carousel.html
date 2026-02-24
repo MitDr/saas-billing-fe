@@ -1,60 +1,63 @@
-<nz-spin [nzSpinning]="loading()">
-  <nz-carousel [nzAutoPlaySpeed]="6000" [nzDotPosition]="'bottom'" class="h-64 md:h-48" nzAutoPlay>
-    <!-- Slide 1: Tổng quan subscriptions -->
-    <div nz-carousel-content>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
-        <nz-card nzHoverable>
-          <nz-statistic [nzValue]="overview()?.totalSubscriptions ?? 0" nzTitle="Total Subscriptions">
-            <ng-template nzPrefix><span nz-icon nzType="file-text"></span></ng-template>
-          </nz-statistic>
-        </nz-card>
+<nz-card class="shadow-md h-fit" nzTitle="Monthly Recurring Revenue (MRR)">
+  <nz-spin [nzSpinning]="loading()">
+    <nz-carousel [nzDotPosition]="'bottom'" class="h-64 md:h-48">
+      <!--          <nz-carousel [nzAutoPlaySpeed]="6000" [nzDotPosition]="'bottom'" class="h-64 md:h-48" nzAutoPlay>-->
+      <!-- Slide 1: Tổng quan subscriptions -->
+      <div nz-carousel-content>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
+          <nz-card nzHoverable>
+            <nz-statistic [nzValue]="overview()?.totalSubscriptions ?? 0" nzTitle="Total Subscriptions">
+              <ng-template nzPrefix><span nz-icon nzType="file-text"></span></ng-template>
+            </nz-statistic>
+          </nz-card>
 
-        <nz-card nzHoverable>
-          <nz-statistic [nzValue]="overview()?.active ?? 0" nzTitle="Active Subscriptions">
-            <ng-template nzPrefix><span class="text-green-600" nz-icon nzType="check-circle"></span></ng-template>
-          </nz-statistic>
-        </nz-card>
+          <nz-card nzHoverable>
+            <nz-statistic [nzValue]="overview()?.active ?? 0" nzTitle="Active Subscriptions">
+              <ng-template nzPrefix><span class="text-green-600" nz-icon nzType="check-circle"></span></ng-template>
+            </nz-statistic>
+          </nz-card>
+        </div>
       </div>
-    </div>
 
-    <!-- Slide 2: Trial, Cancel, Past Due -->
-    <div nz-carousel-content>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4">
-        <nz-card nzHoverable>
-          <nz-statistic [nzValue]="overview()?.trial ?? 0" nzTitle="Trial Subscriptions">
-            <ng-template nzPrefix><span class="text-blue-600" nz-icon nzType="experiment"></span></ng-template>
-          </nz-statistic>
-        </nz-card>
+      <!-- Slide 2: Trial, Cancel, Past Due -->
+      <div nz-carousel-content>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4">
+          <nz-card nzHoverable>
+            <nz-statistic [nzValue]="overview()?.trial ?? 0" nzTitle="Trial Subscriptions">
+              <ng-template nzPrefix><span class="text-blue-600" nz-icon nzType="experiment"></span></ng-template>
+            </nz-statistic>
+          </nz-card>
 
-        <nz-card nzHoverable>
-          <nz-statistic [nzValue]="overview()?.cancel ?? 0" nzTitle="Cancelled">
-            <ng-template nzPrefix><span class="text-red-600" nz-icon nzType="close-circle"></span></ng-template>
-          </nz-statistic>
-        </nz-card>
+          <nz-card nzHoverable>
+            <nz-statistic [nzValue]="overview()?.cancel ?? 0" nzTitle="Cancelled">
+              <ng-template nzPrefix><span class="text-red-600" nz-icon nzType="close-circle"></span></ng-template>
+            </nz-statistic>
+          </nz-card>
 
-        <nz-card nzHoverable>
-          <nz-statistic [nzValue]="overview()?.pastDue ?? 0" nzTitle="Past Due">
-            <ng-template nzPrefix><span class="text-orange-600" nz-icon nzType="warning"></span></ng-template>
-          </nz-statistic>
-        </nz-card>
+          <nz-card nzHoverable>
+            <nz-statistic [nzValue]="overview()?.pastDue ?? 0" nzTitle="Past Due">
+              <ng-template nzPrefix><span class="text-orange-600" nz-icon nzType="warning"></span></ng-template>
+            </nz-statistic>
+          </nz-card>
+        </div>
       </div>
-    </div>
 
-    <!-- Slide 3: Deleted & New This Month -->
-    <div nz-carousel-content>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
-        <nz-card nzHoverable>
-          <nz-statistic [nzValue]="overview()?.totalDeleted ?? 0" nzTitle="Deleted Subscriptions">
-            <ng-template nzPrefix><span class="text-gray-600" nz-icon nzType="delete"></span></ng-template>
-          </nz-statistic>
-        </nz-card>
+      <!-- Slide 3: Deleted & New This Month -->
+      <div nz-carousel-content>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
+          <nz-card nzHoverable>
+            <nz-statistic [nzValue]="overview()?.totalDeleted ?? 0" nzTitle="Deleted Subscriptions">
+              <ng-template nzPrefix><span class="text-gray-600" nz-icon nzType="delete"></span></ng-template>
+            </nz-statistic>
+          </nz-card>
 
-        <nz-card nzHoverable>
-          <nz-statistic [nzValue]="overview()?.newThisMonth ?? 0" nzTitle="New This Month">
-            <ng-template nzPrefix><span class="text-green-600" nz-icon nzType="plus-circle"></span></ng-template>
-          </nz-statistic>
-        </nz-card>
+          <nz-card nzHoverable>
+            <nz-statistic [nzValue]="overview()?.newThisMonth ?? 0" nzTitle="New This Month">
+              <ng-template nzPrefix><span class="text-green-600" nz-icon nzType="plus-circle"></span></ng-template>
+            </nz-statistic>
+          </nz-card>
+        </div>
       </div>
-    </div>
-  </nz-carousel>
-</nz-spin>
+    </nz-carousel>
+  </nz-spin>
+</nz-card>
