@@ -1,1 +1,89 @@
-<p>subscription-reuse-form works!</p>
+<form (ngSubmit)="onSubmit()" [formGroup]="formGroup()" nz-form>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="status" nzRequired>Status</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Status is required">
+      <nz-select formControlName="status" nzPlaceHolder="status">
+        @for (opt of statusOption; track opt.value) {
+          <nz-option [nzLabel]="opt.label" [nzValue]="opt.value"></nz-option>
+        }
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="defaultPaymentMethod">Payment Method</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Payment Method is required">
+      <input formControlName="defaultPaymentMethod" id="defaultPaymentMethod" nz-input placeholder="Payment Method..." type="text"/>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="quantity">Quantity</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Quantity is required">
+      <input formControlName="quantity" id="quantity" nz-input placeholder="Quantity..." type="number"/>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="isTrial">Trial</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input nz-checkbox formControlName="isTrial" id="isTrial" nz-input/>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="startDate" nzRequired>Start Date</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <nz-date-picker
+        [nzFormat]="'dd-MM-yyyy HH:mm:ss'"
+        class="w-full" formControlName="startDate"
+        id="startDate"
+        nzAllowClear
+        nzPlaceHolder="Choose start date"
+        nzShowTime
+      ></nz-date-picker>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="endDate" nzRequired>End Date</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <nz-date-picker
+        [nzFormat]="'dd-MM-yyyy HH:mm:ss'"
+        class="w-full" formControlName="endDate"
+        id="endDate"
+        nzAllowClear
+        nzPlaceHolder="Choose end date"
+        nzShowTime
+      ></nz-date-picker>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="cancelAtPeriodEnd">Cancel At End</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input nz-checkbox formControlName="cancelAtPeriodEnd" id="cancelAtPeriodEnd" nz-input/>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="cancelDate">Cancel Date</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <nz-date-picker
+        [nzFormat]="'dd-MM-yyyy HH:mm:ss'"
+        class="w-full" formControlName="cancelDate"
+        id="cancelDate"
+        nzAllowClear
+        nzPlaceHolder="Choose cancel date"
+        nzShowTime
+      ></nz-date-picker>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="dueDate">Due Date</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <nz-date-picker
+        [nzFormat]="'dd-MM-yyyy HH:mm:ss'"
+        class="w-full" formControlName="dueDate"
+        id="dueDate"
+        nzAllowClear
+        nzPlaceHolder="Choose Due Date"
+        nzShowTime
+      ></nz-date-picker>
+    </nz-form-control>
+  </nz-form-item>
+
+</form>
