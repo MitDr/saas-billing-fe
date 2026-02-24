@@ -1,0 +1,25 @@
+<nz-spin [nzSpinning]="loading()">
+  <nz-table [nzData]="data()" nzSize="middle">
+    <thead>
+    <tr>
+      <th>Tenant Name</th>
+      <th>Email</th>
+      <th>Total Revenue</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (tenant of data(); track tenant.id) {
+        <tr>
+          <td>{{ tenant.name }}</td>
+          <td>{{ tenant.email }}</td>
+          <td>{{ tenant.totalRevenue | currency:'USD':'symbol':'1.0-0' }}</td>
+        </tr>
+      }
+      @if (data().length === 0) {
+        <tr>
+          <td colspan="3" class="text-center py-8 text-gray-500">No data available</td>
+        </tr>
+      }
+    </tbody>
+  </nz-table>
+</nz-spin>

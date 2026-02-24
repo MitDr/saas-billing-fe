@@ -1,1 +1,31 @@
-<p>subscriber-edit works!</p>
+<div class="page-container">
+  <nz-page-header
+    [nzSubtitle]="'ID: ' + (subscriber()?.id || '')"
+    [nzTitle]="'Update Subscriber'"
+  >
+    <div class="flex justify-end mb-4">
+      <app-breadcrumb [routes]="routing"></app-breadcrumb>
+    </div>
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item><a routerLink="/admin/tables/subscribers">Subscribers</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>Update Subscriber</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-page-header>
+
+  @if (!loading()) {
+    @if (subscriber(); as sub) {
+      <app-subscriber-reuse-form
+        [formGroup]="subscriberForm "
+        [availableTenants]="availableTenant()"
+        [isEditMode]="true"
+        [initTenant]="initTenant()"
+        [submitLabel]="'Update'"
+        (submitted)="onSubmitted()"
+      ></app-subscriber-reuse-form>
+    } @else {
+      <div>Subscriber not found</div>
+    }
+  } @else {
+    <nz-spin nzTip="Subscriber Feature..."></nz-spin>
+  }
+</div>

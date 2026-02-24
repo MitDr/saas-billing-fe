@@ -33,7 +33,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 export class SubscriberList extends GenericListComponent<Subscriber, SubscriberRequest> {
   subscriberPage = signal<ListData<Subscriber> | null>(null);
   checked = false;
-  createRoute = 'admin/tables/subscribers/created'
+  createRoute = '/admin/tables/subscribers/create'
   subscriberListRouting = SUBSCRIBER_ROUTE_CONSTANT;
   private subscriberService = inject(SubscriberService);
 

@@ -62,6 +62,8 @@ import {PlanGroupCreate} from './pages/admin/tables/plan-group/plan-group-create
 import {PlanGroupEdit} from './pages/admin/tables/plan-group/plan-group-edit/plan-group-edit';
 import {PriceCreate} from './pages/admin/tables/price/price-create/price-create';
 import {PriceEdit} from './pages/admin/tables/price/price-edit/price-edit';
+import {SubscriberCreate} from './pages/admin/tables/subscriber/subscriber-create/subscriber-create';
+import {SubscriberEdit} from './pages/admin/tables/subscriber/subscriber-edit/subscriber-edit';
 
 export const routes: Routes = [
   {
@@ -204,8 +206,16 @@ export const routes: Routes = [
         component: SubscriberList
       },
       {
+        path: 'tables/subscribers/create',
+        component: SubscriberCreate
+      },
+      {
         path: 'tables/subscribers/:id',
         component: SubscriberDetail
+      },
+      {
+        path: 'tables/subscribers/:id/edit',
+        component: SubscriberEdit
       },
       //Subscriptions
       {

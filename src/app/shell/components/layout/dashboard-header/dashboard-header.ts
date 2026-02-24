@@ -8,6 +8,7 @@ import {RouterLink} from '@angular/router';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzTagComponent} from 'ng-zorro-antd/tag';
 import {NzSegmentedComponent, NzSegmentedItemComponent} from 'ng-zorro-antd/segmented';
+import {NgxEchartsModule} from 'ngx-echarts';
 
 @Component({
   selector: 'app-dashboard-header',
@@ -21,6 +22,7 @@ import {NzSegmentedComponent, NzSegmentedItemComponent} from 'ng-zorro-antd/segm
     NzMenuItemComponent,
     NzMenuDividerDirective,
     RouterLink,
+    NgxEchartsModule,
     NzButtonComponent,
     NzTagComponent,
     NzSegmentedComponent,

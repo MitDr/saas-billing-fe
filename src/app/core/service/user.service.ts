@@ -1,4 +1,3 @@
-// user.service.ts
 import {inject, Injectable} from '@angular/core';
 import {HttpParams} from '@angular/common/http';
 import {map, Observable, throwError} from 'rxjs';
@@ -69,10 +68,6 @@ export class UserService {
       })
     );
   }
-
-// }
-
-// Update một user (PUT)
   update(updatedUser: UserRequest, id: number): Observable<User> {
     return this.api.put<User>(`/admin/users/${id}`, updatedUser).pipe(
       catchError(error => {
@@ -82,7 +77,6 @@ export class UserService {
     );
   }
 
-//   // Bulk delete (DELETE nhiều ID)
   bulkDelete(ids: number[]): Observable<void> {
     return this.api.deletes<void>(`/admin/users`, ids).pipe(
       catchError(error => {
@@ -90,15 +84,6 @@ export class UserService {
         return throwError(() => new Error('Xóa hàng loạt thất bại'));
       })
     );
-    //   return this.http.request<void>('DELETE', this.apiUrl, {
-    //     body: ids
-    //   }).pipe(
-    //     catchError(error => {
-    //       console.error('Bulk delete error:', error);
-    //       return throwError(() => new Error('Xóa hàng loạt thất bại'));
-    //     })
-    //   );
-    // }
   }
 
   deleteUser(id: number): Observable<void> {

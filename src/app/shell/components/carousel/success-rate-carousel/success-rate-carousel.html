@@ -1,0 +1,33 @@
+<nz-spin [nzSpinning]="loading()"]>
+  <nz-carousel [nzAutoPlaySpeed]="6000" [nzDotPosition]="'bottom'" class="h-64 md:h-48" nzAutoPlay>
+    <div nz-carousel-content>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4">
+        <nz-card nzHoverable>
+          <nz-statistic [nzValue]="data()?.paid ?? 0" nzTitle="Paid Invoices">
+            <ng-template nzPrefix><span nz-icon nzType="file-text"></span></ng-template>
+          </nz-statistic>
+        </nz-card>
+
+        <nz-card nzHoverable>
+          <nz-statistic [nzValue]="data()?.unpaid ?? 0" nzTitle="Unpaid Invoices">
+            <ng-template nzPrefix><span class="text-green-600" nz-icon nzType="check-circle"></span></ng-template>
+          </nz-statistic>
+        </nz-card>
+        <nz-card nzHoverable>
+          <nz-statistic [nzValue]="data()?.draft ?? 0" nzTitle="Draft Invoices">
+            <ng-template nzPrefix><span class="text-green-600" nz-icon nzType="check-circle"></span></ng-template>
+          </nz-statistic>
+        </nz-card>
+      </div>
+    </div>
+    <div nz-carousel-content>
+      <div class="p-4">
+        <nz-card class="shadow-sm" nzHoverable>
+          <nz-statistic [nzValue]="appendPercentage(data().successRate)" nzTitle="Success Rate">
+            <ng-template nzPrefix><span class="text-green-600" nz-icon nzType="check-circle"></span></ng-template>
+          </nz-statistic>
+        </nz-card>
+      </div>
+    </div>
+  </nz-carousel>
+</nz-spin>

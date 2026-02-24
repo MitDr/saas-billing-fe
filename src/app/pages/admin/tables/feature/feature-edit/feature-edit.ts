@@ -24,7 +24,6 @@ import {FeatureRequest} from '../../../../../core/interface/request/feature-requ
   selector: 'app-feature-edit',
   imports: [
     Breadcrumb,
-    EntitlementReuseForm,
     NzBreadCrumbComponent,
     NzBreadCrumbItemComponent,
     NzPageHeaderComponent,
