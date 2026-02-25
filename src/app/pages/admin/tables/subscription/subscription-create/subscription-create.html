@@ -1,1 +1,18 @@
-<p>subscription-create works!</p>
+<div class="page-container">
+  <h1 class="text-2xl font-semibold mb-6">Create Subscription</h1>
+  <div class="flex justify-end mb-4">
+    <app-breadcrumb [routes]="route"></app-breadcrumb>
+  </div>
+
+  <app-subscription-reuse-form
+    (submitted)="onSubmitted()"
+    [availableInvoice]="availableInvoice()"
+    [availablePrice]="availablePrice()"
+    [availableSubscriber]="availableSubscriber()"
+    [availableTenants]="availableTenant()"
+    [formGroup]="subscriptionForm"
+    [isEditMode]="false"
+    [isLoading]="isSubmitting"
+    [submitLabel]="'Create'"
+  ></app-subscription-reuse-form>
+</div>

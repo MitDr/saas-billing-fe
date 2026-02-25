@@ -19,6 +19,12 @@ import {NzInputDirective} from 'ng-zorro-antd/input';
 import {NzCheckboxComponent} from 'ng-zorro-antd/checkbox';
 import {NzDatePickerComponent} from 'ng-zorro-antd/date-picker';
 import {Invoice} from '../../../../../core/interface/entity/invoice';
+import {NzButtonComponent} from 'ng-zorro-antd/button';
+import {NzCardComponent, NzCardMetaComponent} from 'ng-zorro-antd/card';
+import {NzIconDirective} from 'ng-zorro-antd/icon';
+import {NzTagComponent} from 'ng-zorro-antd/tag';
+import {NgForOf} from '@angular/common';
+import {NzModalComponent, NzModalContentDirective} from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-subscription-reuse-form',
@@ -35,7 +41,15 @@ import {Invoice} from '../../../../../core/interface/entity/invoice';
     ReactiveFormsModule,
     NzInputDirective,
     NzCheckboxComponent,
-    NzDatePickerComponent
+    NzDatePickerComponent,
+    NzButtonComponent,
+    NzCardComponent,
+    NzCardMetaComponent,
+    NzIconDirective,
+    NzTagComponent,
+    NgForOf,
+    NzModalComponent,
+    NzModalContentDirective
   ],
   templateUrl: './subscription-reuse-form.html',
   styleUrl: './subscription-reuse-form.css',
@@ -47,6 +61,11 @@ export class SubscriptionReuseForm {
     {label: 'Pending', value: 'PENDING'},
     {label: 'Ended', value: 'ENDED'},
     {label: 'Cancel', value: 'CANCEL'}
+  ]
+
+  trialOption: OptionInterface[] =[
+    {label: 'True', value: 'true'},
+    {label: 'False', value: 'false'}
   ]
 
   formGroup = input.required<FormGroup>();
@@ -204,7 +223,7 @@ export class SubscriptionReuseForm {
     return this.selectedInvoice().some(u => u.id === invoiceId);
   }
 
-  togglePrice(invoice: Invoice) {
+  toggleInvoice(invoice: Invoice) {
     const current = this.selectedInvoice();
     if (current.some(u => u.id === invoice.id)) {
       this.selectedInvoice.set(current.filter(u => u.id !== invoice.id));

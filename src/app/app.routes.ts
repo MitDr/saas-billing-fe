@@ -64,6 +64,8 @@ import {PriceCreate} from './pages/admin/tables/price/price-create/price-create'
 import {PriceEdit} from './pages/admin/tables/price/price-edit/price-edit';
 import {SubscriberCreate} from './pages/admin/tables/subscriber/subscriber-create/subscriber-create';
 import {SubscriberEdit} from './pages/admin/tables/subscriber/subscriber-edit/subscriber-edit';
+import {SubscriptionEdit} from './pages/admin/tables/subscription/subscription-edit/subscription-edit';
+import {SubscriptionCreate} from './pages/admin/tables/subscription/subscription-create/subscription-create';
 
 export const routes: Routes = [
   {
@@ -223,8 +225,16 @@ export const routes: Routes = [
         component: SubscriptionList
       },
       {
+        path: 'tables/subscriptions/create',
+        component: SubscriptionCreate
+      },
+      {
         path: 'tables/subscriptions/:id',
         component: SubscriptionDetail
+      },
+      {
+        path: 'tables/subscriptions/:id/edit',
+        component: SubscriptionEdit
       },
       //Entitlement
       {

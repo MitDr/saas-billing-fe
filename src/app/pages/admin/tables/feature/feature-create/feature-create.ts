@@ -20,7 +20,6 @@ import {FeatureRequest} from '../../../../../core/interface/request/feature-requ
   selector: 'app-feature-create',
   imports: [
     Breadcrumb,
-    EntitlementReuseForm,
     FeatureReuseForm,
     NzModalModule,
   ],

@@ -1,4 +1,4 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {Tenant} from '../../../../../core/interface/entity/tenant';
 import {Invoice} from '../../../../../core/interface/entity/invoice';
 import {Router} from '@angular/router';
@@ -26,7 +26,7 @@ import {PAYMENT_ROUTE_CONSTANT} from '../../../../../core/constant/payment/payme
   templateUrl: './payment-create.html',
   styleUrl: './payment-create.css',
 })
-export class PaymentCreate {
+export class PaymentCreate implements OnInit{
   availableTenant = signal<Tenant[]>([]);
   availableInvoice = signal<Invoice[]>([]);
   route = PAYMENT_ROUTE_CONSTANT;
