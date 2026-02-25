@@ -3,7 +3,6 @@ import {Tenant} from '../../../../../core/interface/entity/tenant';
 import {Invoice} from '../../../../../core/interface/entity/invoice';
 import {Subscriber} from '../../../../../core/interface/entity/subscriber';
 import {Price} from '../../../../../core/interface/entity/price';
-import {PAYMENT_ROUTE_CONSTANT} from '../../../../../core/constant/payment/payment-list-constant';
 import {Router} from '@angular/router';
 import {SUBSCRIPTION_ROUTE_CONSTANT} from '../../../../../core/constant/subscription/subscription-list-constant';
 import {InvoiceService} from '../../../../../core/service/invoice-service';
@@ -13,17 +12,13 @@ import {NonNullableFormBuilder, Validators} from '@angular/forms';
 import {SubscriberService} from '../../../../../core/service/subscriber-service';
 import {PriceService} from '../../../../../core/service/price-service';
 import {formatDate} from '@angular/common';
-import {PaymentRequest} from '../../../../../core/interface/request/payment-request';
 import {SubscriptionRequest} from '../../../../../core/interface/request/subscription-request';
 import {Breadcrumb} from '../../../../../shell/components/generic/breadcrumb/breadcrumb';
-import {PaymentReuseForm} from '../../../../../shell/components/form/admin/payment-reuse-form/payment-reuse-form';
-import {
-  SubscriberReuseForm
-} from '../../../../../shell/components/form/admin/subscriber-reuse-form/subscriber-reuse-form';
 import {
   SubscriptionReuseForm
 } from '../../../../../shell/components/form/admin/subscription-reuse-form/subscription-reuse-form';
 import {NzModalModule} from 'ng-zorro-antd/modal';
+import {SubscriptionService} from '../../../../../core/service/subscription-service';
 
 @Component({
   selector: 'app-subscription-create',
@@ -47,17 +42,18 @@ export class SubscriptionCreate implements OnInit {
   tenantService = inject(TenantService);
   priceService = inject(PriceService);
   subscriberService = inject(SubscriberService);
+  subscriptionService = inject(SubscriptionService);
   message = inject(NzMessageService);
   private fb = inject(NonNullableFormBuilder)
 
   subscriptionForm = this.fb.group({
     status: ['', [Validators.required, Validators.pattern('ACTIVE|DRAFT|PENDING|ENDED|CANCEL')]],
     defaultPaymentMethod: [''],
-    quantity: [null],
-    isTrial: [null],
+    quantity: [null, [Validators.min(1)]],
+    isTrial: [false],
     startDate: ['', Validators.required],
     endDate: ['', Validators.required],
-    cancelAtPeriodEnd: [null, Validators.required],
+    cancelAtPeriodEnd: [false],
     cancelDate: [''],
     dueDate: ['', Validators.required],
     subscriberId: [null, Validators.required],
@@ -65,7 +61,7 @@ export class SubscriptionCreate implements OnInit {
     invoices: [[]],
     tenantId: [null, Validators.required],
     metadata: this.fb.array([])
-  })
+  });
 
   ngOnInit(): void {
     this.loadAllTenant();
@@ -103,6 +99,7 @@ export class SubscriptionCreate implements OnInit {
       }
     });
   }
+
   loadAllSubscriber() {
     this.subscriberService.getAllSubscribers().subscribe({  // size=1000 để an toàn lấy hết
       next: (response) => {
@@ -115,6 +112,7 @@ export class SubscriptionCreate implements OnInit {
       }
     });
   }
+
   loadAllPrice() {
     this.priceService.getAllPrices().subscribe({  // size=1000 để an toàn lấy hết
       next: (response) => {
@@ -150,9 +148,9 @@ export class SubscriptionCreate implements OnInit {
         status: this.subscriptionForm.value.status! as "ACTIVE" | 'DRAFT' | 'PENDING' | 'ENDED' | 'CANCEL',
         quantity: this.subscriptionForm.value.quantity!,
         isTrial: this.subscriptionForm.value.isTrial!,
-        startDate: this.subscriptionForm.value.startDate!,
-        endDate: this.subscriptionForm.value.endDate!,
-        dueDate: this.subscriptionForm.value.dueDate!,
+        startDate: this.formatDateString(this.subscriptionForm.value.startDate, 'dd-MM-yyyy HH:mm:ss')!,
+        endDate: this.formatDateString(this.subscriptionForm.value.endDate, 'dd-MM-yyyy HH:mm:ss')!,
+        dueDate: this.formatDateString(this.subscriptionForm.value.dueDate, 'dd-MM-yyyy HH:mm:ss')!,
         subscriberId: this.subscriptionForm.value.subscriberId!,
         priceId: this.subscriptionForm.value.priceId!,
         tenantId: this.subscriptionForm.value.tenantId!,
@@ -172,7 +170,7 @@ export class SubscriptionCreate implements OnInit {
       }
 
       const invoices = this.subscriptionForm.value.invoices! as number[];
-      if (invoices.length > 0){
+      if (invoices.length > 0) {
         Object.assign(payload, {invoices})
       }
 
@@ -181,19 +179,19 @@ export class SubscriptionCreate implements OnInit {
       }
 
       console.log(payload)
-      // this.paymentService.createPayment(payload).subscribe({
-      //   next: (response) => {
-      //     this.isSubmitting = false;
-      //     this.message.success('Tạo payment thành công');
-      //     this.paymentForm.reset();
-      //     this.router.navigate(['/admin/tables/payments']);
-      //   },
-      //   error: (err) => {
-      //     this.isSubmitting = false;
-      //     console.error('Create payment failed:', err);
-      //     this.message.error('Tạo payment thất bại');
-      //   }
-      // })
+      this.subscriptionService.createSubscription(payload).subscribe({
+        next: (response) => {
+          this.isSubmitting = false;
+          this.message.success('Tạo subscription thành công');
+          this.subscriptionForm.reset();
+          this.router.navigate(['/admin/tables/subscriptions']);
+        },
+        error: (err) => {
+          this.isSubmitting = false;
+          console.error('Create subscription failed:', err);
+          this.message.error('Tạo subscription thất bại');
+        }
+      })
     }
   }
 

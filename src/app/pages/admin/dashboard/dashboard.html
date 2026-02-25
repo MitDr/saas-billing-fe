@@ -3,9 +3,9 @@
 
   </nz-page-header>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6 mb-6">
     <div class="col-span-1 md:col-span-2 lg:col-span-4">
-      <h2 class="text-xl font-semibold mb-4">System Overview</h2>
+      <!--      <h2 class="text-xl font-semibold mb-4">System Overview</h2>-->
       <app-system-summary-carousel
         [loading]="load()"
         [systemSummary]="systemSummary()!"
@@ -13,7 +13,7 @@
       ></app-system-summary-carousel>
     </div>
   </div>
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <div class="grid grid-cols-1 lg:grid-cols-2 mt-6 mb-6 gap-6">
     <!--    <div class="fit-content">-->
     <!--      <h2 class="text-xl font-semibold mb-4">Revenue Summary</h2>-->
     <app-revenue-summary-carousel
@@ -30,35 +30,36 @@
     ></app-subscription-overvie-carousel>
     <!--    </div>-->
   </div>
-  <div class="mb-6">
-    <h2 class="text-xl font-semibold mb-4">Monthly Recurring Revenue (MRR)</h2>
+  <div class="!mt-6 !mb-6">
     <app-mrr-chart
       [data]="mrrRevenue()"
       [loading]="load()"
     ></app-mrr-chart>
   </div>
-</div>
-<nz-card class="shadow-md" nzTitle="Top Tenants by Revenue">
-  <app-top-tenant-table
-    [data]="topTenants()"
-    [loading]="load()"
-  ></app-top-tenant-table>
-</nz-card>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-  <div class="col-span-1 md:col-span-2 lg:col-span-4">
-    <h2 class="text-xl font-semibold mb-4">Invoice Success Rate</h2>
-    <app-success-rate-carousel
-      [data]="invoiceSuccessRate()!!"
+  <nz-card class="shadow-md mt-6 mb-6" nzTitle="Top Tenants by Revenue">
+    <app-top-tenant-table
+      [data]="topTenants()"
       [loading]="load()"
-    ></app-success-rate-carousel>
+    ></app-top-tenant-table>
+  </nz-card>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6 mb-6">
+    <div class="col-span-1 md:col-span-2 lg:col-span-4">
+      <app-success-rate-carousel
+        [data]="invoiceSuccessRate()!"
+        [loading]="load()"
+        class="carousel-fit"
+      ></app-success-rate-carousel>
+    </div>
   </div>
+  <!-- Churn Rate Card (đặt ở phần cuối hoặc cùng hàng với Top Tenants) -->
+  <div class="mt-6">
+    <!--    <h2 class="text-xl font-semibold mb-4">Churn Rate</h2>-->
+    <app-churn-rate-chart
+      [data]="churnRate()!"
+      [loading]="load()"
+    ></app-churn-rate-chart>
+  </div>
+  <!--  UpcomingRenewal-->
 </div>
-<!-- Churn Rate Card (đặt ở phần cuối hoặc cùng hàng với Top Tenants) -->
-<div class="mb-8">
-  <h2 class="text-xl font-semibold mb-4">Churn Rate</h2>
-  <app-churn-rate-chart
-    [data]="churnRate()!"
-    [loading]="load()"
-  ></app-churn-rate-chart>
-</div>
+
 

@@ -1,14 +1,13 @@
-<nz-card class="shadow-md" nzTitle="Monthly Recurring Revenue (MRR)">
+<nz-card class="shadow-md" nzTitle="Revenue Summary">
   <nz-spin [nzSpinning]="loading()">
-    <!--    <nz-carousel [nzAutoPlaySpeed]="6000" [nzDotPosition]="'bottom'" nzAutoPlay>-->
-    <nz-carousel [nzDotPosition]="'bottom'">
+    <nz-carousel [nzAutoPlaySpeed]="6000" [nzDotPosition]="'bottom'" nzAutoPlay>
+      <!--    <nz-carousel [nzDotPosition]="'bottom'">-->
       <!-- Slide 1: Total & Monthly Revenue -->
       <div class="!overflow-hidden" nz-carousel-content>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
           <nz-card class="shadow-sm" nzHoverable>
             <nz-statistic
               [nzPrefix]="'$'"
-              [nzSuffix]="'USD'"
               [nzValue]="revenueSummary()?.totalRevenue ?? 0"
               nzTitle="Total Revenue"
             >
@@ -21,7 +20,6 @@
           <nz-card class="shadow-sm" nzHoverable>
             <nz-statistic
               [nzPrefix]="'$'"
-              [nzSuffix]="'USD'"
               [nzValue]="revenueSummary()?.revenueThisMonth ?? 0"
               nzTitle="Revenue This Month"
             >
@@ -39,7 +37,6 @@
           <nz-card class="shadow-sm" nzHoverable>
             <nz-statistic
               [nzPrefix]="'$'"
-              [nzSuffix]="'USD'"
               [nzValue]="revenueSummary()?.revenueLastMonth ?? 0"
               nzTitle="Revenue Last Month"
             >
@@ -52,7 +49,6 @@
           <nz-card class="shadow-sm" nzHoverable>
             <nz-statistic
               [nzPrefix]="'$'"
-              [nzSuffix]="'USD'"
               [nzValue]="revenueSummary()?.expectedRecurringRevenue ?? 0"
               nzTitle="Expected Recurring Revenue"
             >

@@ -73,13 +73,13 @@ export class Dashboard implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.getSystemSummary()
-    // this.getRevenueSummary()
-    // this.getSubscriptionSummary()
+    this.getSystemSummary()
+    this.getRevenueSummary()
+    this.getSubscriptionSummary()
     this.getMrrRevenues(12)
     this.getTopTenant(10)
     this.getInvoiceSuccessRate();
-    this.getChurnRate();
+    this.getChurnRate(12);
     this.load.set(false)
   }
 
@@ -94,17 +94,6 @@ export class Dashboard implements OnInit {
     })
   }
 
-
-  // private getSubscriptionSummary() {
-  //   this.statisticService.getSubscriptionSummary().subscribe({
-  //     next: (res) => {
-  //       this.subscriptionSummary.set(res);
-  //     },
-  //     error: (err) => {
-  //       console.log(err);
-  //     }
-  //   })
-
   getRevenueSummary() {
     this.statisticService.getRevenueSummary().subscribe({
       next: (res) => {
@@ -116,142 +105,59 @@ export class Dashboard implements OnInit {
     })
   }
 
+  private getSubscriptionSummary() {
+    this.statisticService.getSubscriptionSummary().subscribe({
+      next: (res) => {
+        this.subscriptionSummary.set(res);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
   // }
   private getMrrRevenues(month: number) {
-    // this.statisticService.getSubscriptionSummary().subscribe({
-    //   next: (res) => {
-    //     this.subscriptionSummary.set(res);
-    //   },
-    //   error: (err) => {
-    //     console.log(err);
-    //   }
-    // })
-    const mockData: MrrResponse[] = [
-      {month: "2026-01", mrr: "390.00"},
-      {month: "2025-12", mrr: "387.00"},
-      {month: "2025-11", mrr: "305.00"},
-      {month: "2025-10", mrr: "14.00"},
-      {month: "2025-09", mrr: "0.00"},
-      {month: "2025-08", mrr: "0.00"},
-      {month: "2025-07", mrr: "0.00"},
-      {month: "2025-06", mrr: "0.00"},
-      {month: "2025-05", mrr: "0.00"},
-      {month: "2025-04", mrr: "0.00"},
-      {month: "2025-03", mrr: "0.00"},
-      {month: "2025-02", mrr: "0.00"}
-    ];
-    this.mrrRevenue.set(mockData);
+    this.statisticService.getMrrRevenues(month).subscribe({
+      next: (res) => {
+        this.mrrRevenue.set(res);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
   }
 
   private getTopTenant(num: number) {
-    const mockData: TopTenantResponse[] = [
-      {
-        "id": 2,
-        "name": "Long3's tenant",
-        "email": "ttlong13013@gmail.com",
-        "totalRevenue": 10347
+    this.statisticService.getTopTenant(num).subscribe({
+      next: (res) => {
+        this.topTenants.set(res);
       },
-      {
-        "id": 3,
-        "name": "Long4's tenant",
-        "email": "ttlong13014@gmail.com",
-        "totalRevenue": 0
+      error: (err) => {
+        console.log(err);
       }
-    ]
-
-    this.topTenants.set(mockData);
+    })
   }
 
   private getInvoiceSuccessRate() {
-    const mockData: SuccessRateResponse = {
-      "paid": 34,
-      "unpaid": 0,
-      "draft": 0,
-      "successRate": 100
-    }
-
-    this.invoiceSuccessRate.set(mockData)
+    this.statisticService.getSuccessRate().subscribe({
+      next: (res) => {
+        this.invoiceSuccessRate.set(res)
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
   }
 
-  private getChurnRate(){
-    const mockData: ChurnRateResponse = {
-      "period": 12,
-      "churnRate": 0.02083,
-      "data": [
-        {
-          "month": "2026-01",
-          "endEdSubscription": 0,
-          "activeStartSubscription": 3,
-          "churnRate": 0
-        },
-        {
-          "month": "2025-12",
-          "endEdSubscription": 1,
-          "activeStartSubscription": 4,
-          "churnRate": 0.25
-        },
-        {
-          "month": "2025-11",
-          "endEdSubscription": 0,
-          "activeStartSubscription": 3,
-          "churnRate": 0
-        },
-        {
-          "month": "2025-10",
-          "endEdSubscription": 0,
-          "activeStartSubscription": 0,
-          "churnRate": 0
-        },
-        {
-          "month": "2025-09",
-          "endEdSubscription": 0,
-          "activeStartSubscription": 0,
-          "churnRate": 0
-        },
-        {
-          "month": "2025-08",
-          "endEdSubscription": 0,
-          "activeStartSubscription": 1,
-          "churnRate": 0
-        },
-        {
-          "month": "2025-07",
-          "endEdSubscription": 0,
-          "activeStartSubscription": 0,
-          "churnRate": 0
-        },
-        {
-          "month": "2025-06",
-          "endEdSubscription": 0,
-          "activeStartSubscription": 0,
-          "churnRate": 0
-        },
-        {
-          "month": "2025-05",
-          "endEdSubscription": 0,
-          "activeStartSubscription": 0,
-          "churnRate": 0
-        },
-        {
-          "month": "2025-04",
-          "endEdSubscription": 0,
-          "activeStartSubscription": 0,
-          "churnRate": 0
-        },
-        {
-          "month": "2025-03",
-          "endEdSubscription": 0,
-          "activeStartSubscription": 0,
-          "churnRate": 0
-        },
-        {
-          "month": "2025-02",
-          "endEdSubscription": 0,
-          "activeStartSubscription": 0,
-          "churnRate": 0
-        }
-      ]
-    }
-    this.churnRate.set(mockData);
+  private getChurnRate(num: number) {
+    this.statisticService.getChurnRate(num).subscribe({
+      next: (res) => {
+        this.churnRate.set(res)
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
   }
 }

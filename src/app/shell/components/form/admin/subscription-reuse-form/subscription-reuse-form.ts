@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import {Tenant} from '../../../../../core/interface/entity/tenant';
 import {Price} from '../../../../../core/interface/entity/price';
-import { Subscriber } from "../../../../../core/interface/entity/subscriber";
+import {Subscriber} from "../../../../../core/interface/entity/subscriber";
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {OptionInterface} from '../../../../../core/interface/option-interface';
 import {NzFormControlComponent, NzFormDirective, NzFormItemComponent, NzFormLabelComponent} from 'ng-zorro-antd/form';
@@ -23,7 +23,7 @@ import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzCardComponent, NzCardMetaComponent} from 'ng-zorro-antd/card';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzTagComponent} from 'ng-zorro-antd/tag';
-import {NgForOf} from '@angular/common';
+import {JsonPipe, NgForOf} from '@angular/common';
 import {NzModalComponent, NzModalContentDirective} from 'ng-zorro-antd/modal';
 
 @Component({
@@ -49,7 +49,8 @@ import {NzModalComponent, NzModalContentDirective} from 'ng-zorro-antd/modal';
     NzTagComponent,
     NgForOf,
     NzModalComponent,
-    NzModalContentDirective
+    NzModalContentDirective,
+    JsonPipe
   ],
   templateUrl: './subscription-reuse-form.html',
   styleUrl: './subscription-reuse-form.css',
@@ -61,11 +62,6 @@ export class SubscriptionReuseForm {
     {label: 'Pending', value: 'PENDING'},
     {label: 'Ended', value: 'ENDED'},
     {label: 'Cancel', value: 'CANCEL'}
-  ]
-
-  trialOption: OptionInterface[] =[
-    {label: 'True', value: 'true'},
-    {label: 'False', value: 'false'}
   ]
 
   formGroup = input.required<FormGroup>();
@@ -109,47 +105,59 @@ export class SubscriptionReuseForm {
     });
   }
 
-  get status(){
+  get status() {
     return this.formGroup().get('status')
   }
-  get defaultPaymentMethod(){
+
+  get defaultPaymentMethod() {
     return this.formGroup().get('defaultPaymentMethod')
   }
-  get quantity(){
+
+  get quantity() {
     return this.formGroup().get('quantity')
   }
-  get isTrial(){
+
+  get isTrial() {
     return this.formGroup().get('isTrial')
   }
-  get startDate(){
+
+  get startDate() {
     return this.formGroup().get('startDate')
   }
-  get endDate(){
+
+  get endDate() {
     return this.formGroup().get('endDate')
   }
-  get cancelAtPeriodEnd(){
+
+  get cancelAtPeriodEnd() {
     return this.formGroup().get('cancelAtPeriodEnd')
   }
-  get cancelDate(){
+
+  get cancelDate() {
     return this.formGroup().get('cancelDate')
   }
-  get dueDate(){
+
+  get dueDate() {
     return this.formGroup().get('dueDate')
   }
-  get subscriberId(){
+
+  get subscriberId() {
     return this.formGroup().get('subscriberId')
   }
-  get priceId(){
-    return this.formGroup().get('invoices')
+
+  get priceId() {
+    return this.formGroup().get('priceId')
   }
-  get tenantId(){
+
+  get tenantId() {
     return this.formGroup().get('tenantId')
   }
 
-  get invoices(){
+  get invoices() {
     return this.formGroup().get('invoices');
   }
-  get metadata(){
+
+  get metadata() {
     return this.formGroup().get('metadata')
   }
 
@@ -261,6 +269,7 @@ export class SubscriptionReuseForm {
     Tenant: ${pr.tenant?.name}
   `;
   }
+
   getInvoiceDescription(inv: Invoice): string {
     return `
     ${inv.invoiceNumber}

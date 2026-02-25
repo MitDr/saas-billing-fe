@@ -2,7 +2,8 @@
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="status" nzRequired>Status</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Status is required">
-      <nz-select formControlName="status" nzPlaceHolder="status">
+      <nz-select formControlName="status"
+                 nzPlaceHolder="Status">
         @for (opt of statusOption; track opt.value) {
           <nz-option [nzLabel]="opt.label" [nzValue]="opt.value"></nz-option>
         }
@@ -12,7 +13,8 @@
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="defaultPaymentMethod">Payment Method</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Payment Method is required">
-      <input formControlName="defaultPaymentMethod" id="defaultPaymentMethod" nz-input placeholder="Payment Method..." type="text"/>
+      <input formControlName="defaultPaymentMethod" id="defaultPaymentMethod" nz-input placeholder="Payment Method..."
+             type="text"/>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
@@ -22,13 +24,11 @@
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="isTrial">Trial</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24">Trial</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
-      <nz-select formControlName="status" nzPlaceHolder="status">
-        @for (opt of trialOption; track opt.value) {
-          <nz-option [nzLabel]="opt.label" [nzValue]="opt.value"></nz-option>
-        }
-      </nz-select>
+      <label formControlName="isTrial" nz-checkbox>
+        This subscription is a trial period
+      </label>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
@@ -58,9 +58,11 @@
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="cancelAtPeriodEnd" nzRequired>Cancel At End</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24">Cancel At Period End</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
-      <input nz-checkbox formControlName="cancelAtPeriodEnd" id="cancelAtPeriodEnd" nz-input/>
+      <label formControlName="cancelAtPeriodEnd" nz-checkbox>
+        Cancel subscription at the end of current billing period
+      </label>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
@@ -152,7 +154,7 @@
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24">Invoice</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
-      <button (click)="openInvoiceModal()" nz-button nzType="default" type="button">
+      <button (click)="openInvoiceModal()" nz-button nzType="default">
         <span nz-icon nzType="team"></span> Chọn Invoice
       </button>
 
@@ -238,31 +240,6 @@
   </ng-template>
 </nz-modal>
 <nz-modal
-  (nzOnCancel)="isTenantModalOpen.set(false)"
-  (nzOnOk)="isTenantModalOpen.set(false)"
-  [nzVisible]="isTenantModalOpen()"
-  nzCancelText="Đóng"
-  nzOkText="Xác nhận"
-  nzTitle="Chọn Tenant"
->
-  <ng-template nzModalContent>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
-      @if (availableTenants().length === 0) {
-        <p class="text-center text-gray-500 py-10">Không có tenant nào để chọn</p>
-      } @else {
-        @for (tenant of availableTenants(); track tenant.id) {
-          <nz-card nzHoverable (click)="selectTenant(tenant)">
-            <nz-card-meta
-              nzTitle="{{ tenant.name }}"
-              nzDescription="{{ tenant.id }} • {{ tenant.email}}"
-            ></nz-card-meta>
-          </nz-card>
-        }
-      }
-    </div>
-  </ng-template>
-</nz-modal>
-<nz-modal
   (nzOnCancel)="isPriceModalOpen.set(false)"
   (nzOnOk)="isPriceModalOpen.set(false)"
   [nzVisible]="isPriceModalOpen()"
@@ -272,7 +249,7 @@
 >
   <ng-template nzModalContent>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
-      @if (availableTenants().length === 0) {
+      @if (availablePrice().length === 0) {
         <p class="text-center text-gray-500 py-10">Không có price nào để chọn</p>
       } @else {
         @for (price of availablePrice(); track price.id) {

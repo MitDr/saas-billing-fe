@@ -14,6 +14,15 @@ import {SoftDeleteRequest} from '../interface/request/soft-delete-request';
 export class SubscriptionService {
   api = inject(ApiClientService);
 
+  createSubscription(request: SubscriptionRequest): Observable<Subscription> {
+    return this.api.post<Subscription>('/admin/subscriptions', request).pipe(
+      catchError(error => {
+        console.error('Create subscription error:', error);
+        return throwError(() => new Error('Tạo subscription thất bại'));
+      })
+    );
+  }
+
   getSubscriptions(
     page: number = 1,
     size: number = 5,

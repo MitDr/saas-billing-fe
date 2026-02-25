@@ -1,12 +1,8 @@
 import {Component, effect, inject, signal} from '@angular/core';
 import {Tenant} from '../../../../../core/interface/entity/tenant';
-import {FEATURE_ROUTE_CONSTANT} from '../../../../../core/constant/feature/feature-list-constant';
-import {FeatureService} from '../../../../../core/service/feature-service';
 import {TenantService} from '../../../../../core/service/tenant-service';
-import {PlanService} from '../../../../../core/service/plan-service';
 import {SubscriberService} from '../../../../../core/service/subscriber-service';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {Feature} from '../../../../../core/interface/entity/feature';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {NonNullableFormBuilder, Validators} from '@angular/forms';
 import {Subscriber} from '../../../../../core/interface/entity/subscriber';
@@ -19,6 +15,8 @@ import {SUBSCRIBER_ROUTE_CONSTANT} from '../../../../../core/constant/subscriber
 import {
   SubscriberReuseForm
 } from '../../../../../shell/components/form/admin/subscriber-reuse-form/subscriber-reuse-form';
+import {NzModalModule} from 'ng-zorro-antd/modal';
+import {SubscriberRequest} from '../../../../../core/interface/request/subscriber-request';
 
 @Component({
   selector: 'app-subscriber-edit',
@@ -30,7 +28,8 @@ import {
     NzPageHeaderComponent,
     NzSpinComponent,
     RouterLink,
-    SubscriberReuseForm
+    SubscriberReuseForm,
+    NzModalModule
   ],
   templateUrl: './subscriber-edit.html',
   styleUrl: './subscriber-edit.css',
@@ -51,7 +50,7 @@ export class SubscriberEdit {
   subscriberForm = this.fb.group({
     name: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
-    // customerId: [''],
+    customerId: [''],
     tenantId: [null as number | null, [Validators.required]],
   })
 
@@ -69,7 +68,7 @@ export class SubscriberEdit {
         this.subscriberForm.patchValue({
           name: currentSubscriber.name,
           email: currentSubscriber.email,
-          // customerId: currentSubscriber.customerId,
+          customerId: currentSubscriber.customerId,
           tenantId: currentSubscriber.tenant?.id
         });
         this.getTenant(currentSubscriber?.tenant.id!);
@@ -102,8 +101,32 @@ export class SubscriberEdit {
   onSubmitted() {
     console.log(this.subscriberForm.value)
     if (this.subscriberForm.valid) {
-      this.isSubmitting = true;
+      const payload: SubscriberRequest = {
+        name: this.subscriberForm.value.name!,
+        email: this.subscriberForm.value.email!,
+        tenantId: this.subscriberForm.value.tenantId!,
+      }
+
+      const customerId = this.subscriberForm.value.customerId as string;
+      if (customerId) {
+        Object.assign(payload, {customerId})
+      }
+
+      console.log(payload);
+      this.subscriberService.update(payload, this.subscriber()?.id!).subscribe({
+        next: (response) => {
+          this.isSubmitting = false;
+          this.message.success('Update subscription thành công');
+          this.subscriberForm.reset();
+          this.router.navigate(['/admin/tables/subscribers']);
+        },
+        error: (err) => {
+          this.isSubmitting = false;
+          console.error('Update subscriber failed:', err);
+          this.message.error('Update subscriber thất bại');
+        }
+      })
+
     }
   }
-
 }

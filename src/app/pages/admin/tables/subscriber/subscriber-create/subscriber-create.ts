@@ -1,6 +1,5 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {Tenant} from '../../../../../core/interface/entity/tenant';
-import {FEATURE_ROUTE_CONSTANT} from '../../../../../core/constant/feature/feature-list-constant';
 import {Router} from '@angular/router';
 import {SUBSCRIBER_ROUTE_CONSTANT} from '../../../../../core/constant/subscriber/subscriber-list-constant';
 import {TenantService} from '../../../../../core/service/tenant-service';
@@ -13,6 +12,7 @@ import {
   SubscriberReuseForm
 } from '../../../../../shell/components/form/admin/subscriber-reuse-form/subscriber-reuse-form';
 import {NzModalModule} from 'ng-zorro-antd/modal';
+import {SubscriberRequest} from '../../../../../core/interface/request/subscriber-request';
 
 @Component({
   selector: 'app-subscriber-create',
@@ -25,7 +25,7 @@ import {NzModalModule} from 'ng-zorro-antd/modal';
   templateUrl: './subscriber-create.html',
   styleUrl: './subscriber-create.css',
 })
-export class SubscriberCreate implements OnInit{
+export class SubscriberCreate implements OnInit {
   availableTenant = signal<Tenant[]>([]);
   route = SUBSCRIBER_ROUTE_CONSTANT;
   router = inject(Router);
@@ -37,7 +37,7 @@ export class SubscriberCreate implements OnInit{
   subscriberForm = this.fb.group({
     name: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
-    // customerId: [''],
+    customerId: [''],
     tenantId: [null, [Validators.required]],
   })
 
@@ -46,12 +46,10 @@ export class SubscriberCreate implements OnInit{
   }
 
   loadAllTenant() {
-    // Gọi API với size lớn để lấy hết (hoặc dùng all=true nếu backend hỗ trợ)
-    this.tenantService.getAllTenants().subscribe({  // size=1000 để an toàn lấy hết
+    this.tenantService.getAllTenants().subscribe({
       next: (response) => {
-        const tenants = response.content || []; // ListData<User> có content[]
+        const tenants = response.content || [];
         this.availableTenant.set(tenants);
-        // console.log('Loaded tenant for modal:', users.length, users);
       },
       error: (err) => {
         console.error('Load tenants failed:', err);
@@ -62,5 +60,33 @@ export class SubscriberCreate implements OnInit{
 
   onSubmitted() {
     console.log(this.subscriberForm.value)
+    if (this.subscriberForm.valid) {
+      const payload: SubscriberRequest = {
+        name: this.subscriberForm.value.name!,
+        email: this.subscriberForm.value.email!,
+        tenantId: this.subscriberForm.value.tenantId!,
+      }
+
+      const customerId = this.subscriberForm.value.customerId as string;
+      if (customerId) {
+        Object.assign(payload, {customerId})
+      }
+
+      console.log(payload);
+      this.subscriberService.createSubscriber(payload).subscribe({
+        next: (response) => {
+          this.isSubmitting = false;
+          this.message.success('Tạo subscription thành công');
+          this.subscriberForm.reset();
+          this.router.navigate(['/admin/tables/subscribers']);
+        },
+        error: (err) => {
+          this.isSubmitting = false;
+          console.error('Create subscriber failed:', err);
+          this.message.error('Tạo subscriber thất bại');
+        }
+      })
+
+    }
   }
 }
