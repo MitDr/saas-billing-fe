@@ -28,6 +28,8 @@ import {SuccessRateCarousel} from '../../../shell/components/carousel/success-ra
 import {Breadcrumb} from '../../../shell/components/generic/breadcrumb/breadcrumb';
 import {PRICE_ROUTE_CONSTANT} from '../../../core/constant/price/price-list-constant';
 import {SuccessRateCard} from '../../../shell/components/card/statistic/success-rate-card/success-rate-card';
+import {ChurnRateResponse} from '../../../core/interface/response/statistic/churn-rate-response';
+import {ChurnRateChart} from '../../../shell/components/chart/churn-rate-chart/churn-rate-chart';
 
 @Component({
   selector: 'app-dashboard',
@@ -48,7 +50,8 @@ import {SuccessRateCard} from '../../../shell/components/card/statistic/success-
     Breadcrumb,
     NzBreadCrumbComponent,
     NzPageHeaderBreadcrumbDirective,
-    SuccessRateCard
+    SuccessRateCard,
+    ChurnRateChart
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
@@ -61,6 +64,7 @@ export class Dashboard implements OnInit {
   mrrRevenue = signal<MrrResponse[]>([]);
   topTenants = signal<TopTenantResponse[]>([]);
   invoiceSuccessRate = signal<SuccessRateResponse | null>(null);
+  churnRate = signal<ChurnRateResponse | null>(null);
   load = signal(false);
   protected readonly routing = PRICE_ROUTE_CONSTANT;
 
@@ -75,6 +79,7 @@ export class Dashboard implements OnInit {
     this.getMrrRevenues(12)
     this.getTopTenant(10)
     this.getInvoiceSuccessRate();
+    this.getChurnRate();
     this.load.set(false)
   }
 
@@ -166,5 +171,87 @@ export class Dashboard implements OnInit {
     }
 
     this.invoiceSuccessRate.set(mockData)
+  }
+
+  private getChurnRate(){
+    const mockData: ChurnRateResponse = {
+      "period": 12,
+      "churnRate": 0.02083,
+      "data": [
+        {
+          "month": "2026-01",
+          "endEdSubscription": 0,
+          "activeStartSubscription": 3,
+          "churnRate": 0
+        },
+        {
+          "month": "2025-12",
+          "endEdSubscription": 1,
+          "activeStartSubscription": 4,
+          "churnRate": 0.25
+        },
+        {
+          "month": "2025-11",
+          "endEdSubscription": 0,
+          "activeStartSubscription": 3,
+          "churnRate": 0
+        },
+        {
+          "month": "2025-10",
+          "endEdSubscription": 0,
+          "activeStartSubscription": 0,
+          "churnRate": 0
+        },
+        {
+          "month": "2025-09",
+          "endEdSubscription": 0,
+          "activeStartSubscription": 0,
+          "churnRate": 0
+        },
+        {
+          "month": "2025-08",
+          "endEdSubscription": 0,
+          "activeStartSubscription": 1,
+          "churnRate": 0
+        },
+        {
+          "month": "2025-07",
+          "endEdSubscription": 0,
+          "activeStartSubscription": 0,
+          "churnRate": 0
+        },
+        {
+          "month": "2025-06",
+          "endEdSubscription": 0,
+          "activeStartSubscription": 0,
+          "churnRate": 0
+        },
+        {
+          "month": "2025-05",
+          "endEdSubscription": 0,
+          "activeStartSubscription": 0,
+          "churnRate": 0
+        },
+        {
+          "month": "2025-04",
+          "endEdSubscription": 0,
+          "activeStartSubscription": 0,
+          "churnRate": 0
+        },
+        {
+          "month": "2025-03",
+          "endEdSubscription": 0,
+          "activeStartSubscription": 0,
+          "churnRate": 0
+        },
+        {
+          "month": "2025-02",
+          "endEdSubscription": 0,
+          "activeStartSubscription": 0,
+          "churnRate": 0
+        }
+      ]
+    }
+    this.churnRate.set(mockData);
   }
 }

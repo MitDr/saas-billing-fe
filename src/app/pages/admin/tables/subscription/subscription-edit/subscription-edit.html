@@ -1,1 +1,38 @@
-<p>subscription-edit works!</p>
+<!--<div class="page-container">-->
+<!--  <nz-page-header-->
+<!--    [nzSubtitle]="'ID: ' + (subscription()?.id || '')"-->
+<!--    [nzTitle]="'Update Subscription'"-->
+<!--  >-->
+<!--    <div class="flex justify-end mb-4">-->
+<!--      <app-breadcrumb [routes]="routing"></app-breadcrumb>-->
+<!--    </div>-->
+<!--    <nz-breadcrumb nz-page-header-breadcrumb>-->
+<!--      <nz-breadcrumb-item><a routerLink="/admin/tables/subscriptions">Subscription</a></nz-breadcrumb-item>-->
+<!--      <nz-breadcrumb-item>Update Subscription</nz-breadcrumb-item>-->
+<!--    </nz-breadcrumb>-->
+<!--  </nz-page-header>-->
+
+<!--  @if (!loading()) {-->
+<!--    @if (subscription(); as sub) {-->
+<!--      <app-subscription-reuse-form-->
+<!--        [formGroup]="subscriptionForm"-->
+<!--        [availableSubscriber]="availableSubscriber()"-->
+<!--        [availablePrice]="availablePrice()"-->
+<!--        [availableInvoice]="availableInvoice()"-->
+<!--        [availableTenants]="availableTenant()"-->
+<!--        [isEditMode]="true"-->
+<!--        [initInvoice]="initInvoice()"-->
+<!--        [initTenant]="initTenant()"-->
+<!--        [initPrice]="initPrice()"-->
+<!--        [initSubscriber]="initSubscriber()"-->
+<!--        [submitLabel]="'Update'"-->
+<!--        (submitted)="onSubmitted()"-->
+<!--      ></app-subscription-reuse-form>-->
+<!--    } @else {-->
+<!--      <div>Payment not found</div>-->
+<!--    }-->
+<!--  } @else {-->
+<!--    <nz-spin nzTip="Loading Paymnet..."></nz-spin>-->
+<!--  }-->
+<!--</div>-->
+

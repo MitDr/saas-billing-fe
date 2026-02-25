@@ -95,35 +95,4 @@ export class MrrChart {
       }]
     };
   });
-
-  // chartOptions = computed<EChartsOption>(() => ({
-  //   tooltip: { trigger: 'axis' },
-  //   grid: {
-  //     left: '3%',
-  //     right: '4%',
-  //     bottom: '3%',
-  //     // outerBounds: 'all'
-  //   },
-  //   xAxis: {
-  //     type: 'category',
-  //     boundaryGap: false,
-  //     data: this.data().map(d => d.month),
-  //     axisLabel: { rotate: 45, fontSize: 12 }
-  //   },
-  //   yAxis: {
-  //     type: 'value',
-  //     name: 'MRR ($)',
-  //     axisLabel: { formatter: '${value}' }
-  //   },
-  //   series: [{
-  //     name: 'Monthly Recurring Revenue',
-  //     type: 'line',
-  //     smooth: true,
-  //     symbol: 'circle',
-  //     symbolSize: 8,
-  //     data: this.data().map(d => parseFloat(d.mrr)),
-  //     itemStyle: { color: '#52c41a' },
-  //     areaStyle: { color: 'rgba(82, 196, 26, 0.2)' }
-  //   }]
-  // }));
 }

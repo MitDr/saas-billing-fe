@@ -1,6 +1,6 @@
 export interface ChurnRateDto{
   month: string,
   endEdSubscription: number,
-  activeStartSubscriber: number,
+  activeStartSubscription: number,
   churnRate: number
 }

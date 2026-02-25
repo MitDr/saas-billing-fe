@@ -1,0 +1,56 @@
+<!--<nz-card nzTitle="Churn Rate" class="shadow-md">-->
+<!--  <nz-spin [nzSpinning]="loading()">-->
+<!--    &lt;!&ndash; Tổng churn rate &ndash;&gt;-->
+<!--    <nz-statistic-->
+<!--      nzTitle="Overall Churn Rate ({{ data()?.period }} months)"-->
+<!--      [nzValue]="data().churnRate"-->
+<!--      nzSuffix="%"-->
+<!--    >-->
+<!--      <nz-progress-->
+<!--        [nzPercent]="data().churnRate * 100"-->
+<!--        [nzStatus]="data().churnRate * 100 > 10 ? 'exception' : 'success'"-->
+<!--        [nzStrokeWidth]="12"-->
+<!--      ></nz-progress>-->
+<!--      <div class="mt-2 text-sm text-gray-600">-->
+<!--        Lower is better (industry avg ~5-7%)-->
+<!--      </div>-->
+<!--    </nz-statistic>-->
+
+<!--    &lt;!&ndash; Bar chart chi tiết theo tháng &ndash;&gt;-->
+<!--    <div class="mt-6">-->
+<!--      <div echarts [options]="chartOptions()" class="h-64 w-full"></div>-->
+<!--    </div>-->
+<!--  </nz-spin>-->
+<!--</nz-card>-->
+<nz-card nzTitle="Churn Rate" class="shadow-md">
+  <nz-spin [nzSpinning]="loading()">
+    @if (data(); as churn) {
+      <!-- Tổng churn rate -->
+      <nz-statistic
+        nzTitle="Overall Churn Rate ({{ churn.period ?? 12 }} months)"
+        [nzValue]="(churn.churnRate ?? 0) * 100"
+        nzSuffix="%"
+      >
+        <nz-progress
+          [nzPercent]="(churn.churnRate ?? 0) * 100"
+          [nzStatus]="(churn.churnRate ?? 0) * 100 > 10 ? 'exception' : 'success'"
+          [nzStrokeWidth]="12"
+        ></nz-progress>
+        <div class="mt-2 text-sm text-gray-600">
+          Lower is better (industry avg ~5-7%)
+        </div>
+      </nz-statistic>
+
+      <!-- Bar chart chi tiết theo tháng -->
+      <div class="mt-6">
+        <div echarts [options]="chartOptions()" class="h-64 w-full"></div>
+      </div>
+    } @else {
+      <div class="text-center py-10 text-gray-500">
+        <nz-icon nzType="line-chart" class="text-5xl mb-4"></nz-icon>
+        <p class="text-lg">No churn rate data available</p>
+        <p class="text-sm mt-2">Loading or no data from server</p>
+      </div>
+    }
+  </nz-spin>
+</nz-card>

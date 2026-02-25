@@ -53,4 +53,12 @@
     ></app-success-rate-carousel>
   </div>
 </div>
+<!-- Churn Rate Card (đặt ở phần cuối hoặc cùng hàng với Top Tenants) -->
+<div class="mb-8">
+  <h2 class="text-xl font-semibold mb-4">Churn Rate</h2>
+  <app-churn-rate-chart
+    [data]="churnRate()!"
+    [loading]="load()"
+  ></app-churn-rate-chart>
+</div>
 
