@@ -30,6 +30,8 @@ import {PRICE_ROUTE_CONSTANT} from '../../../core/constant/price/price-list-cons
 import {SuccessRateCard} from '../../../shell/components/card/statistic/success-rate-card/success-rate-card';
 import {ChurnRateResponse} from '../../../core/interface/response/statistic/churn-rate-response';
 import {ChurnRateChart} from '../../../shell/components/chart/churn-rate-chart/churn-rate-chart';
+import {ExpectedRenewalTable} from '../../../shell/components/table/expected-renewal-table/expected-renewal-table';
+import {ExpectedRenewal} from '../../../core/interface/response/statistic/expected-renewal';
 
 @Component({
   selector: 'app-dashboard',
@@ -51,7 +53,8 @@ import {ChurnRateChart} from '../../../shell/components/chart/churn-rate-chart/c
     NzBreadCrumbComponent,
     NzPageHeaderBreadcrumbDirective,
     SuccessRateCard,
-    ChurnRateChart
+    ChurnRateChart,
+    ExpectedRenewalTable
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
@@ -65,6 +68,7 @@ export class Dashboard implements OnInit {
   topTenants = signal<TopTenantResponse[]>([]);
   invoiceSuccessRate = signal<SuccessRateResponse | null>(null);
   churnRate = signal<ChurnRateResponse | null>(null);
+  expectedRenewals = signal<ExpectedRenewal[]>([]);
   load = signal(false);
   protected readonly routing = PRICE_ROUTE_CONSTANT;
 
@@ -73,13 +77,14 @@ export class Dashboard implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getSystemSummary()
-    this.getRevenueSummary()
-    this.getSubscriptionSummary()
-    this.getMrrRevenues(12)
-    this.getTopTenant(10)
-    this.getInvoiceSuccessRate();
-    this.getChurnRate(12);
+    // this.getSystemSummary()
+    // this.getRevenueSummary()
+    // this.getSubscriptionSummary()
+    // this.getMrrRevenues(12)
+    // this.getTopTenant(10)
+    // this.getInvoiceSuccessRate();
+    // this.getChurnRate(12);
+    this.getExpectedRenewal();
     this.load.set(false)
   }
 
@@ -159,5 +164,66 @@ export class Dashboard implements OnInit {
         console.log(err);
       }
     })
+  }
+
+  private getExpectedRenewal(){
+    const mockData: ExpectedRenewal[] = [
+      {
+        subscriptionId: 101,
+        subscriberId: 5,
+        subscriberName: "Nguyễn Văn A",
+        planName: "Pro Plan",
+        renewalDate: "2026-02-15T00:00:00",
+        expectedAmountUsd: 99,
+        autoRenew: true
+      },
+      {
+        subscriptionId: 102,
+        subscriberId: 7,
+        subscriberName: "Trần Thị B",
+        planName: "Enterprise",
+        renewalDate: "2026-02-20T00:00:00",
+        expectedAmountUsd: 299,
+        autoRenew: false
+      },
+      {
+        subscriptionId: 103,
+        subscriberId: 2,
+        subscriberName: "Lê Văn C",
+        planName: "Basic",
+        renewalDate: "2026-03-01T00:00:00",
+        expectedAmountUsd: 29,
+        autoRenew: true
+      },
+      {
+        subscriptionId: 104,
+        subscriberId: 9,
+        subscriberName: "Phạm Thị D",
+        planName: "Pro Plan",
+        renewalDate: "2026-03-05T00:00:00",
+        expectedAmountUsd: 99,
+        autoRenew: true
+      },
+      {
+        subscriptionId: 105,
+        subscriberId: 11,
+        subscriberName: "Hoàng Văn E",
+        planName: "Enterprise",
+        renewalDate: "2026-03-10T00:00:00",
+        expectedAmountUsd: 299,
+        autoRenew: false
+      },
+      {
+        subscriptionId: 106,
+        subscriberId: 13,
+        subscriberName: "Vũ Thị F",
+        planName: "Basic",
+        renewalDate: "2026-03-15T00:00:00",
+        expectedAmountUsd: 29,
+        autoRenew: true
+      }
+    ]
+
+    this.expectedRenewals.set(mockData)
   }
 }

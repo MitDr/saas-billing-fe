@@ -18,7 +18,6 @@ import {SubscriberRequest} from '../../../../../core/interface/request/subscribe
   selector: 'app-subscriber-create',
   imports: [
     Breadcrumb,
-    FeatureReuseForm,
     SubscriberReuseForm,
     NzModalModule
   ],
@@ -37,7 +36,7 @@ export class SubscriberCreate implements OnInit {
   subscriberForm = this.fb.group({
     name: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
-    customerId: [''],
+    // customerId: [''],
     tenantId: [null, [Validators.required]],
   })
 
@@ -67,10 +66,10 @@ export class SubscriberCreate implements OnInit {
         tenantId: this.subscriberForm.value.tenantId!,
       }
 
-      const customerId = this.subscriberForm.value.customerId as string;
-      if (customerId) {
-        Object.assign(payload, {customerId})
-      }
+      // const customerId = this.subscriberForm.value.customerId as string;
+      // if (customerId) {
+      //   Object.assign(payload, {customerId})
+      // }
 
       console.log(payload);
       this.subscriberService.createSubscriber(payload).subscribe({

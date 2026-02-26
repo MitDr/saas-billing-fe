@@ -1,0 +1,80 @@
+<nz-card nzTitle="Upcoming Renewals (Next 30 Days)" class="shadow-md">
+  <nz-spin [nzSpinning]="loading()">
+    <!-- Tổng quan nhanh -->
+    <div class="flex flex-wrap gap-8 mb-6">
+      <nz-statistic
+        nzTitle="Upcoming Renewals"
+        [nzValue]="data()?.length ?? 0"
+        nzSuffix="subscriptions"
+      >
+        <ng-template nzPrefix>
+          <span nz-icon nzType="calendar" class="text-2xl text-blue-600"></span>
+        </ng-template>
+      </nz-statistic>
+
+      <nz-statistic
+        nzTitle="Expected Amount"
+        [nzValue]="totalAmount()"
+        [nzPrefix]="'$'"
+        [nzSuffix]="'USD'"
+      >
+        <ng-template nzPrefix>
+          <span nz-icon nzType="dollar" class="text-2xl text-green-600"></span>
+        </ng-template>
+      </nz-statistic>
+    </div>
+
+    <!-- Table với phân trang client-side + size selector -->
+    <nz-table
+      [nzData]="data()"
+      [nzFrontPagination]="true"
+      [nzPageIndex]="pageIndex()"
+      [nzPageSize]="pageSize()"
+      [nzPageSizeOptions]="[5, 10, 20, 50]"
+      [nzShowSizeChanger]="true"
+      [nzShowQuickJumper]="true"
+      [nzTotal]="data()?.length ?? 0"
+      (nzPageIndexChange)="onPageIndexChange($event)"
+      (nzPageSizeChange)="onPageSizeChange($event)"
+      nzSize="middle"
+    >
+      <thead>
+      <tr>
+        <th>Subscriber</th>
+        <th>Plan</th>
+        <th>Renewal Date</th>
+        <th>Amount</th>
+        <th>Auto Renew</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (item of tableData(); track item.subscriptionId) {
+          <tr>
+            <td>{{ item.subscriberName }}</td>
+            <td>{{ item.planName }}</td>
+            <td>{{ item.renewalDate | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td>{{ item.expectedAmountUsd | currency:'USD':'symbol':'1.0-0' }}</td>
+            <td>
+              <nz-tag [nzColor]="item.autoRenew ? 'success' : 'warning'">
+                {{ item.autoRenew ? 'Yes' : 'No' }}
+              </nz-tag>
+            </td>
+            <td>
+              <button nz-button nzType="link" [routerLink]="['/admin/tables/subscriptions', item.subscriptionId]">
+                View
+              </button>
+            </td>
+          </tr>
+        }
+        @if (data()?.length === 0) {
+          <tr>
+            <td colspan="6" class="text-center py-8 text-gray-500">
+              No upcoming renewals in the next 30 days
+            </td>
+          </tr>
+        }
+      </tbody>
+    </nz-table>
+  </nz-spin>
+</nz-card>

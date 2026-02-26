@@ -66,6 +66,10 @@ import {SubscriberCreate} from './pages/admin/tables/subscriber/subscriber-creat
 import {SubscriberEdit} from './pages/admin/tables/subscriber/subscriber-edit/subscriber-edit';
 import {SubscriptionEdit} from './pages/admin/tables/subscription/subscription-edit/subscription-edit';
 import {SubscriptionCreate} from './pages/admin/tables/subscription/subscription-create/subscription-create';
+import {
+  WebhookEndpointCreate
+} from './pages/admin/tables/webhook-endpoint/webhook-endpoint-create/webhook-endpoint-create';
+import {WebhookEndpointEdit} from './pages/admin/tables/webhook-endpoint/webhook-endpoint-edit/webhook-endpoint-edit';
 
 export const routes: Routes = [
   {
@@ -328,8 +332,16 @@ export const routes: Routes = [
         component: WebhookEndpointList,
       },
       {
+        path: 'tables/webhook-endpoints/create',
+        component: WebhookEndpointCreate,
+      },
+      {
         path: 'tables/webhook-endpoints/:id',
         component: WebhookEndpointDetail
+      },
+      {
+        path: 'tables/webhook-endpoints/:id/edit',
+        component: WebhookEndpointEdit
       },
       //Webhook Log
       {

@@ -1,1 +1,31 @@
-<p>webhook-endpoint-edit works!</p>
+<div class="page-container">
+  <nz-page-header
+    [nzSubtitle]="'ID: ' + (webhookEndpoint()?.id || '')"
+    [nzTitle]="'Update Webhook Endpoint'"
+  >
+    <div class="flex justify-end mb-4">
+      <app-breadcrumb [routes]="routing"></app-breadcrumb>
+    </div>
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item><a routerLink="/admin/tables/webhook-endpoints">Webhook-Endpoints</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>Update Webhook Endpoint</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-page-header>
+
+  @if (!loading()) {
+    @if (webhookEndpoint(); as feat) {
+      <app-webhook-endpoint-reuse-form
+        [formGroup]="webhookEndpointForm"
+        [availableTenants]="availableTenant()"
+        [isEditMode]="true"
+        [initTenant]="initTenant()"
+        [submitLabel]="'Update'"
+        (submitted)="onSubmitted()"
+      ></app-webhook-endpoint-reuse-form>
+    } @else {
+      <div>Webhook endpoint not found</div>
+    }
+  } @else {
+    <nz-spin nzTip="Loading Webhook endpoint..."></nz-spin>
+  }
+</div>

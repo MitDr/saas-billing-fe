@@ -52,12 +52,10 @@ export class FeatureCreate implements OnInit {
   }
 
   loadAllTenant() {
-    // Gọi API với size lớn để lấy hết (hoặc dùng all=true nếu backend hỗ trợ)
     this.tenantService.getAllTenants().subscribe({  // size=1000 để an toàn lấy hết
       next: (response) => {
         const tenants = response.content || []; // ListData<User> có content[]
         this.availableTenant.set(tenants);
-        // console.log('Loaded tenant for modal:', users.length, users);
       },
       error: (err) => {
         console.error('Load tenants failed:', err);
@@ -67,12 +65,10 @@ export class FeatureCreate implements OnInit {
   }
 
   loadAllPlans() {
-    // Gọi API với size lớn để lấy hết (hoặc dùng all=true nếu backend hỗ trợ)
-    this.planService.getAllPlans().subscribe({  // size=1000 để an toàn lấy hết
+    this.planService.getAllPlans().subscribe({
       next: (response) => {
-        const plans = response.content || []; // ListData<User> có content[]
+        const plans = response.content || [];
         this.availablePlans.set(plans);
-        // console.log('Loaded tenant for modal:', users.length, users);
       },
       error: (err) => {
         console.error('Load tenants failed:', err);

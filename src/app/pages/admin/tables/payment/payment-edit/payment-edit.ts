@@ -24,7 +24,6 @@ import {formatDate} from '@angular/common';
   imports: [
     NzModalModule,
     Breadcrumb,
-    InvoiceReuseForm,
     NzBreadCrumbComponent,
     NzBreadCrumbItemComponent,
     NzPageHeaderComponent,
