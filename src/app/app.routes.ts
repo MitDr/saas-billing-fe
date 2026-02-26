@@ -70,6 +70,9 @@ import {
   WebhookEndpointCreate
 } from './pages/admin/tables/webhook-endpoint/webhook-endpoint-create/webhook-endpoint-create';
 import {WebhookEndpointEdit} from './pages/admin/tables/webhook-endpoint/webhook-endpoint-edit/webhook-endpoint-edit';
+import {FeatureAuthList} from './pages/auth/tables/feature/feature-auth-list/feature-auth-list';
+import {AuthInvoiceList} from './pages/auth/tables/invoice/auth-invoice-list/auth-invoice-list';
+import {AuthPaymentList} from './pages/auth/tables/payment/auth-payment-list/auth-payment-list';
 
 export const routes: Routes = [
   {
@@ -362,7 +365,27 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         component: AuthDashboard
-      }
+      },
+      //Features
+      {
+        path: 'tables/features',
+        component: FeatureAuthList
+      },
+      //Invoice
+      {
+        path: 'tables/invoices',
+        component: AuthInvoiceList
+      },
+      //Payment
+      {
+        path: 'tables/payments',
+        component: AuthPaymentList
+      },
+      //Payout
+      // {
+      //   path: 'tables/payouts',
+      //   component: AuthPayoutList
+      // },
     ]
   }
   // {

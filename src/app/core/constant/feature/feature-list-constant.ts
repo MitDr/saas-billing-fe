@@ -17,3 +17,21 @@ export const FEATURE_ROUTE_CONSTANT: BreadCrumbInterface[] = [
     activable: true
   }
 ]
+
+export const FEATURE_AUTH_ROUTE_CONSTANT: BreadCrumbInterface[] = [
+  {
+    name: "Dashboard",
+    route: "/app/dashboard",
+    activable: true
+  },
+  {
+    name: "Tables",
+    route: "/app/tables",
+    activable: false
+  },
+  {
+    name: "Features",
+    route: "/app/tables/Features",
+    activable: true
+  }
+]

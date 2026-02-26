@@ -57,6 +57,7 @@ export class EditableDataTable<T extends { id: number }> {
   entityName = input<string>('thưc thể');
   pageChange = output<number>();
   sizeChange = output<number>();
+  editable = input<boolean>(true);
   // Computed lấy mảng thật
   tableData = computed(() => this.data()?.content ?? []);
   isVisible = false;

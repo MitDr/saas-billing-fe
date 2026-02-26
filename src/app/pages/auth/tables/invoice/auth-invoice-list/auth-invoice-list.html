@@ -1,0 +1,47 @@
+<div class="mb-4 flex justify-between">
+  <h1 class="text-2xl font-semibold mb-6">
+    INVOICE LIST
+  </h1>
+  <ng-container class="mb-4">
+    <button [routerLink]="createRoute" nz-button nzType="primary">+ Add Invoice</button>
+  </ng-container>
+</div>
+<app-editable-data-table
+  (bulkDelete)="onBulkDelete($event)"
+  (pageChange)="onPageChange($event)"
+  (saveRow)="onSaveRow($event)"
+  (sizeChange)="onSizeChange($event)"
+  [columns]="getColumns()"
+  [data]="invoicePage()"
+  [loading]="loading()"
+  [routes]="invoiceListRouting"
+  [showBulkDelete]="true"
+  [showSoftDelete]="false"
+  [editable]="false"
+  entityName="invoice(s)"
+  viewRoute="/app/tables/invoices/">
+  >
+  <!-- Toolbar nếu cần -->
+  <div class="flex mb-4 gap-3 items-center flex-wrap" table-toolbar>
+
+    <!-- 🔍 Search -->
+    <nz-input-wrapper class="w-64">
+      <input
+        (ngModelChange)="onSearchChange($event.target.value)"
+        [ngModel]="search()"
+        nz-input
+        placeholder="Search price..."
+      />
+    </nz-input-wrapper>
+
+    <!-- 🔄 Reset -->
+    <button
+      (click)="resetFilters()"
+      nz-button
+      nzType="default"
+    >
+      Reset
+    </button>
+
+  </div>
+</app-editable-data-table>

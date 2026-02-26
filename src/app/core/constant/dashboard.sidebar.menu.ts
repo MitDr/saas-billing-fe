@@ -97,9 +97,81 @@ export const APP_MENU: MenuItem[] = [
     path: '/app/dashboard'
   },
   {
-    title: 'Invoices',
-    icon: 'file',
-    path: '/app/invoices'
-  }
+    title: 'Tenant',
+    icon: 'container',
+    path: '/app/tenant',
+  },
+  {
+    title: 'Tables',
+    icon: 'table',
+    path: '/app/tables',
+    children: [
+      {
+        title: 'Feature',
+        icon: 'bulb',
+        path: '/app/tables/features',
+      },
+      {
+        title: 'Invoice',
+        icon: 'file-done',
+        path: '/app/tables/invoices'
+      },
+      {
+        title: 'Payment',
+        icon: 'credit-card',
+        path: '/app/tables/payments'
+      },
+      {
+        title: 'Payout',
+        icon: 'dollar',
+        path: '/app/tables/payouts'
+      },
+      {
+        title: 'Plan',
+        icon: 'book',
+        path: '/app/tables/plans',
+      },
+      {
+        title: 'Plan Group',
+        icon: 'group',
+        path: '/app/tables/plan-groups'
+      },
+      {
+        title: 'Price',
+        icon: 'exception',
+        path: '/app/tables/prices'
+      },
+      {
+        title: 'Subscriber',
+        icon: 'team',
+        path: '/app/tables/subscribers',
+      },
+      {
+        title: 'Subscription',
+        icon: 'wallet',
+        path: '/app/tables/subscriptions',
+      },
+      {
+        title: 'Webhook Endpoint',
+        icon: 'solution',
+        path: '/app/tables/webhook-endpoints',
+      },
+      {
+        title: 'Webhook Log',
+        icon: 'file-protect',
+        path: '/app/tables/webhook-logs',
+      },
+    ]
+  },
+  {
+    title: 'Subscribe',
+    icon: 'container',
+    path: '/app/subscribe',
+  },
+  {
+    title: 'AI Chat',
+    icon: 'container',
+    path: '/app/ai-chat',
+  },
 ];
 

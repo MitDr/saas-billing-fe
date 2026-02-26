@@ -1,0 +1,44 @@
+<div class="mb-4 flex justify-between">
+  <h1 class="text-2xl font-semibold mb-6">
+    FEATURES LIST
+  </h1>
+  <ng-container class="mb-4">
+    <button [routerLink]="createRoute" nz-button nzType="primary">+ Add Feature</button>
+  </ng-container>
+</div>
+<app-editable-data-table
+  (bulkDelete)="onBulkDelete($event)"
+  (pageChange)="onPageChange($event)"
+  (saveRow)="onSaveRow($event)"
+  (sizeChange)="onSizeChange($event)"
+  [columns]="getColumns()"
+  [data]="featurePage()"
+  [loading]="loading()"
+  [routes]="featureListRouting"
+  [showBulkDelete]="true"
+  [showSoftDelete]="false"
+  entityName="feature(s)"
+  viewRoute="/app/tables/features/">
+  >
+  <div class="flex gap-3 items-center flex-wrap mb-4" table-toolbar>
+    <nz-input-wrapper class="w-64">
+      <input
+        (ngModelChange)="search.set($event); currentPage.set(1)"
+        [ngModel]="search()"
+        nz-input
+        placeholder="Search feature..."
+      />
+    </nz-input-wrapper>
+
+    <!-- 🔄 Reset -->
+    <button
+      (click)="resetFilters()"
+      nz-button
+      nzType="default"
+    >
+      Reset
+    </button>
+
+  </div>
+  <!-- Toolbar nếu cần -->
+</app-editable-data-table>

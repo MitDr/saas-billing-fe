@@ -172,7 +172,9 @@
                   {{ action.label }}
                 </a>
               }
-              <a class="mr-2" (click)="startEdit(item.id)">Edit</a>
+              @if (editable()){
+                <a class="mr-2" (click)="startEdit(item.id)">Edit</a>
+              }
               <a routerLink="{{viewRoute()}}{{ item.id }}" class="text-blue-600 hover:underline">
                 View
               </a>

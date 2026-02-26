@@ -17,3 +17,20 @@ export const SUBSCRIBER_ROUTE_CONSTANT: BreadCrumbInterface[] = [
     activable: true
   }
 ]
+export const AUTH_SUBSCRIBER_ROUTE_CONSTANT: BreadCrumbInterface[] = [
+  {
+    name: "Dashboard",
+    route: "/app/dashboard",
+    activable: true
+  },
+  {
+    name: "Tables",
+    route: "/app/tables",
+    activable: false
+  },
+  {
+    name: "Subscribers",
+    route: "/app/tables/subscribers",
+    activable: true
+  }
+]
