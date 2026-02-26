@@ -72,9 +72,9 @@ export class ChurnRateChart {
     const chartData = [...this.data()?.data ?? []].reverse();
     if (chartData.length === 0) {
       return {
-        title: { text: 'No Churn Rate data available', left: 'center', top: 'center' },
-        xAxis: { show: false },
-        yAxis: { show: false },
+        title: {text: 'No Churn Rate data available', left: 'center', top: 'center'},
+        xAxis: {show: false},
+        yAxis: {show: false},
         series: []
       };
     }
@@ -93,19 +93,19 @@ export class ChurnRateChart {
       xAxis: {
         type: 'category',
         data: chartData.map(d => d.month),
-        axisLabel: { rotate: 45, fontSize: 12, interval: 0 }
+        axisLabel: {rotate: 45, fontSize: 12, interval: 0}
       },
       yAxis: {
         type: 'value',
         name: 'Churn Rate (%)',
         max: 100,
-        axisLabel: { formatter: '{value}%' }
+        axisLabel: {formatter: '{value}%'}
       },
       series: [{
         name: 'Churn Rate',
         type: 'bar',
         data: chartData.map(d => (d.churnRate ?? 0) * 100),
-        itemStyle: { color: '#f5222d' },
+        itemStyle: {color: '#f5222d'},
         label: {
           show: true,
           position: 'top',

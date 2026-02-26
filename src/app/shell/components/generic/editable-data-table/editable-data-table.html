@@ -13,14 +13,25 @@
     }
     @if (showSoftDelete()) {
       <button
-        (click)="softDelete()"
-        [disabled]="setOfCheckedId().size === 0 || editing()"
         nz-button
-        class="!mr-2"
         nzType="default"
+        [nzDanger]="true"
+        [disabled]="setOfCheckedId().size === 0"
+        (click)="openBulkDeleteModal()"
       >
-        Soft Delete ({{ setOfCheckedId().size }})
+        <span nz-icon nzType="delete"></span>
+        Xử lý xóa mềm / khôi phục ({{ setOfCheckedId().size }})
       </button>
+
+      <!--      <button-->
+        <!--        (click)="softDelete()"-->
+        <!--        [disabled]="setOfCheckedId().size === 0 || editing()"-->
+        <!--        nz-button-->
+        <!--        class="!mr-2"-->
+        <!--        nzType="default"-->
+        <!--      >-->
+        <!--        Soft Delete ({{ setOfCheckedId().size }})-->
+        <!--      </button>-->
     }
     <!--      <button-->
     <!--      -->
@@ -172,7 +183,7 @@
                   {{ action.label }}
                 </a>
               }
-              @if (editable()){
+              @if (editable()) {
                 <a class="mr-2" (click)="startEdit(item.id)">Edit</a>
               }
               <a routerLink="{{viewRoute()}}{{ item.id }}" class="text-blue-600 hover:underline">
@@ -197,3 +208,83 @@
     </tbody>
   </nz-table>
 </div>
+
+<nz-modal
+  (nzOnCancel)="isBulkDeleteModalOpen.set(false)"
+  (nzOnOk)="confirmBulkAction()"
+  [nzOkDisabled]="selectedBulkSoftDeleteMode() === null"
+  [nzVisible]="isBulkDeleteModalOpen()"
+  nzCancelText="Đóng"
+  nzOkText="Xác nhận"
+  nzTitle="Chọn hành động cho {{ setOfCheckedId().size }} {{ entityName() }}"
+>
+  <ng-template nzModalContent>
+    <div class="p-4">
+      <p class="text-lg font-medium mb-6">
+        Bạn muốn thực hiện hành động nào với {{ setOfCheckedId().size }} mục đã chọn?
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Card Khôi phục -->
+        <nz-card
+          (click)="selectedBulkSoftDeleteMode.set(false)"
+          [class.border-2]="selectedBulkSoftDeleteMode() === false"
+          [class.border-blue-500]="selectedBulkSoftDeleteMode() === false"
+          class="relative cursor-pointer transition-all hover:shadow-lg"
+          nzHoverable
+        >
+          <label
+            (nzCheckedChange)="selectedBulkSoftDeleteMode.set(false)"
+            [nzChecked]="selectedBulkSoftDeleteMode() === false"
+            class="absolute top-3 right-3 z-10 text-xl"
+            nz-checkbox
+          ></label>
+
+          <nz-card-meta nzTitle="Khôi phục (hiện lại)">
+            <ng-template nzDescription>
+              <div class="text-sm text-gray-600">
+                Các mục sẽ bị ẩn khỏi hệ thống nhưng vẫn có thể khôi phục sau.<br/>
+                Dữ liệu không bị xóa vĩnh viễn.
+              </div>
+            </ng-template>
+          </nz-card-meta>
+          <!--          <nz-card-meta>-->
+          <!--            <nz-card-meta-title class="text-green-600 text-lg">-->
+          <!--              Khôi phục (hiện lại)-->
+          <!--            </nz-card-meta-title>-->
+          <!--            <nz-card-meta-description>-->
+          <!--              Các mục đang bị xóa mềm sẽ được khôi phục trạng thái active.-->
+          <!--              Không ảnh hưởng đến dữ liệu gốc.-->
+          <!--            </nz-card-meta-description>-->
+          <!--          </nz-card-meta>-->
+        </nz-card>
+
+        <!-- Card Xóa mềm -->
+        <nz-card
+          (click)="selectedBulkSoftDeleteMode.set(true)"
+          [class.border-2]="selectedBulkSoftDeleteMode() === true"
+          [class.border-red-500]="selectedBulkSoftDeleteMode() === true"
+          class="relative cursor-pointer transition-all hover:shadow-lg"
+          nzHoverable
+        >
+          <label
+            (nzCheckedChange)="selectedBulkSoftDeleteMode.set(true)"
+            [nzChecked]="selectedBulkSoftDeleteMode() === true"
+            class="absolute top-3 right-3 z-10 text-xl"
+            nz-checkbox
+          ></label>
+
+
+          <nz-card-meta nzTitle="Xóa mềm (ẩn tạm thời)">
+            <ng-template nzDescription>
+              <div class="text-sm text-gray-600">
+                Các mục sẽ bị ẩn khỏi hệ thống nhưng vẫn có thể khôi phục sau.<br/>
+                Dữ liệu không bị xóa vĩnh viễn.
+              </div>
+            </ng-template>
+          </nz-card-meta>
+        </nz-card>
+      </div>
+    </div>
+  </ng-template>
+</nz-modal>

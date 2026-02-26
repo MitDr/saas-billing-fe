@@ -1,19 +1,11 @@
 import {Component, inject, Signal, signal} from '@angular/core';
-import {GenericListComponent} from '../../../../../core/generic/base-list-component';
 import {AuthPayment} from '../../../../../core/interface/entity/auth/auth-payment';
 import {AuthPaymentRequest} from '../../../../../core/interface/request/auth/auth-payment-request';
 import {ListData} from '../../../../../core/interface/list-data';
-import {Payment} from '../../../../../core/interface/entity/payment';
-import {
-  AUTH_PAYMENT_ROUTE_CONSTANT,
-  PAYMENT_ROUTE_CONSTANT
-} from '../../../../../core/constant/payment/payment-list-constant';
-import {PaymentService} from '../../../../../core/service/payment-service';
+import {AUTH_PAYMENT_ROUTE_CONSTANT} from '../../../../../core/constant/payment/payment-list-constant';
 import {AuthPaymentService} from '../../../../../core/service/auth/auth-payment-service';
 import {ColumnConfig} from '../../../../../core/interface/column-config';
-import {SOFTDELETEOPTIONS} from '../../../../admin/tables/tenant/tenant-list/tenant-list';
 import {PAYMENTSTATUSOPTION} from '../../../../admin/tables/payment/payment-list/payment-list';
-import {PaymentRequest} from '../../../../../core/interface/request/payment-request';
 import {AuthGenericListComponent} from '../../../../../core/generic/base-auth-list-component';
 import {EditableDataTable} from '../../../../../shell/components/generic/editable-data-table/editable-data-table';
 import {FormsModule} from '@angular/forms';
@@ -37,7 +29,7 @@ import {RouterLink} from '@angular/router';
   templateUrl: './auth-payment-list.html',
   styleUrl: './auth-payment-list.css',
 })
-export class AuthPaymentList extends AuthGenericListComponent<AuthPayment, AuthPaymentRequest>{
+export class AuthPaymentList extends AuthGenericListComponent<AuthPayment, AuthPaymentRequest> {
 
   paymentPage = signal<ListData<AuthPayment> | null>(null);
   checked = false;
@@ -54,10 +46,10 @@ export class AuthPaymentList extends AuthGenericListComponent<AuthPayment, AuthP
       {key: 'id', title: 'Id', type: 'text', editable: false},
       {key: 'amount', title: 'Amount', type: "text", editable: true},
       {key: 'status', title: 'Status', type: 'select', editable: true, options: PAYMENTSTATUSOPTION},
-      {key: 'paymentIntentId', title: 'Intent Id', type: "text", editable: true},
+      // {key: 'paymentIntentId', title: 'Intent Id', type: "text", editable: true},
       // {key: 'chargeId', title: 'Charge Id', type: 'text', editable: true},
       // {key: 'balanceTransactionId', title: 'B.Transaction Id', type: 'text', editable: true},
-      {key: 'paymentMethod', title: 'Payment Method', type: "text", editable: true},
+      // {key: 'paymentMethod', title: 'Payment Method', type: "text", editable: true},
       {
         key: 'invoice',
         title: 'Invoice Number',
@@ -109,6 +101,7 @@ export class AuthPaymentList extends AuthGenericListComponent<AuthPayment, AuthP
       }
     });
   }
+
   protected mapToUpdatePayload(updatePayment: AuthPayment): AuthPaymentRequest {
     const result: AuthPaymentRequest = {
       amount: updatePayment.amount,
@@ -117,21 +110,21 @@ export class AuthPaymentList extends AuthGenericListComponent<AuthPayment, AuthP
       metadata: updatePayment.metadata
     };
 
-    if (updatePayment.paymentIntentId) {
-      result.paymentIntentId = updatePayment.paymentIntentId;
-    }
-
-    if (updatePayment.chargeId) {
-      result.chargeId = updatePayment.chargeId;
-    }
-
-    if (updatePayment.balanceTransactionId) {
-      result.balanceTransactionId = updatePayment.balanceTransactionId;
-    }
-
-    if (updatePayment.paymentMethod) {
-      result.paymentMethod = updatePayment.paymentMethod;
-    }
+    // if (updatePayment.paymentIntentId) {
+    //   result.paymentIntentId = updatePayment.paymentIntentId;
+    // }
+    //
+    // if (updatePayment.chargeId) {
+    //   result.chargeId = updatePayment.chargeId;
+    // }
+    //
+    // if (updatePayment.balanceTransactionId) {
+    //   result.balanceTransactionId = updatePayment.balanceTransactionId;
+    // }
+    //
+    // if (updatePayment.paymentMethod) {
+    //   result.paymentMethod = updatePayment.paymentMethod;
+    // }
 
     if (updatePayment.availableOn) {
       result.availableOn = updatePayment.availableOn;

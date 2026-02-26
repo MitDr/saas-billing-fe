@@ -13,6 +13,15 @@ import {WebhookEndpointRequest} from '../interface/request/webhook-endpoint-requ
 export class WebhookEndpointService {
   api = inject(ApiClientService);
 
+  createWebhookEndpoint(createWebhookEndpoint: WebhookEndpointRequest): Observable<WebhookEndpoint> {
+    return this.api.post<WebhookEndpoint>('/admin/webhook-endpoints', createWebhookEndpoint).pipe(
+      catchError(error => {
+        console.error('Create webhook endpoint error:', error);
+        return throwError(() => new Error('Tạo webhook endpoint thất bại'));
+      })
+    );
+  }
+
   getWebhookEndpoints(
     page: number = 1,
     size: number = 5,

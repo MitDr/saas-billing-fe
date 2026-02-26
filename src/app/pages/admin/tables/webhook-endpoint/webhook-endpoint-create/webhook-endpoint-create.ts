@@ -13,6 +13,7 @@ import {
   WebhookEndpointReuseForm
 } from '../../../../../shell/components/form/admin/webhook-endpoint-reuse-form/webhook-endpoint-reuse-form';
 import {NzModalModule} from 'ng-zorro-antd/modal';
+import {WebhookEndpointRequest} from '../../../../../core/interface/request/webhook-endpoint-request';
 
 @Component({
   selector: 'app-webhook-endpoint-create',
@@ -24,7 +25,7 @@ import {NzModalModule} from 'ng-zorro-antd/modal';
   templateUrl: './webhook-endpoint-create.html',
   styleUrl: './webhook-endpoint-create.css',
 })
-export class WebhookEndpointCreate implements OnInit{
+export class WebhookEndpointCreate implements OnInit {
   availableTenant = signal<Tenant[]>([]);
   route = WEBHOOK_ENDPOINT_ROUTE_CONSTANT;
   router = inject(Router);
@@ -38,6 +39,7 @@ export class WebhookEndpointCreate implements OnInit{
     url: ['', [Validators.required]],
     tenantId: [null, [Validators.required]],
   })
+
   ngOnInit(): void {
     this.loadAllTenant()
   }
@@ -60,35 +62,26 @@ export class WebhookEndpointCreate implements OnInit{
 
     if (this.webhookEndpointForm.valid) {
       this.isSubmitting = true;
-      // const payload: FeatureRequest = {
-      //   code: this.featureForm.value.code!,
-      //   name: this.featureForm.value.name!,
-      //   status: this.featureForm.value.status as 'ACTIVE' | 'INACTIVE',
-      //   tenantId: this.featureForm.value.tenantId!
-      // }
-      //
-      // if (this.featureForm.value.description) {
-      //   const description = this.featureForm.value.description as string;
-      //   Object.assign(payload, {description})
-      // }
-      // const plans = this.featureForm.value.plans! as number[];
-      // if (plans?.length) {
-      //   Object.assign(payload, {plans});
-      // }
-      // console.log(payload)
-      // this.featureService.createFeature(payload).subscribe({
-      //   next: (response) => {
-      //     this.isSubmitting = false;
-      //     this.message.success('Tạo tenant thành công');
-      //     this.featureForm.reset();
-      //     this.router.navigate(['/admin/tables/features']);
-      //   },
-      //   error: (err) => {
-      //     this.isSubmitting = false;
-      //     console.error('Create feature failed:', err);
-      //     this.message.error('Tạo feature thất bại');
-      //   }
-      // })
+      const payload: WebhookEndpointRequest = {
+        url: this.webhookEndpointForm.value.url!,
+        status: this.webhookEndpointForm.value.status as 'ACTIVE' | 'DISABLED',
+        tenantId: this.webhookEndpointForm.value.tenantId!
+      }
+
+      console.log(payload)
+      this.webhookEndpointService.createWebhookEndpoint(payload).subscribe({
+        next: (response) => {
+          this.isSubmitting = false;
+          this.message.success('Tạo endpoint thành công');
+          this.webhookEndpointForm.reset();
+          this.router.navigate(['/admin/tables/webhook-endpoints']);
+        },
+        error: (err) => {
+          this.isSubmitting = false;
+          console.error('Create endpoint failed:', err);
+          this.message.error('Tạo endpoint thất bại');
+        }
+      })
     }
   }
 }

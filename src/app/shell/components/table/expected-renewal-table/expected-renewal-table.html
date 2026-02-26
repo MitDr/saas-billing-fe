@@ -1,41 +1,41 @@
-<nz-card nzTitle="Upcoming Renewals (Next 30 Days)" class="shadow-md">
+<nz-card class="shadow-md" nzTitle="Upcoming Renewals {{num()}} days">
   <nz-spin [nzSpinning]="loading()">
     <!-- Tổng quan nhanh -->
     <div class="flex flex-wrap gap-8 mb-6">
       <nz-statistic
-        nzTitle="Upcoming Renewals"
         [nzValue]="data()?.length ?? 0"
         nzSuffix="subscriptions"
+        nzTitle="Upcoming Renewals"
       >
         <ng-template nzPrefix>
-          <span nz-icon nzType="calendar" class="text-2xl text-blue-600"></span>
+          <span class="text-2xl text-blue-600" nz-icon nzType="calendar"></span>
         </ng-template>
       </nz-statistic>
 
       <nz-statistic
-        nzTitle="Expected Amount"
-        [nzValue]="totalAmount()"
         [nzPrefix]="'$'"
         [nzSuffix]="'USD'"
+        [nzValue]="totalAmount()"
+        nzTitle="Expected Amount"
       >
         <ng-template nzPrefix>
-          <span nz-icon nzType="dollar" class="text-2xl text-green-600"></span>
+          <span class="text-2xl text-green-600" nz-icon nzType="dollar"></span>
         </ng-template>
       </nz-statistic>
     </div>
 
     <!-- Table với phân trang client-side + size selector -->
     <nz-table
+      (nzPageIndexChange)="onPageIndexChange($event)"
+      (nzPageSizeChange)="onPageSizeChange($event)"
       [nzData]="data()"
       [nzFrontPagination]="true"
       [nzPageIndex]="pageIndex()"
-      [nzPageSize]="pageSize()"
       [nzPageSizeOptions]="[5, 10, 20, 50]"
-      [nzShowSizeChanger]="true"
+      [nzPageSize]="pageSize()"
       [nzShowQuickJumper]="true"
+      [nzShowSizeChanger]="true"
       [nzTotal]="data()?.length ?? 0"
-      (nzPageIndexChange)="onPageIndexChange($event)"
-      (nzPageSizeChange)="onPageSizeChange($event)"
       nzSize="middle"
     >
       <thead>

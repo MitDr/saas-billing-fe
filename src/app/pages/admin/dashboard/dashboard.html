@@ -1,6 +1,56 @@
 <div class="page-container">
   <nz-page-header nzSubtitle="Tổng quan hệ thống" nzTitle="Dashboard">
+    <!--    <nz-content nz-page-header-content>-->
+    <!--      <div class="flex flex-wrap gap-4 items-end">-->
+    <!--        &lt;!&ndash; Filter chung (ví dụ số tháng cho MRR & Churn) &ndash;&gt;-->
+    <!--        <div>-->
+    <!--          <label class="block text-sm font-medium mb-1">Số tháng xem</label>-->
+    <!--          <nz-input-number-->
+    <!--            (ngModelChange)="reloadAllData()"-->
+    <!--            [(ngModel)]="globalMonths"-->
+    <!--            [nzMax]="36"-->
+    <!--            [nzMin]="1"-->
+    <!--            [nzStep]="1"-->
+    <!--            class="w-32"-->
+    <!--            nzPlaceHolder="Số tháng"-->
+    <!--          ></nz-input-number>-->
+    <!--        </div>-->
 
+    <!--        &lt;!&ndash; Filter ngày cho Expected Renewal &ndash;&gt;-->
+    <!--        <div>-->
+    <!--          <label class="block text-sm font-medium mb-1">Số ngày sắp tới</label>-->
+    <!--          <nz-input-number-->
+    <!--            (ngModelChange)="reloadAllData()"-->
+    <!--            [(ngModel)]="renewalDays"-->
+    <!--            [nzMax]="90"-->
+    <!--            [nzMin]="7"-->
+    <!--            [nzStep]="7"-->
+    <!--            class="w-32"-->
+    <!--            nzPlaceHolder="Số ngày"-->
+    <!--          ></nz-input-number>-->
+    <!--        </div>-->
+
+    <!--        &lt;!&ndash; Filter top tenant &ndash;&gt;-->
+    <!--        <div>-->
+    <!--          <label class="block text-sm font-medium mb-1">Top tenant</label>-->
+    <!--          <nz-select-->
+    <!--            (ngModelChange)="reloadAllData()"-->
+    <!--            [(ngModel)]="topTenantLimit"-->
+    <!--            class="w-32"-->
+    <!--            nzPlaceHolder="Số lượng"-->
+    <!--          >-->
+    <!--            <nz-option nzLabel="Top 5" nzValue="5"></nz-option>-->
+    <!--            <nz-option nzLabel="Top 10" nzValue="10"></nz-option>-->
+    <!--            <nz-option nzLabel="Top 20" nzValue="20"></nz-option>-->
+    <!--            <nz-option nzLabel="Top 50" nzValue="50"></nz-option>-->
+    <!--          </nz-select>-->
+    <!--        </div>-->
+
+    <!--        <button (click)="reloadAllData()" nz-button nzType="primary">-->
+    <!--          <span nz-icon nzType="reload"></span> Refresh-->
+    <!--        </button>-->
+    <!--      </div>-->
+    <!--    </nz-content>-->
   </nz-page-header>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6 mb-6">
     <div class="col-span-1 md:col-span-2 lg:col-span-4">
@@ -29,13 +79,46 @@
     ></app-subscription-overvie-carousel>
     <!--    </div>-->
   </div>
-  <div class="!mt-6 !mb-6">
+  <div class="mb-10">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-xl font-semibold">Monthly Recurring Revenue (MRR)</h2>
+      <div class="flex items-center gap-3">
+        <label class="text-sm font-medium">Xem</label>
+        <nz-input-number
+          (ngModelChange)="loadMrr()"
+          [(ngModel)]="mrrMonths"
+          [nzMax]="36"
+          [nzMin]="3"
+          [nzPrecision]="0"
+          [nzStep]="1"
+          class="w-24"
+          nzPlaceHolder="Tháng"
+        ></nz-input-number>
+        <span class="text-sm text-gray-600">tháng</span>
+      </div>
+    </div>
     <app-mrr-chart
       [data]="mrrRevenue()"
       [loading]="load()"
     ></app-mrr-chart>
   </div>
-  <nz-card class="shadow-md mt-6 mb-6" nzTitle="Top Tenants by Revenue">
+  <nz-card nzExtra>
+    <div class="flex items-center gap-3">
+      <label class="text-sm font-medium">Top</label>
+      <nz-select
+        (ngModelChange)="loadTopTenants()"
+        [(ngModel)]="topLimit"
+        class="w-32"
+        nzPlaceHolder="Số lượng"
+      >
+        <nz-option nzLabel="5" nzValue="5"></nz-option>
+        <nz-option nzLabel="10" nzValue="10"></nz-option>
+        <nz-option nzLabel="20" nzValue="20"></nz-option>
+        <nz-option nzLabel="50" nzValue="50"></nz-option>
+      </nz-select>
+    </div>
+  </nz-card>
+  <nz-card class="shadow-md mb-8" nzTitle="Top Tenants by Revenue">
     <app-top-tenant-table
       [data]="topTenants()"
       [loading]="load()"
@@ -50,21 +133,54 @@
       ></app-success-rate-carousel>
     </div>
   </div>
-<!--  &lt;!&ndash; Churn Rate Card (đặt ở phần cuối hoặc cùng hàng với Top Tenants) &ndash;&gt;-->
-  <div class="mt-6">
-    <!--    <h2 class="text-xl font-semibold mb-4">Churn Rate</h2>-->
+  <!--  &lt;!&ndash; Churn Rate Card (đặt ở phần cuối hoặc cùng hàng với Top Tenants) &ndash;&gt;-->
+  <div class="mb-10">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-xl font-semibold">Churn Rate Over Time</h2>
+      <div class="flex items-center gap-3">
+        <label class="text-sm font-medium">Period</label>
+        <nz-input-number
+          (ngModelChange)="loadChurn()"
+          [(ngModel)]="churnPeriod"
+          [nzMax]="36"
+          [nzMin]="3"
+          [nzPrecision]="0"
+          [nzStep]="1"
+          class="w-24"
+          nzPlaceHolder="Tháng"
+        ></nz-input-number>
+        <span class="text-sm text-gray-600">tháng</span>
+      </div>
+    </div>
     <app-churn-rate-chart
       [data]="churnRate()!"
       [loading]="load()"
     ></app-churn-rate-chart>
   </div>
-<!--    UpcomingRenewal-->
-  <div class="mb-8">
-    <app-expected-renewal-table
-      [data]="expectedRenewals()"
-      [loading]="load()"
-    ></app-expected-renewal-table>
-  </div>
+  <nz-card nzExtra>
+    <div class="flex items-center gap-3">
+      <label class="text-sm font-medium">Next</label>
+      <nz-input-number
+        (ngModelChange)="loadExpectedRenewal()"
+        [(ngModel)]="renewalDays"
+        [nzMax]="90"
+        [nzMin]="7"
+        [nzPrecision]="0"
+        [nzStep]="7"
+        class="w-24"
+        nzPlaceHolder="Ngày"
+      ></nz-input-number>
+      <span class="text-sm text-gray-600">days</span>
+    </div>
+  </nz-card>
+  <!--    UpcomingRenewal-->
+  <!--  <nz-card class="shadow-md mb-8" nzTitle="Upcoming Renewals">-->
+  <app-expected-renewal-table
+    [data]="expectedRenewals()"
+    [loading]="load()"
+    [num]="renewalDays()"
+  ></app-expected-renewal-table>
+  <!--  </nz-card>-->
 </div>
 
 

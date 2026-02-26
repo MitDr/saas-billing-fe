@@ -30,6 +30,7 @@ import {RouterLink} from '@angular/router';
 export class ExpectedRenewalTable {
   data = input.required<ExpectedRenewal[]>();
   loading = input<boolean>(false);
+  num = input.required<number>();
 
   // Phân trang client-side
   pageIndex = signal(1);

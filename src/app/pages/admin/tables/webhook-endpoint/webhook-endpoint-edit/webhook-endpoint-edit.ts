@@ -1,26 +1,23 @@
 import {Component, effect, inject, OnInit, signal} from '@angular/core';
 import {Tenant} from '../../../../../core/interface/entity/tenant';
-import {Plan} from '../../../../../core/interface/entity/plan';
-import {FEATURE_ROUTE_CONSTANT} from '../../../../../core/constant/feature/feature-list-constant';
 import {
   WEBHOOK_ENDPOINT_ROUTE_CONSTANT
 } from '../../../../../core/constant/webhook-endpoint/webhook-endpoint-list-constant';
 import {TenantService} from '../../../../../core/service/tenant-service';
 import {WebhookEndpointService} from '../../../../../core/service/webhook-endpoint-service';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {Feature} from '../../../../../core/interface/entity/feature';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {NonNullableFormBuilder, Validators} from '@angular/forms';
 import {WebhookEndpoint} from '../../../../../core/interface/entity/webhook-endpoint';
 import {NzModalModule} from 'ng-zorro-antd/modal';
 import {Breadcrumb} from '../../../../../shell/components/generic/breadcrumb/breadcrumb';
-import {FeatureReuseForm} from '../../../../../shell/components/form/admin/feature-reuse-form/feature-reuse-form';
 import {NzBreadCrumbComponent, NzBreadCrumbItemComponent} from 'ng-zorro-antd/breadcrumb';
 import {NzPageHeaderComponent} from 'ng-zorro-antd/page-header';
 import {NzSpinComponent} from 'ng-zorro-antd/spin';
 import {
   WebhookEndpointReuseForm
 } from '../../../../../shell/components/form/admin/webhook-endpoint-reuse-form/webhook-endpoint-reuse-form';
+import {WebhookEndpointRequest} from '../../../../../core/interface/request/webhook-endpoint-request';
 
 @Component({
   selector: 'app-webhook-endpoint-edit',
@@ -117,8 +114,30 @@ export class WebhookEndpointEdit implements OnInit {
   }
 
   onSubmitted() {
-    if (this.webhookEndpointForm.valid) {
+    console.log(this.webhookEndpointForm.value)
 
+    if (this.webhookEndpointForm.valid) {
+      this.isSubmitting = true;
+      const payload: WebhookEndpointRequest = {
+        url: this.webhookEndpointForm.value.url!,
+        status: this.webhookEndpointForm.value.status as 'ACTIVE' | 'DISABLED',
+        tenantId: this.webhookEndpointForm.value.tenantId!
+      }
+
+      console.log(payload)
+      this.webhookEndpointService.update(payload, this.webhookEndpoint()?.id!).subscribe({
+        next: (response) => {
+          this.isSubmitting = false;
+          this.message.success('Update endpoint thành công');
+          this.webhookEndpointForm.reset();
+          this.router.navigate(['/admin/tables/webhook-endpoints']);
+        },
+        error: (err) => {
+          this.isSubmitting = false;
+          console.error('Update endpoint failed:', err);
+          this.message.error('Update endpoint thất bại');
+        }
+      })
     }
   }
 }

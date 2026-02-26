@@ -24,9 +24,15 @@
       <div nz-carousel-content>
         <div class="p-4">
           <nz-card class="shadow-sm" nzHoverable>
-            <nz-statistic [nzValue]="appendPercentage(data().successRate)" nzTitle="Success Rate">
-              <ng-template nzPrefix><span class="text-green-600" nz-icon nzType="check-circle"></span></ng-template>
-            </nz-statistic>
+            @if (data(); as d) {
+              <nz-statistic [nzValue]="d.successRate + '%'" nzTitle="Success Rate">
+                <ng-template nzPrefix>
+                  <span class="text-green-600" nz-icon nzType="check-circle"></span>
+                </ng-template>
+              </nz-statistic>
+            } @else {
+              <nz-statistic nzTitle="Success Rate" nzValue="—"/>
+            }
           </nz-card>
         </div>
       </div>

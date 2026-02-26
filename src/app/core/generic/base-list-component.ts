@@ -6,6 +6,7 @@ import {TenantService} from '../service/tenant-service';
 import {ListData} from '../interface/list-data';
 import {ColumnConfig} from '../interface/column-config';
 import {debounceTime, distinctUntilChanged, Subject} from 'rxjs';
+import {SoftDeleteRequest} from '../interface/request/soft-delete-request';
 
 export interface Entity {
   id: number;
@@ -108,9 +109,9 @@ export abstract class GenericListComponent<T extends Entity, R> {
     });
   }
 
-  onBulkSoftDelete(ids: number[]) {
-    if (ids.length === 0) return;
-    this.getService().bulkSoftDelete({ids, softDelete: true}).subscribe({
+  onBulkSoftDelete(request: SoftDeleteRequest) {
+    if (request.ids.length === 0) return;
+    this.getService().bulkSoftDelete(request).subscribe({
       next: () => {
         this.message.success('Soft Deleted successfully'); // Add success
         this.reloadData();
@@ -134,7 +135,7 @@ export abstract class GenericListComponent<T extends Entity, R> {
   }
 
   protected abstract getService(): any;
-  
+
   protected syncUrl(extraParams: Partial<{ page?: number; size?: number; sort?: string }> = {}) {
     this.router.navigate([], {
       relativeTo: this.route,

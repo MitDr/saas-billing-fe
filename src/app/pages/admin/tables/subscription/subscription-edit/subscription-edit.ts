@@ -22,6 +22,7 @@ import {
   SubscriptionReuseForm
 } from '../../../../../shell/components/form/admin/subscription-reuse-form/subscription-reuse-form';
 import {NzModalModule} from 'ng-zorro-antd/modal';
+import {SubscriptionRequest} from '../../../../../core/interface/request/subscription-request';
 
 @Component({
   selector: 'app-subscription-edit',
@@ -38,7 +39,7 @@ import {NzModalModule} from 'ng-zorro-antd/modal';
   templateUrl: './subscription-edit.html',
   styleUrl: './subscription-edit.css',
 })
-export class SubscriptionEdit  implements  OnInit{
+export class SubscriptionEdit implements OnInit {
   availableTenant = signal<Tenant[]>([]);
   availableInvoice = signal<Invoice[]>([]);
   availablePrice = signal<Price[]>([]);
@@ -108,7 +109,8 @@ export class SubscriptionEdit  implements  OnInit{
         this.patchMetadata(currentSubscription.metadata);
         this.getTenant(currentSubscription?.tenant.id);
         this.getPrice(currentSubscription?.price.id)
-        this.getInvoice(currentSubscription?.invoices.map(u=>u.id))
+        this.getSubscriber(currentSubscription?.subscriber.id)
+        this.getInvoice(currentSubscription?.invoices.map(u => u.id))
       }
     });
   }
@@ -146,6 +148,7 @@ export class SubscriptionEdit  implements  OnInit{
       }
     });
   }
+
   loadAllPrice() {
     this.priceService.getAllPrices().subscribe({
       next: (response) => {
@@ -171,6 +174,7 @@ export class SubscriptionEdit  implements  OnInit{
       }
     });
   }
+
   loadAllSubscriber() {
     this.subscriberService.getAllSubscribers().subscribe({
       next: (response) => {
@@ -213,10 +217,19 @@ export class SubscriptionEdit  implements  OnInit{
       }
     });
   }
+
   getPrice(id: number) {
     return this.priceService.getPrice(id).subscribe({
       next: (response) => {
         this.initPrice.set(response);
+      }
+    });
+  }
+
+  getSubscriber(id: number) {
+    return this.subscriberService.getSubscriber(id).subscribe({
+      next: (response) => {
+        this.initSubscriber.set(response);
       }
     });
   }
@@ -229,6 +242,75 @@ export class SubscriptionEdit  implements  OnInit{
         this.initInvoice.set(filterInvoice);
       }
     });
+  }
+
+  onSubmitted() {
+    console.log(this.subscriptionForm.value)
+    if (this.subscriptionForm.valid) {
+      this.isSubmitting = true;
+
+      const raw = this.subscriptionForm.value;
+
+      // Convert metadata array -> object
+      const metadataObject: any = {};
+
+      if (raw.metadata && raw.metadata.length > 0) {
+        raw.metadata.forEach((item: any) => {
+          if (item.key) {
+            metadataObject[item.key] = item.value;
+          }
+        });
+      }
+
+      const payload: SubscriptionRequest = {
+        status: this.subscriptionForm.value.status! as "ACTIVE" | 'DRAFT' | 'PENDING' | 'ENDED' | 'CANCEL',
+        quantity: this.subscriptionForm.value.quantity!,
+        isTrial: this.subscriptionForm.value.isTrial!,
+        startDate: this.formatDateString(this.subscriptionForm.value.startDate, 'dd-MM-yyyy HH:mm:ss')!,
+        endDate: this.formatDateString(this.subscriptionForm.value.endDate, 'dd-MM-yyyy HH:mm:ss')!,
+        dueDate: this.formatDateString(this.subscriptionForm.value.dueDate, 'dd-MM-yyyy HH:mm:ss')!,
+        subscriberId: this.subscriptionForm.value.subscriberId!,
+        priceId: this.subscriptionForm.value.priceId!,
+        tenantId: this.subscriptionForm.value.tenantId!,
+        cancelAtPeriodEnd: this.subscriptionForm.value.cancelAtPeriodEnd!
+      };
+
+      if (this.subscriptionForm.value.defaultPaymentMethod) {
+        const defaultPaymentMethod = this.subscriptionForm.value.defaultPaymentMethod as string;
+        Object.assign(payload, {defaultPaymentMethod})
+      }
+
+      if (this.subscriptionForm.value.cancelDate) {
+        if (this.subscriptionForm.value.cancelDate) {
+          const cancelDate = this.formatDateString(this.subscriptionForm.value.cancelDate, 'dd-MM-yyyy HH:mm:ss')
+          Object.assign(payload, {cancelDate});
+        }
+      }
+
+      const invoices = this.subscriptionForm.value.invoices! as number[];
+      if (invoices.length > 0) {
+        Object.assign(payload, {invoices})
+      }
+
+      if (Object.keys(metadataObject).length === 0) {
+        delete payload.metadata;
+      }
+
+      console.log(payload)
+      this.subscriptionService.update(payload, this.subscription()?.id!).subscribe({
+        next: (response) => {
+          this.isSubmitting = false;
+          this.message.success('Update subscription thành công');
+          this.subscriptionForm.reset();
+          this.router.navigate(['/admin/tables/subscriptions']);
+        },
+        error: (err) => {
+          this.isSubmitting = false;
+          console.error('Update subscription failed:', err);
+          this.message.error('Update subscription thất bại');
+        }
+      })
+    }
   }
 
   private patchMetadata(metadata: any) {
@@ -247,9 +329,5 @@ export class SubscriptionEdit  implements  OnInit{
         })
       );
     });
-  }
-
-  onSubmitted() {
-    console.log(this.subscriptionForm.value)
   }
 }

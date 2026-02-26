@@ -17,6 +17,10 @@ import {ListData} from '../../../../core/interface/list-data';
 import {NzDatePickerComponent} from 'ng-zorro-antd/date-picker';
 import {NzTimePickerComponent} from 'ng-zorro-antd/time-picker';
 import {NzModalModule, NzModalService} from 'ng-zorro-antd/modal';
+import {SoftDeleteRequest} from '../../../../core/interface/request/soft-delete-request';
+import {NzIconDirective} from 'ng-zorro-antd/icon';
+import {NzCardComponent, NzCardMetaComponent} from 'ng-zorro-antd/card';
+import {NzCheckboxComponent} from 'ng-zorro-antd/checkbox';
 
 @Component({
   selector: ' app-editable-data-table',
@@ -38,7 +42,11 @@ import {NzModalModule, NzModalService} from 'ng-zorro-antd/modal';
     NzDatePickerComponent,
     NzTimePickerComponent,
     NzModalModule,
-    DatePipe
+    DatePipe,
+    NzIconDirective,
+    NzCardComponent,
+    NzCheckboxComponent,
+    NzCardMetaComponent
   ],
   templateUrl: './editable-data-table.html',
   styleUrl: './editable-data-table.css',
@@ -57,6 +65,10 @@ export class EditableDataTable<T extends { id: number }> {
   entityName = input<string>('thưc thể');
   pageChange = output<number>();
   sizeChange = output<number>();
+
+  // Trong SubscriptionReuseForm (hoặc component table chứa bulk action)
+  isBulkDeleteModalOpen = signal(false);
+  selectedBulkSoftDeleteMode = signal<boolean | null>(null); // null = chưa chọn, true = xóa mềm, false = khôi phục
   editable = input<boolean>(true);
   // Computed lấy mảng thật
   tableData = computed(() => this.data()?.content ?? []);
@@ -71,7 +83,7 @@ export class EditableDataTable<T extends { id: number }> {
   saveRow = output<T>();
   // deleteRow = output<T>();
   bulkDelete = output<number[]>();
-  bulkSoftDelete = output<number[]>();
+  bulkSoftDelete = output<SoftDeleteRequest>();
   // State
   editCache = signal<Record<string | number, { edit: boolean; data: T }>>({});
   checked = signal(false);
@@ -194,7 +206,11 @@ export class EditableDataTable<T extends { id: number }> {
       nzOkDanger: true,
       nzOnOk: () => {
         // set.delete(id);
-        this.bulkSoftDelete.emit(Array.from(this.setOfCheckedId()));
+        const response: SoftDeleteRequest = {
+          ids: Array.from(this.setOfCheckedId()),
+          softDelete: true
+        }
+        this.bulkSoftDelete.emit(response);
         this.setOfCheckedId.set(new Set);
       }
     });
@@ -228,6 +244,30 @@ export class EditableDataTable<T extends { id: number }> {
     return uuid.slice(0, 8) + '...' + uuid.slice(-4);
   }
 
+  openBulkDeleteModal(): void {
+    const count = this.setOfCheckedId().size;
+    if (count === 0) return;
+
+    this.selectedBulkSoftDeleteMode.set(null); // reset lựa chọn
+    this.isBulkDeleteModalOpen.set(true);
+  }
+
+  confirmBulkAction(): void {
+    const mode = this.selectedBulkSoftDeleteMode();
+    if (mode === null) return;
+
+    const ids = Array.from(this.setOfCheckedId());
+    const response: SoftDeleteRequest = {
+      ids,
+      softDelete: mode
+    };
+
+    this.bulkSoftDelete.emit(response);
+    this.setOfCheckedId.set(new Set());
+    this.isBulkDeleteModalOpen.set(false);
+    this.selectedBulkSoftDeleteMode.set(null);
+  }
+
   private formatDate(date: Date): string {
     const pad = (n: number) => n < 10 ? '0' + n : n;
 
@@ -254,6 +294,4 @@ export class EditableDataTable<T extends { id: number }> {
 
     return obj;
   }
-
-
 }

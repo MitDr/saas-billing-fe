@@ -10,6 +10,7 @@ import {HttpParams} from '@angular/common/http';
 import {TopTenantResponse} from '../interface/response/statistic/top-tenant-response';
 import {ChurnRateResponse} from '../interface/response/statistic/churn-rate-response';
 import {SuccessRateResponse} from '../interface/response/statistic/success-rate-response';
+import {ExpectedRenewal} from '../interface/response/statistic/expected-renewal';
 
 @Injectable({
   providedIn: 'root'
@@ -89,5 +90,16 @@ export class StatisticService {
     )
   }
 
-  
+  getUpcomingRenewal(days: number): Observable<ExpectedRenewal[]> {
+    let params = new HttpParams()
+      .set('days', days);
+
+    return this.api.get<ExpectedRenewal[]>('/admin/analytics/tenant/subscriptions/upcoming-renewals', params).pipe(
+      catchError(error => {
+        console.error('Get upcoming renewal error:', error);
+        return throwError(() => new Error('Không thể lấy thông tin thống kê doanh thu'));
+      })
+    )
+  }
+
 }
