@@ -1,1 +1,47 @@
-<p>auth-plan-group-list works!</p>
+<div class="mb-4 flex justify-between">
+  <h1 class="text-2xl font-semibold mb-6">
+    PLAN GROUP LIST
+  </h1>
+  <ng-container class="mb-4">
+    <button [routerLink]="createRoute" nz-button nzType="primary">+ Add Plan Group</button>
+  </ng-container>
+</div>
+<app-editable-data-table
+  (bulkDelete)="onBulkDelete($event)"
+  (pageChange)="onPageChange($event)"
+  (saveRow)="onSaveRow($event)"
+  (sizeChange)="onSizeChange($event)"
+  [columns]="getColumns()"
+  [data]="planGroupPage()"
+  [loading]="loading()"
+  [routes]="planGroupListRouting"
+  [showBulkDelete]="true"
+  [editable]="false"
+  [showSoftDelete]="false"
+  entityName="plan group(s)"
+  viewRoute="/app/tables/plan-groups/">
+  >
+  <!-- Toolbar nếu cần -->
+  <div class="flex gap-3 items-center flex-wrap mb-4" table-toolbar>
+
+    <!-- 🔍 Search -->
+    <nz-input-wrapper class="w-64">
+      <input
+        (ngModelChange)="onSearchChange($event)"
+        [ngModel]="search()"
+        nz-input
+        placeholder="Search price..."
+      />
+    </nz-input-wrapper>
+
+    <!-- 🔄 Reset -->
+    <button
+      (click)="resetFilters()"
+      nz-button
+      nzType="default"
+    >
+      Reset
+    </button>
+
+  </div>
+</app-editable-data-table>

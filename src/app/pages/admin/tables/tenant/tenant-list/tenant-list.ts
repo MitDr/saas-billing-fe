@@ -12,6 +12,7 @@ import {TenantRequest} from '../../../../../core/interface/request/tenant-reques
 import {NzInputDirective, NzInputWrapperComponent} from 'ng-zorro-antd/input';
 import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {SoftDeleteRequest} from '../../../../../core/interface/request/soft-delete-request';
 
 @Component({
   selector: 'app-tenant-list',
@@ -155,9 +156,9 @@ export class TenantList {
     });
   }
 
-  onBulkSoftDelete(ids: number[]) {
-    if (ids.length === 0) return;
-    this.tenantService.bulkSoftDelete({ids: ids, softDelete: true}).subscribe({
+  onBulkSoftDelete(request: SoftDeleteRequest) {
+    if (request.ids.length === 0) return;
+    this.tenantService.bulkSoftDelete(request).subscribe({
       next: () => {
         this.loadTenants(
           this.currentPage(),
