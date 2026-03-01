@@ -1,0 +1,155 @@
+<nz-card [nzBordered]="false" class="tenant-card">
+  <div class="flex items-start gap-6">
+    <div class="flex-1">
+      <!-- Tên Tenant + Status -->
+      <h2 class="text-2xl font-bold flex items-center gap-3">
+        Plan: {{ plan().name }}
+      </h2>
+
+      <img
+        [nzFallback]="fallbackImageConst"
+        [nzSrc]="plan().image"
+        alt="plan image"
+        class="w-full max-h-64 !object-contain !rounded-lg mt-3 border"
+        nz-image
+      />
+
+      <!-- Thông tin chính (không có phần users count nữa) -->
+      <nz-descriptions [nzColumn]="2" class="mt-6" nzBordered nzSize="small">
+        <nz-descriptions-item nzTitle="Plan ID">
+          #{{ plan().id }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Status">
+          <div class="flex items-center gap-3">
+            @switch (plan().status) {
+              @case ('ACTIVE') {
+                <nz-tag class="font-momo" nzColor="green">Active</nz-tag>
+              }
+              @case ('DEACTIVATED') {
+                <nz-tag class="font-momo" nzColor="gray">Deactivated</nz-tag>
+              }
+              @case ('CANCEL') {
+                <nz-tag class="font-momo" nzColor="red">Cancel</nz-tag>
+              }
+            }
+          </div>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Created Date">
+          {{ plan().createdDate }}
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Last Modified">
+          {{ plan().modifiedDate }}
+        </nz-descriptions-item>
+      </nz-descriptions>
+      <!-- Actions -->
+      <div class="mt-8 flex flex-wrap gap-3">
+        <button [routerLink]="['/app/tables/plans', plan().id, 'edit']"
+                class="!inline-flex !items-center" nz-button
+                nzType="primary">
+          <span nz-icon nzType="edit"></span>
+          Edit Plan
+        </button>
+
+        <!--        <button nz-button nzDanger (click)="confirmDelete()">-->
+
+        <button (click)="onDelete()" class="!inline-flex !items-center"
+                nz-button nzDanger>
+          <span nz-icon nzType="delete"></span>
+          Delete Plan
+        </button>
+
+        <!--        @if (tenant().stripeAccountId) {-->
+        <!--          <button nz-button nzType="default">-->
+        <!--            <span nz-icon nzType="link"></span>-->
+        <!--            View in Stripe-->
+        <!--          </button>-->
+        <!--        }-->
+      </div>
+      @if (plan().planGroup) {
+        <div class="mt-10">
+          <h3 class="text-xl font-semibold mb-6 flex items-center gap-3">
+            <span nz-icon nzType="group" class="text-blue-600"></span>
+            Plan group of this plan ({{ plan().planGroup.name }})
+          </h3>
+          <div class="grid grid-cols-1 gap-6">
+            <app-auth-plan-group-dto-card [planGroup]="plan().planGroup"></app-auth-plan-group-dto-card>
+          </div>
+        </div>
+      } @else {
+        <div class="mt-10 text-center text-gray-500 py-8">
+          <nz-icon nzType="group" nzTheme="outline" class="text-4xl opacity-50"></nz-icon>
+          <p class="mt-3">No plan group in this plan yet.</p>
+        </div>
+      }
+      <!--      Phần Price-->
+      @if (plan().prices?.length) {
+        <div class="mt-10">
+          <h3 class="text-xl font-semibold mb-6 flex items-center gap-3">
+            <span nz-icon nzType="exception" class="text-blue-600"></span>
+            Prices in this Plan ({{ plan().prices.length }})
+          </h3>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            @for (pri of plan().prices; track pri.id; let last = $last) {
+              <div
+                [class.lg:col-span-2]="plan().prices.length % 2 === 1 && last"
+              >
+                <app-auth-price-dto-card
+                  (priceRemove)="onPriceRemove($event)"
+                  [removable]="true"
+                  [numberOfColumn]="1"
+                  [price]="pri">
+                </app-auth-price-dto-card>
+                <!--                <app-price-dto-card-->
+                <!--                  [removable]="true"-->
+                <!--                  [numberOfColumn]="1"-->
+                <!--                  [price]="pri">-->
+                <!--                </app-price-dto-card>-->
+              </div>
+            }
+          </div>
+
+        </div>
+      } @else {
+        <div class="mt-10 text-center text-gray-500 py-8">
+          <nz-icon nzType="exception" nzTheme="outline" class="text-4xl opacity-50"></nz-icon>
+          <p class="mt-3">No plan in this feature yet.</p>
+        </div>
+      }
+      <!--      Phần Feature-->
+      @if (plan().features?.length) {
+        <div class="mt-10">
+          <h3 class="text-xl font-semibold mb-6 flex items-center gap-3">
+            <span nz-icon nzType="bulb" class="text-blue-600"></span>
+            Features in this Plan ({{ plan().features.length }})
+          </h3>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            @for (feat of plan().features; track feat.id; let last = $last) {
+              <div
+                [class.lg:col-span-2]="plan().features.length % 2 === 1 && last"
+              >
+                <app-auth-feature-dto-card
+                  (featureRemove)="onFeatureRemove($event)"
+                  [removable]="true"
+                  [numberOfColumn]="1"
+                  [feature]="feat">
+                </app-auth-feature-dto-card>
+                <!--                <app-price-dto-card-->
+                <!--                  [removable]="true"-->
+                <!--                  [numberOfColumn]="1"-->
+                <!--                  [price]="pri">-->
+                <!--                </app-price-dto-card>-->
+              </div>
+            }
+          </div>
+
+        </div>
+      } @else {
+        <div class="mt-10 text-center text-gray-500 py-8">
+          <nz-icon nzType="bulb" nzTheme="outline" class="text-4xl opacity-50"></nz-icon>
+          <p class="mt-3">No feature in this plan yet.</p>
+        </div>
+      }
+    </div>
+  </div>
+</nz-card>

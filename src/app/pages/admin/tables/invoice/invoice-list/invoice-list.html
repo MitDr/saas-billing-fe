@@ -26,7 +26,7 @@
     <!-- 🔍 Search -->
     <nz-input-wrapper class="w-64">
       <input
-        (ngModelChange)="onSearchChange($event.target.value)"
+        (ngModelChange)="search.set($event); currentPage.set(1)"
         [ngModel]="search()"
         nz-input
         placeholder="Search price..."
@@ -35,7 +35,7 @@
 
     <!-- 🗑 Soft Delete Filter -->
     <nz-select
-      (ngModelChange)="onSoftDeleteChange($event)"
+      (ngModelChange)="softDeleteFilter.set($event); currentPage.set(1)"
       [ngModel]="softDeleteFilter()"
       class="w-44"
       nzAllowClear
@@ -47,7 +47,7 @@
 
     <!-- 🏢 Tenant Filter -->
     <nz-select
-      (ngModelChange)="onTenantChange($event)"
+      (ngModelChange)="tenantFilter.set($event); currentPage.set(1)"
       [ngModel]="tenantFilter()"
       class="w-52"
       nzAllowClear

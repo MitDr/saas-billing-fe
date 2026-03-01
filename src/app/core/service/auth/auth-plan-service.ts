@@ -1,8 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {ApiClientService} from '../api-client-service';
-import {PlanRequest} from '../../interface/request/plan-request';
 import {Observable, throwError} from 'rxjs';
-import {Plan} from '../../interface/entity/plan';
 import {catchError} from 'rxjs/operators';
 import {ListData} from '../../interface/list-data';
 import {HttpParams} from '@angular/common/http';
@@ -13,14 +11,35 @@ import {AuthPlan} from '../../interface/entity/auth/auth-plan';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthPlanService{
+export class AuthPlanService {
   api = inject(ApiClientService)
 
-  createPlan(request: AuthPlanRequest): Observable<AuthPlan> {
-    return this.api.post<AuthPlan>(`/auth/plans`, request).pipe(
+  createPlan(planData: AuthPlanRequest, imageFile?: File): Observable<AuthPlan> {
+    const formData = new FormData();
+
+    // Thêm các field JSON vào FormData
+    formData.append('name', planData.name);
+    formData.append('status', planData.status);
+    if (planData.planGroupId !== null && planData.planGroupId !== undefined) {
+      formData.append('planGroupId', planData.planGroupId.toString());
+    }
+    if (planData.features && planData.features.length > 0) {
+      planData.features.forEach(id => formData.append('features', id.toString()));
+    }
+    if (planData.prices && planData.prices.length > 0) {
+      planData.prices.forEach(id => formData.append('prices', id.toString()));
+    }
+
+    // Thêm file image nếu có
+    if (imageFile) {
+      formData.append('image', imageFile, imageFile.name);
+    }
+
+    // Gửi FormData (không cần header Content-Type, Angular tự set multipart)
+    return this.api.post<AuthPlan>('/auth/plans', formData).pipe(
       catchError(error => {
-        console.error('Create plans error:', error);
-        return throwError(() => new Error('Tạo plans thất bại'));
+        console.error('Create plan error:', error);
+        return throwError(() => new Error('Tạo plan thất bại'));
       })
     );
   }
@@ -97,12 +116,59 @@ export class AuthPlanService{
     );
   }
 
-  update(updatedPlan: PlanRequest, id: number): Observable<AuthPlan> {
+  update(updatedPlan: AuthPlanRequest, id: number): Observable<AuthPlan> {
     console.log(updatedPlan)
     return this.api.put<AuthPlan>(`/auth/plans/${id}`, updatedPlan).pipe(
       catchError(error => {
         console.error('Update plans error:', error);
         return throwError(() => new Error('Cập nhật plans thất bại'));
+      })
+    );
+  }
+
+  updatePlan(planId: number, planData: AuthPlanRequest, imageFile?: File): Observable<AuthPlan> {
+
+
+    const formData = new FormData();
+
+    // Thêm các field bắt buộc
+    formData.append('name', planData.name);
+    formData.append('status', planData.status);
+
+    // Optional fields
+    if (planData.planGroupId !== null && planData.planGroupId !== undefined) {
+      formData.append('planGroupId', planData.planGroupId.toString());
+    }
+
+    // Mảng features/prices (backend hỗ trợ append nhiều lần với cùng key)
+    if (planData.features && planData.features.length > 0) {
+      planData.features.forEach(id => formData.append('features', id.toString()));
+    }
+
+    if (planData.prices && planData.prices.length > 0) {
+      planData.prices.forEach(id => formData.append('prices', id.toString()));
+    }
+
+
+    if (imageFile) {
+      formData.append('image', imageFile, imageFile.name);
+    } else {
+      formData.append('image', new Blob([]), '');
+    }
+
+
+    // Log FormData để debug
+    console.group('FormData gửi lên update plan');
+    console.log('FormData entries:');
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}:`, value instanceof File ? `File: ${value.name} (${value.size} bytes)` : value);
+    }
+    console.groupEnd();
+
+    return this.api.put<AuthPlan>(`/auth/plans/${planId}`, formData).pipe(
+      catchError(error => {
+        console.error('Update plan error:', error);
+        return throwError(() => new Error('Cập nhật plan thất bại'));
       })
     );
   }

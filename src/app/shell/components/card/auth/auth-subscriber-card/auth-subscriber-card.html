@@ -1,0 +1,82 @@
+<nz-card [nzBordered]="false" class="tenant-card">
+  <div class="flex items-start gap-6">
+    <div class="flex-1">
+      <!-- Tên Tenant + Status -->
+      <h2 class="text-2xl font-bold flex items-center gap-3">
+        Subscriber Name: {{ subscriber().name }}
+      </h2>
+      <p class="text-gray-500 mt-1">
+        {{ subscriber().email }}
+        <!--        <span class="ml-4 text-sm text-gray-400">-->
+        <!--                Created by <strong>{{ tenant().creator?.username || 'N/A' }}</strong>-->
+        <!--        </span>-->
+      </p>
+
+      <!-- Thông tin chính (không có phần users count nữa) -->
+      <nz-descriptions [nzColumn]="2" class="mt-6" nzBordered nzSize="small">
+        <nz-descriptions-item nzTitle="Subscriber ID">
+          #{{ subscriber().id }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Subscriber Name">
+          <span class="font-medium text-orange-600">
+            {{ subscriber().name }}
+          </span>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Subscriber email">
+          {{ subscriber().email }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Created Date">
+          {{ subscriber().createdDate }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Last Modified">
+          {{ subscriber().modifiedDate }}
+        </nz-descriptions-item>
+      </nz-descriptions>
+
+
+      <!-- Actions -->
+      <div class="mt-8 flex flex-wrap gap-3">
+        <button [routerLink]="['/app/tables/subscribers', subscriber().id, 'edit']"
+                class="!inline-flex !items-center" nz-button
+                nzType="primary">
+          <span nz-icon nzType="edit"></span>
+          Edit Subscriber
+        </button>
+
+        <button (click)="onDelete()" class="!inline-flex !items-center"
+                nz-button nzDanger>
+          <span nz-icon nzType="delete"></span>
+          Delete Subscriber
+        </button>
+      </div>
+
+      <!--      Phần entitlements-->
+      @if (subscriber().subscriptions?.length) {
+        <div class="mt-10">
+          <h3 class="text-xl font-semibold mb-6 flex items-center gap-3">
+            <span nz-icon nzType="wallet" class="text-blue-600"></span>
+            Subscriptions belong to Subscriber ({{ subscriber().subscriptions.length }})
+          </h3>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            @for (sub of subscriber().subscriptions; track sub.id; let last = $last) {
+              <div
+                [class.lg:col-span-2]="subscriber().subscriptions.length % 2 === 1 && last"
+              >
+                <app-auth-subscription-dto-card
+                  [numberOfColumn]="1"
+                  [subscription]="sub">
+                </app-auth-subscription-dto-card>
+              </div>
+            }
+          </div>
+
+        </div>
+      } @else {
+        <div class="mt-10 text-center text-gray-500 py-8">
+          <nz-icon nzType="wallet" nzTheme="outline" class="text-4xl opacity-50"></nz-icon>
+          <p class="mt-3">No subscription belongs to subscriber yet.</p>
+        </div>
+      }
+    </div>
+  </div>
+</nz-card>

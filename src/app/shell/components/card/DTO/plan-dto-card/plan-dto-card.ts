@@ -39,7 +39,7 @@ export class PlanDtoCard {
   onRemovePlan() {
     this.modalService.confirm({
       nzTitle: 'Xác nhận xóa',
-      nzContent: `Xóa Entitlement #${this.plan().id} ?`,
+      nzContent: `Xóa Plan #${this.plan().id} ?`,
       nzOkText: 'Xóa',
       nzOkDanger: true,
       nzOnOk: () => {

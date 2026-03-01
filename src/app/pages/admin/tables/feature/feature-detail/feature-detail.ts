@@ -21,7 +21,7 @@ import {FeatureCard} from '../../../../../shell/components/card/feature/feature-
     FeatureCard
   ],
   templateUrl: './feature-detail.html',
-  styleUrl: './feature-detail.css',
+  styleUrl: './feature-detail.css'
 })
 export class FeatureDetail {
   loading = signal(false);

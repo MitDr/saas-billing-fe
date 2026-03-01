@@ -1,16 +1,12 @@
 import {Component, inject, Signal, signal} from '@angular/core';
 import {ListData} from '../../../../../core/interface/list-data';
-import {Plan} from '../../../../../core/interface/entity/plan';
-import {AUTH_PLAN_ROUTE_CONSTANT, PLAN_ROUTE_CONSTANT} from '../../../../../core/constant/plan/plan-list-constant';
-import {PlanService} from '../../../../../core/service/plan-service';
+import {AUTH_PLAN_ROUTE_CONSTANT} from '../../../../../core/constant/plan/plan-list-constant';
 import {AuthGenericListComponent} from '../../../../../core/generic/base-auth-list-component';
 import {AuthPlan} from '../../../../../core/interface/entity/auth/auth-plan';
 import {AuthPlanRequest} from '../../../../../core/interface/request/auth/auth-plan-request';
 import {AuthPlanService} from '../../../../../core/service/auth/auth-plan-service';
 import {ColumnConfig} from '../../../../../core/interface/column-config';
-import {SOFTDELETEOPTIONS} from '../../../../admin/tables/tenant/tenant-list/tenant-list';
 import {PLANSTATUSOPTIONS} from '../../../../admin/tables/plan/plan-list/plan-list';
-import {PlanRequest} from '../../../../../core/interface/request/plan-request';
 import {EditableDataTable} from '../../../../../shell/components/generic/editable-data-table/editable-data-table';
 import {FormsModule} from '@angular/forms';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
@@ -33,7 +29,8 @@ import {RouterLink} from '@angular/router';
   templateUrl: './auth-plan-list.html',
   styleUrl: './auth-plan-list.css',
 })
-export class AuthPlanList extends AuthGenericListComponent<AuthPlan, AuthPlanRequest>{
+export class AuthPlanList extends AuthGenericListComponent<AuthPlan, AuthPlanRequest> {
+
   planPage = signal<ListData<AuthPlan> | null>(null);
   checked = false;
   createRoute = '/app/tables/plans/create'
@@ -76,6 +73,40 @@ export class AuthPlanList extends AuthGenericListComponent<AuthPlan, AuthPlanReq
     }
   }
 
+  override onSaveRow(updatedPlan: AuthPlan) {
+    const service = this.getService();
+
+    const payload: AuthPlanRequest = {
+      name: updatedPlan.name,
+      status: updatedPlan.status,
+    };
+
+    if (updatedPlan.planGroup?.id) {
+      payload.planGroupId = updatedPlan.planGroup.id;
+    }
+    if (updatedPlan.prices?.length) {
+      payload.prices = updatedPlan.prices.map(price => price.id);
+    }
+    if (updatedPlan.features?.length) {
+      payload.features = updatedPlan.features.map(feature => feature.id);
+    }
+
+    // Hiện tại không hỗ trợ upload image mới từ table (editable: false)
+    // Nên KHÔNG gửi field image → backend giữ nguyên image cũ
+    // Nếu sau này bật editable image → thêm logic lưu file riêng
+
+    service.updatePlan(updatedPlan.id, payload).subscribe({
+      next: () => {
+        this.message.success('Updated successfully');
+        this.reloadData();
+      },
+      error: () => {
+        this.message.error('Update failed');
+        this.reloadData(); // rollback UI
+      }
+    });
+  }
+
   protected loadData(
     page: number,
     size: number,
@@ -98,13 +129,18 @@ export class AuthPlanList extends AuthGenericListComponent<AuthPlan, AuthPlanReq
   protected mapToUpdatePayload(updatedPlan: AuthPlan): AuthPlanRequest {
     const result: AuthPlanRequest = {
       name: updatedPlan.name,
-      image: updatedPlan.image,
       status: updatedPlan.status,
+    };
+
+    if (updatedPlan.planGroup?.id) {
+      result.planGroupId = updatedPlan.planGroup.id;
     }
-    if (updatedPlan.prices.length > 0) {
+
+    if (updatedPlan.prices?.length) {
       result.prices = updatedPlan.prices.map(price => price.id);
     }
-    if (updatedPlan.features.length > 0) {
+
+    if (updatedPlan.features?.length) {
       result.features = updatedPlan.features.map(feature => feature.id);
     }
 

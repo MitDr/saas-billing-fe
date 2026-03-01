@@ -1,0 +1,26 @@
+<div class="page-container">
+  <nz-page-header
+    [nzSubtitle]="'ID: ' + (subscriber()?.id || '')"
+    [nzTitle]="'Subscriber Detail'"
+  >
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item><a routerLink="/app/tables/subscribers">Subscribers</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>Subscriber Detail</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-page-header>
+
+  <div class="mt-8">
+    @if (subscriber(); as sub) {
+      <app-auth-subscriber-card
+        [subscriber]="sub"
+        (load)="loadSubscriber($event)"
+        (deleteButton)="onDelete($event)">
+      </app-auth-subscriber-card>
+    } @else {
+      <div class="text-center py-16">
+        <nz-spin nzSize="large"></nz-spin>
+        <p class="mt-4 text-gray-500">Loading subscriber information...</p>
+      </div>
+    }
+  </div>
+</div>

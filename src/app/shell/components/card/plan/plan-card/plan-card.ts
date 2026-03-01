@@ -16,6 +16,7 @@ import {PriceDtoCard} from '../../DTO/price-dto-card/price-dto-card';
 import {PlanService} from '../../../../../core/service/plan-service';
 import {PlanRequest} from '../../../../../core/interface/request/plan-request';
 import {FeatureDtoCard} from '../../DTO/feature-dto-card/feature-dto-card';
+import {PlanGroupDtoCard} from '../../DTO/plan-group-dto-card/plan-group-dto-card';
 
 @Component({
   selector: 'app-plan-card',
@@ -33,7 +34,8 @@ import {FeatureDtoCard} from '../../DTO/feature-dto-card/feature-dto-card';
     EntitlementDtoCard,
     PriceDtoCard,
     PlanDtoCard,
-    FeatureDtoCard
+    FeatureDtoCard,
+    PlanGroupDtoCard
   ],
   templateUrl: './plan-card.html',
   styleUrl: './plan-card.css',

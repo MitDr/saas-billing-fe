@@ -1,0 +1,46 @@
+<nz-card [nzBordered]="false" class="user-card">
+  <div class="flex items-start gap-6">
+    <div class="flex-1">
+      <h2 class="text-2xl font-bold flex items-center gap-3">
+        #{{ feature().id }}
+      </h2>
+      <nz-descriptions [nzColumn]="numberOfColumn()" class="mt-6" nzBordered nzSize="small">
+        <nz-descriptions-item nzTitle="Subscription ID">
+          {{ feature().id }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Code">
+          {{ feature().code }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Name">
+          {{ feature().name }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Status">
+          @switch (feature().status) {
+            @case ('ACTIVE') {
+              <nz-tag class="font-momo" nzColor="green">Active</nz-tag>
+            }
+            @case ('INACTIVE') {
+              <nz-tag class="font-momo" nzColor="red">Inactive</nz-tag>
+            }
+          }
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Start Date">
+          {{ feature().createdDate }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="End Modified">
+          {{ feature().modifiedDate }}
+        </nz-descriptions-item>
+      </nz-descriptions>
+      @if (removable()) {
+        <div class="mt-6 flex gap-3">
+          <button (click)="onRemoveFeature()" class="!inline-flex !items-center"
+                  nz-button
+                  nzDanger>
+            <span nz-icon nzType="delete"></span>
+            Remove
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+</nz-card>

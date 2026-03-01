@@ -1,0 +1,25 @@
+<div class="page-container">
+  <nz-page-header
+    [nzSubtitle]="'ID: ' + (payout()?.id || '')"
+    [nzTitle]="'Payout Detail'"
+  >
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item><a routerLink="/app/tables/payouts">Payouts</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>Payout Detail</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-page-header>
+
+  <div class="mt-8">
+    @if (payout(); as pay) {
+      <app-auth-payout-card
+        [payout]="pay"
+        (deleteButton)="onDelete($event)">
+      </app-auth-payout-card>
+    } @else {
+      <div class="text-center py-16">
+        <nz-spin nzSize="large"></nz-spin>
+        <p class="mt-4 text-gray-500">Loading payout information...</p>
+      </div>
+    }
+  </div>
+</div>

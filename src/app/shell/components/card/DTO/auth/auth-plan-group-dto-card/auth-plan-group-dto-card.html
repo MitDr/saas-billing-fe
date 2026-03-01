@@ -1,0 +1,39 @@
+<nz-card [nzBordered]="false" class="user-card">
+  <div class="flex items-start gap-6">
+    <div class="flex-1">
+      <h2 class="text-2xl font-bold flex items-center gap-3">
+        #{{ planGroup().id }}
+      </h2>
+      <nz-descriptions [nzColumn]="numberOfColumn()" class="mt-6" nzBordered nzSize="small">
+        <nz-descriptions-item nzTitle="Plan Group ID">
+          #{{ planGroup().id }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Plan Group Name">
+          <span class="font-medium text-orange-600">
+            {{ planGroup().name }}
+          </span>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Plan Group Description">
+          {{ planGroup().description }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Created Date">
+          {{ planGroup().createdDate }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Last Modified">
+          {{ planGroup().modifiedDate }}
+        </nz-descriptions-item>
+      </nz-descriptions>
+
+      @if (removable()) {
+        <div class="mt-6 flex gap-3">
+          <button (click)="onPlanGroupRemove()" class="!inline-flex !items-center"
+                  nz-button
+                  nzDanger>
+            <span nz-icon nzType="delete"></span>
+            Remove
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+</nz-card>

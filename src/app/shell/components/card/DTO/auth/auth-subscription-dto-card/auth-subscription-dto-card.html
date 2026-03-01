@@ -1,0 +1,38 @@
+<nz-card [nzBordered]="false" class="user-card">
+  <div class="flex items-start gap-6">
+    <div class="flex-1">
+      <h2 class="text-2xl font-bold flex items-center gap-3">
+        #{{ subscription().id }}
+        @switch (subscription().status) {
+
+          @case ('ACTIVE') {
+            <nz-tag nzColor="green">Active</nz-tag>
+          }
+          @case ('DRAFT') {
+            <nz-tag nzColor="red">Draft</nz-tag>
+          }
+          @case ('PENDING') {
+            <nz-tag nzColor="blue">Pending</nz-tag>
+          }
+          @case ('ENDED') {
+            <nz-tag nzColor="yellow">Ended</nz-tag>
+          }
+          @case ('CANCEL') {
+            <nz-tag nzColor="orange">Cancel</nz-tag>
+          }
+        }
+      </h2>
+      <nz-descriptions [nzColumn]="numberOfColumn()" class="mt-6" nzBordered nzSize="small">
+        <nz-descriptions-item nzTitle="Subscription ID">
+          {{ subscription().id }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Start Date">
+          {{ subscription().startDate }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="End Modified">
+          {{ subscription().endDate }}
+        </nz-descriptions-item>
+      </nz-descriptions>
+    </div>
+  </div>
+</nz-card>

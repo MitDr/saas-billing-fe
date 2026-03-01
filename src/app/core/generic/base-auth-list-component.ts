@@ -1,8 +1,6 @@
 import {effect, inject, Signal, signal} from '@angular/core';
-import {Tenant} from '../interface/entity/tenant';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {TenantService} from '../service/tenant-service';
 import {debounceTime, distinctUntilChanged, Subject} from 'rxjs';
 import {ListData} from '../interface/list-data';
 import {ColumnConfig} from '../interface/column-config';
@@ -162,7 +160,7 @@ export abstract class AuthGenericListComponent<T extends Entity, R> {
   protected abstract mapToUpdatePayload(entity: T): R;
 
   // Private chung: Reload data (gọi loadData với current state)
-  private reloadData() {
+  protected reloadData() {
     this.loadData(
       this.currentPage(),
       this.pageSize(),

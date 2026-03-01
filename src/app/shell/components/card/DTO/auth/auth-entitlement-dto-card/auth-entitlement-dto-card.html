@@ -1,0 +1,48 @@
+<nz-card [nzBordered]="false" class="user-card">
+  <div class="flex items-start gap-6">
+    <div class="flex-1">
+      <h2 class="text-2xl font-bold flex items-center gap-3">
+        #{{ entitlementDto().id }}
+      </h2>
+      <nz-descriptions [nzColumn]="numberOfColumn()" class="mt-6" nzBordered nzSize="small">
+        <nz-descriptions-item nzTitle="Entitlement ID">
+          {{ entitlementDto().id }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Entitlement Status">
+          <div class="flex items-center gap-3">
+            @switch (entitlementDto().status) {
+              @case ('ACTIVE') {
+                <nz-tag class="font-mono" nzColor="green">
+                  {{ entitlementDto().status }}
+                </nz-tag>
+              }
+              @case ('EXPIRED') {
+                <nz-tag class="font-mono" nzColor="red">
+                  {{ entitlementDto().status }}
+                </nz-tag>
+              }
+              @case ('REVOKED') {
+                <nz-tag class="font-mono" nzColor="orange">
+                  {{ entitlementDto().status }}
+                </nz-tag>
+              }
+            }
+          </div>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Start Date">
+          {{ entitlementDto().startDate }}
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="End Date">
+          {{ entitlementDto().endDate }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Created Date">
+          {{ entitlementDto().createdDate }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Last Modified">
+          {{ entitlementDto().modifiedDate }}
+        </nz-descriptions-item>
+      </nz-descriptions>
+    </div>
+  </div>
+</nz-card>

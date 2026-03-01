@@ -1,19 +1,16 @@
 import {inject, Injectable} from '@angular/core';
 import {ApiClientService} from '../api-client-service';
-import {InvoiceRequest} from '../../interface/request/invoice-request';
 import {Observable, throwError} from 'rxjs';
-import {Invoice} from '../../interface/entity/invoice';
 import {catchError} from 'rxjs/operators';
 import {ListData} from '../../interface/list-data';
 import {HttpParams} from '@angular/common/http';
-import {SoftDeleteRequest} from '../../interface/request/soft-delete-request';
 import {AuthInvoiceRequest} from '../../interface/request/auth/auth-invoice-request';
 import {AuthInvoice} from '../../interface/entity/auth/auth-invoice';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthInvoiceService{
+export class AuthInvoiceService {
   api = inject(ApiClientService);
 
   createInvoice(request: AuthInvoiceRequest): Observable<AuthInvoice> {
@@ -93,7 +90,7 @@ export class AuthInvoiceService{
   }
 
   deleteInvoice(id: number): Observable<void> {
-    return this.api.delete<void>(`/admin/invoices/${id}`).pipe(
+    return this.api.delete<void>(`/auth/invoices/${id}`).pipe(
       catchError(error => {
         console.error('Delete invoice error:', error);
         return throwError(() => new Error('Xóa invoice thất bại'));

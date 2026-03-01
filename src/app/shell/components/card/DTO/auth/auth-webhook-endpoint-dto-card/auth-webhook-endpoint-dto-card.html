@@ -1,0 +1,35 @@
+<nz-card [nzBordered]="false" class="user-card">
+  <div class="flex items-start gap-6">
+    <div class="flex-1">
+      <h2 class="text-2xl font-bold flex items-center gap-3">
+        #{{ webhookEndpoint().id }}
+      </h2>
+      <nz-descriptions [nzColumn]="numberOfColumn()" class="mt-6" nzBordered nzSize="small">
+        <nz-descriptions-item nzTitle="ID">
+          {{ webhookEndpoint().id }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Webhook Endpoint URL">
+          <span class="font-medium text-orange-600">
+            {{ webhookEndpoint().url }}
+          </span>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Status">
+          @switch (webhookEndpoint().status) {
+            @case ('ACTIVE') {
+              <nz-tag nzColor="green">Active</nz-tag>
+            }
+            @case ('DISABLED') {
+              <nz-tag nzColor="red">Disabled</nz-tag>
+            }
+          }
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Start Date">
+          {{ webhookEndpoint().createdDate }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="End Modified">
+          {{ webhookEndpoint().modifiedDate }}
+        </nz-descriptions-item>
+      </nz-descriptions>
+    </div>
+  </div>
+</nz-card>

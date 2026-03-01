@@ -83,6 +83,24 @@ import {
 import {AuthSubscriptionList} from './pages/auth/tables/subscription/auth-subscription-list/auth-subscription-list';
 import {AuthWebhookLogList} from './pages/auth/tables/webhook-log/auth-webhook-log-list/auth-webhook-log-list';
 import {AuthSubscriberList} from './pages/auth/tables/subscriber/auth-subscriber-list/auth-subscriber-list';
+import {AuthFeatureDetail} from './pages/auth/tables/feature/auth-feature-detail/auth-feature-detail';
+import {AuthInvoiceDetail} from './pages/auth/tables/invoice/auth-invoice-detail/auth-invoice-detail';
+import {AuthPaymentDetail} from './pages/auth/tables/payment/auth-payment-detail/auth-payment-detail';
+import {AuthPayoutDetail} from './pages/auth/tables/payout/auth-payout-detail/auth-payout-detail';
+import {AuthPlanDetail} from './pages/auth/tables/plan/auth-plan-detail/auth-plan-detail';
+import {AuthPlanGroupDetail} from './pages/auth/tables/plan-group/auth-plan-group-detail/auth-plan-group-detail';
+import {AuthPriceDetail} from './pages/auth/tables/price/auth-price-detail/auth-price-detail';
+import {AuthSubscriberDetail} from './pages/auth/tables/subscriber/auth-subscriber-detail/auth-subscriber-detail';
+import {
+  AuthSubscriptionDetail
+} from './pages/auth/tables/subscription/auth-subscription-detail/auth-subscription-detail';
+import {
+  AuthWebhookEndpointDetail
+} from './pages/auth/tables/webhook-endpoint/auth-webhook-endpoint-detail/auth-webhook-endpoint-detail';
+import {AuthWebhookLogDetail} from './pages/auth/tables/webhook-log/auth-webhook-log-detail/auth-webhook-log-detail';
+import {AuthFeatureCreate} from './pages/auth/tables/feature/auth-feature-create/auth-feature-create';
+import {AuthFeatureEdit} from './pages/auth/tables/feature/auth-feature-edit/auth-feature-edit';
+import {AuthPlanCreate} from './pages/auth/tables/plan/auth-plan-create/auth-plan-create';
 
 export const routes: Routes = [
   {
@@ -381,55 +399,111 @@ export const routes: Routes = [
         path: 'tables/features',
         component: FeatureAuthList
       },
+      {
+        path: 'tables/features/create',
+        component: AuthFeatureCreate
+      },
+      {
+        path: 'tables/features/:id',
+        component: AuthFeatureDetail
+      },
+      {
+        path: 'tables/features/:id/edit',
+        component: AuthFeatureEdit
+      },
       //Invoice
       {
         path: 'tables/invoices',
         component: AuthInvoiceList
+      },
+      {
+        path: 'tables/invoices/:id',
+        component: AuthInvoiceDetail
       },
       //Payment
       {
         path: 'tables/payments',
         component: AuthPaymentList
       },
+      {
+        path: 'tables/payments/:id',
+        component: AuthPaymentDetail
+      },
       //Payout
       {
         path: 'tables/payouts',
         component: AuthPayoutList
+      },
+      {
+        path: 'tables/payouts/:id',
+        component: AuthPayoutDetail
       },
       //Plan
       {
         path: 'tables/plans',
         component: AuthPlanList
       },
+      {
+        path: 'tables/plans/create',
+        component: AuthPlanCreate
+      },
+      {
+        path: 'tables/plans/:id',
+        component: AuthPlanDetail
+      },
       //Plan Group
       {
         path: 'tables/plan-groups',
         component: AuthPlanGroupList
+      },
+      {
+        path: 'tables/plan-groups/:id',
+        component: AuthPlanGroupDetail
       },
       //price
       {
         path: 'tables/prices',
         component: AuthPriceList
       },
-      //subscribeer
+      {
+        path: 'tables/prices/:id',
+        component: AuthPriceDetail
+      },
+      //subscriber
       {
         path: 'tables/subscribers',
         component: AuthSubscriberList
+      },
+      {
+        path: 'tables/subscribers/:id',
+        component: AuthSubscriberDetail
       },
       //Subscription
       {
         path: 'tables/subscriptions',
         component: AuthSubscriptionList
       },
+      {
+        path: 'tables/subscriptions/:id',
+        component: AuthSubscriptionDetail
+      },
       //webhook endpoint
       {
         path: 'tables/webhook-endpoints',
         component: AuthWebhookEndpointList
       },
+      {
+        path: 'tables/webhook-endpoints/:id',
+        component: AuthWebhookEndpointDetail
+      },
       //webhook log
       {
         path: 'tables/webhook-logs',
         component: AuthWebhookLogList
+      },
+      {
+        path: 'tables/webhook-logs/:id',
+        component: AuthWebhookLogDetail
       }
     ]
   }

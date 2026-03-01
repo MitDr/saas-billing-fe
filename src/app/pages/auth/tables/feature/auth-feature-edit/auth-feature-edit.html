@@ -1,0 +1,31 @@
+<div class="page-container">
+  <nz-page-header
+    [nzSubtitle]="'ID: ' + (feature()?.id || '')"
+    [nzTitle]="'Update Feature'"
+  >
+    <div class="flex justify-end mb-4">
+      <app-breadcrumb [routes]="routing"></app-breadcrumb>
+    </div>
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item><a routerLink="/app/tables/entitlements">Features</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>Update Feature</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-page-header>
+
+  @if (!loading()) {
+    @if (feature(); as feat) {
+      <app-auth-feature-reuse-form
+        [formGroup]="featureForm"
+        [availablePlans]="availablePlans()"
+        [isEditMode]="true"
+        [initPlan]="initPlans() "
+        [submitLabel]="'Update'"
+        (submitted)="onSubmitted()"
+      ></app-auth-feature-reuse-form>
+    } @else {
+      <div>Feature not found</div>
+    }
+  } @else {
+    <nz-spin nzTip="Loading Feature..."></nz-spin>
+  }
+</div>

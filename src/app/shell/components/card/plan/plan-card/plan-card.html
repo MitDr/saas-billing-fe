@@ -100,7 +100,7 @@
             Plan group of this plan ({{ plan().planGroup.name }})
           </h3>
           <div class="grid grid-cols-1 gap-6">
-            <app-tenant-dto-card [tenant]="plan().tenant"></app-tenant-dto-card>
+            <app-plan-group-dto-card [planGroup]="plan().planGroup"></app-plan-group-dto-card>
           </div>
         </div>
       } @else {

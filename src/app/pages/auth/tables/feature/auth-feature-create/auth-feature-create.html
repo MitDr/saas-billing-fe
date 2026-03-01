@@ -1,0 +1,15 @@
+<div class="page-container">
+  <h1 class="text-2xl font-semibold mb-6">Create Feature</h1>
+  <div class="flex justify-end mb-4">
+    <app-breadcrumb [routes]="route"></app-breadcrumb>
+  </div>
+
+  <app-auth-feature-reuse-form
+    (submitted)="onSubmitted()"
+    [availablePlans]="availablePlans()"
+    [formGroup]="featureForm"
+    [isEditMode]="false"
+    [isLoading]="isSubmitting"
+    [submitLabel]="'Create'"
+  ></app-auth-feature-reuse-form>
+</div>

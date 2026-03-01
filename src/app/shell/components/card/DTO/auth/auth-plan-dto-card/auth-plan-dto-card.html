@@ -1,0 +1,54 @@
+<nz-card [nzBordered]="false" class="user-card">
+  <div class="flex items-start gap-6">
+    <div class="flex-1">
+      <h2 class="text-2xl font-bold flex items-center gap-3">
+        {{ plan().name }}
+      </h2>
+      <!--      cho nay de avatar-->
+      <img
+        [nzFallback]="fallbackImageConst"
+        [nzSrc]="plan().image"
+        alt="plan image"
+        class="w-full max-h-64 !object-contain !rounded-lg mt-3 border"
+        nz-image
+      />
+
+      <nz-descriptions [nzColumn]="numberOfColumn()" class="mt-6" nzBordered nzSize="small">
+        <nz-descriptions-item nzTitle="Plan ID">
+          {{ plan().id }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Status">
+          <div class="flex items-center gap-3">
+            @switch (plan().status) {
+              @case ('ACTIVE') {
+                <nz-tag class="font-momo" nzColor="green">Active</nz-tag>
+              }
+              @case ('DEACTIVATED') {
+                <nz-tag class="font-momo" nzColor="gray">Deactivated</nz-tag>
+              }
+              @case ('CANCEL') {
+                <nz-tag class="font-momo" nzColor="red">Cancel</nz-tag>
+              }
+            }
+          </div>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Created Date">
+          {{ plan().createdDate }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Last Modified">
+          {{ plan().modifiedDate }}
+        </nz-descriptions-item>
+      </nz-descriptions>
+      @if (removable()) {
+        <div class="mt-6 flex gap-3">
+          <button (click)="onRemovePlan()" class="!inline-flex !items-center"
+                  nz-button
+                  nzDanger>
+            <span nz-icon nzType="delete"></span>
+            Remove
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+</nz-card>

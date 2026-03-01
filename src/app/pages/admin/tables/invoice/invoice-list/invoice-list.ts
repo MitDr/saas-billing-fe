@@ -71,23 +71,23 @@ export class InvoiceList extends GenericListComponent<Invoice, InvoiceRequest> {
   }
 
   // Handlers cho filters (fix UX: sync URL ngay)
-  onSearchChange(value: string) {
-    this.search.set(value);
-    this.currentPage.set(1);
-    this.syncUrl({page: 1});
-  }
-
-  onSoftDeleteChange(value: boolean | null) {
-    this.softDeleteFilter.set(value);
-    this.currentPage.set(1);
-    this.syncUrl({page: 1});
-  }
-
-  onTenantChange(value: number | null) {
-    this.tenantFilter.set(value);
-    this.currentPage.set(1);
-    this.syncUrl({page: 1});
-  }
+  // onSearchChange(value: string) {
+  //   this.search.set(value);
+  //   this.currentPage.set(1);
+  //   this.syncUrl({page: 1});
+  // }
+  //
+  // onSoftDeleteChange(value: boolean | null) {
+  //   this.softDeleteFilter.set(value);
+  //   this.currentPage.set(1);
+  //   this.syncUrl({page: 1});
+  // }
+  //
+  // onTenantChange(value: number | null) {
+  //   this.tenantFilter.set(value);
+  //   this.currentPage.set(1);
+  //   this.syncUrl({page: 1});
+  // }
 
 
   protected loadData(page: number, size: number, search?: string, softDelete?: boolean | null, tenantId?: number | null, sort?: string) {

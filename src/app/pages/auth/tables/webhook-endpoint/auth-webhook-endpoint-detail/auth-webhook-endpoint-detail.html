@@ -1,0 +1,26 @@
+<div class="page-container">
+  <nz-page-header
+    [nzSubtitle]="'ID: ' + (webhookEndpoint()?.id || '')"
+    [nzTitle]="'Webhook Endpoint Detail'"
+  >
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item><a routerLink="/app/tables/webhook-endpoints">Webhook-Endpoints</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>Webhook Endpoint Detail</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-page-header>
+
+  <div class="mt-8">
+    @if (webhookEndpoint(); as web) {
+      <app-auth-webhook-endpoint-card
+        [webhookEndpoint]="web"
+        (load)="loadWebhookEndpoint($event)"
+        (deleteButton)="onDelete($event)">
+      </app-auth-webhook-endpoint-card>
+    } @else {
+      <div class="text-center py-16">
+        <nz-spin nzSize="large"></nz-spin>
+        <p class="mt-4 text-gray-500">Loading webhook endpoint information...</p>
+      </div>
+    }
+  </div>
+</div>
