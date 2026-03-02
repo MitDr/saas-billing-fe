@@ -61,7 +61,8 @@ import {PlanCreate} from './pages/admin/tables/plan/plan-create/plan-create';
 import {PlanGroupCreate} from './pages/admin/tables/plan-group/plan-group-create/plan-group-create';
 import {PlanGroupEdit} from './pages/admin/tables/plan-group/plan-group-edit/plan-group-edit';
 import {PriceCreate} from './pages/admin/tables/price/price-create/price-create';
-import {PriceEdit} from './pages/admin/tables/price/price-edit/price-edit';
+import {
+  PriceEdit} from './pages/admin/tables/price/price-edit/price-edit';
 import {SubscriberCreate} from './pages/admin/tables/subscriber/subscriber-create/subscriber-create';
 import {SubscriberEdit} from './pages/admin/tables/subscriber/subscriber-edit/subscriber-edit';
 import {SubscriptionEdit} from './pages/admin/tables/subscription/subscription-edit/subscription-edit';
@@ -101,6 +102,10 @@ import {AuthWebhookLogDetail} from './pages/auth/tables/webhook-log/auth-webhook
 import {AuthFeatureCreate} from './pages/auth/tables/feature/auth-feature-create/auth-feature-create';
 import {AuthFeatureEdit} from './pages/auth/tables/feature/auth-feature-edit/auth-feature-edit';
 import {AuthPlanCreate} from './pages/auth/tables/plan/auth-plan-create/auth-plan-create';
+import {AuthPlanGroupCreate} from './pages/auth/tables/plan-group/auth-plan-group-create/auth-plan-group-create';
+import {AuthPriceCreate} from './pages/auth/tables/price/auth-price-create/auth-price-create';
+import {AuthPlanGroupEdit} from './pages/auth/tables/plan-group/auth-plan-group-edit/auth-plan-group-edit';
+import {AuthPriceEdit} from './pages/auth/tables/price/auth-price-edit/auth-price-edit';
 
 export const routes: Routes = [
   {
@@ -457,8 +462,16 @@ export const routes: Routes = [
         component: AuthPlanGroupList
       },
       {
+        path: 'tables/plan-groups/create',
+        component: AuthPlanGroupCreate
+      },
+      {
         path: 'tables/plan-groups/:id',
         component: AuthPlanGroupDetail
+      },
+      {
+        path: 'tables/plan-groups/:id/edit',
+        component: AuthPlanGroupEdit
       },
       //price
       {
@@ -466,8 +479,16 @@ export const routes: Routes = [
         component: AuthPriceList
       },
       {
+        path: 'tables/prices/create',
+        component: AuthPriceCreate
+      },
+      {
         path: 'tables/prices/:id',
         component: AuthPriceDetail
+      },
+      {
+        path: 'tables/prices/:id/edit',
+        component: AuthPriceEdit
       },
       //subscriber
       {

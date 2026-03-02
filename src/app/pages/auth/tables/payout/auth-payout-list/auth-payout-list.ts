@@ -15,11 +15,18 @@ import {AuthGenericListComponent} from '../../../../../core/generic/base-auth-li
 import {PayoutRequest} from '../../../../../core/interface/request/payout-request';
 import {AuthPayoutRequest} from '../../../../../core/interface/request/auth/auth-payout-request';
 import {EditableDataTable} from '../../../../../shell/components/generic/editable-data-table/editable-data-table';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, NonNullableFormBuilder, Validators} from '@angular/forms';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzInputDirective, NzInputWrapperComponent} from 'ng-zorro-antd/input';
 import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
 import {RouterLink} from '@angular/router';
+import {
+  AuthWebhookEndpointReuseForm
+} from '../../../../../shell/components/form/auth/auth-webhook-endpoint-reuse-form/auth-webhook-endpoint-reuse-form';
+import {NzModalComponent, NzModalContentDirective} from 'ng-zorro-antd/modal';
+import {
+  AuthPayoutReuseForm
+} from '../../../../../shell/components/form/auth/auth-payout-reuse-form/auth-payout-reuse-form';
 
 @Component({
   selector: 'app-auth-payout-list',
@@ -31,7 +38,11 @@ import {RouterLink} from '@angular/router';
     NzInputWrapperComponent,
     NzOptionComponent,
     NzSelectComponent,
-    RouterLink
+    RouterLink,
+    AuthWebhookEndpointReuseForm,
+    NzModalComponent,
+    NzModalContentDirective,
+    AuthPayoutReuseForm
   ],
   templateUrl: './auth-payout-list.html',
   styleUrl: './auth-payout-list.css',
@@ -42,6 +53,13 @@ export class AuthPayoutList extends AuthGenericListComponent<AuthPayout, AuthPay
   createRoute = '/app/tables/payouts/create'
   payoutListRouting = AUTH_PAYOUT_ROUTE_CONSTANT;
   private payoutService = inject(AuthPayoutService)
+  isCreateModalOpen = signal(false);
+  isSubmitting = false;
+  private fb = inject(NonNullableFormBuilder)
+  payoutForm = this.fb.group({
+    amount: [null, [Validators.required]],
+    currency: ['', [Validators.required, Validators.pattern('USD')]],
+  })
 
   getDataPage(): Signal<ListData<AuthPayout> | null> {
     return this.payoutPage;
@@ -99,8 +117,46 @@ export class AuthPayoutList extends AuthGenericListComponent<AuthPayout, AuthPay
     const result: AuthPayoutRequest = {
       amount: updatePayout.amount,
       currency: updatePayout.currency,
-      status: updatePayout.status,
     }
     return result;
+  }
+
+  openCreateModal() {
+    this.isCreateModalOpen.set(true);
+  }
+
+  onConfirmModal(){
+    this.isCreateModalOpen.set(false);
+    this.reloadData()
+  }
+
+  onCloseModal(){
+    this.isCreateModalOpen.set(false);
+  }
+
+  onSubmitted() {
+    console.log(this.payoutForm.value);
+    if (this.payoutForm.valid) {
+      this.isSubmitting = true;
+
+      const payload: AuthPayoutRequest = {
+        amount: this.payoutForm.value.amount!,
+        currency: this.payoutForm.value.currency as 'USD',
+      }
+
+      this.payoutService.createPayout(payload).subscribe({
+        next: (response) => {
+          this.isSubmitting = false;
+          this.message.success('Tạo payout thành công');
+          this.payoutForm.reset();
+          // this.router.navigate(['/admin/tables/payouts']);
+        },
+        error: (err) => {
+          this.isSubmitting = false;
+          console.error('Create payout failed:', err);
+          this.message.error('Tạo payout thất bại');
+        }
+      })
+    }
   }
 }

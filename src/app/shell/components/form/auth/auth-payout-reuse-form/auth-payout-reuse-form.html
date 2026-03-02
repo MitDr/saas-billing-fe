@@ -1,0 +1,30 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="formGroup()" nz-form>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="amount" nzRequired>Amount</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Amount is required">
+      <input formControlName="amount" id="amount" nz-input placeholder="Description" type="number"/>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="currency" nzRequired>Currency</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Currency is required">
+      <nz-select formControlName="currency" nzPlaceHolder="currency">
+        @for (opt of currencyOption; track opt.value) {
+          <nz-option [nzLabel]="opt.label" [nzValue]="opt.value"></nz-option>
+        }
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item class="mt-8" nz-row>
+    <nz-form-control [nzOffset]="6" [nzSpan]="14">
+      <button
+        [disabled]="formGroup()?.invalid || isLoading()"
+        [nzLoading]="isLoading()"
+        nz-button
+        nzType="primary"
+      >
+        {{ submitLabel() }}
+      </button>
+    </nz-form-control>
+  </nz-form-item>
+</form>

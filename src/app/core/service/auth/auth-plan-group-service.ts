@@ -13,7 +13,7 @@ import {AuthPlanGroupRequest} from '../../interface/request/auth/auth-plan-group
 export class AuthPlanGroupService {
   api = inject(ApiClientService)
 
-  createPlanGroup(request: AuthPlanGroup) {
+  createPlanGroup(request: AuthPlanGroupRequest) {
     return this.api.post('/auth/plan-groups', request).pipe(
       catchError(error => {
         console.error('create plan group error:', error);

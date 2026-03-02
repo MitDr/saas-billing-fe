@@ -16,11 +16,23 @@ import {
 } from '../../../../admin/tables/webhook-endpoint/webhook-endpoint-list/webhook-endpoint-list';
 import {WebhookEndpointRequest} from '../../../../../core/interface/request/webhook-endpoint-request';
 import {EditableDataTable} from '../../../../../shell/components/generic/editable-data-table/editable-data-table';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, NonNullableFormBuilder, Validators} from '@angular/forms';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzInputDirective, NzInputWrapperComponent} from 'ng-zorro-antd/input';
 import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
 import {RouterLink} from '@angular/router';
+import {NzCardComponent, NzCardMetaComponent} from 'ng-zorro-antd/card';
+import {NzCheckboxComponent} from 'ng-zorro-antd/checkbox';
+import {NzIconDirective} from 'ng-zorro-antd/icon';
+import {NzModalComponent, NzModalContentDirective} from 'ng-zorro-antd/modal';
+import {Breadcrumb} from '../../../../../shell/components/generic/breadcrumb/breadcrumb';
+import {
+  WebhookEndpointReuseForm
+} from '../../../../../shell/components/form/admin/webhook-endpoint-reuse-form/webhook-endpoint-reuse-form';
+import {NzMessageService} from 'ng-zorro-antd/message';
+import {
+  AuthWebhookEndpointReuseForm
+} from '../../../../../shell/components/form/auth/auth-webhook-endpoint-reuse-form/auth-webhook-endpoint-reuse-form';
 
 @Component({
   selector: 'app-auth-webhook-endpoint-list',
@@ -32,7 +44,16 @@ import {RouterLink} from '@angular/router';
     NzInputWrapperComponent,
     NzOptionComponent,
     NzSelectComponent,
-    RouterLink
+    RouterLink,
+    NzCardComponent,
+    NzCardMetaComponent,
+    NzCheckboxComponent,
+    NzIconDirective,
+    NzModalContentDirective,
+    NzModalComponent,
+    Breadcrumb,
+    WebhookEndpointReuseForm,
+    AuthWebhookEndpointReuseForm
   ],
   templateUrl: './auth-webhook-endpoint-list.html',
   styleUrl: './auth-webhook-endpoint-list.css',
@@ -43,6 +64,13 @@ export class AuthWebhookEndpointList extends AuthGenericListComponent<AuthWebhoo
   createRoute = '/app/tables/webhook-endpoints/create'
   webhookListRouting = AUTH_WEBHOOK_ENDPOINT_ROUTE_CONSTANT;
   private webhookEndpointService = inject(AuthWebhookEndpointService);
+  isCreateModalOpen = signal(false);
+  isSubmitting = false;
+  private fb = inject(NonNullableFormBuilder)
+  webhookEndpointForm = this.fb.group({
+    status: ['', [Validators.required, Validators.pattern('ACTIVE|DISABLED')]],
+    url: ['', [Validators.required]],
+  })
 
   getDataPage(): Signal<ListData<AuthWebhookEndpoint> | null> {
     return this.webhookEndpointPage;
@@ -102,5 +130,45 @@ export class AuthWebhookEndpointList extends AuthGenericListComponent<AuthWebhoo
       status: updateWebhookEndpoint.status,
     }
     return result;
+  }
+
+  onSubmitted() {
+    console.log(this.webhookEndpointForm.value)
+
+    if (this.webhookEndpointForm.valid) {
+      this.isSubmitting = true;
+      const payload: AuthWebhookEndpointRequest = {
+        url: this.webhookEndpointForm.value.url!,
+        status: this.webhookEndpointForm.value.status as 'ACTIVE' | 'DISABLED',
+      }
+
+      console.log(payload)
+      this.webhookEndpointService.createWebhookEndpoint(payload).subscribe({
+        next: (response) => {
+          this.isSubmitting = false;
+          this.message.success('Tạo endpoint thành công');
+          this.webhookEndpointForm.reset();
+          // this.router.navigate(['/app/tables/webhook-endpoints']);
+        },
+        error: (err) => {
+          this.isSubmitting = false;
+          console.error('Create endpoint failed:', err);
+          this.message.error('Tạo endpoint thất bại');
+        }
+      })
+    }
+  }
+
+  openCreateModal() {
+    this.isCreateModalOpen.set(true);
+  }
+
+  onConfirmModal(){
+    this.isCreateModalOpen.set(false);
+    this.reloadData()
+  }
+
+  onCloseModal(){
+    this.isCreateModalOpen.set(false);
   }
 }

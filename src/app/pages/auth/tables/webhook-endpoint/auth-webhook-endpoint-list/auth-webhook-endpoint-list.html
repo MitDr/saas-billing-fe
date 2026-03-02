@@ -3,7 +3,7 @@
     WEBHOOK ENDPOINT LIST
   </h1>
   <ng-container class="mb-4">
-    <button [routerLink]="createRoute" nz-button nzType="primary">+ Add Webhook Endpoint</button>
+    <button (click)="openCreateModal()" nz-button nzType="primary">+ Add Webhook Endpoint</button>
   </ng-container>
 </div>
 <app-editable-data-table
@@ -43,3 +43,25 @@
 
   </div>
 </app-editable-data-table>
+<nz-modal
+  (nzOnCancel)="onCloseModal()"
+  (nzOnOk)="onConfirmModal()"
+  [nzVisible]="isCreateModalOpen()"
+  nzCancelText="Close"
+  nzOkText="Complete"
+  nzTitle="Create Webhook Endpoint"
+>
+<ng-template nzModalContent>
+  <div class="page-container">
+<!--    <h1 class="text-2xl font-semibold mb-6">Create Webhook Endpoint</h1>-->
+
+    <app-auth-webhook-endpoint-reuse-form
+      (submitted)="onSubmitted()"
+      [formGroup]="webhookEndpointForm"
+      [isEditMode]="false"
+      [isLoading]="isSubmitting"
+      [submitLabel]="'Create'"
+    ></app-auth-webhook-endpoint-reuse-form>
+  </div>
+</ng-template>
+</nz-modal>

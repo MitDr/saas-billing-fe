@@ -1,0 +1,31 @@
+<div class="page-container">
+  <nz-page-header
+    [nzSubtitle]="'ID: ' + (price()?.id || '')"
+    [nzTitle]="'Update Price'"
+  >
+    <div class="flex justify-end mb-4">
+      <app-breadcrumb [routes]="routing"></app-breadcrumb>
+    </div>
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item><a routerLink="/admin/tables/prices">Prices</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>Update Price</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-page-header>
+
+  @if (!loading()) {
+    @if (price(); as price) {
+      <app-auth-price-reuse-form
+        [formGroup]="priceForm"
+        [availablePlans]="availablePlans()"
+        [isEditMode]="true"
+        [initPlan]="initPlan() "
+        [submitLabel]="'Update'"
+        (submitted)="onSubmitted()"
+      ></app-auth-price-reuse-form>
+    } @else {
+      <div>Price not found</div>
+    }
+  } @else {
+    <nz-spin nzTip="Loading Price..."></nz-spin>
+  }
+</div>

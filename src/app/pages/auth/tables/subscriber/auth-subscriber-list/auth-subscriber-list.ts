@@ -14,11 +14,18 @@ import {SubscriberRequest} from '../../../../../core/interface/request/subscribe
 import {AuthGenericListComponent} from '../../../../../core/generic/base-auth-list-component';
 import {AuthSubscriberRequest} from '../../../../../core/interface/request/auth/auth-subscriber-request';
 import {EditableDataTable} from '../../../../../shell/components/generic/editable-data-table/editable-data-table';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, NonNullableFormBuilder, Validators} from '@angular/forms';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzInputDirective, NzInputWrapperComponent} from 'ng-zorro-antd/input';
 import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
 import {RouterLink} from '@angular/router';
+import {
+  AuthWebhookEndpointReuseForm
+} from '../../../../../shell/components/form/auth/auth-webhook-endpoint-reuse-form/auth-webhook-endpoint-reuse-form';
+import {NzModalComponent, NzModalContentDirective} from 'ng-zorro-antd/modal';
+import {
+  AuthSubscriberReuseForm
+} from '../../../../../shell/components/form/auth/auth-subscriber-reuse-form/auth-subscriber-reuse-form';
 
 @Component({
   selector: 'app-auth-subscriber-list',
@@ -30,7 +37,11 @@ import {RouterLink} from '@angular/router';
     NzInputWrapperComponent,
     NzOptionComponent,
     NzSelectComponent,
-    RouterLink
+    RouterLink,
+    AuthWebhookEndpointReuseForm,
+    NzModalComponent,
+    NzModalContentDirective,
+    AuthSubscriberReuseForm
   ],
   templateUrl: './auth-subscriber-list.html',
   styleUrl: './auth-subscriber-list.css',
@@ -41,6 +52,13 @@ export class AuthSubscriberList extends AuthGenericListComponent<AuthSubscriber,
   createRoute = '/app/tables/subscribers/create'
   subscriberListRouting = AUTH_SUBSCRIBER_ROUTE_CONSTANT;
   private subscriberService = inject(AuthSubscriberService);
+  isCreateModalOpen = signal(false);
+  isSubmitting = false;
+  private fb = inject(NonNullableFormBuilder)
+  subscriberForm = this.fb.group({
+    name: ['', [Validators.required]],
+    email: ['', [Validators.required, Validators.email]],
+  })
 
   getDataPage(): Signal<ListData<AuthSubscriber> | null> {
     return this.subscriberPage;
@@ -106,5 +124,43 @@ export class AuthSubscriberList extends AuthGenericListComponent<AuthSubscriber,
       email: updatedSubscriber.email,
     }
     return result;
+  }
+
+  onSubmitted() {
+    console.log(this.subscriberForm.value)
+    if (this.subscriberForm.valid) {
+      const payload: AuthSubscriberRequest = {
+        name: this.subscriberForm.value.name!,
+        email: this.subscriberForm.value.email!,
+      }
+
+      console.log(payload);
+      this.subscriberService.createSubscriber(payload).subscribe({
+        next: (response) => {
+          this.isSubmitting = false;
+          this.message.success('Tạo subscription thành công');
+          this.subscriberForm.reset();
+          // this.router.navigate(['/app/tables/subscribers']);
+        },
+        error: (err) => {
+          this.isSubmitting = false;
+          console.error('Create subscriber failed:', err);
+          this.message.error('Tạo subscriber thất bại');
+        }
+      })
+    }
+  }
+
+  openCreateModal() {
+    this.isCreateModalOpen.set(true);
+  }
+
+  onConfirmModal(){
+    this.isCreateModalOpen.set(false);
+    this.reloadData()
+  }
+
+  onCloseModal(){
+    this.isCreateModalOpen.set(false);
   }
 }

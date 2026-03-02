@@ -3,7 +3,7 @@
     PAYOUT LIST
   </h1>
   <ng-container class="mb-4">
-    <button [routerLink]="createRoute" nz-button nzType="primary">+ Add Payout</button>
+    <button (click)="openCreateModal()" nz-button nzType="primary">Request Payout</button>
   </ng-container>
 </div>
 <app-editable-data-table
@@ -45,3 +45,27 @@
   </div>
   <!-- Toolbar nếu cần -->
 </app-editable-data-table>
+
+<nz-modal
+  (nzOnCancel)="onCloseModal()"
+  (nzOnOk)="onConfirmModal()"
+  [nzVisible]="isCreateModalOpen()"
+  nzCancelText="Close"
+  nzOkText="Complete"
+  nzTitle="Create Payout"
+>
+  <ng-template nzModalContent>
+    <div class="page-container">
+      <h1 class="text-2xl font-semibold mb-6">Create Payout</h1>
+
+      <app-auth-payout-reuse-form
+        (submitted)="onSubmitted()"
+        [formGroup]="payoutForm"
+        [isEditMode]="false"
+        [isLoading]="isSubmitting"
+        [submitLabel]="'Create'"
+      ></app-auth-payout-reuse-form>
+    </div>
+  </ng-template>
+</nz-modal>
+
