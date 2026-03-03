@@ -14,7 +14,8 @@
       <app-auth-webhook-endpoint-card
         [webhookEndpoint]="web"
         (load)="loadWebhookEndpoint($event)"
-        (deleteButton)="onDelete($event)">
+        (deleteButton)="onDelete($event)"
+        (onSubmit)="onSubmitted($event)">
       </app-auth-webhook-endpoint-card>
     } @else {
       <div class="text-center py-16">

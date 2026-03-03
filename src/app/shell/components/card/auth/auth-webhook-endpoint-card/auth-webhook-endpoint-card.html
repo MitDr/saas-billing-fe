@@ -44,7 +44,7 @@
 
       <!-- Actions -->
       <div class="mt-8 flex flex-wrap gap-3">
-        <button [routerLink]="['/app/tables/webhook-endpoints', webhookEndpoint().id, 'edit']"
+        <button (click)="openCreateModal()"
                 class="!inline-flex !items-center" nz-button
                 nzType="primary">
           <span nz-icon nzType="edit"></span>
@@ -62,3 +62,26 @@
     </div>
   </div>
 </nz-card>
+
+<nz-modal
+  (nzOnCancel)="onCloseModal()"
+  (nzOnOk)="onConfirmModal()"
+  [nzVisible]="isCreateModalOpen()"
+  nzCancelText="Close"
+  nzOkText="Complete"
+  nzTitle="Update Webhook Endpoint"
+>
+  <ng-template nzModalContent>
+    <div class="page-container">
+      <!--    <h1 class="text-2xl font-semibold mb-6">Create Webhook Endpoint</h1>-->
+
+      <app-auth-webhook-endpoint-reuse-form
+        (submitted)="onUpdate()"
+        [formGroup]="webhookEndpointForm"
+        [isEditMode]="false"
+        [isLoading]="isSubmitting"
+        [submitLabel]="'Create'"
+      ></app-auth-webhook-endpoint-reuse-form>
+    </div>
+  </ng-template>
+</nz-modal>
