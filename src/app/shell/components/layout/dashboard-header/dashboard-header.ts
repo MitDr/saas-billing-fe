@@ -1,10 +1,10 @@
-import {Component, input, output} from '@angular/core';
+import {Component, inject, input, output} from '@angular/core';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzHeaderComponent} from 'ng-zorro-antd/layout';
 import {NzDropdownDirective, NzDropdownMenuComponent} from 'ng-zorro-antd/dropdown';
 import {NzAvatarComponent} from 'ng-zorro-antd/avatar';
 import {NzMenuDirective, NzMenuDividerDirective, NzMenuItemComponent} from 'ng-zorro-antd/menu';
-import {RouterLink} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzTagComponent} from 'ng-zorro-antd/tag';
 import {NzSegmentedComponent, NzSegmentedItemComponent} from 'ng-zorro-antd/segmented';
@@ -35,10 +35,15 @@ export class DashboardHeader {
 
   isCollapsed = input<boolean>(false);
 
+  router = inject(Router);
   toggle = output<void>();
   logout = output<void>();
 
   onToggle() {
     this.toggle.emit();
+  }
+
+  clickProfile(){
+    this.router.navigate(['/profile'])
   }
 }

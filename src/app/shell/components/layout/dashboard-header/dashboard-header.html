@@ -23,21 +23,21 @@
       <!-- Dropdown user -->
       <a [nzDropdownMenu]="menu" nz-dropdown>
         <nz-avatar nzIcon="user"></nz-avatar>
-        <span class="ml-2">Tài khoản</span>
+        <span class="ml-2">Account</span>
         <nz-icon nzType="down"/>
       </a>
 
       <nz-dropdown-menu #menu="nzDropdownMenu">
         <ul nz-menu>
           <li nz-menu-item>
-            <a routerLink="/profile">Thông tin cá nhân</a>
+            <a (click)="clickProfile()">Profile</a>
           </li>
 
           <li nz-menu-divider></li>
 
           <!-- Logout chỉ emit event -->
           <li (click)="logout.emit()" nz-menu-item>
-            Đăng xuất
+            Logout
           </li>
         </ul>
       </nz-dropdown-menu>

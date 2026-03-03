@@ -89,7 +89,6 @@ export class Dashboard {
   renewalDays = signal(30);
 
   load = signal(false);
-  protected readonly routing = PRICE_ROUTE_CONSTANT;
 
 
   constructor() {

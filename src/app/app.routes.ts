@@ -106,6 +106,8 @@ import {AuthPlanGroupCreate} from './pages/auth/tables/plan-group/auth-plan-grou
 import {AuthPriceCreate} from './pages/auth/tables/price/auth-price-create/auth-price-create';
 import {AuthPlanGroupEdit} from './pages/auth/tables/plan-group/auth-plan-group-edit/auth-plan-group-edit';
 import {AuthPriceEdit} from './pages/auth/tables/price/auth-price-edit/auth-price-edit';
+import {AuthEntitlementList} from './pages/auth/tables/entitlement/auth-entitlement-list/auth-entitlement-list';
+import {Profile} from './pages/public/profile/profile/profile';
 
 export const routes: Routes = [
   {
@@ -115,6 +117,10 @@ export const routes: Routes = [
       {
         path: '',
         component: Home
+      },
+      {
+        path: 'profile',
+        component: Profile
       }
     ]
   },
@@ -398,6 +404,11 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         component: AuthDashboard
+      },
+      //Entitlement
+      {
+        path: 'tables/entitlements',
+        component: AuthEntitlementList
       },
       //Features
       {

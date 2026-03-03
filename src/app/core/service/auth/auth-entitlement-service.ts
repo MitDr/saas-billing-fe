@@ -1,0 +1,103 @@
+import {inject, Injectable} from '@angular/core';
+import {ApiClientService} from '../api-client-service';
+import {EntitlementRequest} from '../../interface/request/entitlement-request';
+import {Observable, throwError} from 'rxjs';
+import {Entitlement} from '../../interface/entity/entitlement';
+import {catchError} from 'rxjs/operators';
+import {ListData} from '../../interface/list-data';
+import {HttpParams} from '@angular/common/http';
+import {SoftDeleteRequest} from '../../interface/request/soft-delete-request';
+import {AuthEntitlementRequest} from '../../interface/request/auth/auth-entitlement-request';
+import {AuthEntitlement} from '../../interface/entity/auth/auth-entitlement';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthEntitlementService{
+  api = inject(ApiClientService);
+
+  createEntitlement(request: AuthEntitlementRequest): Observable<AuthEntitlement> {
+    return this.api.post<AuthEntitlement>(`/auth/entitlements`, request).pipe(
+      catchError(error => {
+        console.error('Create entitlement error:', error);
+        return throwError(() => new Error('Tạo entitlement thất bại'));
+      })
+    );
+  }
+
+  getEntitlements(
+    page: number = 1,
+    size: number = 5,
+    search?: string,
+    softDelete?: boolean | null,
+    tenantId?: number | null,
+    sort: string = 'id,asc'
+  ): Observable<ListData<AuthEntitlement>> {
+
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString())
+      .set('sort', sort);
+
+    if (search) {
+      params = params.set('search', search);
+    }
+
+    if (softDelete !== null && softDelete !== undefined) {
+      params = params.set('softDelete', softDelete.toString());
+    }
+
+    if (tenantId) {
+      params = params
+        .set('tenantId', tenantId.toString())
+        .set('filterByTenant', 'true');
+    }
+
+    return this.api.get<ListData<AuthEntitlement>>('/auth/entitlements', params);
+  }
+
+  getEntitlement(id: number): Observable<AuthEntitlement> {
+    return this.api.get<AuthEntitlement>(`/auth/entitlements/${id}`).pipe(
+      catchError(error => {
+        console.error('Get entitlement error:', error);
+        return throwError(() => new Error('Không thể lấy entitlement'));
+      })
+    );
+  }
+
+  update(updateEntitlement: AuthEntitlementRequest, id: number): Observable<AuthEntitlement> {
+    return this.api.put<AuthEntitlement>(`/auth/entitlements/${id}`, updateEntitlement).pipe(
+      catchError(error => {
+        console.error('Update entitlement error:', error);
+        return throwError(() => new Error('Cập nhật entitlement thất bại'));
+      })
+    );
+  }
+
+  bulkDelete(ids: number[]): Observable<void> {
+    return this.api.deletes<void>(`/auth/entitlements`, ids).pipe(
+      catchError(error => {
+        console.error('Bulk delete error:', error);
+        return throwError(() => new Error('Xóa hàng loạt thất bại'));
+      })
+    );
+  }
+
+  bulkSoftDelete(softDeleteRequest: SoftDeleteRequest): Observable<void> {
+    return this.api.post<void>(`/auth/entitlements/softDelete`, softDeleteRequest).pipe(
+      catchError(error => {
+        console.error('Bulk soft delete error:', error);
+        return throwError(() => new Error('Xóa mềm hàng loạt thất bại'));
+      })
+    );
+  }
+
+  deleteEntitlement(id: number): Observable<void> {
+    return this.api.delete<void>(`/auth/entitlements/${id}`).pipe(
+      catchError(error => {
+        console.error('Delete entitlement error:', error);
+        return throwError(() => new Error('Xóa entitlement thất bại'));
+      })
+    );
+  }
+}

@@ -107,6 +107,11 @@ export const APP_MENU: MenuItem[] = [
     path: '/app/tables',
     children: [
       {
+        title: 'Entitlements',
+        icon: 'eye',
+        path: '/app/tables/entitlements',
+      },
+      {
         title: 'Feature',
         icon: 'bulb',
         path: '/app/tables/features',
