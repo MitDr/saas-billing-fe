@@ -11,6 +11,7 @@ import {catchError} from 'rxjs/operators';
 })
 export class ApiClientService {
 
+  // private baseUrl =
   private baseUrl = 'http://localhost:8080/api/v1';
   private isRefreshing = false;
   private refreshTokenSubject = new BehaviorSubject<string | null>(null);
@@ -39,6 +40,8 @@ export class ApiClientService {
     if (token && !endpoint.startsWith('/public')) {
       headers = headers.set('Authorization', `Bearer ${token}`);
     }
+
+    // headers = headers.set('ngrok-skip-browser-warning', 'true');
 
     return this.http.request<ApiResponse<T> | null>(
       method,

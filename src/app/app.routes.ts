@@ -61,8 +61,7 @@ import {PlanCreate} from './pages/admin/tables/plan/plan-create/plan-create';
 import {PlanGroupCreate} from './pages/admin/tables/plan-group/plan-group-create/plan-group-create';
 import {PlanGroupEdit} from './pages/admin/tables/plan-group/plan-group-edit/plan-group-edit';
 import {PriceCreate} from './pages/admin/tables/price/price-create/price-create';
-import {
-  PriceEdit} from './pages/admin/tables/price/price-edit/price-edit';
+import {PriceEdit} from './pages/admin/tables/price/price-edit/price-edit';
 import {SubscriberCreate} from './pages/admin/tables/subscriber/subscriber-create/subscriber-create';
 import {SubscriberEdit} from './pages/admin/tables/subscriber/subscriber-edit/subscriber-edit';
 import {SubscriptionEdit} from './pages/admin/tables/subscription/subscription-edit/subscription-edit';
@@ -108,6 +107,7 @@ import {AuthPlanGroupEdit} from './pages/auth/tables/plan-group/auth-plan-group-
 import {AuthPriceEdit} from './pages/auth/tables/price/auth-price-edit/auth-price-edit';
 import {AuthEntitlementList} from './pages/auth/tables/entitlement/auth-entitlement-list/auth-entitlement-list';
 import {Profile} from './pages/public/profile/profile/profile';
+import {AuthEntitlementDetail} from './pages/auth/tables/entitlement/auth-entitlement-detail/auth-entitlement-detail';
 
 export const routes: Routes = [
   {
@@ -291,7 +291,6 @@ export const routes: Routes = [
         path: 'tables/entitlements/:id',
         component: EntitlementDetail,
       },
-
       {
         path: 'tables/entitlements/:id/edit',
         component: EntitlementEdit
@@ -409,6 +408,10 @@ export const routes: Routes = [
       {
         path: 'tables/entitlements',
         component: AuthEntitlementList
+      },
+      {
+        path: 'tables/entitlements/:id',
+        component: AuthEntitlementDetail
       },
       //Features
       {
