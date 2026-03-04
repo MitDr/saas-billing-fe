@@ -118,10 +118,6 @@ export const routes: Routes = [
         path: '',
         component: Home
       },
-      {
-        path: 'profile',
-        component: Profile
-      }
     ]
   },
   {
@@ -404,6 +400,10 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         component: AuthDashboard
+      },
+      {
+        path: 'profile',
+        component: Profile
       },
       //Entitlement
       {
