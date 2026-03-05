@@ -108,6 +108,8 @@ import {AuthPriceEdit} from './pages/auth/tables/price/auth-price-edit/auth-pric
 import {AuthEntitlementList} from './pages/auth/tables/entitlement/auth-entitlement-list/auth-entitlement-list';
 import {Profile} from './pages/public/profile/profile/profile';
 import {AuthEntitlementDetail} from './pages/auth/tables/entitlement/auth-entitlement-detail/auth-entitlement-detail';
+import {DocumentChat} from './pages/auth/ai-chat/document-chat/document-chat';
+import {EntitlementCheck} from './pages/auth/policy/entitlement-check/entitlement-check';
 
 export const routes: Routes = [
   {
@@ -399,6 +401,14 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         component: AuthDashboard
+      },
+      {
+        path: 'ai-chat',
+        component: DocumentChat
+      },
+      {
+        path: 'entitlement-check',
+        component: EntitlementCheck
       },
       {
         path: 'profile',

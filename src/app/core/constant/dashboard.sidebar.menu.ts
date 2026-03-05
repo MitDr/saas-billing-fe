@@ -102,6 +102,11 @@ export const APP_MENU: MenuItem[] = [
     path: '/app/tenant',
   },
   {
+    title: 'Check',
+    icon: 'container',
+    path: '/app/entitlement-check',
+  },
+  {
     title: 'Tables',
     icon: 'table',
     path: '/app/tables',

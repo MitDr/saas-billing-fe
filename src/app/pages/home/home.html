@@ -1,13 +1,168 @@
-<section class="max-w-4xl mx-auto">
-  <h1 class="text-4xl font-bold mb-4">
-    Welcome to MyApp
-  </h1>
+<div class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/50">
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden">
+    <!-- Background subtle pattern -->
+    <div class="absolute inset-0 z-0 opacity-10">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,#3b82f6_0%,transparent_50%)]"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,#8b5cf6_0%,transparent_50%)]"></div>
+    </div>
 
-  <p class="text-gray-500 mb-6">
-    Build your SaaS faster with Angular.
-  </p>
+    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pt-20 pb-32 md:pt-32 md:pb-48 text-center">
+      <!-- Badge -->
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100/80 text-blue-700 text-sm font-medium mb-6">
+        <span nz-icon nzType="rocket" class="text-blue-600"></span>
+        Built with Angular, ng-zorro and Spring Boot
+      </div>
 
-  <button nz-button nzType="primary" nzSize="large">
-    Get Started
-  </button>
-</section>
+      <!-- Headline -->
+      <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
+        Build Your Service
+        <br class="hidden md:block" />
+        <span class="text-4xl md:text-6xl">10x Faster</span>
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto mb-10 leading-relaxed">
+        Modern Subscription SaaS with authentication, payments, admin dashboard, and beautiful UI components.
+        Focus on your business logic — we handle the rest.
+      </p>
+
+      <!-- CTA Buttons -->
+      <div class="flex flex-col sm:flex-row gap-5 justify-center items-center">
+        <button nz-button nzType="primary" nzSize="large" class="h-14 px-10 text-lg font-medium shadow-lg hover:shadow-xl transition-all">
+          Get Started Free
+        </button>
+      </div>
+
+      <!-- Social proof / stats -->
+      <div class="mt-16 grid grid-cols-2 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div class="text-center">
+          <div class="text-4xl font-bold text-blue-600">+30</div>
+          <p class="text-gray-600 mt-2">Beautiful Components</p>
+        </div>
+<!--        <div class="text-center">-->
+<!--          <div class="text-4xl font-bold text-indigo-600">100%</div>-->
+<!--          <p class="text-gray-600 mt-2">TypeScript & Signals</p>-->
+<!--        </div>-->
+        <div class="text-center">
+          <div class="text-4xl font-bold text-green-600">Fast</div>
+          <p class="text-gray-600 mt-2">Performance Optimized</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Subtle wave decoration -->
+    <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent"></div>
+  </section>
+
+  <!-- Features Section -->
+  <!-- Features Section -->
+  <section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-bold mb-4">Everything You Need to Launch Fast</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Production-ready features so you can focus on building your product, not the boilerplate.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Feature Card 1: Authentication & Security -->
+        <nz-card nzHoverable class="shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-200 rounded-xl">
+          <nz-card-meta
+            [nzTitle]="authTitle"
+            [nzDescription]="authDescription"
+          ></nz-card-meta>
+        </nz-card>
+
+        <!-- Feature Card 2: Payments & Subscriptions -->
+        <nz-card nzHoverable class="shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-200 rounded-xl">
+          <nz-card-meta
+            [nzTitle]="paymentTitle"
+            [nzDescription]="paymentDescription"
+          ></nz-card-meta>
+        </nz-card>
+
+        <!-- Feature Card 3: Admin Dashboard -->
+        <nz-card nzHoverable class="shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-200 rounded-xl">
+          <nz-card-meta
+            [nzTitle]="dashboardTitle"
+            [nzDescription]="dashboardDescription"
+          ></nz-card-meta>
+        </nz-card>
+      </div>
+
+      <!-- Định nghĩa ng-template riêng cho từng card -->
+      <ng-template #authTitle>
+        <div class="flex items-center gap-3">
+          <span nz-icon nzType="safety-certificate" class="text-3xl text-blue-600"></span>
+          <span class="text-2xl font-bold text-blue-600">Authentication & Security</span>
+        </div>
+      </ng-template>
+
+      <ng-template #authDescription>
+        <div class="text-gray-600 text-base leading-relaxed">
+          Full auth system with:
+          <ul class="list-disc pl-6 mt-3 space-y-2">
+            <li>JWT & refresh tokens</li>
+            <li>Role-based access control (RBAC)</li>
+          </ul>
+        </div>
+      </ng-template>
+
+      <ng-template #paymentTitle>
+        <div class="flex items-center gap-3">
+          <span nz-icon nzType="credit-card" class="text-3xl text-indigo-600"></span>
+          <span class="text-2xl font-bold text-indigo-600">Payments & Subscriptions</span>
+        </div>
+      </ng-template>
+
+      <ng-template #paymentDescription>
+        <div class="text-gray-600 text-base leading-relaxed">
+          Integrated with Stripe for:
+          <ul class="list-disc pl-6 mt-3 space-y-2">
+            <li>Subscription plans</li>
+            <li>Invoice generation & management</li>
+            <li>Webhook handling (payment success/failure)</li>
+            <li>Proration & trial periods</li>
+          </ul>
+        </div>
+      </ng-template>
+
+      <ng-template #dashboardTitle>
+        <div class="flex items-center gap-3">
+          <span nz-icon nzType="dashboard" class="text-3xl text-purple-600"></span>
+          <span class="text-2xl font-bold text-purple-600">Admin Dashboard</span>
+        </div>
+      </ng-template>
+
+      <ng-template #dashboardDescription>
+        <div class="text-gray-600 text-base leading-relaxed">
+          Complete dashboard with:
+          <ul class="list-disc pl-6 mt-3 space-y-2">
+            <li>Analytics & reporting</li>
+            <li>System monitoring</li>
+          </ul>
+        </div>
+      </ng-template>
+    </div>
+  </section>
+
+  <!-- CTA Final -->
+  <section class="py-20 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center">
+    <div class="max-w-4xl mx-auto px-6">
+      <h2 class="text-4xl md:text-5xl font-bold mb-6">Ready to Launch Your Service?</h2>
+      <p class="text-xl md:text-2xl mb-10 opacity-90">
+        Start building today with the best Subscription SaaS.
+      </p>
+      <button nz-button nzType="primary" nzSize="large" class="h-14 px-12 text-lg font-medium shadow-2xl hover:shadow-3xl transition-all bg-white text-blue-600 hover:bg-gray-100">
+        Get Started Now
+      </button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 bg-gray-900 text-gray-400 text-center">
+    <p>© {{ currentYear }} Saas Billing. Built with ❤️ and Angular.</p>
+  </footer>
+</div>

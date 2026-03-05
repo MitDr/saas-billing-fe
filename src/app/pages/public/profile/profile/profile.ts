@@ -1,4 +1,4 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {
   AbstractControl,
   FormsModule,
@@ -15,6 +15,8 @@ import {NzInputDirective} from 'ng-zorro-antd/input';
 import {AuthUser} from '../../../../core/interface/entity/auth/auth-user';
 import {AuthUserService} from '../../../../core/service/auth/auth-user-service';
 import {AuthUserCard} from '../../../../shell/components/card/auth/auth-user-card/auth-user-card';
+import {NzSpinComponent} from 'ng-zorro-antd/spin';
+import {AuthUserRequest} from '../../../../core/interface/request/auth/auth-user-request';
 
 @Component({
   selector: 'app-profile',
@@ -29,12 +31,13 @@ import {AuthUserCard} from '../../../../shell/components/card/auth/auth-user-car
     NzInputDirective,
     NzRowDirective,
     ReactiveFormsModule,
-    AuthUserCard
+    AuthUserCard,
+    NzSpinComponent
   ],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
-export class Profile {
+export class Profile implements OnInit {
   private fb = inject(NonNullableFormBuilder);
   private destroy$ = new Subject<void>();
   userService = inject(AuthUserService);
@@ -73,7 +76,6 @@ export class Profile {
   }
 
   validateForm = this.fb.group({
-    username: this.fb.control('',[Validators.required, Validators.minLength(4), Validators.maxLength(20)]),
     email: this.fb.control('', [Validators.email, Validators.required]),
     password: this.fb.control('', [Validators.required]),
     checkPassword: this.fb.control('', [Validators.required, this.confirmationValidator])
@@ -92,7 +94,19 @@ export class Profile {
 
   submitForm(): void {
     if (this.validateForm.valid) {
-      console.log('submit', this.validateForm.value);
+      const request: AuthUserRequest = {
+        email: this.validateForm.value.email!,
+        password: this.validateForm.value.password!
+      }
+      this.userService.updatePassword(request).subscribe({
+        next: (res) => {
+          this.user.set(res);
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      })
+      // console.log('submit', this.validateForm.value);
     } else {
       Object.values(this.validateForm.controls).forEach(control => {
         if (control.invalid) {
@@ -111,4 +125,5 @@ export class Profile {
     }
     return {};
   }
+
 }

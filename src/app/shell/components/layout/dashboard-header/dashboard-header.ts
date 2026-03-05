@@ -44,6 +44,6 @@ export class DashboardHeader {
   }
 
   clickProfile(){
-    this.router.navigate(['/profile'])
+    this.router.navigate(['app/profile'])
   }
 }

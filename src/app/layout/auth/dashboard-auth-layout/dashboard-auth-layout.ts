@@ -31,7 +31,6 @@ export class DashboardAuthLayout {
   onLogout() {
     this.auth.logout().subscribe({
       next: () => {
-        // không cần làm gì thêm
       }
     });
   }

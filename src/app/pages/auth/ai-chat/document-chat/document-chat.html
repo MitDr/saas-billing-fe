@@ -1,0 +1,88 @@
+<div class="p-6 max-w-7xl mx-auto">
+  <h1 class="text-3xl font-bold mb-2">Chatbot hỏi đáp tài liệu</h1>
+<!--  <p class="text-gray-600 mb-8">Hỗ trợ PDF / TXT / DOCX / MD – Tải lên và hỏi đáp ngay</p>-->
+
+  <!-- Upload Section -->
+
+  <!-- Delete Section -->
+
+  <!-- Chat Section -->
+<!--  <nz-card nzTitle="Hỏi đáp tài liệu" class="shadow-md">-->
+    <nz-spin [nzSpinning]="chatLoading()">
+      <div class="space-y-6">
+        <!-- Input + Button -->
+          <input
+            nz-input
+            placeholder="Nhập câu hỏi về tài liệu..."
+            [(ngModel)]="query"
+            (keyup.enter)="askQuestion()"
+            class="h-12 text-base"
+          />
+          <button
+            nz-button
+            nzType="primary"
+            nzSize="large"
+            (click)="askQuestion()"
+            [nzLoading]="chatLoading()"
+            class="!mt-5 h-12"
+          >
+            Hỏi ngay
+          </button>
+
+        <!-- Kết quả trả lời -->
+        @if (answer()) {
+          <div class="mt-5 bg-gray-50 p-6 rounded-lg border border-gray-200">
+            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+              <span nz-icon nzType="bulb" class="text-yellow-600"></span>
+              Trả lời
+            </h3>
+            <p class="text-gray-800 whitespace-pre-wrap leading-relaxed">
+              {{ answer() }}
+            </p>
+
+            @if (sources().length > 0) {
+              <nz-divider nzText="Nguồn tham khảo"></nz-divider>
+              <nz-descriptions [nzColumn]="1" nzBordered nzSize="small">
+                @for (source of sources(); track source.source) {
+                  <nz-descriptions-item [nzTitle]="source.source">
+                    <div class="text-gray-700">
+                      {{ source.content | slice:0:300 }}...
+                      <span class="text-xs text-gray-500 ml-2">(trích đoạn)</span>
+                    </div>
+                  </nz-descriptions-item>
+                }
+              </nz-descriptions>
+            }
+          </div>
+        } @else if (chatLoading()) {
+          <!-- Loading placeholder -->
+          <div class="text-center py-8 text-gray-500">
+            <nz-spin nzSize="large"></nz-spin>
+            <p class="mt-4">Đang tìm kiếm và trả lời...</p>
+          </div>
+        } @else {
+          <!-- Mẫu data để test giao diện (xóa khi dùng thật) -->
+          <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
+            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+              <span nz-icon nzType="bulb" class="text-yellow-600"></span>
+              Ví dụ trả lời mẫu
+            </h3>
+            <p class="text-gray-800 leading-relaxed">
+              Angular là một framework JavaScript mạnh mẽ để xây dựng ứng dụng web single-page (SPA). Nó sử dụng TypeScript làm ngôn ngữ chính, hỗ trợ component-based architecture, dependency injection, và reactive programming với RxJS.
+            </p>
+
+            <nz-divider nzText="Nguồn tham khảo (mẫu)"></nz-divider>
+            <nz-descriptions [nzColumn]="1" nzBordered nzSize="small">
+              <nz-descriptions-item nzTitle="angular.io/docs">
+                Angular là framework mã nguồn mở do Google phát triển...
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="wikipedia.org/wiki/Angular">
+                Angular (phiên bản 2 trở lên) được ra mắt năm 2016...
+              </nz-descriptions-item>
+            </nz-descriptions>
+          </div>
+        }
+      </div>
+    </nz-spin>
+<!--  </nz-card>-->
+</div>

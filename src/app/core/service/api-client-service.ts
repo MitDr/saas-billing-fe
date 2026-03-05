@@ -36,7 +36,6 @@ export class ApiClientService {
     let headers = new HttpHeaders();
     const token = this.getAccessToken();
 
-    // Public API không gửi token
     if (token && !endpoint.startsWith('/public')) {
       headers = headers.set('Authorization', `Bearer ${token}`);
     }
@@ -55,7 +54,6 @@ export class ApiClientService {
     ).pipe(
       map((res: HttpResponse<ApiResponse<T> | null>) => {
 
-        // 👉 HTTP 204
         if (res.status === 204) {
           return undefined as T;
         }
