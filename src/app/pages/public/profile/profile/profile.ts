@@ -17,6 +17,7 @@ import {AuthUserService} from '../../../../core/service/auth/auth-user-service';
 import {AuthUserCard} from '../../../../shell/components/card/auth/auth-user-card/auth-user-card';
 import {NzSpinComponent} from 'ng-zorro-antd/spin';
 import {AuthUserRequest} from '../../../../core/interface/request/auth/auth-user-request';
+import {AuthService} from '../../../../core/service/auth-service';
 
 @Component({
   selector: 'app-profile',
@@ -38,24 +39,31 @@ import {AuthUserRequest} from '../../../../core/interface/request/auth/auth-user
   styleUrl: './profile.css',
 })
 export class Profile implements OnInit {
-  private fb = inject(NonNullableFormBuilder);
-  private destroy$ = new Subject<void>();
   userService = inject(AuthUserService);
+  authService = inject(AuthService);
   loading = signal<boolean>(false)
-
   user = signal<AuthUser | null>(null);
-  constructor(){
-    const username = this.getUsername();
-    const email = this.getEmail();
-    const id = this.getId();
+  private fb = inject(NonNullableFormBuilder);
+  validateForm = this.fb.group({
+    email: this.fb.control('', [Validators.email, Validators.required]),
+    password: this.fb.control('', [Validators.required]),
+    checkPassword: this.fb.control('', [Validators.required, this.confirmationValidator])
+  })
+  private destroy$ = new Subject<void>();
+
+  constructor() {
+    const username = this.authService.currentUserName;
+    const email = this.authService.currentUserEmail;
+    const id = this.authService.currentUserID;
     this.loading.set(true)
-    if (username && email && id){
-      this.userService.getUser(username, id, email).subscribe({
+    if (username && email && id) {
+      // console.log(currentUser);
+      this.userService.getUser(username, id.toString(), email).subscribe({
         next: (response) => {
           this.user.set(response);
-         this.loading.set(false);
+          this.loading.set(false);
         },
-        error: (err)=> {
+        error: (err) => {
           this.loading.set(false);
           console.error(err);
         }
@@ -63,23 +71,21 @@ export class Profile implements OnInit {
     }
   }
 
-  getUsername(){
+  getCurrentUser() {
+    return localStorage.getItem('currentUser');
+  }
+
+  getUsername() {
     return localStorage.getItem('username')
   }
 
-  getEmail(){
+  getEmail() {
     return localStorage.getItem('email')
   }
 
-  getId(){
+  getId() {
     return localStorage.getItem('id');
   }
-
-  validateForm = this.fb.group({
-    email: this.fb.control('', [Validators.email, Validators.required]),
-    password: this.fb.control('', [Validators.required]),
-    checkPassword: this.fb.control('', [Validators.required, this.confirmationValidator])
-  })
 
   ngOnInit(): void {
     this.validateForm.controls.password.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
@@ -100,6 +106,7 @@ export class Profile implements OnInit {
       }
       this.userService.updatePassword(request).subscribe({
         next: (res) => {
+          this.validateForm.reset();
           this.user.set(res);
         },
         error: (err) => {
@@ -111,7 +118,7 @@ export class Profile implements OnInit {
       Object.values(this.validateForm.controls).forEach(control => {
         if (control.invalid) {
           control.markAsDirty();
-          control.updateValueAndValidity({ onlySelf: true });
+          control.updateValueAndValidity({onlySelf: true});
         }
       });
     }
@@ -119,9 +126,9 @@ export class Profile implements OnInit {
 
   confirmationValidator(control: AbstractControl): ValidationErrors | null {
     if (!control.value) {
-      return { required: true };
+      return {required: true};
     } else if (control.value !== control.parent!.value.password) {
-      return { confirm: true, error: true };
+      return {confirm: true, error: true};
     }
     return {};
   }

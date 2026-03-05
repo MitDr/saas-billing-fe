@@ -1,12 +1,9 @@
 import {Component, computed, inject, OnInit, signal} from '@angular/core';
-import {Feature} from '../../../../core/interface/entity/feature';
 import {AuthSubscriber} from '../../../../core/interface/entity/auth/auth-subscriber';
 import {AuthFeature} from '../../../../core/interface/entity/auth/auth-feature';
-import {FeatureService} from '../../../../core/service/feature-service';
 import {AuthSubscriberService} from '../../../../core/service/auth/auth-subscriber-service';
 import {AuthFeatureService} from '../../../../core/service/auth/auth-feature-service';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {PlanGroup} from '../../../../core/interface/entity/plan-group';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzFormControlComponent, NzFormItemComponent, NzFormLabelComponent} from 'ng-zorro-antd/form';
@@ -15,12 +12,13 @@ import {NzTagComponent} from 'ng-zorro-antd/tag';
 import {NzCardComponent, NzCardMetaComponent} from 'ng-zorro-antd/card';
 import {NzCheckboxComponent} from 'ng-zorro-antd/checkbox';
 import {NzModalComponent, NzModalContentDirective, NzModalModule} from 'ng-zorro-antd/modal';
-import {Subscriber} from '../../../../core/interface/entity/subscriber';
 import {Policy} from '../../../../core/interface/entity/auth/policy';
 import {NzTableComponent} from 'ng-zorro-antd/table';
 import {formatDate} from '@angular/common';
 import {NzEmptyComponent} from 'ng-zorro-antd/empty';
 import {NzSpinComponent} from 'ng-zorro-antd/spin';
+import {AuthEntitlementService} from '../../../../core/service/auth/auth-entitlement-service';
+import {AuthPolicy} from '../../../../core/interface/entity/auth/auth-policy';
 
 @Component({
   selector: 'app-entitlement-check',
@@ -46,7 +44,7 @@ import {NzSpinComponent} from 'ng-zorro-antd/spin';
   templateUrl: './entitlement-check.html',
   styleUrl: './entitlement-check.css',
 })
-export class EntitlementCheck implements OnInit{
+export class EntitlementCheck implements OnInit {
   availableFeatures = signal<AuthFeature[]>([])
   availableSubscriber = signal<AuthSubscriber[]>([])
   policy = signal<Policy | null>(null);
@@ -55,13 +53,46 @@ export class EntitlementCheck implements OnInit{
 
   isFeatureModalOpen = signal(false);
   isSubscriberModalOpen = signal(false);
+  checking = signal(false);
+
 
   featureService = inject(AuthFeatureService);
   subscriberService = inject(AuthSubscriberService);
+  entitlementService = inject(AuthEntitlementService);
+  canCheck = computed(() => {
+    return this.selectedSubscriber() !== null && this.selectedFeatures().length > 0;
+  });
 
   tableData = computed(() => this.policy()?.entitlements ?? []);
 
   message = inject(NzMessageService);
+
+  checkEntitlements() {
+    if (!this.canCheck()) {
+      this.message.warning('Vui lòng chọn ít nhất 1 subscriber và 1 feature');
+      return;
+    }
+
+    this.checking.set(true);
+
+    const request: AuthPolicy = {
+      subscriberId: this.selectedSubscriber()!.id,
+      featureIds: this.selectedFeatures().map(f => f.id)
+    };
+
+    this.entitlementService.checkPolicies(request).subscribe({
+      next: (policy) => {
+        this.policy.set(policy);
+        this.message.success('Kiểm tra entitlement thành công');
+        this.checking.set(false);
+      },
+      error: (err) => {
+        console.error('Check policies error:', err);
+        this.message.error('Kiểm tra entitlement thất bại');
+        this.checking.set(false);
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.loadAllFeature();

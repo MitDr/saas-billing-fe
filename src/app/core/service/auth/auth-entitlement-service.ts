@@ -1,19 +1,19 @@
 import {inject, Injectable} from '@angular/core';
 import {ApiClientService} from '../api-client-service';
-import {EntitlementRequest} from '../../interface/request/entitlement-request';
 import {Observable, throwError} from 'rxjs';
-import {Entitlement} from '../../interface/entity/entitlement';
 import {catchError} from 'rxjs/operators';
 import {ListData} from '../../interface/list-data';
 import {HttpParams} from '@angular/common/http';
 import {SoftDeleteRequest} from '../../interface/request/soft-delete-request';
 import {AuthEntitlementRequest} from '../../interface/request/auth/auth-entitlement-request';
 import {AuthEntitlement} from '../../interface/entity/auth/auth-entitlement';
+import {Policy} from '../../interface/entity/auth/policy';
+import {AuthPolicy} from '../../interface/entity/auth/auth-policy';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthEntitlementService{
+export class AuthEntitlementService {
   api = inject(ApiClientService);
 
   createEntitlement(request: AuthEntitlementRequest): Observable<AuthEntitlement> {
@@ -97,6 +97,15 @@ export class AuthEntitlementService{
       catchError(error => {
         console.error('Delete entitlement error:', error);
         return throwError(() => new Error('Xóa entitlement thất bại'));
+      })
+    );
+  }
+
+  checkPolicies(request: AuthPolicy): Observable<Policy> {
+    return this.api.post<Policy>('/auth/entitlements/check-policies', request).pipe(
+      catchError(error => {
+        console.error('get policy error:', error);
+        return throwError(() => new Error('get policy failed'));
       })
     );
   }

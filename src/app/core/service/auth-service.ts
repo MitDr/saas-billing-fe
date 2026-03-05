@@ -9,7 +9,7 @@ import {tap} from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthService {
-  
+
   bootstrapped = false;
   currentUser$ = new BehaviorSubject<AuthUser | null>(this.loadUser());
 
@@ -23,17 +23,29 @@ export class AuthService {
     return this.currentUser$.value;
   }
 
+  get currentUserEmail() {
+    return this.currentUser$.value?.email;
+  }
+
+  get currentUserID() {
+    return this.currentUser$.value?.id;
+  }
+
+  get currentUserName() {
+    return this.currentUser$.value?.username;
+  }
+
   bootstrapAuth() {
     if (this.bootstrapped) return;
 
-    console.log('[AUTH] bootstrapAuth called');
+    // console.log('[AUTH] bootstrapAuth called');
     const access = localStorage.getItem('accessToken');
     const refresh = localStorage.getItem('refreshToken');
     const user = localStorage.getItem('currentUser');
 
-    console.log('[AUTH] bootstrap - accessToken:', access);
-    console.log('[AUTH] bootstrap - refreshToken:', refresh);
-    console.log('[AUTH] bootstrap - currentUser:', user);
+    // console.log('[AUTH] bootstrap - accessToken:', access);
+    // console.log('[AUTH] bootstrap - refreshToken:', refresh);
+    // console.log('[AUTH] bootstrap - currentUser:', user);
 
     if (access && refresh && user) {
       this.bootstrapped = true;
