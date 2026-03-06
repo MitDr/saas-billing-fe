@@ -1,0 +1,44 @@
+<div class="page-container">
+  <nz-tabs>
+    <nz-tab nzTitle="Subscribe">
+      <h1 class="text-2xl font-semibold mb-6">Create Subscription</h1>
+      <app-subscribe-reuse-form
+        (submitted)="onSubmitted()"
+        [availablePrice]="availablePrice()"
+        [availableSubscriber]="availableSubscriber()"
+        [formGroup]="subscribeForm"
+        [isLoading]="isSubmitting"
+      ></app-subscribe-reuse-form>
+    </nz-tab>
+    <nz-tab nzTitle="Cancel">
+      <h1 class="text-2xl font-semibold mb-6">Cancel Subscription</h1>
+      <app-cancel-subscription-reuse-form
+        (submitted)="onSubmitted()"
+        [availableSubscription]="availableSubscription()"
+        [availableSubscriber]="availableSubscriber()"
+        [formGroup]="cancelForm"
+        [isLoading]="isSubmitting"
+      ></app-cancel-subscription-reuse-form>
+    </nz-tab>
+    <nz-tab nzTitle="Renew">
+      <h1 class="text-2xl font-semibold mb-6">Renew Subscription</h1>
+      <app-renew-subscription-reuse-form
+        (submitted)="onSubmitted()"
+        [availableSubscription]="availableSubscription()"
+        [availableSubscriber]="availableSubscriber()"
+        [formGroup]="renewForm"
+        [isLoading]="isSubmitting"
+      ></app-renew-subscription-reuse-form>
+    </nz-tab>
+    <nz-tab nzTitle="Reactivate">
+      <h1 class="text-2xl font-semibold mb-6">Reactivate Subscription</h1>
+      <app-reactivate-subscription-reuse-form
+        (submitted)="onSubmitted()"
+        [availableSubscription]="availableSubscription()"
+        [availableSubscriber]="availableSubscriber()"
+        [formGroup]="reactivateForm"
+        [isLoading]="isSubmitting"
+      ></app-reactivate-subscription-reuse-form>
+    </nz-tab>
+  </nz-tabs>
+</div>

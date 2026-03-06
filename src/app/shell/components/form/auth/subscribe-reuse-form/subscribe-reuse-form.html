@@ -1,0 +1,156 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="formGroup()" nz-form>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="quantity" nzRequired>Quantity</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Quantity is required">
+      <input formControlName="quantity" id="quantity" nz-input placeholder="Quantity..." type="number"/>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="numberOfCycle" nzRequired>Num of cycle</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Number of cycle is required">
+      <input formControlName="numberOfCycle" id="numberOfCycle" nz-input placeholder="Number of cycle..." type="number"/>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Subscriber</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <button (click)="openSubscriberModal()" nz-button nzType="default" type="button">
+        <span nz-icon nzType="container"></span> Choose Subscriber
+      </button>
+
+      @if (selectedSubscriber(); as subscriber) {
+        <nz-card class="mt-3" nzHoverable>
+          <nz-card-meta
+            nzTitle="{{ subscriber.name }}"
+            nzDescription="{{subscriber.id}} • {{subscriber.email}}"
+          ></nz-card-meta>
+          <button type="button" nz-button nzType="link" nzDanger (click)="clearSubscriber()">Delete</button>
+        </nz-card>
+      } @else {
+        <p class="text-gray-500 mt-2">Subscriber is not chosen</p>
+      }
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Price</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <button (click)="openPriceModal()" nz-button nzType="default" type="button">
+        <span nz-icon nzType="container"></span> Choose Price
+      </button>
+
+      @if (selectedPrice(); as price) {
+        <nz-card class="mt-3" nzHoverable>
+          <nz-card-meta
+            nzTitle="{{ price.id }}"
+            [nzDescription]="getPriceDescription(price)"
+          ></nz-card-meta>
+          <button type="button" nz-button nzType="link" nzDanger (click)="clearPrice()">Delete</button>
+        </nz-card>
+      } @else {
+        <p class="text-gray-500 mt-2">Price is not chosen</p>
+      }
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24">Trial</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <label formControlName="isTrial" nz-checkbox>
+        This subscription is a trial period
+      </label>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24">Cancel At End</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <label formControlName="cancelAtPeriodEnd" nz-checkbox>
+        This subscription will be canceled at end
+      </label>
+    </nz-form-control>
+  </nz-form-item>
+  <div formArrayName="metadata">
+    <div *ngFor="let item of metadataList.controls; let i = index" [formGroupName]="i">
+
+      <nz-form-item>
+        <nz-form-label [nzSm]="6">Key</nz-form-label>
+        <nz-form-control [nzSm]="7">
+          <input formControlName="key" nz-input placeholder="Key"/>
+        </nz-form-control>
+
+        <nz-form-label [nzSm]="3">Value</nz-form-label>
+        <nz-form-control [nzSm]="6">
+          <input formControlName="value" nz-input placeholder="Value"/>
+        </nz-form-control>
+
+        <button (click)="removeMetadata(i)" nz-button nzType="default" type="button">
+          X
+        </button>
+      </nz-form-item>
+
+    </div>
+  </div>
+  <button (click)="addMetadata()" nz-button nzType="dashed" type="button">
+    + Add Metadata
+  </button>
+  <nz-form-item class="mt-8" nz-row>
+    <nz-form-control [nzOffset]="6" [nzSpan]="14">
+      <button
+        [disabled]="formGroup()?.invalid || isLoading()"
+        [nzLoading]="isLoading()"
+        nz-button
+        nzType="primary"
+      >
+        Create
+      </button>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+<nz-modal
+  (nzOnCancel)="isPriceModalOpen.set(false)"
+  (nzOnOk)="isPriceModalOpen.set(false)"
+  [nzVisible]="isPriceModalOpen()"
+  nzCancelText="Đóng"
+  nzOkText="Xác nhận"
+  nzTitle="Chọn Price"
+>
+  <ng-template nzModalContent>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
+      @if (availablePrice().length === 0) {
+        <p class="text-center text-gray-500 py-10">Không có price nào để chọn</p>
+      } @else {
+        @for (price of availablePrice(); track price.id) {
+          <nz-card nzHoverable (click)="selectPrice(price)">
+            <nz-card-meta
+              nzTitle="{{ price.id }}"
+              [nzDescription]="getPriceDescription(price)"
+            ></nz-card-meta>
+          </nz-card>
+        }
+      }
+    </div>
+  </ng-template>
+</nz-modal>
+<nz-modal
+  (nzOnCancel)="isSubscriberModalOpen.set(false)"
+  (nzOnOk)="isSubscriberModalOpen.set(false)"
+  [nzVisible]="isSubscriberModalOpen()"
+  nzCancelText="Đóng"
+  nzOkText="Xác nhận"
+  nzTitle="Chọn Subscriber"
+>
+  <ng-template nzModalContent>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
+      @if (availableSubscriber().length === 0) {
+        <p class="text-center text-gray-500 py-10">Không có subscriber nào để chọn</p>
+      } @else {
+        @for (sub of availableSubscriber(); track sub.id) {
+          <nz-card nzHoverable (click)="selectSubscriber(sub)">
+            <nz-card-meta
+              nzTitle="{{ sub.name }}"
+              nzDescription="{{ sub.id }} • {{ sub.email}}"
+            ></nz-card-meta>
+          </nz-card>
+        }
+      }
+    </div>
+  </ng-template>
+</nz-modal>

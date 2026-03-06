@@ -1,0 +1,109 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="formGroup()" nz-form>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Subscriber</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <button (click)="openSubscriberModal()" nz-button nzType="default" type="button">
+        <span nz-icon nzType="container"></span> Choose Subscriber
+      </button>
+
+      @if (selectedSubscriber(); as subscriber) {
+        <nz-card class="mt-3" nzHoverable>
+          <nz-card-meta
+            nzTitle="{{ subscriber.name }}"
+            nzDescription="{{subscriber.id}} • {{subscriber.email}}"
+          ></nz-card-meta>
+          <button type="button" nz-button nzType="link" nzDanger (click)="clearSubscriber()">Delete</button>
+        </nz-card>
+      } @else {
+        <p class="text-gray-500 mt-2">Subscriber is not chosen</p>
+      }
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Subscription</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <button (click)="openSubscriptionModal()" nz-button nzType="default" type="button">
+        <span nz-icon nzType="wallet"></span> Choose Subscription
+      </button>
+      @if (selectedSubscription(); as sub) {
+        <nz-card class="mt-3" nzHoverable>
+          <nz-card-meta
+            nzTitle="{{ sub.id }}"
+            [nzDescription]="getSubscriptionDescription(sub)"
+          ></nz-card-meta>
+          <button type="button" nz-button nzType="link" nzDanger (click)="clearSubscription()">Delete</button>
+        </nz-card>
+      } @else {
+        <p class="text-gray-500 mt-2">Subscription is not chosen</p>
+      }
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="quantity">Quantity</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Quantity is required">
+      <input formControlName="quantity" id="quantity" nz-input placeholder="Quantity..." type="number"/>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item class="mt-8" nz-row>
+    <nz-form-control [nzOffset]="6" [nzSpan]="14">
+      <button
+        [disabled]="formGroup()?.invalid || isLoading()"
+        [nzLoading]="isLoading()"
+        nz-button
+        nzType="primary"
+      >
+        Submit
+      </button>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+<nz-modal
+  (nzOnCancel)="isSubscriptionModalOpen.set(false)"
+  (nzOnOk)="isSubscriptionModalOpen.set(false)"
+  [nzVisible]="isSubscriptionModalOpen()"
+  nzCancelText="Đóng"
+  nzOkText="Xác nhận"
+  nzTitle="Chọn Subscription"
+>
+  <ng-template nzModalContent>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
+      @if (availableSubscription().length === 0) {
+        <p class="text-center text-gray-500 py-10">Không có subscription nào để chọn</p>
+      } @else {
+        @for (sub of availableSubscription(); track sub.id) {
+          <nz-card nzHoverable (click)="selectSubscription(sub)">
+            <nz-card-meta
+              nzTitle="{{ sub.id }}"
+              [nzDescription]="getSubscriptionDescription(sub)"
+            ></nz-card-meta>
+          </nz-card>
+        }
+      }
+    </div>
+  </ng-template>
+</nz-modal>
+<nz-modal
+  (nzOnCancel)="isSubscriberModalOpen.set(false)"
+  (nzOnOk)="isSubscriberModalOpen.set(false)"
+  [nzVisible]="isSubscriberModalOpen()"
+  nzCancelText="Đóng"
+  nzOkText="Xác nhận"
+  nzTitle="Chọn Subscriber"
+>
+  <ng-template nzModalContent>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
+      @if (availableSubscriber().length === 0) {
+        <p class="text-center text-gray-500 py-10">Không có subscriber nào để chọn</p>
+      } @else {
+        @for (sub of availableSubscriber(); track sub.id) {
+          <nz-card nzHoverable (click)="selectSubscriber(sub)">
+            <nz-card-meta
+              nzTitle="{{ sub.name }}"
+              nzDescription="{{ sub.id }} • {{ sub.email}}"
+            ></nz-card-meta>
+          </nz-card>
+        }
+      }
+    </div>
+  </ng-template>
+</nz-modal>

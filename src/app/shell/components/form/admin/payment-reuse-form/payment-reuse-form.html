@@ -97,7 +97,7 @@
             nzTitle="{{ inv.id }}"
             [nzDescription]="getInvoiceDescription(inv)"
           ></nz-card-meta>
-          <button type="button" nz-button nzType="link" nzDanger (click)="clearTenant()">Delete</button>
+          <button type="button" nz-button nzType="link" nzDanger (click)="clearInvoice()">Delete</button>
         </nz-card>
       } @else {
         <p class="text-gray-500 mt-2">Invoice is not chosen</p>

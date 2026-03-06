@@ -110,6 +110,8 @@ import {Profile} from './pages/public/profile/profile/profile';
 import {AuthEntitlementDetail} from './pages/auth/tables/entitlement/auth-entitlement-detail/auth-entitlement-detail';
 import {DocumentChat} from './pages/auth/ai-chat/document-chat/document-chat';
 import {EntitlementCheck} from './pages/auth/policy/entitlement-check/entitlement-check';
+import { Subscribe } from "./pages/auth/subscribe/subscribe/subscribe";
+import {AuthTenant} from './pages/auth/tenant/auth-tenant/auth-tenant';
 
 export const routes: Routes = [
   {
@@ -403,8 +405,16 @@ export const routes: Routes = [
         component: AuthDashboard
       },
       {
+        path: 'tenant',
+        component: AuthTenant
+      },
+      {
         path: 'ai-chat',
         component: DocumentChat
+      },
+      {
+        path: 'subscribe',
+        component: Subscribe
       },
       {
         path: 'entitlement-check',
