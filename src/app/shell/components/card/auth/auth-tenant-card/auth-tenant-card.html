@@ -1,1 +1,91 @@
-<p>auth-tenant-card works!</p>
+<nz-card [nzBordered]="false" class="entity-card">
+  <div class="flex items-start gap-6">
+    <div class="flex-1">
+      <!-- Tên Tenant + Status -->
+      <h2 class="text-2xl font-bold flex items-center gap-3">
+        {{ tenant().name }}
+      </h2>
+
+      <!-- Email + Creator ngắn gọn -->
+      <p class="text-gray-500 mt-1">
+        {{ tenant().email }}
+        <span class="ml-4 text-sm text-gray-400">
+          Created by <strong>{{ tenant().creator?.username || 'N/A' }}</strong>
+        </span>
+      </p>
+
+      <!-- Thông tin chính (không có phần users count nữa) -->
+      <nz-descriptions [nzColumn]="2" class="mt-6" nzBordered nzSize="small">
+        <nz-descriptions-item nzTitle="Tenant ID">
+          #{{ tenant().id }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="API Key">
+          <div class="flex items-center gap-3">
+            <!-- Hiển thị API Key đã mask -->
+            <nz-tag class="font-mono" nzColor="processing">
+              {{ maskApiKey(tenant().apiKey) }}
+            </nz-tag>
+
+            <!-- Nút Copy -->
+            <button
+              (click)="copyApiKey(tenant().apiKey)"
+              nz-button
+              nz-tooltip
+              nzShape="circle"
+              nzTooltipTitle="Copy API Key"
+              nzType="text"
+            >
+              <span nz-icon nzType="copy"></span>
+            </button>
+
+            <!-- Nút Refresh -->
+            <button
+              (nzOnConfirm)="refreshApiKey()"
+              nz-button
+              nz-popconfirm
+              nz-tooltip
+              nzPopconfirmTitle="Bạn có chắc muốn tạo lại API Key mới? API Key cũ sẽ không còn hiệu lực."
+              nzShape="circle"
+              nzTooltipTitle="Refresh / Regenerate API Key"
+              nzType="text"
+            >
+              <span class="text-orange-600" nz-icon nzType="sync"></span>
+            </button>
+          </div>
+        </nz-descriptions-item>
+
+        <!--        <nz-descriptions-item nzTitle="API Key">-->
+        <!--          <nz-tag nzColor="processing">-->
+        <!--            {{ maskApiKey(tenant().apiKey) }}-->
+        <!--          </nz-tag>-->
+        <!--        </nz-descriptions-item>-->
+
+        <!--        <nz-descriptions-item nzTitle="Onboard">-->
+        <!--          <nz-tag [nzColor]="tenant().onboarded ? 'geekblue' : 'green'">-->
+        <!--            {{ tenant().onboarded }}-->
+        <!--          </nz-tag>-->
+        <!--        </nz-descriptions-item>-->
+
+        <nz-descriptions-item nzTitle="Current Balance">
+          <span class="font-medium text-green-600">
+            ${{ (tenant().currentAmount || 0) | number:'1.0-0' }}
+          </span>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Pending Amount">
+          <span class="font-medium text-orange-600">
+            ${{ (tenant().pendingAmount || 0) | number:'1.0-0' }}
+          </span>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Created Date">
+          {{ tenant().createdDate }}
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Last Modified">
+          {{ tenant().modifiedDate }}
+        </nz-descriptions-item>
+      </nz-descriptions>
+    </div>
+  </div>
+</nz-card>

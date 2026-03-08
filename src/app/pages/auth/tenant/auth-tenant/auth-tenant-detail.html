@@ -1,0 +1,16 @@
+<div class="page-container">
+  <div class="mt-8">
+    @if (tenant(); as tenant) {
+      <app-auth-tenant-card
+        [tenant]="tenant"
+        (load)="loadTenant()"
+        (refreshApi)="onRefreshToken()">
+      </app-auth-tenant-card>
+    } @else {
+      <div class="text-center py-16">
+        <nz-spin nzSize="large"></nz-spin>
+        <p class="mt-4 text-gray-500">Loading tenant information...</p>
+      </div>
+    }
+  </div>
+</div>

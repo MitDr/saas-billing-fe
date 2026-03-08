@@ -3,8 +3,6 @@ import {Router} from '@angular/router';
 import {SubscribeService} from '../../../../core/service/auth/subscribe-service';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NonNullableFormBuilder, Validators} from '@angular/forms';
-import {Price} from '../../../../core/interface/entity/price';
-import {Subscriber} from '../../../../core/interface/entity/subscriber';
 import {AuthSubscriberService} from '../../../../core/service/auth/auth-subscriber-service';
 import {AuthPrice} from '../../../../core/interface/entity/auth/auth-price';
 import {AuthSubscriber} from '../../../../core/interface/entity/auth/auth-subscriber';
@@ -13,7 +11,6 @@ import {Breadcrumb} from '../../../../shell/components/generic/breadcrumb/breadc
 import {
   SubscriptionReuseForm
 } from '../../../../shell/components/form/admin/subscription-reuse-form/subscription-reuse-form';
-import {SUBSCRIPTION_ROUTE_CONSTANT} from '../../../../core/constant/subscription/subscription-list-constant';
 import {SubscribeReuseForm} from '../../../../shell/components/form/auth/subscribe-reuse-form/subscribe-reuse-form';
 import {NzModalModule} from 'ng-zorro-antd/modal';
 import {NzTabComponent, NzTabsComponent, NzTabsModule} from 'ng-zorro-antd/tabs';
@@ -28,6 +25,10 @@ import {
 import {
   ReactivateSubscriptionReuseForm
 } from '../../../../shell/components/form/auth/reactivate-subscription-reuse-form/reactivate-subscription-reuse-form';
+import {CancelRequest} from '../../../../core/interface/request/auth/cancel-request';
+import {SubscribeRequest} from '../../../../core/interface/request/auth/subscribe-request';
+import {RenewRequest} from '../../../../core/interface/request/auth/renew-request';
+import {ReactivateRequest} from '../../../../core/interface/request/auth/reactivate-request';
 
 @Component({
   selector: 'app-subscribe',
@@ -46,39 +47,38 @@ import {
   templateUrl: './subscribe.html',
   styleUrl: './subscribe.css',
 })
-export class Subscribe implements OnInit{
+export class Subscribe implements OnInit {
   router = inject(Router);
   isSubmitting = false;
   subscribeService = inject(SubscribeService);
   message = inject(NzMessageService);
-  private fb = inject(NonNullableFormBuilder)
   availablePrice = signal<AuthPrice[]>([]);
   availableSubscriber = signal<AuthSubscriber[]>([]);
   availableSubscription = signal<AuthSubscription[]>([]);
   subscriberService = inject(AuthSubscriberService);
   priceService = inject(AuthPriceService);
   subscriptionService = inject(AuthSubscriptionService);
-
+  private fb = inject(NonNullableFormBuilder)
   subscribeForm = this.fb.group({
     quantity: [null, [Validators.required]],
     numberOfCycle: [null, [Validators.required]],
     isTrial: [false],
-    subscriberId: [null,Validators.required],
-    priceId: [null,Validators.required],
+    subscriberId: [null, Validators.required],
+    priceId: [null, Validators.required],
     cancelAtPeriodEnd: [false],
     metadata: this.fb.array([])
   });
   cancelForm = this.fb.group({
-    subscriberId: [null,Validators.required],
+    subscriberId: [null, Validators.required],
     subscriptionId: [null, Validators.required]
   });
   renewForm = this.fb.group({
-    subscriberId: [null,Validators.required],
+    subscriberId: [null, Validators.required],
     subscriptionId: [null, Validators.required],
     quantity: [null, [Validators.required]]
   });
   reactivateForm = this.fb.group({
-    subscriberId: [null,Validators.required],
+    subscriberId: [null, Validators.required],
     subscriptionId: [null, Validators.required],
     quantity: [null]
   });
@@ -116,9 +116,9 @@ export class Subscribe implements OnInit{
   }
 
   loadAllSubscription() {
-    this.subscriptionService.getAllSubscriptions().subscribe({  // size=1000 để an toàn lấy hết
+    this.subscriptionService.getAllSubscriptions().subscribe({
       next: (response) => {
-        const subscriptions = response.content || []; // ListData<User> có content[]
+        const subscriptions = response.content || [];
         this.availableSubscription.set(subscriptions);
       },
       error: (err) => {
@@ -127,8 +127,136 @@ export class Subscribe implements OnInit{
       }
     });
   }
-  onSubmitted() {
 
+  onCancelSubmitted() {
+    console.log(this.cancelForm.value);
+    if (this.cancelForm.valid) {
+      this.isSubmitting = true;
+      const payload: CancelRequest = {
+        subscriberId: this.cancelForm.value.subscriberId!,
+        subscriptionId: this.cancelForm.value.subscriptionId!
+      }
+
+      console.log(payload);
+      this.subscribeService.cancel(payload).subscribe({
+        next: value => {
+          this.isSubmitting = false;
+          this.message.success('Cancel Successfully')
+          this.cancelForm.reset();
+        },
+        error: err => {
+          this.isSubmitting = false;
+          console.error('Cancel Failed', err);
+          this.message.error('Cancel Failed');
+        }
+      })
+    }
+  }
+
+  onSubscribeSubmitted() {
+    console.log(this.subscribeForm.value);
+    if (this.subscribeForm.valid) {
+      this.isSubmitting = true;
+
+      const raw = this.subscribeForm.value;
+
+      // Convert metadata array -> object
+      const metadataObject: any = {};
+
+      if (raw.metadata && raw.metadata.length > 0) {
+        raw.metadata.forEach((item: any) => {
+          if (item.key) {
+            metadataObject[item.key] = item.value;
+          }
+        });
+      }
+
+      const payload: SubscribeRequest = {
+        quantity: this.subscribeForm.value.quantity!,
+        numberOfCycle: this.subscribeForm.value.numberOfCycle!,
+        subscriberId: this.subscribeForm.value.subscriberId!,
+        priceId: this.subscribeForm.value.priceId!,
+        cancelAtPeriodEnd: this.subscribeForm.value.cancelAtPeriodEnd!,
+        isTrial: this.subscribeForm.value.isTrial!
+      }
+      if (Object.keys(metadataObject).length === 0) {
+        delete payload.metadata;
+      }
+
+      console.log(payload)
+
+      this.subscribeService.subscribe(payload).subscribe({
+        next: value => {
+          this.isSubmitting = false;
+          this.message.success('Subscribe Successfully')
+          this.subscribeForm.reset();
+          //Redirect to payment gateway
+        },
+        error: err => {
+          this.isSubmitting = false;
+          console.error('Subscribe Failed', err);
+          this.message.error('Subscribe Failed');
+        }
+      })
+    }
+  }
+
+  onRenewSubmitted() {
+    console.log(this.renewForm.value);
+    if (this.renewForm.valid) {
+      this.isSubmitting = true;
+
+      const payload: RenewRequest = {
+        subscriberId: this.renewForm.value.subscriberId!,
+        subscriptionId: this.renewForm.value.subscriptionId!,
+        quantity: this.renewForm.value.quantity!
+      }
+
+      console.log(payload)
+
+      this.subscribeService.renew(payload).subscribe({
+        next: value => {
+          this.isSubmitting = false;
+          this.message.success('Renew Successfully')
+          this.subscribeForm.reset();
+        },
+        error: err => {
+          this.isSubmitting = false;
+          console.error('Renew Failed', err);
+          this.message.error('Renew Failed');
+        }
+      })
+    }
+  }
+
+  onReactivateSubmitted() {
+    console.log(this.reactivateForm.value);
+    if (this.reactivateForm.valid) {
+      this.isSubmitting = true;
+      const payload: ReactivateRequest = {
+        subscriberId: this.reactivateForm.value.subscriberId!,
+        subscriptionId: this.reactivateForm.value.subscriptionId!,
+      }
+      if (this.reactivateForm.value.quantity) {
+        const quantity = this.reactivateForm.value.quantity as number;
+        Object.assign(payload, quantity);
+      }
+
+      console.log(payload);
+
+      this.subscribeService.reactivate(payload).subscribe({
+        next: value => {
+          this.isSubmitting = false;
+          this.message.success('Reactivate Successfully')
+          this.subscribeForm.reset();
+        },
+        error: err => {
+          this.isSubmitting = false;
+          console.error('Reactivate Failed', err);
+          this.message.error('Reactivate Failed');
+        }
+      })
+    }
   }
 
 }

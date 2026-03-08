@@ -10,6 +10,7 @@ import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzModalComponent, NzModalContentDirective} from 'ng-zorro-antd/modal';
 import {NzInputDirective} from 'ng-zorro-antd/input';
+import {AuthSubscriptionService} from '../../../../../core/service/auth/auth-subscription-service';
 
 @Component({
   selector: 'app-renew-subscription-reuse-form',
@@ -35,26 +36,25 @@ export class RenewSubscriptionReuseForm {
   formGroup = input.required<FormGroup>();
   isLoading = input<boolean>(false);
   submitted = output<void>();
-  private message = inject(NzMessageService);
   fb = inject(NonNullableFormBuilder);
-
   availableSubscriber = input<AuthSubscriber[]>([]);
   selectedSubscriber = signal<AuthSubscriber | null>(null);
-
-  availableSubscription = input<AuthSubscription[]>([]);
+  availableSubscription = signal<AuthSubscription[]>([]);
   selectedSubscription = signal<AuthSubscription | null>(null);
-
   isSubscriptionModalOpen = signal(false);
   isSubscriberModalOpen = signal(false);
+  subscriptionService = inject(AuthSubscriptionService);
+  private message = inject(NzMessageService);
 
-  get subscriberId(){
+  get subscriberId() {
     return this.formGroup()?.get('subscriberId');
   }
 
-  get subscriptionId(){
+  get subscriptionId() {
     return this.formGroup()?.get('subscriptionId');
   }
-  get quantity(){
+
+  get quantity() {
     return this.formGroup()?.get('quantity');
   }
 
@@ -81,12 +81,40 @@ export class RenewSubscriptionReuseForm {
     this.selectedSubscriber.set(subscriber);
     this.subscriberId?.setValue(subscriber.id);
     this.isSubscriberModalOpen.set(false);
+
+    // Reset subscription cũ
+    this.selectedSubscription.set(null);
+    this.subscriptionId?.setValue(null);
+    this.availableSubscription.set([]);
+
+    // Call API lấy subscription cancelable của subscriber
+    this.loadRenewableSubscriptions(subscriber.id);
+  }
+
+  loadRenewableSubscriptions(subscriberId: number) {
+    this.subscriptionService.getAllRenewableSubscription(subscriberId).subscribe({
+      next: (response) => {
+        const subscriptions = response.content || []
+        this.availableSubscription.set(subscriptions);
+        if (subscriptions.length === 0) {
+          this.message.info('Subscriber này không có subscription nào có thể renew');
+        }
+      },
+      error: (err) => {
+        console.error('Load renewable subscriptions failed:', err);
+        this.message.error('Không tải được danh sách subscription');
+      }
+    });
   }
 
   clearSubscriber() {
     this.selectedSubscriber.set(null);
     this.subscriberId?.setValue(null);
+    this.availableSubscription.set([]);
+    this.selectedSubscription.set(null);
+    this.subscriptionId?.setValue(null);
   }
+
   openSubscriptionModal() {
     this.isSubscriptionModalOpen.set(true);
   }

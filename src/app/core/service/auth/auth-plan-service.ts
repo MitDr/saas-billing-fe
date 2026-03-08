@@ -17,24 +17,39 @@ export class AuthPlanService {
   createPlan(planData: AuthPlanRequest, imageFile?: File): Observable<AuthPlan> {
     const formData = new FormData();
 
-    // Thêm các field JSON vào FormData
+    // Thêm các field bắt buộc
     formData.append('name', planData.name);
     formData.append('status', planData.status);
+
+    // Optional fields
     if (planData.planGroupId !== null && planData.planGroupId !== undefined) {
       formData.append('planGroupId', planData.planGroupId.toString());
     }
+
+    // Mảng features/prices (backend hỗ trợ append nhiều lần với cùng key)
     if (planData.features && planData.features.length > 0) {
       planData.features.forEach(id => formData.append('features', id.toString()));
     }
+
     if (planData.prices && planData.prices.length > 0) {
       planData.prices.forEach(id => formData.append('prices', id.toString()));
     }
 
-    // Thêm file image nếu có
+
     if (imageFile) {
       formData.append('image', imageFile, imageFile.name);
+    } else {
+      formData.append('image', new Blob([]), '');
     }
 
+
+    // Log FormData để debug
+    console.group('FormData gửi lên update plan');
+    console.log('FormData entries:');
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}:`, value instanceof File ? `File: ${value.name} (${value.size} bytes)` : value);
+    }
+    console.groupEnd();
     // Gửi FormData (không cần header Content-Type, Angular tự set multipart)
     return this.api.post<AuthPlan>('/auth/plans', formData).pipe(
       catchError(error => {
@@ -127,8 +142,6 @@ export class AuthPlanService {
   }
 
   updatePlan(planId: number, planData: AuthPlanRequest, imageFile?: File): Observable<AuthPlan> {
-
-
     const formData = new FormData();
 
     // Thêm các field bắt buộc

@@ -1,18 +1,12 @@
 import {Component, effect, inject, OnInit, signal} from '@angular/core';
-import {Plan} from '../../../../../core/interface/entity/plan';
-import {AUTH_PRICE_ROUTE_CONSTANT, PRICE_ROUTE_CONSTANT} from '../../../../../core/constant/price/price-list-constant';
-import {PriceService} from '../../../../../core/service/price-service';
-import {TenantService} from '../../../../../core/service/tenant-service';
-import {PlanService} from '../../../../../core/service/plan-service';
+import {AUTH_PRICE_ROUTE_CONSTANT} from '../../../../../core/constant/price/price-list-constant';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {AuthPriceService} from '../../../../../core/service/auth/auth-price-service';
 import {AuthPlanService} from '../../../../../core/service/auth/auth-plan-service';
 import {AuthPlan} from '../../../../../core/interface/entity/auth/auth-plan';
-import {Price} from '../../../../../core/interface/entity/price';
-import { AuthPrice } from "../../../../../core/interface/entity/auth/auth-price";
+import {AuthPrice} from "../../../../../core/interface/entity/auth/auth-price";
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {NonNullableFormBuilder, Validators} from '@angular/forms';
-import {PriceRequest} from '../../../../../core/interface/request/price-request';
 import {AuthPriceRequest} from '../../../../../core/interface/request/auth/auth-price-request';
 import {Breadcrumb} from '../../../../../shell/components/generic/breadcrumb/breadcrumb';
 import {NzBreadCrumbComponent, NzBreadCrumbItemComponent} from 'ng-zorro-antd/breadcrumb';
@@ -22,6 +16,7 @@ import {PriceReuseForm} from '../../../../../shell/components/form/admin/price-r
 import {
   AuthPriceReuseForm
 } from '../../../../../shell/components/form/auth/auth-price-reuse-form/auth-price-reuse-form';
+import {NzModalModule} from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-auth-price-edit',
@@ -33,7 +28,8 @@ import {
     NzSpinComponent,
     PriceReuseForm,
     RouterLink,
-    AuthPriceReuseForm
+    AuthPriceReuseForm,
+    NzModalModule
   ],
   templateUrl: './auth-price-edit.html',
   styleUrl: './auth-price-edit.css',

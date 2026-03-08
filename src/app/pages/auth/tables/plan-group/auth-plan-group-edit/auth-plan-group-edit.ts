@@ -1,20 +1,12 @@
 import {Component, effect, inject, OnInit, signal} from '@angular/core';
-import {Plan} from '../../../../../core/interface/entity/plan';
-import {
-  AUTH_PLAN_GROUP_ROUTE_CONSTANT
-} from '../../../../../core/constant/plan-group/plan-group-list-constant';
-import {TenantService} from '../../../../../core/service/tenant-service';
-import {PlanService} from '../../../../../core/service/plan-service';
-import {PlanGroupService} from '../../../../../core/service/plan-group-service';
+import {AUTH_PLAN_GROUP_ROUTE_CONSTANT} from '../../../../../core/constant/plan-group/plan-group-list-constant';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {AuthPlan} from '../../../../../core/interface/entity/auth/auth-plan';
 import {AuthPlanGroupService} from '../../../../../core/service/auth/auth-plan-group-service';
-import {PlanGroup} from '../../../../../core/interface/entity/plan-group';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {NonNullableFormBuilder, Validators} from '@angular/forms';
 import {AuthPlanGroup} from '../../../../../core/interface/entity/auth/auth-plan-group';
 import {AuthPlanService} from '../../../../../core/service/auth/auth-plan-service';
-import {PlanGroupRequest} from '../../../../../core/interface/request/plan-group-request';
 import {AuthPlanGroupRequest} from '../../../../../core/interface/request/auth/auth-plan-group-request';
 import {Breadcrumb} from '../../../../../shell/components/generic/breadcrumb/breadcrumb';
 import {NzBreadCrumbComponent, NzBreadCrumbItemComponent} from 'ng-zorro-antd/breadcrumb';
@@ -26,6 +18,7 @@ import {
 import {
   AuthPlanGroupReuseForm
 } from '../../../../../shell/components/form/auth/auth-plan-group-reuse-form/auth-plan-group-reuse-form';
+import {NzModalModule} from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-auth-plan-group-edit',
@@ -37,7 +30,8 @@ import {
     NzSpinComponent,
     PlanGroupReuseForm,
     RouterLink,
-    AuthPlanGroupReuseForm
+    AuthPlanGroupReuseForm,
+    NzModalModule
   ],
   templateUrl: './auth-plan-group-edit.html',
   styleUrl: './auth-plan-group-edit.css',

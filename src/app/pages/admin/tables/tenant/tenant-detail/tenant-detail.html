@@ -14,7 +14,7 @@
       <app-tenant-card
         [tenant]="tenant"
         (load)="loadTenant($event)"
-        (refreshApi)="$event"
+        (refreshApi)="onRefreshToken($event)"
         (deleteButton)="onDelete($event)">
       </app-tenant-card>
     } @else {

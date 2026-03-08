@@ -1,8 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {ApiClientService} from '../api-client-service';
-import {SubscriptionRequest} from '../../interface/request/subscription-request';
 import {Observable, throwError} from 'rxjs';
-import {Subscription} from '../../interface/entity/subscription';
 import {catchError} from 'rxjs/operators';
 import {ListData} from '../../interface/list-data';
 import {SoftDeleteRequest} from '../../interface/request/soft-delete-request';
@@ -13,7 +11,7 @@ import {AuthSubscription} from '../../interface/entity/auth/auth-subscription';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthSubscriptionService{
+export class AuthSubscriptionService {
   api = inject(ApiClientService);
 
   createSubscription(request: AuthSubscriptionRequest): Observable<AuthSubscription> {
@@ -54,6 +52,33 @@ export class AuthSubscriptionService{
     }
 
     return this.api.get<ListData<AuthSubscription>>('/auth/subscriptions', params);
+  }
+
+  getAllCancelableSubscription(subscriberId: number): Observable<ListData<AuthSubscription>> {
+    return this.api.get<ListData<AuthSubscription>>(`/auth/subscriptions/cancelable/subscriber-id/${subscriberId}`).pipe(
+      catchError(error => {
+        console.error('Get subscriptions error:', error);
+        return throwError(() => new Error('Không thể lấy subscriptions'));
+      })
+    )
+  }
+
+  getAllRenewableSubscription(subscriberId: number): Observable<ListData<AuthSubscription>> {
+    return this.api.get<ListData<AuthSubscription>>(`/auth/subscriptions/renewable/subscriber-id/${subscriberId}`).pipe(
+      catchError(error => {
+        console.error('Get subscriptions error:', error);
+        return throwError(() => new Error('Không thể lấy subscriptions'));
+      })
+    )
+  }
+
+  getAllReactivatableSubscription(subscriberId: number): Observable<ListData<AuthSubscription>> {
+    return this.api.get<ListData<AuthSubscription>>(`/auth/subscriptions/reactivatable/subscriber-id/${subscriberId}`).pipe(
+      catchError(error => {
+        console.error('Get subscriptions error:', error);
+        return throwError(() => new Error('Không thể lấy subscriptions'));
+      })
+    )
   }
 
   getAllSubscriptions(
