@@ -65,4 +65,8 @@ export class AuthTenantCard {
     const end = key.slice(-4);
     return `${start}...${end}`;
   }
+
+  onLeaveTenant() {
+    console.log("leave")
+  }
 }

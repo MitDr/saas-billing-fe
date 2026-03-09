@@ -24,25 +24,27 @@
         nzName="image"
       >
         <button [disabled]="imageFileList().length > 0" nz-button nzType="default" type="button">
-          <span nz-icon nzType="upload"></span> Chọn ảnh
+          <span nz-icon nzType="upload"></span>
+          {{ isEditMode() ? 'Thay ảnh mới' : 'Chọn ảnh' }}
         </button>
       </nz-upload>
 
       @if (imagePreview()) {
         <div class="mt-4">
           <img [src]="imagePreview()" alt="Preview" class="max-w-xs rounded-lg shadow-md object-cover">
-
-          @if (fileSizeKB(); as size) {
-            <p class="mt-2 text-sm text-gray-600">
+          <p class="mt-2 text-sm text-gray-600">
+            @if (fileSizeKB(); as size) {
               {{ imageFileList()[0].name }} ({{ size }} KB)
-            </p>
-          }
-          <button (click)="clearImage()" nz-button type="button" nzType="link" nzDanger>
-            Xóa ảnh
+            } @else if (initialImageUrl()) {
+              Ảnh hiện tại (từ server)
+            }
+          </p>
+          <button (click)="clearImage()" type="button" nz-button nzType="link" nzDanger>
+            Xóa / Giữ ảnh cũ
           </button>
         </div>
-      } @else if (imageFileList().length === 0) {
-        <p class="mt-2 text-sm text-gray-500">Chưa chọn ảnh (tối đa 5MB)</p>
+      } @else {
+        <p class="mt-2 text-sm text-gray-500">Chưa chọn ảnh mới</p>
       }
     </nz-form-control>
   </nz-form-item>

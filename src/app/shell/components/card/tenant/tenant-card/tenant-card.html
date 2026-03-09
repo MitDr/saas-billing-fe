@@ -70,6 +70,17 @@
             {{ tenant().stripeAccountId }}
           </nz-tag>
         </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Stripe OnBoard">
+          @if (!tenant().stripeOnboarded) {
+            <nz-tag nzColor="magenta">
+              {{ tenant().stripeOnboarded }}
+            </nz-tag>
+          } @else {
+            <nz-tag nzColor="green">
+              {{ tenant().stripeOnboarded }}
+            </nz-tag>
+          }
+        </nz-descriptions-item>
 
         <!--        <nz-descriptions-item nzTitle="Onboard">-->
         <!--          <nz-tag [nzColor]="tenant().onboarded ? 'geekblue' : 'green'">-->

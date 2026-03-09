@@ -1,1 +1,36 @@
-<p>auth-plan-edit works!</p>
+<div class="page-container">
+  <nz-page-header
+    [nzSubtitle]="'ID: ' + (plan()?.id || '')"
+    [nzTitle]="'Update Plan'"
+  >
+    <div class="flex justify-end mb-4">
+      <app-breadcrumb [routes]="routing"></app-breadcrumb>
+    </div>
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item><a routerLink="/admin/tables/plans">Plan</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>Update Plan</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-page-header>
+
+  @if (!loading()) {
+    @if (plan(); as pl) {
+      <app-auth-plan-reuse-form
+        [formGroup]="planForm"
+        [availablePrices]="availablePrices()"
+        [availablePlanGroups]="availablePlanGroup()"
+        [availableFeatures]="availableFeature()"
+        [isEditMode]="true"
+        [initialImageUrl]="initialImageUrl()"
+        [initFeatures]="initFeature()"
+        [initPlanGroup]="initPlanGroup()"
+        [initPrices]="initPrice()"
+        [submitLabel]="'Update'"
+        (submitted)="onSubmitted()"
+      ></app-auth-plan-reuse-form>
+    } @else {
+      <div>Plan not found</div>
+    }
+  } @else {
+    <nz-spin nzTip="Loading Plan..."></nz-spin>
+  }
+</div>

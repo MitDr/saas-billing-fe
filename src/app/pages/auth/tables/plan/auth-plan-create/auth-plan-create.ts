@@ -1,4 +1,4 @@
-import {Component, inject, signal, ViewChild} from '@angular/core';
+import {Component, inject, OnInit, signal, ViewChild} from '@angular/core';
 import {Breadcrumb} from '../../../../../shell/components/generic/breadcrumb/breadcrumb';
 import {PlanReuseForm} from '../../../../../shell/components/form/admin/plan-reuse-form/plan-reuse-form';
 import {AuthPlanReuseForm} from '../../../../../shell/components/form/auth/auth-plan-reuse-form/auth-plan-reuse-form';
@@ -28,7 +28,7 @@ import {AuthPlanRequest} from '../../../../../core/interface/request/auth/auth-p
   templateUrl: './auth-plan-create.html',
   styleUrl: './auth-plan-create.css',
 })
-export class AuthPlanCreate {
+export class AuthPlanCreate implements OnInit {
   availablePrices = signal<AuthPrice[]>([]);
   availablePlanGroup = signal<AuthPlanGroup[]>([]);
   availableFeature = signal<AuthFeature[]>([])

@@ -114,6 +114,7 @@ import {Subscribe} from "./pages/auth/subscribe/subscribe/subscribe";
 import {AuthTenantDetail} from './pages/auth/tenant/auth-tenant/auth-tenant-detail';
 import {Faq} from './pages/public/faq/faq';
 import {Portal} from './pages/portal/portal/portal';
+import {AuthPlanEdit} from './pages/auth/tables/plan/auth-plan-edit/auth-plan-edit';
 
 export const routes: Routes = [
   {
@@ -125,8 +126,8 @@ export const routes: Routes = [
         component: Home
       },
       {
-       path: 'faq',
-       component: Faq
+        path: 'faq',
+        component: Faq
       }
     ]
   },
@@ -499,6 +500,10 @@ export const routes: Routes = [
       {
         path: 'tables/plans/:id',
         component: AuthPlanDetail
+      },
+      {
+        path: 'tables/plans/:id/edit',
+        component: AuthPlanEdit
       },
       //Plan Group
       {

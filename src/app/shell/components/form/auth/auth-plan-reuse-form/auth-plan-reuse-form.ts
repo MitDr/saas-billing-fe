@@ -66,6 +66,7 @@ export class AuthPlanReuseForm {
   availablePrices = input<AuthPrice[]>([]);
   selectedPrices = signal<AuthPrice[]>([]);
   initPrices = input<AuthPrice[] | null>();
+  initialImageUrl = input<string | null>(null);
 
   imageFileList = signal<NzUploadFile[]>([]); // danh sách file (nz-upload dùng mảng)
   imagePreview = signal<string | null>(null);
@@ -91,6 +92,10 @@ export class AuthPlanReuseForm {
       this.selectedFeatures.set(this.initFeatures() || []);
       this.selectedPrices.set(this.initPrices() || []);
       this.selectedPlanGroup.set(this.initPlanGroup() || null);
+
+      if (this.isEditMode() && this.initialImageUrl()) {
+        this.imagePreview.set(this.initialImageUrl()!);
+      }
     });
   }
 
