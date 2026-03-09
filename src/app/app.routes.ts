@@ -112,6 +112,8 @@ import {DocumentChat} from './pages/auth/ai-chat/document-chat/document-chat';
 import {EntitlementCheck} from './pages/auth/policy/entitlement-check/entitlement-check';
 import {Subscribe} from "./pages/auth/subscribe/subscribe/subscribe";
 import {AuthTenantDetail} from './pages/auth/tenant/auth-tenant/auth-tenant-detail';
+import {Faq} from './pages/public/faq/faq';
+import {Portal} from './pages/portal/portal/portal';
 
 export const routes: Routes = [
   {
@@ -122,7 +124,15 @@ export const routes: Routes = [
         path: '',
         component: Home
       },
+      {
+       path: 'faq',
+       component: Faq
+      }
     ]
+  },
+  {
+    path: 'portal',
+    component: Portal
   },
   {
     path: 'auth',

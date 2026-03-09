@@ -1,5 +1,7 @@
 <!-- public-layout.component.html -->
-<app-header></app-header>
+<app-header
+  [isLoggedIn]="isLoggedIn()">
+</app-header>
 
 <main class="p-8">
   <router-outlet></router-outlet>

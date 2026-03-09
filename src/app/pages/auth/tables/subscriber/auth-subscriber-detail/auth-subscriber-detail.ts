@@ -68,4 +68,19 @@ export class AuthSubscriberDetail {
       }
     })
   }
+
+  onOpenPortal(id: number){
+    this.loading.set(true);
+    this.subscriberService.openPortal(id).subscribe({
+      next: (response) => {
+        this.message.success('feature deleted successfully');
+        this.message.success(response);
+        // this.router.navigate(['/app/tables/subscribers'])
+      },
+      error: (err) => {
+        this.loading.set(false);
+        console.error(err);
+      }
+    })
+  }
 }

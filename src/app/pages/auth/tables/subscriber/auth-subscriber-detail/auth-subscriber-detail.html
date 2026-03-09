@@ -14,7 +14,8 @@
       <app-auth-subscriber-card
         [subscriber]="sub"
         (load)="loadSubscriber($event)"
-        (deleteButton)="onDelete($event)">
+        (deleteButton)="onDelete($event)"
+        (portal)="onOpenPortal($event)">
       </app-auth-subscriber-card>
     } @else {
       <div class="text-center py-16">

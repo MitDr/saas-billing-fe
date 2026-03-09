@@ -131,4 +131,13 @@ export class AuthSubscriberService{
       })
     );
   }
+
+  openPortal(id: number): Observable<string>{
+    return this.api.get<string>(`auth/portals/${id}`).pipe(
+      catchError(error => {
+        console.error('Get Portal error:', error);
+        return throwError(() => new Error('Get Portal failed'));
+      })
+    );
+  }
 }

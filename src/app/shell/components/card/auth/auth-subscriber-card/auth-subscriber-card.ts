@@ -33,6 +33,7 @@ export class AuthSubscriberCard {
   subscriber = input.required<AuthSubscriber>()
   // tenantService = inject(TenantService);
   deleteButton = output<number>();
+  portal = output<number>();
   modalService = inject(NzModalService);
   // subscriberService = inject(SubscriberService)
   load = output<number>();
@@ -46,6 +47,18 @@ export class AuthSubscriberCard {
       nzOkDanger: true,
       nzOnOk: () => {
         this.deleteButton.emit(this.subscriber().id);
+      }
+    });
+  }
+
+  openPortal(){
+    this.modalService.confirm({
+      nzTitle: 'Open Portal',
+      nzContent: `Open Portal for Subscriber #${this.subscriber().id} ?`,
+      nzOkText: 'Open',
+      nzOkDanger: true,
+      nzOnOk: () => {
+        this.portal.emit(this.subscriber().id);
       }
     });
   }
