@@ -36,6 +36,8 @@ export class AuthTenantCard {
   tenant = input.required<AuthTenant>();
   tenantService = inject(AuthTenantService);
   refreshApi = output<void>();
+  leaveTenant = output<void>();
+  accountLink = output<void>();
   modalService = inject(NzModalService);
   load = output<number>();
   private message = inject(NzMessageService);
@@ -67,6 +69,10 @@ export class AuthTenantCard {
   }
 
   onLeaveTenant() {
-    console.log("leave")
+    this.leaveTenant.emit()
+  }
+
+  goOnboard() {
+    this.accountLink.emit()
   }
 }

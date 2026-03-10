@@ -115,6 +115,7 @@ import {AuthTenantDetail} from './pages/auth/tenant/auth-tenant/auth-tenant-deta
 import {Faq} from './pages/public/faq/faq';
 import {Portal} from './pages/portal/portal/portal';
 import {AuthPlanEdit} from './pages/auth/tables/plan/auth-plan-edit/auth-plan-edit';
+import { AiDoc } from "./pages/admin/ai-doc/ai-doc/ai-doc";
 
 export const routes: Routes = [
   {
@@ -157,6 +158,10 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         component: Dashboard
+      },
+      {
+        path: 'ai-doc',
+        component: AiDoc
       },
       {
         path: 'tables/users',

@@ -190,6 +190,7 @@ export class Subscribe implements OnInit {
           this.isSubmitting = false;
           this.message.success('Subscribe Successfully')
           this.subscribeForm.reset();
+          console.log(value);
           //Redirect to payment gateway
         },
         error: err => {

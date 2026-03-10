@@ -4,7 +4,9 @@
       <app-auth-tenant-card
         [tenant]="tenant"
         (load)="loadTenant()"
-        (refreshApi)="onRefreshToken()">
+        (refreshApi)="onRefreshToken()"
+        (leaveTenant)="leaveTenant()"
+        (accountLink)='updateAccountLink()'>
       </app-auth-tenant-card>
     } @else {
       <div class="text-center py-16">

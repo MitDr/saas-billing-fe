@@ -69,4 +69,36 @@ export class AuthTenantDetail {
       }
     });
   }
+
+  leaveTenant(){
+    this.loading.set(true);
+    this.tenantService.leaveTenant().subscribe({
+      next: (response) => {
+        this.tenant.set(null);
+        this.message.success('Leave tenant successfully');
+        this.loading.set(false);
+
+      },
+      error: (err) => {
+        this.loading.set(false);
+        console.error(err);
+      }
+    });
+  }
+
+  updateAccountLink(){
+    this.loading.set(true);
+    this.tenantService.updateAccountLink().subscribe({
+      next: (response) => {
+        // this.tenant.set(null);
+        this.message.success('Leave tenant successfully');
+        this.loading.set(false);
+        //Redirect theo link tra ve
+      },
+      error: (err) => {
+        this.loading.set(false);
+        console.error(err);
+      }
+    });
+  }
 }

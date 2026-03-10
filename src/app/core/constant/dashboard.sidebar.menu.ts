@@ -87,6 +87,11 @@ export const ADMIN_SIDEBAR_MENU: MenuItem[] =[
         path: '/admin/tables/webhook-logs',
       },
     ]
+  },
+  {
+    title: 'AI Doc',
+    icon: 'robot',
+    path: '/admin/ai-doc'
   }
 ]
 

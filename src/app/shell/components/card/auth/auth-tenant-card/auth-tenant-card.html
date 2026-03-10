@@ -104,13 +104,11 @@
           <span nz-icon nzType="delete"></span>
           Leave Tenant
         </button>
-
-        <!--        @if (tenant().stripeAccountId) {-->
-        <!--          <button nz-button nzType="default">-->
-        <!--            <span nz-icon nzType="link"></span>-->
-        <!--            View in Stripe-->
-        <!--          </button>-->
-        <!--        }-->
+          <button (click)="goOnboard()" class="!inline-flex !items-center"
+                  nz-button nzType="default">
+            <span nz-icon nzType="link"></span>
+            Account Link
+          </button>
       </div>
     </div>
   </div>

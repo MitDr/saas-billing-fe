@@ -10,6 +10,7 @@ import {NzSpinComponent} from 'ng-zorro-antd/spin';
 import {
   PortalSubscriptionCard
 } from '../../../shell/components/card/portal/portal-subscription-card/portal-subscription-card';
+import {NzTabComponent, NzTabsComponent} from 'ng-zorro-antd/tabs';
 
 @Component({
   selector: 'app-portal',
@@ -20,7 +21,9 @@ import {
     NzPageHeaderComponent,
     NzSpinComponent,
     RouterLink,
-    PortalSubscriptionCard
+    PortalSubscriptionCard,
+    NzTabComponent,
+    NzTabsComponent
   ],
   templateUrl: './portal.html',
   styleUrl: './portal.css',

@@ -28,5 +28,22 @@ export class AuthTenantService {
     );
   }
 
+  leaveTenant(): Observable<string>{
+    return this.api.post<string>(`/auth/tenants/leave`).pipe(
+      catchError(error => {
+        console.error('Leave tenant error:', error);
+        return throwError(() => new Error('Cannot leave tenant'));
+      })
+    )
+  }
+
+  updateAccountLink(): Observable<string>{
+    return this.api.post<string>(`/auth/tenants/update-account`).pipe(
+      catchError(error => {
+        console.error('Leave tenant error:', error);
+        return throwError(() => new Error('Cannot leave tenant'));
+      })
+    )
+  }
 
 }
