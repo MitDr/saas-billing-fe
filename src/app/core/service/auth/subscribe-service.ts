@@ -41,7 +41,7 @@ export class SubscribeService {
   }
 
   reactivate(request: ReactivateRequest): Observable<string> {
-    return this.api.post<string>('/auth/subscribe/reactivate', request).pipe(
+    return this.api.post<string>('/auth/subscribe/re-activate', request).pipe(
       catchError(error => {
         console.error('Reactivate failed:', error);
         return throwError(() => new Error('Reactivate failed'));

@@ -12,8 +12,6 @@ import {NzFormControlComponent, NzFormDirective, NzFormItemComponent, NzFormLabe
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzInputDirective} from 'ng-zorro-antd/input';
 import {NzCheckboxComponent} from 'ng-zorro-antd/checkbox';
-import {Subscriber} from '../../../../../core/interface/entity/subscriber';
-import {Price} from '../../../../../core/interface/entity/price';
 import {AuthSubscriber} from '../../../../../core/interface/entity/auth/auth-subscriber';
 import {AuthPrice} from '../../../../../core/interface/entity/auth/auth-price';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
@@ -21,6 +19,7 @@ import {NzCardComponent, NzCardMetaComponent} from 'ng-zorro-antd/card';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NgForOf} from '@angular/common';
 import {NzModalComponent, NzModalContentDirective} from 'ng-zorro-antd/modal';
+import {AuthPriceService} from '../../../../../core/service/auth/auth-price-service';
 
 @Component({
   selector: 'app-subscribe-reuse-form',
@@ -50,36 +49,40 @@ export class SubscribeReuseForm {
   formGroup = input.required<FormGroup>();
   isLoading = input<boolean>(false);
   submitted = output<void>();
-  private message = inject(NzMessageService);
   fb = inject(NonNullableFormBuilder);
-
+  priceService = inject(AuthPriceService);
   availableSubscriber = input<AuthSubscriber[]>([]);
   selectedSubscriber = signal<AuthSubscriber | null>(null);
-
-  availablePrice = input<AuthPrice[]>([]);
+  availablePrice = signal<AuthPrice[]>([]);
   selectedPrice = signal<AuthPrice | null>(null);
-
   isPriceModalOpen = signal(false);
   isSubscriberModalOpen = signal(false);
+  private message = inject(NzMessageService);
 
-  get quantity(){
+  get quantity() {
     return this.formGroup()?.get('quantity');
   }
-  get numberOfCycle(){
+
+  get numberOfCycle() {
     return this.formGroup()?.get('numberOfCycle');
   }
-  get subscriberId(){
+
+  get subscriberId() {
     return this.formGroup()?.get('subscriberId');
   }
-  get priceId(){
+
+  get priceId() {
     return this.formGroup()?.get('priceId');
   }
-  get cancelAtPeriodEnd(){
+
+  get cancelAtPeriodEnd() {
     return this.formGroup()?.get('cancelAtPeriodEnd');
   }
-  get isTrial(){
+
+  get isTrial() {
     return this.formGroup()?.get('isTrial');
   }
+
   get metadataList(): FormArray {
     return this.formGroup()?.get('metadata') as FormArray;
   }
@@ -119,11 +122,22 @@ export class SubscribeReuseForm {
     this.selectedSubscriber.set(subscriber);
     this.subscriberId?.setValue(subscriber.id);
     this.isSubscriberModalOpen.set(false);
+
+    // Reset subscription cũ
+    this.selectedPrice.set(null);
+    this.priceId?.setValue(null);
+    this.availablePrice.set([]);
+
+    // Call API lấy subscription cancelable của subscriber
+    this.loadNotSubscribedPrice(subscriber.id);
   }
 
   clearSubscriber() {
     this.selectedSubscriber.set(null);
     this.subscriberId?.setValue(null);
+    this.availablePrice.set([]);
+    this.selectedPrice.set(null);
+    this.priceId?.setValue(null);
   }
 
   openPriceModal() {
@@ -139,6 +153,22 @@ export class SubscribeReuseForm {
   clearPrice() {
     this.selectedPrice.set(null);
     this.priceId?.setValue(null);
+  }
+
+  loadNotSubscribedPrice(subscriberId: number) {
+    this.priceService.getNotSubscribed(subscriberId).subscribe({
+      next: (response) => {
+        const prices = response.content || []
+        this.availablePrice.set(prices);
+        if (prices.length === 0) {
+          this.message.info('Subscriber này không có Price nào có thể subscribe');
+        }
+      },
+      error: (err) => {
+        console.error('Load Price failed:', err);
+        this.message.error('Không tải được danh sách price');
+      }
+    })
   }
 
   getPriceDescription(pr: AuthPrice): string {

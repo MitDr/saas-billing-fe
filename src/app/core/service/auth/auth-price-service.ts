@@ -1,6 +1,5 @@
 import {inject, Injectable} from '@angular/core';
 import {ApiClientService} from '../api-client-service';
-import {PriceRequest} from '../../interface/request/price-request';
 import {Observable, throwError} from 'rxjs';
 import {Price} from '../../interface/entity/price';
 import {catchError} from 'rxjs/operators';
@@ -13,8 +12,12 @@ import {AuthPrice} from '../../interface/entity/auth/auth-price';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthPriceService{
+export class AuthPriceService {
   api = inject(ApiClientService);
+
+  getNotSubscribed(id: number): Observable<ListData<AuthPrice>> {
+    return this.api.get<ListData<AuthPrice>>(`/auth/prices/subscriberId/${id}`);
+  }
 
   createPrice(request: AuthPriceRequest): Observable<AuthPrice> {
     return this.api.post<AuthPrice>('/auth/prices', request).pipe(

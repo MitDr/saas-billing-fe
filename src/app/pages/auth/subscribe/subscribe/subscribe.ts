@@ -4,9 +4,7 @@ import {SubscribeService} from '../../../../core/service/auth/subscribe-service'
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NonNullableFormBuilder, Validators} from '@angular/forms';
 import {AuthSubscriberService} from '../../../../core/service/auth/auth-subscriber-service';
-import {AuthPrice} from '../../../../core/interface/entity/auth/auth-price';
 import {AuthSubscriber} from '../../../../core/interface/entity/auth/auth-subscriber';
-import {AuthPriceService} from '../../../../core/service/auth/auth-price-service';
 import {Breadcrumb} from '../../../../shell/components/generic/breadcrumb/breadcrumb';
 import {
   SubscriptionReuseForm
@@ -14,8 +12,6 @@ import {
 import {SubscribeReuseForm} from '../../../../shell/components/form/auth/subscribe-reuse-form/subscribe-reuse-form';
 import {NzModalModule} from 'ng-zorro-antd/modal';
 import {NzTabComponent, NzTabsComponent, NzTabsModule} from 'ng-zorro-antd/tabs';
-import {AuthSubscriptionService} from '../../../../core/service/auth/auth-subscription-service';
-import {AuthSubscription} from '../../../../core/interface/entity/auth/auth-subscription';
 import {
   CancelSubscriptionReuseForm
 } from '../../../../shell/components/form/auth/cancel-subscription-reuse-form/cancel-subscription-reuse-form';
@@ -52,12 +48,8 @@ export class Subscribe implements OnInit {
   isSubmitting = false;
   subscribeService = inject(SubscribeService);
   message = inject(NzMessageService);
-  availablePrice = signal<AuthPrice[]>([]);
   availableSubscriber = signal<AuthSubscriber[]>([]);
-  availableSubscription = signal<AuthSubscription[]>([]);
   subscriberService = inject(AuthSubscriberService);
-  priceService = inject(AuthPriceService);
-  subscriptionService = inject(AuthSubscriptionService);
   private fb = inject(NonNullableFormBuilder)
   subscribeForm = this.fb.group({
     quantity: [null, [Validators.required]],
@@ -85,8 +77,6 @@ export class Subscribe implements OnInit {
 
   ngOnInit(): void {
     this.loadAllSubscriber();
-    this.loadAllPrice();
-    this.loadAllSubscription();
   }
 
   loadAllSubscriber() {
@@ -98,32 +88,6 @@ export class Subscribe implements OnInit {
       error: (err) => {
         console.error('Load subscriber failed:', err);
         this.message.error('Không tải được danh sách subscriber');
-      }
-    });
-  }
-
-  loadAllPrice() {
-    this.priceService.getAllPrices().subscribe({  // size=1000 để an toàn lấy hết
-      next: (response) => {
-        const price = response.content || []; // ListData<User> có content[]
-        this.availablePrice.set(price);
-      },
-      error: (err) => {
-        console.error('Load price failed:', err);
-        this.message.error('Không tải được danh sách price');
-      }
-    });
-  }
-
-  loadAllSubscription() {
-    this.subscriptionService.getAllSubscriptions().subscribe({
-      next: (response) => {
-        const subscriptions = response.content || [];
-        this.availableSubscription.set(subscriptions);
-      },
-      error: (err) => {
-        console.error('Load subscription failed:', err);
-        this.message.error('Không tải được danh sách subscription');
       }
     });
   }
@@ -160,7 +124,6 @@ export class Subscribe implements OnInit {
 
       const raw = this.subscribeForm.value;
 
-      // Convert metadata array -> object
       const metadataObject: any = {};
 
       if (raw.metadata && raw.metadata.length > 0) {
@@ -177,8 +140,10 @@ export class Subscribe implements OnInit {
         subscriberId: this.subscribeForm.value.subscriberId!,
         priceId: this.subscribeForm.value.priceId!,
         cancelAtPeriodEnd: this.subscribeForm.value.cancelAtPeriodEnd!,
-        isTrial: this.subscribeForm.value.isTrial!
+        isTrial: this.subscribeForm.value.isTrial!,
+        metadata: metadataObject
       }
+      console.log(Object.keys(metadataObject).length)
       if (Object.keys(metadataObject).length === 0) {
         delete payload.metadata;
       }
@@ -187,10 +152,9 @@ export class Subscribe implements OnInit {
 
       this.subscribeService.subscribe(payload).subscribe({
         next: value => {
-          this.isSubmitting = false;
-          this.message.success('Subscribe Successfully')
-          this.subscribeForm.reset();
-          console.log(value);
+          this.message.success('Redirecting to payment...');
+
+          window.location.assign(value);
           //Redirect to payment gateway
         },
         error: err => {

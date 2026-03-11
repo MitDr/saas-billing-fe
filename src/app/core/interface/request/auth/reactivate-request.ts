@@ -1,5 +1,5 @@
 export interface ReactivateRequest {
-  "subscriptionId": 1,
-  "subscriberId": 1,
-  "quantity"?: 1
+  "subscriptionId": number,
+  "subscriberId": number,
+  "quantity"?: number
 }

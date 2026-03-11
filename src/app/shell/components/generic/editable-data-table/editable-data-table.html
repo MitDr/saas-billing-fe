@@ -110,6 +110,9 @@
                   @case ('text') {
                     <input nz-input [(ngModel)]="editCache()[item.id].data[col.key]"/>
                   }
+                  @case ('number') {
+                    <input nz-input type="number" [(ngModel)]="editCache()[item.id].data[col.key]"/>
+                  }
                   @case ('select') {
                     <nz-select [(ngModel)]="editCache()[item.id].data[col.key]">
                       @for (opt of col.options; track opt.value) {

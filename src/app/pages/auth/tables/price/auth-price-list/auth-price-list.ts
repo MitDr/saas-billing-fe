@@ -4,18 +4,15 @@ import {AuthPrice} from '../../../../../core/interface/entity/auth/auth-price';
 import {AuthPriceRequest} from '../../../../../core/interface/request/auth/auth-price-request';
 import {ListData} from '../../../../../core/interface/list-data';
 import {Price} from '../../../../../core/interface/entity/price';
-import {AUTH_PRICE_ROUTE_CONSTANT, PRICE_ROUTE_CONSTANT} from '../../../../../core/constant/price/price-list-constant';
-import {PriceService} from '../../../../../core/service/price-service';
+import {AUTH_PRICE_ROUTE_CONSTANT} from '../../../../../core/constant/price/price-list-constant';
 import {AuthPriceService} from '../../../../../core/service/auth/auth-price-service';
 import {ColumnConfig} from '../../../../../core/interface/column-config';
-import {SOFTDELETEOPTIONS} from '../../../../admin/tables/tenant/tenant-list/tenant-list';
 import {
   CURRENCYOPTIONS,
   CYCLEOPTIONS,
   PRICESTATUSOPTIONS,
   SCHEMEOPTIONS
 } from '../../../../admin/tables/price/price-list/price-list';
-import {PriceRequest} from '../../../../../core/interface/request/price-request';
 import {EditableDataTable} from '../../../../../shell/components/generic/editable-data-table/editable-data-table';
 import {FormsModule} from '@angular/forms';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
@@ -38,7 +35,7 @@ import {RouterLink} from '@angular/router';
   templateUrl: './auth-price-list.html',
   styleUrl: './auth-price-list.css',
 })
-export class AuthPriceList extends AuthGenericListComponent<AuthPrice, AuthPriceRequest>{
+export class AuthPriceList extends AuthGenericListComponent<AuthPrice, AuthPriceRequest> {
   pricePage = signal<ListData<AuthPrice> | null>(null);
 
   checked = false;
@@ -58,9 +55,9 @@ export class AuthPriceList extends AuthGenericListComponent<AuthPrice, AuthPrice
       {key: 'scheme', title: 'Scheme', editable: true, type: 'select', options: SCHEMEOPTIONS},
       {key: 'cycle', title: 'Cycle', editable: true, type: 'select', options: CYCLEOPTIONS},
       {key: 'status', title: 'Status', editable: true, type: 'select', options: PRICESTATUSOPTIONS},
-      {key: 'maxUnit', title: 'Max Unit', editable: true, type: "text"},
-      {key: 'cycleCount', title: 'Cycle Count', editable: true, type: "text"},
-      {key: 'trialPeriod', title: 'Trial Period', editable: true, type: "text"},
+      {key: 'maxUnit', title: 'Max Unit', editable: true, type: "number"},
+      {key: 'cycleCount', title: 'Cycle Count', editable: true, type: "number"},
+      {key: 'trialPeriod', title: 'Trial Period', editable: true, type: "number"},
       {key: 'trialCycle', title: 'Trial Cycle', type: "select", editable: true, options: CYCLEOPTIONS},
       {key: 'dueDelay', title: 'Due Delay', editable: true, type: "text"},
       {key: 'plan', title: 'Plan\'s name', editable: false, type: 'custom', path: 'plan.name'},
@@ -121,6 +118,7 @@ export class AuthPriceList extends AuthGenericListComponent<AuthPrice, AuthPrice
     if (price.plan) {
       result.planId = price.plan.id;
     }
+    console.log(result);
     return result;
   }
 }
