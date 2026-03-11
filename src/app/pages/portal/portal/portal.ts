@@ -11,6 +11,7 @@ import {
   PortalSubscriptionCard
 } from '../../../shell/components/card/portal/portal-subscription-card/portal-subscription-card';
 import {NzTabComponent, NzTabsComponent} from 'ng-zorro-antd/tabs';
+import {PortalSubscription} from '../../../core/interface/portal/portal-subscription';
 
 @Component({
   selector: 'app-portal',
@@ -30,7 +31,7 @@ import {NzTabComponent, NzTabsComponent} from 'ng-zorro-antd/tabs';
 })
 export class Portal {
   loading = signal(false);
-  subscription = signal<AuthSubscription[] | []>([]);
+  subscriptions = signal<PortalSubscription[] | []>([]);
 
   // portalService = inject(PortalService);
   router = inject(Router);
@@ -44,9 +45,9 @@ export class Portal {
   // }
   loadSubscriptions() {
     // this.loading.set(true);
-    // this.subscriptionService.getSubscription(id).subscribe({
+    // this.portalService.getSubscription().subscribe({
     //   next: (response) => {
-    //     this.subscription.set(response);
+    //     this.subscriptions.set(response);
     //     this.loading.set(false);
     //   },
     //   error: (err) => {
