@@ -1,41 +1,42 @@
 import {Component, inject, input, output} from '@angular/core';
-import {User} from '../../../../../core/interface/entity/user';
-import {NzButtonComponent} from 'ng-zorro-antd/button';
+import {User} from '../../../../../../core/interface/entity/user';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {AuthUser} from '../../../../../../core/interface/entity/auth/auth-user';
 import {NzCardComponent} from 'ng-zorro-antd/card';
+import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzDescriptionsComponent, NzDescriptionsItemComponent} from 'ng-zorro-antd/descriptions';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzTagComponent} from 'ng-zorro-antd/tag';
-import {NzModalService} from 'ng-zorro-antd/modal';
+import {AuthUserDto} from '../../../../../../core/interface/DTO/auth/auth-user-dto';
 
 @Component({
-  selector: 'app-user-dto-card',
+  selector: 'app-auth-user-dto-card',
   imports: [
-    NzButtonComponent,
     NzCardComponent,
+    NzButtonComponent,
     NzDescriptionsComponent,
     NzDescriptionsItemComponent,
     NzIconDirective,
     NzTagComponent
   ],
-  templateUrl: './user-dto-card.html',
-  styleUrl: './user-dto-card.css',
+  templateUrl: './auth-user-dto-card.html',
+  styleUrl: './auth-user-dto-card.css',
 })
-export class UserDtoCard {
-  user = input.required<User>();
+export class AuthUserDtoCard {
+  user = input.required<AuthUserDto>();
   numberOfColumn = input<number>(2);
 
   modalService = inject(NzModalService);
-  planRemove = output<number>();
-  userRemove = output<number>();
+  userRemove = output<string>();
 
   onRemoveUser() {
     this.modalService.confirm({
       nzTitle: 'Xác nhận xóa',
-      nzContent: `Xóa Entitlement #${this.user().id} ?`,
+      nzContent: `Xóa User #${this.user().id} ?`,
       nzOkText: 'Xóa',
       nzOkDanger: true,
       nzOnOk: () => {
-        this.userRemove.emit(this.user().id);
+        this.userRemove.emit(this.user().email);
       }
     });
   }

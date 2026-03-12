@@ -1,18 +1,54 @@
 <div class="page-container">
-  <div class="mt-8">
-    @if (tenant(); as tenant) {
-      <app-auth-tenant-card
-        [tenant]="tenant"
-        (load)="loadTenant()"
-        (refreshApi)="onRefreshToken()"
-        (leaveTenant)="leaveTenant()"
-        (accountLink)='updateAccountLink()'>
-      </app-auth-tenant-card>
-    } @else {
-      <div class="text-center py-16">
-        <nz-spin nzSize="large"></nz-spin>
-        <p class="mt-4 text-gray-500">Loading tenant information...</p>
-      </div>
-    }
-  </div>
+  @if (tenant()) {
+    <div class="mt-8">
+      @if (tenant(); as tenant) {
+        <app-auth-tenant-card
+          [tenant]="tenant"
+          (load)="loadTenant()"
+          [isCreator]="isCreator()"
+          (deleteTenant)="onDeleteTenant()"
+          (openEditData)="openEditModal()"
+          (changeOwner)="changeOwner($event)"
+          (refreshApi)="onRefreshToken()"
+          (leaveTenant)="leaveTenant()"
+          (removeUser)="onRemoveUser($event)"
+          (accountLink)='updateAccountLink()'>
+        </app-auth-tenant-card>
+      } @else {
+        <div class="text-center py-16">
+          <nz-spin nzSize="large"></nz-spin>
+          <p class="mt-4 text-gray-500">Loading tenant information...</p>
+        </div>
+      }
+    </div>
+  } @else {
+    <h1 class="text-2xl font-semibold mb-6">Create Tenant</h1>
+    <app-auth-tenant-reuse-form
+      (submitted)="onSubmitted()"
+      [formGroup]="tenantForm"
+      [isLoading]="isSubmitting"
+      [submitLabel]="'Create'"
+    ></app-auth-tenant-reuse-form>
+  }
 </div>
+<nz-modal
+  (nzOnCancel)="onCloseModal()"
+  (nzOnOk)="onConfirmModal()"
+  [nzVisible]="isEditModalOpen()"
+  nzCancelText="Close"
+  nzOkText="Complete"
+  nzTitle="Edit Tenant"
+>
+  <ng-template nzModalContent>
+    <div class="page-container">
+      <h1 class="text-2xl font-semibold mb-6">Edit Tenant</h1>
+
+      <app-auth-tenant-reuse-form
+        (submitted)="onConfirmModal()"
+        [formGroup]="tenantEditForm"
+        [isLoading]="isSubmitting"
+        [submitLabel]="'Edit'"
+      ></app-auth-tenant-reuse-form>
+    </div>
+  </ng-template>
+</nz-modal>

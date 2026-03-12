@@ -19,26 +19,15 @@
             {{ user().role }}
           </nz-tag>
         </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="Created Date">
-          {{ user().createdDate }}
-        </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="Last Modified">
-          {{ user().modifiedDate }}
-        </nz-descriptions-item>
         <nz-descriptions-item nzTitle="Email">
           {{ user().email }}
         </nz-descriptions-item>
+        <!--        <nz-descriptions-item nzTitle="Status" [nzSpan]="2">-->
+        <!--          <nz-tag color="green">Active</nz-tag>-->
+        <!--        </nz-descriptions-item>-->
       </nz-descriptions>
 
       <div class="mt-6 flex gap-3">
-        <!--        <button nz-button nzType="primary" [routerLink]="['/users', user().id, 'edit']">-->
-        <!--          <span nz-icon nzType="edit"></span>-->
-        <!--          Edit User-->
-        <!--        </button>-->
-        <!--        <button nz-button nzDanger>-->
-        <!--          <span nz-icon nzType="delete"></span>-->
-        <!--          Delete-->
-        <!--        </button>-->
         <button (click)="onRemoveUser()" class="!inline-flex !items-center"
                 nz-button
                 nzDanger>

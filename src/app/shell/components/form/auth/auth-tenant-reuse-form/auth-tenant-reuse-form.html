@@ -1,0 +1,29 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="formGroup()" nz-form>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>Tên Tenant</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Tên tenant từ 3-50 ký tự">
+      <input formControlName="name" id="name" nz-input placeholder="Ví dụ: Công ty ABC Tenant"/>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Email -->
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="email" nzRequired>Email liên hệ</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Email không hợp lệ">
+      <input formControlName="email" id="email" nz-input placeholder="email@tenant.com"/>
+    </nz-form-control>
+  </nz-form-item>
+  <!-- Submit -->
+  <nz-form-item class="mt-8" nz-row>
+    <nz-form-control [nzOffset]="6" [nzSpan]="14">
+      <button
+        [disabled]="formGroup()?.invalid || isLoading()"
+        [nzLoading]="isLoading()"
+        nz-button
+        nzType="primary"
+      >
+        {{ submitLabel() }}
+      </button>
+    </nz-form-control>
+  </nz-form-item>
+</form>

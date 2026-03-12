@@ -3,6 +3,8 @@ import {ApiClientService} from '../api-client-service';
 import {Observable, throwError} from 'rxjs';
 import {AuthTenant} from '../../interface/entity/auth/auth-tenant';
 import {catchError} from 'rxjs/operators';
+import {AuthTenantRequest} from '../../interface/request/auth/auth-tenant-request';
+import {ChangeOwnerRequest} from '../../interface/request/auth/change-owner-request';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +19,33 @@ export class AuthTenantService {
         return throwError(() => new Error('Cannot get tenant'));
       })
     );
+  }
+
+  updateTenant(request: AuthTenantRequest, id: number): Observable<AuthTenant>{
+    return this.api.put<AuthTenant>(`auth/tenants/${id}`, request).pipe(
+      catchError(error => {
+        console.error('Update tenant error:', error);
+        return throwError(() => new Error('Cannot update tenant'));
+      })
+    )
+  }
+
+  changeOwner(request: ChangeOwnerRequest): Observable<AuthTenant>{
+    return this.api.put<AuthTenant>('auth/tenants/change-owner', request).pipe(
+      catchError(error => {
+        console.error('Change owner error:', error);
+        return throwError(() => new Error('Cannot change owner'));
+      })
+    )
+  }
+
+  createTenant(request: AuthTenantRequest): Observable<AuthTenant>{
+    return this.api.post<AuthTenant>('/auth/tenants').pipe(
+      catchError(error => {
+        console.error('Create tenant error:', error);
+        return throwError(() => new Error('Cannot create tenant'));
+      })
+    )
   }
 
   refreshAPIKey(): Observable<AuthTenant> {
@@ -42,6 +71,24 @@ export class AuthTenantService {
       catchError(error => {
         console.error('Leave tenant error:', error);
         return throwError(() => new Error('Cannot leave tenant'));
+      })
+    )
+  }
+
+  deleteTenant(): Observable<void>{
+    return this.api.delete<void>('auth/tenants').pipe(
+      catchError(error => {
+        console.error('Cannot delete tenant:', error);
+        return throwError(() => new Error('Cannot delete tenant'));
+      })
+    )
+  }
+
+  removeUserFromTenant(request: ChangeOwnerRequest): Observable<AuthTenant>{
+    return this.api.deletes<AuthTenant>('auth/tenants/remove-users', request).pipe(
+      catchError(error => {
+        console.error('Cannot remove user', error);
+        return throwError(() => new Error('Cannot remove user'));
       })
     )
   }

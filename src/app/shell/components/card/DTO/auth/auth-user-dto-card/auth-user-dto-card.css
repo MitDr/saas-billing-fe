@@ -1,0 +1,12 @@
+.entity-card {
+  border-radius: 16px !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+}
+
+:host ::ng-deep .ant-card {
+  transition: all 0.3s;
+}
+
+:host ::ng-deep .ant-card:hover {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
