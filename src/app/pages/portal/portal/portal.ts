@@ -12,6 +12,13 @@ import {
 } from '../../../shell/components/card/portal/portal-subscription-card/portal-subscription-card';
 import {NzTabComponent, NzTabsComponent} from 'ng-zorro-antd/tabs';
 import {PortalSubscription} from '../../../core/interface/portal/portal-subscription';
+import {PortalSubscriber} from '../../../core/interface/portal/portal-subscriber';
+import {
+  PortalSubscriberCard
+} from '../../../shell/components/card/portal/portal-subscriber-card/portal-subscriber-card';
+import {ApiPortalService} from '../../../core/service/portal/api-portal-service';
+import {PortalService} from '../../../core/service/portal/portal-service';
+import {PortalSubscriberRequest} from '../../../core/interface/request/portal/portal-subscriber-request';
 
 @Component({
   selector: 'app-portal',
@@ -24,7 +31,8 @@ import {PortalSubscription} from '../../../core/interface/portal/portal-subscrip
     RouterLink,
     PortalSubscriptionCard,
     NzTabComponent,
-    NzTabsComponent
+    NzTabsComponent,
+    PortalSubscriberCard
   ],
   templateUrl: './portal.html',
   styleUrl: './portal.css',
@@ -32,28 +40,57 @@ import {PortalSubscription} from '../../../core/interface/portal/portal-subscrip
 export class Portal {
   loading = signal(false);
   subscriptions = signal<PortalSubscription[] | []>([]);
-
-  // portalService = inject(PortalService);
+  subscriber = signal<PortalSubscriber | null>(null)
+  portalService = inject(PortalService);
   router = inject(Router);
   message = inject(NzMessageService)
   private route = inject(ActivatedRoute);
 
-  // constructor() {
-  //   effect(() => {
-  //     this.loadSubscriptions()
-  //   }
-  // }
+  constructor(){
+    effect(() => {
+      this.loadSubscriptions();
+      this.loadSubscriber();
+    });
+  }
   loadSubscriptions() {
-    // this.loading.set(true);
-    // this.portalService.getSubscription().subscribe({
-    //   next: (response) => {
-    //     this.subscriptions.set(response);
-    //     this.loading.set(false);
-    //   },
-    //   error: (err) => {
-    //     this.loading.set(false);
-    //     console.error(err);
-    //   }
-    // });
+    this.loading.set(true);
+    this.portalService.getSubscription().subscribe({
+      next: (response) => {
+        this.subscriptions.set(response.content || []);
+        this.loading.set(false);
+      },
+      error: (err) => {
+        this.loading.set(false);
+        console.error(err);
+      }
+    });
+  }
+
+  loadSubscriber() {
+    this.loading.set(true);
+    this.portalService.getSubscriber().subscribe({
+      next: (response) => {
+        this.subscriber.set(response);
+        this.loading.set(false);
+      },
+      error: (err) => {
+        this.loading.set(false);
+        console.error(err);
+      }
+    });
+  }
+
+  onEdit(request: PortalSubscriberRequest){
+    this.loading.set(true);
+    this.portalService.updateSubscriber(request).subscribe({
+      next: (response) => {
+        this.subscriber.set(response);
+        this.loading.set(false);
+      },
+      error: (err) => {
+        this.loading.set(false);
+        console.error(err);
+      }
+    });
   }
 }

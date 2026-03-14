@@ -1,0 +1,53 @@
+<nz-card [nzBordered]="false" class="tenant-card">
+  <div class="flex items-start gap-6">
+    <div class="flex-1">
+      <h2 class="text-2xl font-bold flex items-center gap-3">
+        Subscriber Name: {{ subscriber().name }}
+      </h2>
+      <p class="text-gray-500 mt-1">
+        {{ subscriber().email }}
+      </p>
+
+      <nz-descriptions [nzColumn]="1" class="mt-6" nzBordered nzSize="small">
+        <nz-descriptions-item nzTitle="Name">
+          <span class="font-medium text-orange-600">
+            {{ subscriber().name }}
+          </span>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Email">
+          {{ subscriber().email }}
+        </nz-descriptions-item>
+      </nz-descriptions>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <button (click)="openEditModal()"
+                class="!inline-flex !items-center" nz-button
+                nzType="primary">
+          <span nz-icon nzType="edit"></span>
+          Edit
+        </button>
+      </div>
+    </div>
+  </div>
+</nz-card>
+<nz-modal
+  (nzOnCancel)="onCloseModal()"
+  (nzOnOk)="onConfirmModal()"
+  [nzVisible]="isEditModalOpen()"
+  nzCancelText="Close"
+  nzOkText="Complete"
+  nzTitle="Update Subscriber"
+>
+  <ng-template nzModalContent>
+    <div class="page-container">
+      <h1 class="text-2xl font-semibold mb-6">Update Subscriber</h1>
+
+<!--      <app-auth-subscriber-reuse-form-->
+<!--        (submitted)="onSubmitted()"-->
+<!--        [formGroup]="subscriberForm"-->
+<!--        [isEditMode]="false"-->
+<!--        [isLoading]="isSubmitting"-->
+<!--        [submitLabel]="'Create'"-->
+<!--      ></app-auth-subscriber-reuse-form>-->
+    </div>
+  </ng-template>
+</nz-modal>
