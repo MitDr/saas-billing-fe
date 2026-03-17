@@ -12,7 +12,7 @@ import {AuthSubscriber} from '../../interface/entity/auth/auth-subscriber';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthSubscriberService{
+export class AuthSubscriberService {
   api = inject(ApiClientService);
 
   createSubscriber(request: AuthSubscriberRequest): Observable<AuthSubscriber> {
@@ -132,8 +132,8 @@ export class AuthSubscriberService{
     );
   }
 
-  openPortal(id: number): Observable<string>{
-    return this.api.get<string>(`auth/portals/${id}`).pipe(
+  openPortal(id: number): Observable<string> {
+    return this.api.get<string>(`/auth/portals/${id}`).pipe(
       catchError(error => {
         console.error('Get Portal error:', error);
         return throwError(() => new Error('Get Portal failed'));

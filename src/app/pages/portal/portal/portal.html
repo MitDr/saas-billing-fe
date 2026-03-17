@@ -2,37 +2,37 @@
   <nz-tabs>
     <nz-tab nzTitle="Subscriber Detail">
       <div class="mt-8">
-        @if (subscriber();as sub) {
+        @if (subscriber(); as sub) {
           <app-portal-subscriber-card
-          [subscriber]="sub"
-          (load)="loadSubscriber()"
-          (openEdit)="onEdit($event)">
+            [subscriber]="sub"
+            (load)="loadSubscriber()"
+            (openEdit)="onEdit($event)">
           </app-portal-subscriber-card>
         }
       </div>
-<!--      form thay doi thong tin subscriber-->
-<!--hiển thị tên và email người dùng; Thêm nút mở modal để người dùng update thông tin-->
+      <!--      form thay doi thong tin subscriber-->
+      <!--hiển thị tên và email người dùng; Thêm nút mở modal để người dùng update thông tin-->
     </nz-tab>
     <nz-tab nzTitle="Subscription Detail">
-<!--      List cac subscription card va nut bam-->
-        @for (sub of subscriptions(); track sub) {
-            <div class="mt-8">
-                @if (sub) {
-<!--                  <app-portal-subscription-card-->
-<!--                    [subscription]="sub"-->
-<!--                    (load)="loadSubscription($event)"-->
-<!--                    (deleteButton)="onDelete($event)">-->
-<!--                  </app-portal-subscription-card>-->
-                } @else {
-                  <div class="text-center py-16">
-                    <nz-spin nzSize="large"></nz-spin>
-                    <p class="mt-4 text-gray-500">Loading subscription information...</p>
-                  </div>
-                }
-              </div>
-        }
+      <!--      List cac subscription card va nut bam-->
+      @for (sub of subscriptions(); track sub) {
+        <div class="mt-8">
+          @if (sub) {
+            <!--                              <app-portal-subscription-card-->
+              <!--                                  [subscription]="sub"-->
+              <!--                                  (load)="loadSubscription($event)"-->
+              <!--                                  (deleteButton)="onDelete($event)">-->
+              <!--                                </app-portal-subscription-card>-->
+          } @else {
+            <div class="text-center py-16">
+              <nz-spin nzSize="large"></nz-spin>
+              <p class="mt-4 text-gray-500">Loading subscription information...</p>
+            </div>
+          }
+        </div>
+      }
     </nz-tab>
   </nz-tabs>
-<!--  <nz-page-header-->
+  <!--  <nz-page-header-->
 
 </div>

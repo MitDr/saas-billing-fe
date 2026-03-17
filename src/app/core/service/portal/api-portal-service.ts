@@ -1,11 +1,9 @@
-import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
-import {computed, inject, Injectable, signal} from '@angular/core';
-import { NzMessageService } from "ng-zorro-antd/message";
+import {HttpClient, HttpResponse} from "@angular/common/http";
+import {Injectable} from '@angular/core';
+import {NzMessageService} from "ng-zorro-antd/message";
 import {Router} from '@angular/router';
-import {BehaviorSubject, map, Observable, throwError} from "rxjs";
-import {catchError, tap} from 'rxjs/operators';
-import {ListData} from '../../interface/list-data';
-import {PortalSubscription} from '../../interface/portal/portal-subscription';
+import {map, Observable, throwError} from "rxjs";
+import {catchError} from 'rxjs/operators';
 import {ApiResponse} from '../../model/api-model';
 
 export interface PortalUser {
@@ -17,7 +15,7 @@ export interface PortalUser {
   providedIn: 'root'
 })
 export class ApiPortalService {
-  private baseUrl = 'http://localhost:8080/api/v1';
+  private baseUrl = 'http://localhost:8080';
   private http: HttpClient;
 
   constructor(

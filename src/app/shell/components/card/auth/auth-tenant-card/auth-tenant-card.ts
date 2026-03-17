@@ -1,4 +1,4 @@
-import {Component, effect, inject, input, output, signal} from '@angular/core';
+import {Component, inject, input, output, signal} from '@angular/core';
 import {AuthTenant} from '../../../../../core/interface/entity/auth/auth-tenant';
 import {AuthTenantService} from '../../../../../core/service/auth/auth-tenant-service';
 import {NzModalComponent, NzModalContentDirective, NzModalService} from 'ng-zorro-antd/modal';
@@ -13,11 +13,11 @@ import {NzTagComponent} from 'ng-zorro-antd/tag';
 import {NzTooltipDirective} from 'ng-zorro-antd/tooltip';
 import {UserDtoCard} from '../../DTO/user-dto-card/user-dto-card';
 import {RouterLink} from '@angular/router';
-import {User} from '../../../../../core/interface/entity/user';
 import {AuthUserDto} from '../../../../../core/interface/DTO/auth/auth-user-dto';
 import {AuthSubscriberReuseForm} from '../../../form/auth/auth-subscriber-reuse-form/auth-subscriber-reuse-form';
 import {AuthTenantReuseForm} from '../../../form/auth/auth-tenant-reuse-form/auth-tenant-reuse-form';
-import {AuthUserDtoCard} from '../../DTO/auth/auth-user-dto-card/auth-user-dto-card';
+import {AuthUserDtoCard, AuthUserDtoCardInterface} from '../../DTO/auth/auth-user-dto-card/auth-user-dto-card';
+import {AuthService} from '../../../../../core/service/auth-service';
 
 @Component({
   selector: 'app-auth-tenant-card',
@@ -44,13 +44,13 @@ import {AuthUserDtoCard} from '../../DTO/auth/auth-user-dto-card/auth-user-dto-c
   styleUrl: './auth-tenant-card.css',
 })
 export class AuthTenantCard {
+  authService = inject(AuthService);
   tenant = input.required<AuthTenant>();
   isCreator = input.required<boolean>();
   tenantService = inject(AuthTenantService);
   modalService = inject(NzModalService);
   load = output<number>();
   selectedCreator = signal<AuthUserDto | null>(null);
-  private message = inject(NzMessageService);
   isCreatorModalOpen = signal(false);
   refreshApi = output<void>();
   leaveTenant = output<void>();
@@ -59,6 +59,7 @@ export class AuthTenantCard {
   openEditData = output<void>();
   deleteTenant = output<void>();
   removeUser = output<string>();
+  private message = inject(NzMessageService);
 
   copyApiKey(key: string): void {
     if (!key) {
@@ -75,13 +76,10 @@ export class AuthTenantCard {
       });
   }
 
-  // Chọn Creator (single)
   selectCreator(user: AuthUserDto) {
-    effect(() => {
-      this.selectedCreator.set(user);
-      this.isCreatorModalOpen.set(false);
-      this.changeOwner.emit(user.email);
-    });
+    this.selectedCreator.set(user);
+    this.isCreatorModalOpen.set(false);
+    this.changeOwner.emit(user.email);
   }
 
   refreshApiKey(): void {
@@ -117,5 +115,12 @@ export class AuthTenantCard {
 
   onRemoveUser($event: string) {
     this.removeUser.emit($event);
+  }
+
+  getUserCardData(user: AuthUserDto): AuthUserDtoCardInterface {
+    return {
+      user,
+      creator: this.authService.currentUserID === this.tenant().creator.id
+    };
   }
 }

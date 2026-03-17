@@ -5,6 +5,7 @@ import {AuthTenant} from '../../interface/entity/auth/auth-tenant';
 import {catchError} from 'rxjs/operators';
 import {AuthTenantRequest} from '../../interface/request/auth/auth-tenant-request';
 import {ChangeOwnerRequest} from '../../interface/request/auth/change-owner-request';
+import {RemoveUserRequest} from '../../../pages/auth/tenant/auth-tenant/auth-tenant-detail';
 
 @Injectable({
   providedIn: 'root'
@@ -21,8 +22,8 @@ export class AuthTenantService {
     );
   }
 
-  updateTenant(request: AuthTenantRequest, id: number): Observable<AuthTenant>{
-    return this.api.put<AuthTenant>(`auth/tenants/${id}`, request).pipe(
+  updateTenant(request: AuthTenantRequest): Observable<AuthTenant> {
+    return this.api.put<AuthTenant>(`/auth/tenants/update`, request).pipe(
       catchError(error => {
         console.error('Update tenant error:', error);
         return throwError(() => new Error('Cannot update tenant'));
@@ -30,8 +31,8 @@ export class AuthTenantService {
     )
   }
 
-  changeOwner(request: ChangeOwnerRequest): Observable<AuthTenant>{
-    return this.api.put<AuthTenant>('auth/tenants/change-owner', request).pipe(
+  changeOwner(request: ChangeOwnerRequest): Observable<AuthTenant> {
+    return this.api.put<AuthTenant>('/auth/tenants/change-owner', request).pipe(
       catchError(error => {
         console.error('Change owner error:', error);
         return throwError(() => new Error('Cannot change owner'));
@@ -39,7 +40,7 @@ export class AuthTenantService {
     )
   }
 
-  createTenant(request: AuthTenantRequest): Observable<AuthTenant>{
+  createTenant(request: AuthTenantRequest): Observable<AuthTenant> {
     return this.api.post<AuthTenant>('/auth/tenants').pipe(
       catchError(error => {
         console.error('Create tenant error:', error);
@@ -57,7 +58,7 @@ export class AuthTenantService {
     );
   }
 
-  leaveTenant(): Observable<string>{
+  leaveTenant(): Observable<string> {
     return this.api.post<string>(`/auth/tenants/leave`).pipe(
       catchError(error => {
         console.error('Leave tenant error:', error);
@@ -66,8 +67,8 @@ export class AuthTenantService {
     )
   }
 
-  updateAccountLink(): Observable<string>{
-    return this.api.post<string>(`/auth/tenants/update-account`).pipe(
+  updateAccountLink(): Observable<string> {
+    return this.api.get<string>(`/auth/tenants/update-account`).pipe(
       catchError(error => {
         console.error('Leave tenant error:', error);
         return throwError(() => new Error('Cannot leave tenant'));
@@ -75,8 +76,8 @@ export class AuthTenantService {
     )
   }
 
-  deleteTenant(): Observable<void>{
-    return this.api.delete<void>('auth/tenants').pipe(
+  deleteTenant(): Observable<void> {
+    return this.api.delete<void>('/auth/tenants').pipe(
       catchError(error => {
         console.error('Cannot delete tenant:', error);
         return throwError(() => new Error('Cannot delete tenant'));
@@ -84,8 +85,8 @@ export class AuthTenantService {
     )
   }
 
-  removeUserFromTenant(request: ChangeOwnerRequest): Observable<AuthTenant>{
-    return this.api.deletes<AuthTenant>('auth/tenants/remove-users', request).pipe(
+  removeUserFromTenant(request: RemoveUserRequest): Observable<AuthTenant> {
+    return this.api.deletes<AuthTenant>('/auth/tenants/remove-users', request).pipe(
       catchError(error => {
         console.error('Cannot remove user', error);
         return throwError(() => new Error('Cannot remove user'));

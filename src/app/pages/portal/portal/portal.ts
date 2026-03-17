@@ -1,8 +1,6 @@
 import {Component, effect, inject, signal} from '@angular/core';
-import {AuthSubscriptionService} from '../../../core/service/auth/auth-subscription-service';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {AuthSubscription} from '../../../core/interface/entity/auth/auth-subscription';
 import {AuthSubscriptionCard} from '../../../shell/components/card/auth/auth-subscription-card/auth-subscription-card';
 import {NzBreadCrumbComponent, NzBreadCrumbItemComponent} from 'ng-zorro-antd/breadcrumb';
 import {NzPageHeaderComponent} from 'ng-zorro-antd/page-header';
@@ -16,9 +14,9 @@ import {PortalSubscriber} from '../../../core/interface/portal/portal-subscriber
 import {
   PortalSubscriberCard
 } from '../../../shell/components/card/portal/portal-subscriber-card/portal-subscriber-card';
-import {ApiPortalService} from '../../../core/service/portal/api-portal-service';
 import {PortalService} from '../../../core/service/portal/portal-service';
 import {PortalSubscriberRequest} from '../../../core/interface/request/portal/portal-subscriber-request';
+import {NzModalModule} from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-portal',
@@ -32,7 +30,8 @@ import {PortalSubscriberRequest} from '../../../core/interface/request/portal/po
     PortalSubscriptionCard,
     NzTabComponent,
     NzTabsComponent,
-    PortalSubscriberCard
+    PortalSubscriberCard,
+    NzModalModule
   ],
   templateUrl: './portal.html',
   styleUrl: './portal.css',
@@ -46,12 +45,13 @@ export class Portal {
   message = inject(NzMessageService)
   private route = inject(ActivatedRoute);
 
-  constructor(){
+  constructor() {
     effect(() => {
       this.loadSubscriptions();
       this.loadSubscriber();
     });
   }
+
   loadSubscriptions() {
     this.loading.set(true);
     this.portalService.getSubscription().subscribe({
@@ -80,7 +80,7 @@ export class Portal {
     });
   }
 
-  onEdit(request: PortalSubscriberRequest){
+  onEdit(request: PortalSubscriberRequest) {
     this.loading.set(true);
     this.portalService.updateSubscriber(request).subscribe({
       next: (response) => {

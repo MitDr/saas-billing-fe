@@ -8,6 +8,7 @@ import {NzPageHeaderComponent} from 'ng-zorro-antd/page-header';
 import {NzSpinComponent} from 'ng-zorro-antd/spin';
 import {SubscriberCard} from '../../../../../shell/components/card/subscriber/subscriber-card/subscriber-card';
 import {AuthSubscriberCard} from '../../../../../shell/components/card/auth/auth-subscriber-card/auth-subscriber-card';
+import {NzModalModule} from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-auth-subscriber-detail',
@@ -18,7 +19,8 @@ import {AuthSubscriberCard} from '../../../../../shell/components/card/auth/auth
     NzSpinComponent,
     RouterLink,
     SubscriberCard,
-    AuthSubscriberCard
+    AuthSubscriberCard,
+    NzModalModule
   ],
   templateUrl: './auth-subscriber-detail.html',
   styleUrl: './auth-subscriber-detail.css',
@@ -69,13 +71,12 @@ export class AuthSubscriberDetail {
     })
   }
 
-  onOpenPortal(id: number){
+  onOpenPortal(id: number) {
     this.loading.set(true);
     this.subscriberService.openPortal(id).subscribe({
       next: (response) => {
-        this.message.success('feature deleted successfully');
-        this.message.success(response);
-        // this.router.navigate(['/app/tables/subscribers'])
+        this.loading.set(false);
+        window.location.href = response;
       },
       error: (err) => {
         this.loading.set(false);

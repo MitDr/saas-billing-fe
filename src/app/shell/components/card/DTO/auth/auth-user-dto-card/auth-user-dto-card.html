@@ -1,40 +1,148 @@
+<!--@if (!isCreator()) {-->
+<!--  <nz-card [nzBordered]="false" class="entity-card">-->
+<!--    <div class="flex items-start gap-6">-->
+<!--      <div class="flex-1">-->
+<!--        <div class="flex items-start justify-between">-->
+<!--          &lt;!&ndash; LEFT &ndash;&gt;-->
+<!--          <div>-->
+<!--            <h2 class="text-2xl font-bold flex items-center gap-3">-->
+<!--              {{ userInfo().username }}-->
+
+<!--              @if (userInfo().role === 'ADMIN') {-->
+<!--                <nz-tag nzColor="red">ADMIN</nz-tag>-->
+<!--              } @else {-->
+<!--                <nz-tag nzColor="green">USER</nz-tag>-->
+<!--              }-->
+<!--            </h2>-->
+<!--            <p class="text-gray-500 mt-1">-->
+<!--              {{ userInfo().email }}-->
+<!--            </p>-->
+<!--          </div>-->
+<!--          &lt;!&ndash; RIGHT &ndash;&gt;-->
+<!--          @if (creator()) {-->
+<!--            <button-->
+<!--              (click)="onRemoveUser()"-->
+<!--              class="!inline-flex !items-center"-->
+<!--              nz-button-->
+<!--              nzDanger-->
+<!--            >-->
+<!--              <span nz-icon nzType="delete"></span>-->
+<!--              Remove-->
+<!--            </button>-->
+<!--          }-->
+<!--        </div>-->
+<!--        <nz-descriptions-->
+<!--          [nzColumn]="numberOfColumn()"-->
+<!--          class="mt-6"-->
+<!--          nzBordered-->
+<!--          nzSize="small"-->
+<!--        >-->
+<!--          <nz-descriptions-item nzTitle="User ID">-->
+<!--            {{ userInfo().id }}-->
+<!--          </nz-descriptions-item>-->
+
+<!--          <nz-descriptions-item nzTitle="Role">-->
+<!--            <nz-tag [nzColor]="userInfo().role === 'ADMIN' ? 'volcano' : 'geekblue'">-->
+<!--              {{ userInfo().role }}-->
+<!--            </nz-tag>-->
+<!--          </nz-descriptions-item>-->
+
+<!--          <nz-descriptions-item nzTitle="Email">-->
+<!--            {{ userInfo().email }}-->
+<!--          </nz-descriptions-item>-->
+<!--        </nz-descriptions>-->
+
+<!--      </div>-->
+<!--    </div>-->
+<!--  </nz-card>-->
+<!--} @else {-->
+<!--  <nz-card [nzBordered]="false" class="entity-card">-->
+<!--    <div class="flex items-start gap-6">-->
+<!--      <div class="flex-1">-->
+<!--        <h2 class="text-2xl font-bold flex items-center gap-3">-->
+<!--          {{ userInfo().username }}-->
+<!--          <nz-tag nzColor="red">CREATOR</nz-tag>-->
+<!--        </h2>-->
+<!--        <p class="text-gray-500 mt-1">{{ userInfo().email }}</p>-->
+<!--        <nz-descriptions [nzColumn]="numberOfColumn()" class="mt-6" nzBordered nzSize="small">-->
+<!--          <nz-descriptions-item nzTitle="User ID">-->
+<!--            {{ userInfo().id }}-->
+<!--          </nz-descriptions-item>-->
+<!--          <nz-descriptions-item nzTitle="Role">-->
+<!--            <nz-tag [nzColor]="userInfo().role === 'ADMIN' ? 'volcano' : 'geekblue'">-->
+<!--              {{ userInfo().role }}-->
+<!--            </nz-tag>-->
+<!--          </nz-descriptions-item>-->
+<!--          <nz-descriptions-item nzTitle="Email">-->
+<!--            {{ userInfo().email }}-->
+<!--          </nz-descriptions-item>-->
+<!--          &lt;!&ndash;        <nz-descriptions-item nzTitle="Status" [nzSpan]="2">&ndash;&gt;-->
+<!--          &lt;!&ndash;          <nz-tag color="green">Active</nz-tag>&ndash;&gt;-->
+<!--          &lt;!&ndash;        </nz-descriptions-item>&ndash;&gt;-->
+<!--        </nz-descriptions>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </nz-card>-->
+<!--}-->
 <nz-card [nzBordered]="false" class="entity-card">
   <div class="flex items-start gap-6">
     <div class="flex-1">
-      <h2 class="text-2xl font-bold flex items-center gap-3">
-        {{ user().username }}
-        @if (user().role === 'ADMIN') {
-          <nz-tag nzColor="red">ADMIN</nz-tag>
-        } @else {
-          <nz-tag nzColor="green">USER</nz-tag>
+
+      <div class="flex items-start justify-between">
+        <!-- LEFT -->
+        <div>
+          <h2 class="text-2xl font-bold flex items-center gap-3">
+            {{ userInfo().username }}
+
+            @if (creator()) {
+              <nz-tag nzColor="red">CREATOR</nz-tag>
+            } @else if (userInfo().role === 'ADMIN') {
+              <nz-tag nzColor="red">ADMIN</nz-tag>
+            } @else {
+              <nz-tag nzColor="green">USER</nz-tag>
+            }
+          </h2>
+
+          <p class="text-gray-500 mt-1">
+            {{ userInfo().email }}
+          </p>
+        </div>
+        <!-- RIGHT -->
+        @if (isCreator() && !creator()) {
+
+          <button
+            (click)="onRemoveUser()"
+            class="!inline-flex !items-center"
+            nz-button
+            nzDanger
+          >
+            <span nz-icon nzType="delete"></span>
+            Remove
+          </button>
         }
-      </h2>
-      <p class="text-gray-500 mt-1">{{ user().email }}</p>
-      <nz-descriptions [nzColumn]="numberOfColumn()" class="mt-6" nzBordered nzSize="small">
+      </div>
+
+      <nz-descriptions
+        [nzColumn]="numberOfColumn()"
+        class="mt-6"
+        nzBordered
+        nzSize="small"
+      >
         <nz-descriptions-item nzTitle="User ID">
-          {{ user().id }}
+          {{ userInfo().id }}
         </nz-descriptions-item>
+
         <nz-descriptions-item nzTitle="Role">
-          <nz-tag [nzColor]="user().role === 'ADMIN' ? 'volcano' : 'geekblue'">
-            {{ user().role }}
+          <nz-tag [nzColor]="userInfo().role === 'ADMIN' ? 'volcano' : 'geekblue'">
+            {{ userInfo().role }}
           </nz-tag>
         </nz-descriptions-item>
+
         <nz-descriptions-item nzTitle="Email">
-          {{ user().email }}
+          {{ userInfo().email }}
         </nz-descriptions-item>
-        <!--        <nz-descriptions-item nzTitle="Status" [nzSpan]="2">-->
-        <!--          <nz-tag color="green">Active</nz-tag>-->
-        <!--        </nz-descriptions-item>-->
       </nz-descriptions>
 
-      <div class="mt-6 flex gap-3">
-        <button (click)="onRemoveUser()" class="!inline-flex !items-center"
-                nz-button
-                nzDanger>
-          <span nz-icon nzType="delete"></span>
-          Remove
-        </button>
-      </div>
     </div>
   </div>
 </nz-card>

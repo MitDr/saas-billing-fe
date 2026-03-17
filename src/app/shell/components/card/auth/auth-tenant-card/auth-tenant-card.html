@@ -38,7 +38,7 @@
               <span nz-icon nzType="copy"></span>
             </button>
 
-            @if (isCreator()){
+            @if (isCreator()) {
               <button
                 (nzOnConfirm)="refreshApiKey()"
                 nz-button
@@ -98,7 +98,7 @@
           {{ tenant().modifiedDate }}
         </nz-descriptions-item>
       </nz-descriptions>
-      @if (!isCreator()){
+      @if (!isCreator()) {
         <div class="mt-8 flex flex-wrap gap-3">
           <button (click)="onLeaveTenant()" class="!inline-flex !items-center"
                   nz-button nzDanger>
@@ -107,27 +107,28 @@
           </button>
         </div>
       } @else {
-        <p>Creator Button</p>
-        <button (click)="onChangeOwner()" class="!inline-flex !items-center"
-                nz-button nzDanger>
-          <span nz-icon nzType="delete"></span>
-          Change Owner
-        </button>
-        <button (click)="onEdit()" class="!inline-flex !items-center"
-                nz-button nzType="default">
-          <span nz-icon nzType="edit"></span>
-          Edit Tenant
-        </button>
-        <button (click)="onDelete()" class="!inline-flex !items-center"
-                nz-button nzDanger>
-          <span nz-icon nzType="delete"></span>
-          Delete Tenant
-        </button>
-        <button (click)="goOnboard()" class="!inline-flex !items-center"
-                nz-button nzType="default">
-          <span nz-icon nzType="link"></span>
-          Account Link
-        </button>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <button (click)="onChangeOwner()" class="!inline-flex !items-center"
+                  nz-button nzType="text">
+            <span nz-icon nzType="user"></span>
+            Change Owner
+          </button>
+          <button (click)="onEdit()" class="!inline-flex !items-center"
+                  nz-button nzType="default">
+            <span nz-icon nzType="edit"></span>
+            Edit Tenant
+          </button>
+          <button (click)="onDelete()" class="!inline-flex !items-center"
+                  nz-button nzDanger>
+            <span nz-icon nzType="delete"></span>
+            Delete Tenant
+          </button>
+          <button (click)="goOnboard()" class="!inline-flex !items-center"
+                  nz-button nzType="primary">
+            <span nz-icon nzType="link"></span>
+            Account Link
+          </button>
+        </div>
       }
 
       @if (tenant().users?.length) {
@@ -139,9 +140,19 @@
 
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             @for (user of tenant().users; track user.id) {
-              <app-auth-user-dto-card [numberOfColumn]="1" [user]="user"
-                                 (userRemove)="onRemoveUser($event)">
-              </app-auth-user-dto-card>
+              @if (user.id === tenant().creator.id) {
+                <app-auth-user-dto-card [numberOfColumn]="1"
+                                        [user]="getUserCardData(user)"
+                                        (userRemove)="onRemoveUser($event)"
+                                        [creator]="true">
+                </app-auth-user-dto-card>
+              } @else {
+                <app-auth-user-dto-card [numberOfColumn]="1"
+                                        [user]="getUserCardData(user)"
+                                        (userRemove)="onRemoveUser($event)"
+                                        [creator]="false">
+                </app-auth-user-dto-card>
+              }
             }
           </div>
         </div>
