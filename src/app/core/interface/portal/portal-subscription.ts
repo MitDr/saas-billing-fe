@@ -1,6 +1,3 @@
-import {AuthSubscriberDto} from '../DTO/auth/auth-subscriber-dto';
-import {AuthPriceDto} from '../DTO/auth/auth-price-dto';
-import {AuthInvoiceDto} from '../DTO/auth/auth-invoice-dto';
 import {PortalPlanDto} from './DTO/portal-plan-dto';
 
 export interface PortalSubscription{

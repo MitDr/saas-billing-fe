@@ -31,8 +31,7 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
   styleUrl: './document-chat.css',
 })
 export class DocumentChat {
-  // files = signal<File[]>([]);
-  uploadedDocs = signal<any[]>([]); // list documents từ DB (tên file, source, v.v.)
+  uploadedDocs = signal<any[]>([]);
   query = signal<string>('');
   answer = signal<string>('');
   sources = signal<any[]>([]);
@@ -76,7 +75,6 @@ export class DocumentChat {
     this.answer.set('');
     this.sources.set([]);
 
-    // Giả lập API (xóa khi dùng thật)
     setTimeout(() => {
       this.answer.set('Đây là câu trả lời mẫu cho câu hỏi: ' + q);
       this.sources.set([

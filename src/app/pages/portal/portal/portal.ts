@@ -1,6 +1,8 @@
 import {Component, effect, inject, signal} from '@angular/core';
+import {AuthSubscriptionService} from '../../../core/service/auth/auth-subscription-service';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {NzMessageService} from 'ng-zorro-antd/message';
+import {AuthSubscription} from '../../../core/interface/entity/auth/auth-subscription';
 import {AuthSubscriptionCard} from '../../../shell/components/card/auth/auth-subscription-card/auth-subscription-card';
 import {NzBreadCrumbComponent, NzBreadCrumbItemComponent} from 'ng-zorro-antd/breadcrumb';
 import {NzPageHeaderComponent} from 'ng-zorro-antd/page-header';
@@ -16,6 +18,13 @@ import {
 } from '../../../shell/components/card/portal/portal-subscriber-card/portal-subscriber-card';
 import {PortalService} from '../../../core/service/portal/portal-service';
 import {PortalSubscriberRequest} from '../../../core/interface/request/portal/portal-subscriber-request';
+import {NzAvatarComponent} from 'ng-zorro-antd/avatar';
+import {NzCardComponent, NzCardMetaComponent} from 'ng-zorro-antd/card';
+import {NzDescriptionsComponent, NzDescriptionsItemComponent} from 'ng-zorro-antd/descriptions';
+import {NzEmptyComponent} from 'ng-zorro-antd/empty';
+import {NzButtonComponent} from 'ng-zorro-antd/button';
+import {NzIconDirective} from 'ng-zorro-antd/icon';
+import {NzTagComponent} from 'ng-zorro-antd/tag';
 import {NzModalModule} from 'ng-zorro-antd/modal';
 
 @Component({
@@ -31,6 +40,16 @@ import {NzModalModule} from 'ng-zorro-antd/modal';
     NzTabComponent,
     NzTabsComponent,
     PortalSubscriberCard,
+    NzAvatarComponent,
+    NzCardComponent,
+    NzDescriptionsComponent,
+    NzDescriptionsItemComponent,
+    NzEmptyComponent,
+    NzButtonComponent,
+    NzIconDirective,
+    NzCardMetaComponent,
+    NzTagComponent,
+    PortalSubscriberCard,
     NzModalModule
   ],
   templateUrl: './portal.html',
@@ -45,13 +64,12 @@ export class Portal {
   message = inject(NzMessageService)
   private route = inject(ActivatedRoute);
 
-  constructor() {
+  constructor(){
     effect(() => {
       this.loadSubscriptions();
       this.loadSubscriber();
     });
   }
-
   loadSubscriptions() {
     this.loading.set(true);
     this.portalService.getSubscription().subscribe({
@@ -80,7 +98,7 @@ export class Portal {
     });
   }
 
-  onEdit(request: PortalSubscriberRequest) {
+  onEdit(request: PortalSubscriberRequest){
     this.loading.set(true);
     this.portalService.updateSubscriber(request).subscribe({
       next: (response) => {
