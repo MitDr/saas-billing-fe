@@ -4,7 +4,6 @@
       <h2 class="text-2xl font-bold flex items-center gap-3">
         {{ plan().name }}
       </h2>
-      <!--      cho nay de avatar-->
       <img
         [nzFallback]="fallbackImageConst"
         [nzSrc]="plan().image"
@@ -31,12 +30,6 @@
               }
             }
           </div>
-        </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="Created Date">
-          {{ plan().createdDate }}
-        </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="Last Modified">
-          {{ plan().modifiedDate }}
         </nz-descriptions-item>
       </nz-descriptions>
     </div>

@@ -5,21 +5,18 @@
       <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div>
           <h1 class="text-3xl md:text-4xl font-bold mb-2">
-            Xin chào, {{ subscriber()?.name || 'Subscriber' }}!
+            Hello, {{ subscriber()?.name || 'Subscriber' }}!
           </h1>
           <p class="text-lg opacity-90">
-            Quản lý tài khoản và subscription của bạn tại đây.
+            Manage your account and subscriptions right here
           </p>
         </div>
         <div class="flex items-center gap-4">
           <nz-avatar
             [nzText]="(subscriber()?.name || 'U').charAt(0).toUpperCase()"
-            nzSize="large"
             class="bg-white text-blue-600 font-bold"
+            nzSize="large"
           ></nz-avatar>
-<!--          <button nz-button nzType="default" nzGhost (click)="logout()">-->
-<!--            <span nz-icon nzType="logout"></span> Đăng xuất-->
-<!--          </button>-->
         </div>
       </div>
     </div>
@@ -27,13 +24,12 @@
 
   <!-- Main Content -->
   <div class="max-w-7xl mx-auto px-6 py-12">
-    <nz-tabs nzType="card" class="shadow-sm rounded-lg overflow-hidden">
-      <!-- Tab 1: Subscriber Detail -->
-      <nz-tab nzTitle="Thông tin cá nhân">
+    <nz-tabs class="shadow-sm rounded-lg overflow-hidden" nzType="card">
+      <nz-tab nzTitle="Account Info">
         <nz-card class="mt-8 shadow-md">
           <nz-spin [nzSpinning]="loading()">
             @if (subscriber(); as sub) {
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div class="grid grid-cols-1 md:grid-cols-1 gap-8">
                 <!-- Avatar + Basic Info -->
                 <div class="text-center md:text-left">
                   <h2 class="text-2xl font-bold mb-2">{{ sub.name || 'Subscriber' }}</h2>
@@ -43,44 +39,46 @@
 
                 <!-- Details -->
                 <div class="space-y-4">
-                  <nz-descriptions nzBordered nzSize="small" [nzColumn]="1">
-                    <nz-descriptions-item nzTitle="Tên đầy đủ">{{ sub.name || '—' }}</nz-descriptions-item>
-                    <nz-descriptions-item nzTitle="Email">{{ sub.email || '—' }}</nz-descriptions-item>
-                  </nz-descriptions>
-
-                  <button nz-button nzType="primary" (click)="onEdit(sub)">
-                    <span nz-icon nzType="edit"></span> Chỉnh sửa thông tin
-                  </button>
+                  @if (subscriber(); as sub) {
+                    <app-portal-subscriber-reuse-form
+                      [formGroup]="subscriberForm"
+                      [isEditMode]="true"
+                      [submitLabel]="'Update'"
+                      (submitted)="onEdit()"
+                    ></app-portal-subscriber-reuse-form>
+                  } @else {
+                    <div>Feature not found</div>
+                  }
                 </div>
               </div>
             } @else {
-              <nz-empty nzSimple nzTitle="Không có thông tin subscriber"></nz-empty>
+              <nz-empty title="There is no subscriber info"></nz-empty>
             }
           </nz-spin>
         </nz-card>
       </nz-tab>
 
       <!-- Tab 2: Subscriptions -->
-      <nz-tab nzTitle="Gói đăng ký">
+      <nz-tab nzTitle="Subscription">
         <nz-card class="mt-8 shadow-md">
           <nz-spin [nzSpinning]="loading()">
             @if (subscriptions().length > 0) {
-              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6">
                 @for (sub of subscriptions(); track sub.id) {
-                              <div class="mt-8">
-                                    @if (sub) {
-                    <!--                  <app-portal-subscription-card-->
-                    <!--                    [subscription]="sub"-->
-                    <!--                    (load)="loadSubscription($event)"-->
-                    <!--                    (deleteButton)="onDelete($event)">-->
-                    <!--                  </app-portal-subscription-card>-->
-                                    } @else {
-                                      <div class="text-center py-16">
-                                        <nz-spin nzSize="large"></nz-spin>
-                                        <p class="mt-4 text-gray-500">Loading subscription information...</p>
-                                      </div>
-                                    }
-                                  </div>
+                  <div class="mt-8">
+                    @if (sub) {
+                      <app-portal-subscription-card
+                        [subscription]="sub"
+                        (load)="loadSubscriptions()"
+                        (changeMethod)="onChangePaymentMethod($event)">
+                      </app-portal-subscription-card>
+                    } @else {
+                      <div class="text-center py-16">
+                        <nz-spin nzSize="large"></nz-spin>
+                        <p class="mt-4 text-gray-500">Loading subscription information...</p>
+                      </div>
+                    }
+                  </div>
                 }
               </div>
             } @else if (!loading()) {
@@ -99,41 +97,41 @@
       </nz-tab>
     </nz-tabs>
   </div>
-<!--<div class="page-container">-->
-<!--  <nz-tabs>-->
-<!--    <nz-tab nzTitle="Subscriber Detail">-->
-<!--      <div class="mt-8">-->
-<!--        @if (subscriber(); as sub) {-->
-<!--          <app-portal-subscriber-card-->
-<!--            [subscriber]="sub"-->
-<!--            (load)="loadSubscriber()"-->
-<!--            (openEdit)="onEdit($event)">-->
-<!--          </app-portal-subscriber-card>-->
-<!--        }-->
-<!--      </div>-->
-<!--      &lt;!&ndash;      form thay doi thong tin subscriber&ndash;&gt;-->
-<!--      &lt;!&ndash;hiển thị tên và email người dùng; Thêm nút mở modal để người dùng update thông tin&ndash;&gt;-->
-<!--    </nz-tab>-->
-<!--    <nz-tab nzTitle="Subscription Detail">-->
-<!--      &lt;!&ndash;      List cac subscription card va nut bam&ndash;&gt;-->
-<!--      @for (sub of subscriptions(); track sub) {-->
-<!--        <div class="mt-8">-->
-<!--          @if (sub) {-->
-<!--            &lt;!&ndash;                              <app-portal-subscription-card&ndash;&gt;-->
-<!--              &lt;!&ndash;                                  [subscription]="sub"&ndash;&gt;-->
-<!--              &lt;!&ndash;                                  (load)="loadSubscription($event)"&ndash;&gt;-->
-<!--              &lt;!&ndash;                                  (deleteButton)="onDelete($event)">&ndash;&gt;-->
-<!--              &lt;!&ndash;                                </app-portal-subscription-card>&ndash;&gt;-->
-<!--          } @else {-->
-<!--            <div class="text-center py-16">-->
-<!--              <nz-spin nzSize="large"></nz-spin>-->
-<!--              <p class="mt-4 text-gray-500">Loading subscription information...</p>-->
-<!--            </div>-->
-<!--          }-->
-<!--        </div>-->
-<!--      }-->
-<!--    </nz-tab>-->
-<!--  </nz-tabs>-->
-<!--  &lt;!&ndash;  <nz-page-header&ndash;&gt;-->
-<!--</div>-->
+  <!--<div class="page-container">-->
+  <!--  <nz-tabs>-->
+  <!--    <nz-tab nzTitle="Subscriber Detail">-->
+  <!--      <div class="mt-8">-->
+  <!--        @if (subscriber(); as sub) {-->
+  <!--          <app-portal-subscriber-card-->
+  <!--            [subscriber]="sub"-->
+  <!--            (load)="loadSubscriber()"-->
+  <!--            (openEdit)="onEdit($event)">-->
+  <!--          </app-portal-subscriber-card>-->
+  <!--        }-->
+  <!--      </div>-->
+  <!--      &lt;!&ndash;      form thay doi thong tin subscriber&ndash;&gt;-->
+  <!--      &lt;!&ndash;hiển thị tên và email người dùng; Thêm nút mở modal để người dùng update thông tin&ndash;&gt;-->
+  <!--    </nz-tab>-->
+  <!--    <nz-tab nzTitle="Subscription Detail">-->
+  <!--      &lt;!&ndash;      List cac subscription card va nut bam&ndash;&gt;-->
+  <!--      @for (sub of subscriptions(); track sub) {-->
+  <!--        <div class="mt-8">-->
+  <!--          @if (sub) {-->
+  <!--            &lt;!&ndash;                              <app-portal-subscription-card&ndash;&gt;-->
+  <!--              &lt;!&ndash;                                  [subscription]="sub"&ndash;&gt;-->
+  <!--              &lt;!&ndash;                                  (load)="loadSubscription($event)"&ndash;&gt;-->
+  <!--              &lt;!&ndash;                                  (deleteButton)="onDelete($event)">&ndash;&gt;-->
+  <!--              &lt;!&ndash;                                </app-portal-subscription-card>&ndash;&gt;-->
+  <!--          } @else {-->
+  <!--            <div class="text-center py-16">-->
+  <!--              <nz-spin nzSize="large"></nz-spin>-->
+  <!--              <p class="mt-4 text-gray-500">Loading subscription information...</p>-->
+  <!--            </div>-->
+  <!--          }-->
+  <!--        </div>-->
+  <!--      }-->
+  <!--    </nz-tab>-->
+  <!--  </nz-tabs>-->
+  <!--  &lt;!&ndash;  <nz-page-header&ndash;&gt;-->
+  <!--</div>-->
 </div>

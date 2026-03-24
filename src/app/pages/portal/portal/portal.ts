@@ -1,8 +1,6 @@
 import {Component, effect, inject, signal} from '@angular/core';
-import {AuthSubscriptionService} from '../../../core/service/auth/auth-subscription-service';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {AuthSubscription} from '../../../core/interface/entity/auth/auth-subscription';
 import {AuthSubscriptionCard} from '../../../shell/components/card/auth/auth-subscription-card/auth-subscription-card';
 import {NzBreadCrumbComponent, NzBreadCrumbItemComponent} from 'ng-zorro-antd/breadcrumb';
 import {NzPageHeaderComponent} from 'ng-zorro-antd/page-header';
@@ -26,6 +24,14 @@ import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzTagComponent} from 'ng-zorro-antd/tag';
 import {NzModalModule} from 'ng-zorro-antd/modal';
+import {NonNullableFormBuilder, Validators} from '@angular/forms';
+import {
+  AuthFeatureReuseForm
+} from '../../../shell/components/form/auth/auth-feature-reuse-form/auth-feature-reuse-form';
+import {
+  PortalSubscriberReuseForm
+} from '../../../shell/components/form/portal/portal-subscriber-reuse-form/portal-subscriber-reuse-form';
+import {NzImageModule} from 'ng-zorro-antd/image';
 
 @Component({
   selector: 'app-portal',
@@ -50,7 +56,10 @@ import {NzModalModule} from 'ng-zorro-antd/modal';
     NzCardMetaComponent,
     NzTagComponent,
     PortalSubscriberCard,
-    NzModalModule
+    NzModalModule,
+    AuthFeatureReuseForm,
+    PortalSubscriberReuseForm,
+    NzImageModule,
   ],
   templateUrl: './portal.html',
   styleUrl: './portal.css',
@@ -62,23 +71,40 @@ export class Portal {
   portalService = inject(PortalService);
   router = inject(Router);
   message = inject(NzMessageService)
+  isSubmitting = false;
+  private fb = inject(NonNullableFormBuilder)
+  subscriberForm = this.fb.group({
+    name: ['', [Validators.required]],
+    email: ['', [Validators.required, Validators.email]],
+  })
   private route = inject(ActivatedRoute);
 
-  constructor(){
+  constructor() {
+    this.loadSubscriptions();
+    this.loadSubscriber();
+
     effect(() => {
-      this.loadSubscriptions();
-      this.loadSubscriber();
+      const currentSubscriber = this.subscriber();
+      if (currentSubscriber) {
+        this.subscriberForm.patchValue({
+          name: currentSubscriber.name,
+          email: currentSubscriber.email
+        })
+      }
     });
   }
+
   loadSubscriptions() {
     this.loading.set(true);
     this.portalService.getSubscription().subscribe({
       next: (response) => {
-        this.subscriptions.set(response.content || []);
+        this.subscriptions.set(response);
         this.loading.set(false);
       },
       error: (err) => {
+
         this.loading.set(false);
+
         console.error(err);
       }
     });
@@ -98,17 +124,51 @@ export class Portal {
     });
   }
 
-  onEdit(request: PortalSubscriberRequest){
+  onChangePaymentMethod($event: number) {
     this.loading.set(true);
-    this.portalService.updateSubscriber(request).subscribe({
+    this.portalService.changePaymentMethod($event).subscribe({
       next: (response) => {
-        this.subscriber.set(response);
         this.loading.set(false);
+        window.location.href = response;
       },
-      error: (err) => {
+      error: (error) => {
         this.loading.set(false);
-        console.error(err);
+        console.error(error);
       }
-    });
+    })
+  }
+
+  onEdit() {
+    if (this.subscriberForm.valid) {
+      this.loading.set(true);
+      this.isSubmitting = true;
+      const payload: PortalSubscriberRequest = {
+        name: this.subscriberForm.value.name!,
+        email: this.subscriberForm.value.email!
+      }
+
+      this.portalService.updateSubscriber(payload).subscribe({
+        next: (response) => {
+          this.isSubmitting = true;
+          this.loading.set(false);
+          this.subscriber.set(response);
+          this.patchValue()
+        },
+        error: (err) => {
+          this.loading.set(false);
+          console.error(err);
+        }
+      });
+    }
+  }
+
+  private patchValue() {
+    const currentSubscriber = this.subscriber();
+    if (currentSubscriber) {
+      this.subscriberForm.patchValue({
+        name: currentSubscriber.name,
+        email: currentSubscriber.email
+      })
+    }
   }
 }

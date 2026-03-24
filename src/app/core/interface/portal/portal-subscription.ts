@@ -1,6 +1,6 @@
 import {PortalPlanDto} from './DTO/portal-plan-dto';
 
-export interface PortalSubscription{
+export interface PortalSubscription {
   "id": number,
   "status": "ACTIVE" | 'DRAFT' | 'PENDING' | 'ENDED' | 'CANCEL',
   "quantity": number,
@@ -12,5 +12,5 @@ export interface PortalSubscription{
   "createdDate": string,
   "modifiedDate": string,
   "plan": PortalPlanDto
-  "isTrial": boolean,
+  "trial": boolean,
 }

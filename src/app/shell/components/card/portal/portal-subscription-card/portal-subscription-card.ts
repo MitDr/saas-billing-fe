@@ -1,5 +1,4 @@
 import {Component, inject, input, output} from '@angular/core';
-import {AuthSubscription} from '../../../../../core/interface/entity/auth/auth-subscription';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {AuthSubscriptionService} from '../../../../../core/service/auth/auth-subscription-service';
 import {NzMessageService} from 'ng-zorro-antd/message';
@@ -14,6 +13,7 @@ import {NzDescriptionsComponent, NzDescriptionsItemComponent} from 'ng-zorro-ant
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzTagComponent} from 'ng-zorro-antd/tag';
 import {PortalPlanDtoCard} from '../../DTO/portal/portal-plan-dto-card/portal-plan-dto-card';
+import {TenantDtoCard} from '../../DTO/tenant-dto-card/tenant-dto-card';
 
 @Component({
   selector: 'app-portal-subscription-card',
@@ -28,22 +28,22 @@ import {PortalPlanDtoCard} from '../../DTO/portal/portal-plan-dto-card/portal-pl
     NzDescriptionsItemComponent,
     NzIconDirective,
     NzTagComponent,
-    PortalPlanDtoCard
+    PortalPlanDtoCard,
+    TenantDtoCard
   ],
   templateUrl: './portal-subscription-card.html',
   styleUrl: './portal-subscription-card.css',
 })
 export class PortalSubscriptionCard {
   subscription = input.required<PortalSubscription>()
-  deleteButton = output<number>();
   modalService = inject(NzModalService);
-
+  changeMethod = output<number>();
   //Viết service cho portal
   subscriptionService = inject(AuthSubscriptionService)
-  load = output<number>();
+  load = output<void>();
   private message = inject(NzMessageService);
 
-  onChangeMethod() {
-
+  onChangeMethod(id: number) {
+    this.changeMethod.emit(id);
   }
 }

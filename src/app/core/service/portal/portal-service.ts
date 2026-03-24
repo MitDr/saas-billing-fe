@@ -1,11 +1,11 @@
 import {inject, Injectable} from '@angular/core';
 import {ApiPortalService} from './api-portal-service';
 import {map, Observable, throwError} from 'rxjs';
-import {ListData} from '../../interface/list-data';
 import {PortalSubscription} from '../../interface/portal/portal-subscription';
 import {catchError} from 'rxjs/operators';
 import {PortalSubscriber} from '../../interface/portal/portal-subscriber';
 import {PortalSubscriberRequest} from '../../interface/request/portal/portal-subscriber-request';
+import {HttpParams} from '@angular/common/http';
 
 @Injectable({
   providedIn: "root"
@@ -13,10 +13,22 @@ import {PortalSubscriberRequest} from '../../interface/request/portal/portal-sub
 export class PortalService {
   apiService = inject(ApiPortalService);
 
-  getSubscription(): Observable<ListData<PortalSubscription>> {
-    return this.apiService.get<ListData<PortalSubscription>>('/api/subscriber-portal/subscriptions').pipe(
+  changePaymentMethod(id: number): Observable<string> {
+    let param = new HttpParams()
+      .set('subscriptionId', id)
+
+    return this.apiService.get<string>('/api/subscriber-portal/change-default-payment', param).pipe(
+      catchError(error => {
+        console.error('Change payment method error ', error);
+        return throwError(() => new Error('Cannot change payment method'));
+      })
+    )
+  }
+
+  getSubscription(): Observable<PortalSubscription[]> {
+    return this.apiService.get<PortalSubscription[]>('/api/subscriber-portal/subscriptions').pipe(
       map(response => {
-        return response as ListData<PortalSubscription>;
+        return response;
       }),
       catchError(error => {
         console.error('Get Subscriptions Error', error);

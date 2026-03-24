@@ -1,1 +1,92 @@
-<p>ai-doc works!</p>
+<div class="p-8 max-w-6xl mx-auto min-h-screen bg-gray-50">
+  <h1 class="text-3xl font-bold mb-8 text-center text-gray-800">
+    File Management
+  </h1>
+
+  <nz-card class="shadow-lg rounded-xl border border-gray-200">
+    <!-- Upload Section -->
+    <nz-card class="mb-8" nzTitle="Upload new documents">
+      <nz-upload
+        [nzAccept]="'.pdf,.txt,.docx,.md'"
+        [nzBeforeUpload]="beforeUpload"
+        [nzCustomRequest]="customUploadRequest"
+        [nzFileList]="[]"
+        [nzMultiple]="true"
+        [nzShowUploadList]="false"
+        nzName="files"
+      >
+        <button [nzLoading]="uploadLoading()" nz-button nzType="primary">
+          <span nz-icon nzType="upload"></span>
+          Choose or drag files
+        </button>
+      </nz-upload>
+
+      <p class="mt-4 pt-4 text-sm text-gray-500">
+        Support: PDF, TXT, DOCX, MD (maximum 10MB/file)
+      </p>
+    </nz-card>
+
+    <!-- File List -->
+    <nz-card class="shadow-md" nzTitle="Uploaded File">
+      <nz-spin [nzSpinning]="loading()">
+        <nz-table
+          [nzData]="files()"
+          [nzPageSize]="10"
+          [nzShowPagination]="true"
+          nzSize="middle"
+        >
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>ID</th>
+            <th>Uploaded Time</th>
+            <th>Chunk</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+            @for (file of files(); track file.file_id) {
+              <tr>
+                <td class="font-medium">{{ file.file_name }}</td>
+                <td class="text-gray-600 text-sm">{{ file.file_id }}</td>
+                <td>{{ file.upload_time | date:'dd/MM/yyyy HH:mm' }}</td>
+                <td>
+                  <nz-tag [nzColor]="file.chunks > 0 ? 'blue' : 'default'">
+                    {{ file.chunks }} chunks
+                  </nz-tag>
+                </td>
+                <td>
+                  <button
+                    nz-button
+                    nzType="link"
+                    nzDanger
+                    nz-popconfirm
+                    nzPopconfirmTitle="Delete this file?"
+                    (nzOnConfirm)="deleteFile(file.file_id, file.file_name)"
+                  >
+                    Xóa
+                  </button>
+                </td>
+              </tr>
+            }
+            @if (files().length === 0 && !loading()) {
+              <tr>
+                <td colspan="5" class="text-center py-12">
+                  <nz-empty
+                    nzSimple
+                    nzTitle="There are no files"
+                    nzDescription="Upload document for chatbot"
+                  >
+                    <button nz-button nzType="primary">
+                      Upload now
+                    </button>
+                  </nz-empty>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </nz-table>
+      </nz-spin>
+    </nz-card>
+  </nz-card>
+</div>

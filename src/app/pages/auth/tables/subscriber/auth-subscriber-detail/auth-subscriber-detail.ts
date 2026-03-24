@@ -56,6 +56,7 @@ export class AuthSubscriberDetail {
     });
   }
 
+
   onDelete(id: number) {
     // console.log(id);
     this.loading.set(true);

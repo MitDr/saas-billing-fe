@@ -1,55 +1,100 @@
-<div class="p-6 max-w-7xl mx-auto">
-  <h1 class="text-3xl font-bold mb-2">Chatbot hỏi đáp tài liệu</h1>
-  <nz-card nzTitle="Hỏi đáp tài liệu" class="shadow-md">
-    <nz-spin [nzSpinning]="chatLoading()">
-      <div class="space-y-6">
-          <input
-            nz-input
-            placeholder="Nhập câu hỏi về tài liệu..."
-            [(ngModel)]="query"
-            (keyup.enter)="askQuestion()"
-            class="h-12 text-base"
-          />
-          <button
-            nz-button
-            nzType="primary"
-            nzSize="large"
-            (click)="askQuestion()"
-            [nzLoading]="chatLoading()"
-            class="!mt-5 h-12"
+<div class="p-6 max-w-5xl mx-auto min-h-screen bg-gradient-to-b from-gray-50 to-white">
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl md:text-4xl font-bold text-gray-900">
+      Chatbot
+    </h1>
+    @if (messages().length > 0) {
+      <button
+        nz-button
+        nzType="default"
+        nzDanger
+        nz-popconfirm
+        nzPopconfirmTitle="Xóa toàn bộ lịch sử chat?"
+        (nzOnConfirm)="clearHistory()"
+        class="flex items-center gap-2"
+      >
+        <span nz-icon nzType="delete"></span>
+        Delete History
+      </button>
+    }
+  </div>
+
+  <nz-card class="shadow-2xl rounded-2xl border border-gray-200 overflow-hidden">
+    <div #chatContainer class="h-[65vh] overflow-y-auto p-6 bg-white">
+      @if (messages().length === 0) {
+        <div class="h-full flex flex-col items-center justify-center text-center text-gray-500">
+          <nz-icon nzType="message" class="text-8xl mb-6 opacity-40"></nz-icon>
+          <h3 class="text-2xl font-semibold mb-3">Welcome!</h3>
+          <p class="text-lg max-w-md">
+            Please type in your question. I'll try my best to answer.
+          </p>
+          <p class="text-sm mt-4 opacity-70">
+            Example: "How can i do x"
+          </p>
+        </div>
+      }
+
+      @for (msg of messages(); track $index) {
+        <div
+          class="mb-8 flex"
+          [ngClass]="msg.role === 'user' ? 'justify-end' : 'justify-start'"
+        >
+          <div
+            class="max-w-[85%] rounded-2xl p-5 shadow-md"
+            [ngClass]="msg.role === 'user'
+              ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-br-none'
+              : 'bg-gray-100 text-gray-900 rounded-bl-none'"
           >
-            Hỏi ngay
-          </button>
-        @if (answer()) {
-          <div class="mt-5 bg-gray-50 p-6 rounded-lg border border-gray-200">
-            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
-              <span nz-icon nzType="bulb" class="text-yellow-600"></span>
-              Trả lời
-            </h3>
-            <p class="text-gray-800 whitespace-pre-wrap leading-relaxed">
-              {{ answer() }}
+            <p class="whitespace-pre-wrap leading-relaxed text-base">
+              {{ msg.content }}
             </p>
-            @if (sources().length > 0) {
-              <nz-divider nzText="Nguồn tham khảo"></nz-divider>
-              <nz-descriptions [nzColumn]="1" nzBordered nzSize="small">
-                @for (source of sources(); track source.source) {
-                  <nz-descriptions-item [nzTitle]="source.source">
-                    <div class="text-gray-700">
-                      {{ source.content | slice:0:300 }}...
-                      <span class="text-xs text-gray-500 ml-2">(trích đoạn)</span>
-                    </div>
-                  </nz-descriptions-item>
-                }
-              </nz-descriptions>
+
+            @if (msg.role === 'assistant') {
+              <button
+                nz-button
+                nzType="text"
+                nzSize="small"
+                class="mt-3 text-blue-600 hover:text-blue-800 flex items-center gap-1"
+                (click)="copyAnswer(msg.content)"
+              >
+                <span nz-icon nzType="copy"></span>
+                Copy
+              </button>
             }
           </div>
-        } @else if (chatLoading()) {
-          <div class="text-center py-8 text-gray-500">
-            <nz-spin nzSize="large"></nz-spin>
-            <p class="mt-4">Đang tìm kiếm và trả lời...</p>
+        </div>
+      }
+
+      @if (chatLoading()) {
+        <div class="flex justify-start mb-6">
+          <div class="bg-gray-100 rounded-2xl px-6 py-4 shadow-sm flex items-center gap-3">
+            <nz-spin nzSize="small"></nz-spin>
+            <span class="text-gray-700 font-medium">Thinking...</span>
           </div>
-        }
-      </div>
-    </nz-spin>
+        </div>
+      }
+    </div>
+
+    <!-- Input area -->
+    <div class="flex gap-4 pt-4 border-t border-gray-200">
+      <input
+        (keyup.enter)="askQuestion()"
+        [(ngModel)]="query"
+        class="flex-1 h-12 text-base rounded-full px-6 border-gray-300 focus:border-blue-500 focus:shadow-blue-200"
+        nz-input
+        placeholder="Type your question..."
+      />
+      <button
+        (click)="askQuestion()"
+        [nzLoading]="chatLoading()"
+        class="h-12 px-8 rounded-full shadow-md hover:shadow-lg transition-all"
+        nz-button
+        nzSize="large"
+        nzType="primary"
+      >
+        Send
+        <span class="ml-2" nz-icon nzType="send"></span>
+      </button>
+    </div>
   </nz-card>
 </div>

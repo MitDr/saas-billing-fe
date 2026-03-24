@@ -1,15 +1,25 @@
-import {Component, effect, inject, signal} from '@angular/core';
+import {Component, ElementRef, inject, signal, ViewChild} from '@angular/core';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {NzModalComponent, NzModalModule, NzModalService} from 'ng-zorro-antd/modal';
+import {NzModalModule, NzModalService} from 'ng-zorro-antd/modal';
 import {NzCardComponent} from 'ng-zorro-antd/card';
 import {NzSpinComponent} from 'ng-zorro-antd/spin';
 import {NzInputDirective, NzInputGroupComponent} from 'ng-zorro-antd/input';
 import {FormsModule} from '@angular/forms';
 import {NzDividerComponent} from 'ng-zorro-antd/divider';
 import {NzDescriptionsComponent, NzDescriptionsItemComponent} from 'ng-zorro-antd/descriptions';
-import {SlicePipe} from '@angular/common';
+import {NgClass, SlicePipe} from '@angular/common';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
+import {NzPopconfirmDirective} from 'ng-zorro-antd/popconfirm';
+import {ChatbotService} from '../../../../core/service/chatbot-service';
+import {AuthQueryRequest} from '../../../../core/interface/request/auth/auth-query-request';
+
+interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+  sources?: { source: string; page?: number }[];
+  timestamp: Date;
+}
 
 @Component({
   selector: 'app-document-chat',
@@ -25,63 +35,120 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
     SlicePipe,
     NzModalModule,
     NzButtonComponent,
-    NzIconDirective
+    NzIconDirective,
+    NzPopconfirmDirective,
+    NgClass
   ],
   templateUrl: './document-chat.html',
   styleUrl: './document-chat.css',
 })
 export class DocumentChat {
-  uploadedDocs = signal<any[]>([]);
+  messages = signal<ChatMessage[]>([]);
   query = signal<string>('');
-  answer = signal<string>('');
-  sources = signal<any[]>([]);
-  loading = signal<boolean>(false);
   chatLoading = signal<boolean>(false);
-
-  // Injections
   private message = inject(NzMessageService);
-  private modal = inject(NzModalService);
-  // private docService = inject(DocumentService);
+  private STORAGE_KEY = 'chatbot_history';
+  @ViewChild('chatContainer') private chatContainer!: ElementRef;
+  private modal = inject(NzModalService)
+  private chatbotService = inject(ChatbotService);
 
-  // askQuestion() {
-  //   const q = this.query().trim();
-  //   if (!q) {
-  //     this.message.warning('Vui lòng nhập câu hỏi');
-  //     return;
-  //   }
-  //
-  //   this.chatLoading.set(true);
-  //   this.answer.set('');
-  //   this.sources.set([]);
-  //
-  //   // this.docService.askQuestion(q).subscribe({
-  //   //   next: (res) => {
-  //   //     this.answer.set(res.answer);
-  //   //     this.sources.set(res.sources || []);
-  //   //     this.chatLoading.set(false);
-  //   //   },
-  //   //   error: (err) => {
-  //   //     this.message.error('Truy vấn thất bại');
-  //   //     this.chatLoading.set(false);
-  //   //   }
-  //   // });
-  // }
+  constructor() {
+    this.loadChatHistory();
+  }
+
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
+  clearHistory() {
+    this.modal.confirm({
+      nzTitle: 'Xóa lịch sử chat?',
+      nzContent: 'Toàn bộ cuộc trò chuyện sẽ bị xóa vĩnh viễn.',
+      nzOkText: 'Xóa',
+      nzOkDanger: true,
+      nzOnOk: () => {
+        this.messages.set([]);
+        localStorage.removeItem(this.STORAGE_KEY);
+        this.message.success('Đã xóa lịch sử chat');
+      }
+    });
+  }
 
   askQuestion() {
     const q = this.query().trim();
-    if (!q) return;
+    if (!q) {
+      this.message.warning('Vui lòng nhập câu hỏi');
+      return;
+    }
+
+    // Thêm tin nhắn user
+    const userMsg: ChatMessage = {
+      role: 'user',
+      content: q,
+      timestamp: new Date()
+    };
+    this.messages.update(msgs => [...msgs, userMsg]);
+    this.saveChatHistory();
 
     this.chatLoading.set(true);
-    this.answer.set('');
-    this.sources.set([]);
+    this.query.set('');
 
-    setTimeout(() => {
-      this.answer.set('Đây là câu trả lời mẫu cho câu hỏi: ' + q);
-      this.sources.set([
-        { source: 'angular.io/docs', content: 'Angular là framework...' },
-        { source: 'wikipedia.org/wiki/Angular', content: 'Angular ra mắt năm 2016...' }
-      ]);
-      this.chatLoading.set(false);
-    }, 1500);
+    const request: AuthQueryRequest = {
+      question: q
+    }
+    this.chatbotService.query(request).subscribe({
+      next: (response) => {
+        const assistantMsg: ChatMessage = {
+          role: 'assistant',
+          content: response.answer,
+          sources: response.sources,
+          timestamp: new Date()
+        };
+        this.messages.update(msgs => [...msgs, assistantMsg]);
+        this.saveChatHistory();
+        this.chatLoading.set(false);
+        this.scrollToBottom();
+      },
+    });
+  }
+
+  copyAnswer(content: string) {
+    navigator.clipboard.writeText(content).then(() => {
+      this.message.success('Đã sao chép câu trả lời');
+    });
+  }
+
+  private scrollToBottom(): void {
+    try {
+      const element = this.chatContainer.nativeElement;
+      element.scrollTop = element.scrollHeight;
+    } catch {
+    }
+  }
+
+  private loadChatHistory() {
+    const stored = localStorage.getItem(this.STORAGE_KEY);
+    if (stored) {
+      try {
+        const history = JSON.parse(stored) as ChatMessage[];
+        const parsed = history.map(msg => ({
+          ...msg,
+          timestamp: new Date(msg.timestamp)
+        }));
+        this.messages.set(parsed);
+      } catch (e) {
+        console.error('Lỗi load lịch sử chat:', e);
+        localStorage.removeItem(this.STORAGE_KEY);
+      }
+    }
+  }
+
+  private saveChatHistory() {
+    let msgs = this.messages();
+    if (msgs.length > 100) {
+      msgs = msgs.slice(-100);
+      this.messages.set(msgs);
+    }
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(msgs));
   }
 }
