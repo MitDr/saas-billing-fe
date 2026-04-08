@@ -1,0 +1,69 @@
+/* Giữ nguyên .status-container, .content-wrapper, .status-visual, .button-group như trên */
+.status-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 20px;
+}
+
+.success-container {
+  background: linear-gradient(135deg, #f0fdf4 0%, #bbf7d0 100%);
+}
+
+/*.status-subtitle {*/
+/*  font-size: 22px;*/
+/*  color: #4f5e71;*/
+/*  line-height: 1.7;*/
+/*  margin-bottom: 40px;*/
+/*}*/
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.content-wrapper {
+  text-align: center;
+  max-width: 620px;
+  width: 100%;
+}
+
+.status-visual {
+  margin-bottom: 24px;
+}
+
+
+.failed-container {
+  background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+}
+
+.status-icon.failed {
+  font-size: 120px;
+  color: #ef4444;
+}
+
+.status-title {
+  font-size: 52px;
+  font-weight: 700;
+  color: #991b1b;
+  margin: 0 0 16px 0;
+  line-height: 1.2;
+}
+
+.status-subtitle {
+  font-size: 22px;
+  color: #4f5e71;
+  line-height: 1.7;
+  margin-bottom: 40px;
+}
+
+:host-context(.dark) .failed-container {
+  background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%);
+}
+
+:host-context(.dark) .status-title {
+  color: #f87171;
+}
