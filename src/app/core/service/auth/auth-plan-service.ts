@@ -54,7 +54,7 @@ export class AuthPlanService {
     return this.api.post<AuthPlan>('/auth/plans', formData).pipe(
       catchError(error => {
         console.error('Create plan error:', error);
-        return throwError(() => new Error('Tạo plan thất bại'));
+        return throwError(() => new Error('Create plan failed'));
       })
     );
   }
@@ -126,7 +126,7 @@ export class AuthPlanService {
     return this.api.get<AuthPlan>(`/auth/plans/${id}`).pipe(
       catchError(error => {
         console.error('Get plan error:', error);
-        return throwError(() => new Error('Không thể lấy plan'));
+        return throwError(() => new Error('Cannot get plan'));
       })
     );
   }
@@ -136,7 +136,7 @@ export class AuthPlanService {
     return this.api.put<AuthPlan>(`/auth/plans/${id}`, updatedPlan).pipe(
       catchError(error => {
         console.error('Update plans error:', error);
-        return throwError(() => new Error('Cập nhật plans thất bại'));
+        return throwError(() => new Error('Update plans failed'));
       })
     );
   }
@@ -181,7 +181,7 @@ export class AuthPlanService {
     return this.api.put<AuthPlan>(`/auth/plans/${planId}`, formData).pipe(
       catchError(error => {
         console.error('Update plan error:', error);
-        return throwError(() => new Error('Cập nhật plan thất bại'));
+        return throwError(() => new Error('Update plan failed'));
       })
     );
   }
@@ -190,7 +190,7 @@ export class AuthPlanService {
     return this.api.deletes<void>(`/auth/plans`, ids).pipe(
       catchError(error => {
         console.error('Bulk delete error:', error);
-        return throwError(() => new Error('Xóa hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk delete failed'));
       })
     );
   }
@@ -199,7 +199,7 @@ export class AuthPlanService {
     return this.api.post<void>(`/auth/plans/softDelete`, softDeleteRequest).pipe(
       catchError(error => {
         console.error('Bulk soft delete error:', error);
-        return throwError(() => new Error('Xóa mềm hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk soft delete failed'));
       })
     );
   }
@@ -208,7 +208,7 @@ export class AuthPlanService {
     return this.api.delete<void>(`/auth/plans/${id}`).pipe(
       catchError(error => {
         console.error('Delete plans error:', error);
-        return throwError(() => new Error('Xóa plans thất bại'));
+        return throwError(() => new Error('Delete plans failed'));
       })
     );
   }

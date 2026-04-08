@@ -22,7 +22,7 @@ export class StatisticService {
     return this.api.get<SystemSummary>('/admin/analytics/tenant/system/summary').pipe(
       catchError(error => {
         console.error('Get system summary error:', error);
-        return throwError(() => new Error('Không thể lấy thông tin thống kê hệ thống'));
+        return throwError(() => new Error('Cannot get thông tin thống kê hệ thống'));
       })
     )
   }
@@ -31,7 +31,7 @@ export class StatisticService {
     return this.api.get<RevenueSummary>('/admin/analytics/tenant/revenue/summary').pipe(
       catchError(error => {
         console.error('Get revenue summary error:', error);
-        return throwError(() => new Error('Không thể lấy thông tin thống kê doanh thu'));
+        return throwError(() => new Error('Cannot get thông tin thống kê doanh thu'));
       })
     )
   }
@@ -40,7 +40,7 @@ export class StatisticService {
     return this.api.get<SubscriptionSummary>('/admin/analytics/tenant/subscription/summary').pipe(
       catchError(error => {
         console.error('Get subscription summary error:', error);
-        return throwError(() => new Error('Không thể lấy thông tin thống kê doanh thu'));
+        return throwError(() => new Error('Cannot get thông tin thống kê doanh thu'));
       })
     )
   }
@@ -52,7 +52,7 @@ export class StatisticService {
     return this.api.get<MrrResponse[]>(`/admin/analytics/tenant/invoice/mmr/${month}`).pipe(
       catchError(error => {
         console.error('Get mrr revenues error:', error);
-        return throwError(() => new Error('Không thể lấy thông tin thống kê doanh thu'));
+        return throwError(() => new Error('Cannot get thông tin thống kê doanh thu'));
       })
     )
   }
@@ -64,7 +64,7 @@ export class StatisticService {
     return this.api.get<TopTenantResponse[]>(`/admin/analytics/tenant/top-revenue`, {params}).pipe(
       catchError(error => {
         console.error('Get top tenants error:', error);
-        return throwError(() => new Error('Không thể lấy thông tin thống kê doanh thu'));
+        return throwError(() => new Error('Cannot get thông tin thống kê doanh thu'));
       })
     )
   }
@@ -73,7 +73,7 @@ export class StatisticService {
     return this.api.get<SuccessRateResponse>('/admin/analytics/tenant/invoice/success-rate').pipe(
       catchError(error => {
         console.error('Get success rate error:', error);
-        return throwError(() => new Error('Không thể lấy thông tin thống kê doanh thu'));
+        return throwError(() => new Error('Cannot get thông tin thống kê doanh thu'));
       })
     )
   }
@@ -85,7 +85,7 @@ export class StatisticService {
     return this.api.get<ChurnRateResponse>('/admin/analytics/tenant/subscriptions/churn-rate', params).pipe(
       catchError(error => {
         console.error('Get churn rate error:', error);
-        return throwError(() => new Error('Không thể lấy thông tin thống kê doanh thu'));
+        return throwError(() => new Error('Cannot get thông tin thống kê doanh thu'));
       })
     )
   }
@@ -97,7 +97,7 @@ export class StatisticService {
     return this.api.get<ExpectedRenewal[]>('/admin/analytics/tenant/subscriptions/upcoming-renewals', params).pipe(
       catchError(error => {
         console.error('Get upcoming renewal error:', error);
-        return throwError(() => new Error('Không thể lấy thông tin thống kê doanh thu'));
+        return throwError(() => new Error('Cannot get thông tin thống kê doanh thu'));
       })
     )
   }

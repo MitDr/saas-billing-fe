@@ -12,6 +12,7 @@ import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzCardComponent, NzCardMetaComponent} from 'ng-zorro-antd/card';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzModalComponent, NzModalContentDirective} from 'ng-zorro-antd/modal';
+import {NzInputNumberComponent} from 'ng-zorro-antd/input-number';
 
 @Component({
   selector: 'app-price-reuse-form',
@@ -31,7 +32,8 @@ import {NzModalComponent, NzModalContentDirective} from 'ng-zorro-antd/modal';
     NzCardMetaComponent,
     NzIconDirective,
     NzModalComponent,
-    NzModalContentDirective
+    NzModalContentDirective,
+    NzInputNumberComponent
   ],
   templateUrl: './price-reuse-form.html',
   styleUrl: './price-reuse-form.css',
@@ -41,11 +43,6 @@ export class PriceReuseForm {
   currencyOption: OptionInterface[] = [
     {label: 'USD', value: 'USD'},
     {label: 'VND', value: 'VND'},
-  ];
-
-  schemeOption: OptionInterface[] = [
-    {label: 'Flat-rate', value: 'FLAT_RATE'},
-    {label: 'Per-unit', value: 'PER_UNIT'},
   ];
 
   statusOption: OptionInterface[] = [
@@ -95,9 +92,6 @@ export class PriceReuseForm {
     return this.formGroup().get('currency')
   }
 
-  get scheme() {
-    return this.formGroup().get('scheme')
-  }
 
   get cycle() {
     return this.formGroup().get('cycle')
@@ -176,7 +170,7 @@ export class PriceReuseForm {
           control.updateValueAndValidity({onlySelf: true});
         }
       });
-      this.message.warning('Vui lòng kiểm tra lại thông tin!');
+      this.message.warning('Please double-check the information!');
     }
   }
 

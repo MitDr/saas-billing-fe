@@ -57,7 +57,7 @@ export class PayoutCreate implements OnInit {
       },
       error: (err) => {
         console.error('Load tenants failed:', err);
-        this.message.error('Không tải được danh sách tenant');
+        this.message.error('Cannot load tenant');
       }
     });
   }
@@ -72,6 +72,11 @@ export class PayoutCreate implements OnInit {
         currency: this.payoutForm.value.currency as 'USD',
         status: this.payoutForm.value.status as 'SUCCESS' | 'REQUESTED' | 'PROCESSING' | 'FAILED',
         tenantId: this.payoutForm.value.tenantId!
+      }
+
+      if (this.payoutForm.value.currency === 'USD' && typeof this.payoutForm.value.amount === 'number') {
+        const amount = Math.round(this.payoutForm.value.amount * 100);
+        Object.assign(payload, {amount})
       }
 
       if (this.payoutForm.value.stripePayoutId) {
@@ -90,14 +95,14 @@ export class PayoutCreate implements OnInit {
       this.payoutService.createPayout(payload).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Tạo payout thành công');
+          this.message.success('Create payout successfully');
           this.payoutForm.reset();
           this.router.navigate(['/admin/tables/payouts']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Create payout failed:', err);
-          this.message.error('Tạo payout thất bại');
+          this.message.error('Create payout failed');
         }
       })
     }

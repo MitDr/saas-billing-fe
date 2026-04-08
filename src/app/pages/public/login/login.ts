@@ -92,7 +92,7 @@ export class Login implements OnDestroy {
     //       localStorage.setItem('userRole', res.user.role);
     //       localStorage.setItem('currentUser', JSON.stringify(res.user));
     //
-    //       this.message.success('Đăng nhập thành công!');
+    //       this.message.success('Đăng nhập successfully!');
     //       this.loading = false;
     //
     //       // Chuyển hướng dựa trên role
@@ -104,7 +104,7 @@ export class Login implements OnDestroy {
     //       }
     //     },
     //     error: (err) => {
-    //       this.message.error(err.error.message || 'Đăng nhập thất bại');
+    //       this.message.error(err.error.message || 'Đăng nhập failed');
     //       this.loading = false;
     //     }
     //   });

@@ -1,6 +1,5 @@
-import {Component, effect, inject, input, output, signal} from '@angular/core';
+import {Component, inject, input, output} from '@angular/core';
 import {FormGroup, ReactiveFormsModule} from '@angular/forms';
-import {Tenant} from '../../../../../core/interface/entity/tenant';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzCardComponent, NzCardMetaComponent} from 'ng-zorro-antd/card';
@@ -45,13 +44,15 @@ export class AuthSubscriberReuseForm {
   //   });
   // }
 
-  get name(){
+  get name() {
     return this.formGroup()?.get('name')
   }
-  get email(){
+
+  get email() {
     return this.formGroup()?.get('email')
   }
-  get customerId(){
+
+  get customerId() {
     return this.formGroup()?.get('customerId')
   }
 
@@ -66,7 +67,7 @@ export class AuthSubscriberReuseForm {
           control.updateValueAndValidity({onlySelf: true});
         }
       });
-      this.message.warning('Vui lòng kiểm tra lại thông tin!');
+      this.message.warning('Please double-check the information!');
     }
   }
 }

@@ -156,13 +156,6 @@ export class AuthPlanReuseForm {
     if (file?.originFileObj) {
       const originFile = file.originFileObj;
 
-      console.log('File thật được chọn:', {
-        name: originFile.name,
-        size: originFile.size,
-        type: originFile.type,
-        lastModified: originFile.lastModified,
-        isFile: originFile instanceof File
-      });
 
       // Preview dùng object URL (nhanh, không warning 404)
       if (!this.imagePreview()) {
@@ -173,12 +166,12 @@ export class AuthPlanReuseForm {
 
       // Validate
       if (!originFile.type.startsWith('image/')) {
-        this.message.error('Chỉ chấp nhận file ảnh');
+        this.message.error('Image Only');
         this.clearImage();
         return;
       }
-      if (originFile.size > 5 * 1024 * 1024) {
-        this.message.error('File ảnh tối đa 5MB');
+      if (originFile.size > 10 * 1024 * 1024) {
+        this.message.error('File maximum 10MB');
         this.clearImage();
         return;
       }
@@ -257,22 +250,8 @@ export class AuthPlanReuseForm {
 
   //
   onSubmit(): void {
-    console.log('=== SUBMIT START ===');
 
     const file = this.imageFile;
-    console.log('File từ getter imageFile:', file ? {
-      name: file.name,
-      size: file.size,
-      type: file.type,
-      lastModified: file.lastModified,
-      isFile: file instanceof File
-    } : 'KHÔNG CÓ FILE');
-
-    if (file) {
-      console.log('File size (bytes):', file.size);
-      console.log('File type:', file.type);
-      console.log('File ready to send: YES');
-    }
 
     const form = this.formGroup();
     if (form?.valid) {
@@ -284,7 +263,7 @@ export class AuthPlanReuseForm {
           control.updateValueAndValidity({onlySelf: true});
         }
       });
-      this.message.warning('Vui lòng kiểm tra lại thông tin!');
+      this.message.warning('Please double-check the information!');
     }
   }
 
@@ -307,11 +286,11 @@ export class AuthPlanReuseForm {
 
   beforeUploadImage = (file: NzUploadFile): boolean => {
     if (!file.type?.startsWith('image/')) {
-      this.message.error('Chỉ chấp nhận file ảnh');
+      this.message.error('Image Only');
       return false;
     }
-    if (file.size! > 5 * 1024 * 1024) {
-      this.message.error('File ảnh tối đa 5MB');
+    if (file.size! > 10 * 1024 * 1024) {
+      this.message.error('Maximum 10MB');
       return false;
     }
     return true;

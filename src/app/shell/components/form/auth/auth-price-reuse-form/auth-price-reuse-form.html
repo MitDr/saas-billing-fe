@@ -1,8 +1,22 @@
 <form (ngSubmit)="onSubmit()" [formGroup]="formGroup()" nz-form>
+  <!--  <nz-form-item>-->
+  <!--    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="price" nzRequired>Amount</nz-form-label>-->
+  <!--    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Amount is required">-->
+  <!--      <input formControlName="price" id="price" nz-input placeholder="Amount" type="number"/>-->
+  <!--    </nz-form-control>-->
+  <!--  </nz-form-item>-->
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="price" nzRequired>Amount</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Amount is required">
-      <input formControlName="price" id="price" nz-input placeholder="Amount" type="number"/>
+      <nz-input-number
+        [nzMin]="0"
+        [nzPrecision]="currency?.value === 'USD' ? 2 : 0"
+        [nzStep]="currency?.value === 'USD' ? 0.01 : 1"
+        formControlName="price"
+        id="price"
+        style="width: 100%"
+      >
+      </nz-input-number>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
@@ -11,16 +25,6 @@
       <nz-select formControlName="currency" nzPlaceHolder="Currency">
         @for (currency of currencyOption; track currency.value) {
           <nz-option [nzLabel]="currency.label" [nzValue]="currency.value"></nz-option>
-        }
-      </nz-select>
-    </nz-form-control>
-  </nz-form-item>
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="scheme" nzRequired>Scheme</nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Scheme is required">
-      <nz-select formControlName="scheme" nzPlaceHolder="Scheme">
-        @for (scheme of schemeOption; track scheme.value) {
-          <nz-option [nzLabel]="scheme.label" [nzValue]="scheme.value"></nz-option>
         }
       </nz-select>
     </nz-form-control>
@@ -117,14 +121,14 @@
   (nzOnCancel)="isPlansModalOpen.set(false)"
   (nzOnOk)="isPlansModalOpen.set(false)"
   [nzVisible]="isPlansModalOpen()"
-  nzCancelText="Đóng"
-  nzOkText="Xác nhận"
-  nzTitle="Chọn Plan"
+  nzCancelText="Close"
+  nzOkText="Confirm"
+  nzTitle="Select Plan"
 >
   <ng-template nzModalContent>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
       @if (availablePlans().length === 0) {
-        <p class="text-center text-gray-500 py-10">Không có plan nào để chọn</p>
+        <p class="text-center text-gray-500 py-10">There are no plans to choose</p>
       } @else {
         @for (plan of availablePlans(); track plan.id) {
           <nz-card nzHoverable (click)="selectPlan(plan)">

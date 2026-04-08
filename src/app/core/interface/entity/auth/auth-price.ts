@@ -1,11 +1,9 @@
 import {PlanDTO} from '../../DTO/planDTO';
-import {TenantDTO} from '../../DTO/TenantDTO';
 
 export interface AuthPrice {
   "id": number,
   "price": number,
   "currency": 'USD' | 'VND',
-  "scheme": "FLAT_RATE" | 'PER_UNIT',
   "cycle": "MONTH" | 'DAY' | 'WEEK' | 'YEAR',
   "status": "ACTIVE" | 'DEACTIVATED' | 'CANCEL',
   "maxUnit": number,

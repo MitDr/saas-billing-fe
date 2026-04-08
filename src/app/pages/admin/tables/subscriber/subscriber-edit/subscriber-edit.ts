@@ -116,14 +116,14 @@ export class SubscriberEdit {
       this.subscriberService.update(payload, this.subscriber()?.id!).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Update subscription thành công');
+          this.message.success('Update subscription successfully');
           this.subscriberForm.reset();
           this.router.navigate(['/admin/tables/subscribers']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Update subscriber failed:', err);
-          this.message.error('Update subscriber thất bại');
+          this.message.error('Update subscriber failed');
         }
       })
 

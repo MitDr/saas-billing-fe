@@ -9,41 +9,46 @@
 
     <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pt-20 pb-32 md:pt-32 md:pb-48 text-center">
       <!-- Badge -->
-      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100/80 text-blue-700 text-sm font-medium mb-6">
-        <span nz-icon nzType="rocket" class="text-blue-600"></span>
+      <div
+        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100/80 text-blue-700 text-sm font-medium mb-6">
+        <span class="text-blue-600" nz-icon nzType="rocket"></span>
         Built with Angular, ng-zorro and Spring Boot
       </div>
 
       <!-- Headline -->
-      <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
+      <h1
+        class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
         Build Your Service
-        <br class="hidden md:block" />
+        <br class="hidden md:block"/>
         <span class="text-4xl md:text-6xl">10x Faster</span>
       </h1>
 
       <!-- Subtitle -->
       <p class="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto mb-10 leading-relaxed">
-        Modern Subscription SaaS with authentication, payments, admin dashboard, and beautiful UI components.
+        Modern Subscription SaaS with authentication, payments and admin dashboard.
         Focus on your business logic — we handle the rest.
       </p>
 
       <!-- CTA Buttons -->
       <div class="flex flex-col sm:flex-row gap-5 justify-center items-center">
-        <button nz-button nzType="primary" nzSize="large" class="h-14 px-10 text-lg font-medium shadow-lg hover:shadow-xl transition-all">
+        <button
+          class="h-14 px-10 text-lg font-medium shadow-lg hover:shadow-xl transition-all"
+          nz-button nzSize="large" nzType="primary"
+          routerLink="/auth/register">
           Get Started Free
         </button>
       </div>
 
       <!-- Social proof / stats -->
-      <div class="mt-16 grid grid-cols-2 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+      <div class="mt-16 grid grid-cols-3 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
         <div class="text-center">
           <div class="text-4xl font-bold text-blue-600">+30</div>
-          <p class="text-gray-600 mt-2">Beautiful Components</p>
+          <p class="text-gray-600 mt-2">Endpoints</p>
         </div>
-<!--        <div class="text-center">-->
-<!--          <div class="text-4xl font-bold text-indigo-600">100%</div>-->
-<!--          <p class="text-gray-600 mt-2">TypeScript & Signals</p>-->
-<!--        </div>-->
+        <div class="text-center">
+          <div class="text-4xl font-bold text-indigo-600">Chatbot</div>
+          <p class="text-gray-600 mt-2">Answer any questions related</p>
+        </div>
         <div class="text-center">
           <div class="text-4xl font-bold text-green-600">Fast</div>
           <p class="text-gray-600 mt-2">Performance Optimized</p>
@@ -68,26 +73,29 @@
 
       <div class="grid md:grid-cols-3 gap-8">
         <!-- Feature Card 1: Authentication & Security -->
-        <nz-card nzHoverable class="shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-200 rounded-xl">
+        <nz-card class="shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-200 rounded-xl"
+                 nzHoverable>
           <nz-card-meta
-            [nzTitle]="authTitle"
             [nzDescription]="authDescription"
+            [nzTitle]="authTitle"
           ></nz-card-meta>
         </nz-card>
 
         <!-- Feature Card 2: Payments & Subscriptions -->
-        <nz-card nzHoverable class="shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-200 rounded-xl">
+        <nz-card class="shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-200 rounded-xl"
+                 nzHoverable>
           <nz-card-meta
-            [nzTitle]="paymentTitle"
             [nzDescription]="paymentDescription"
+            [nzTitle]="paymentTitle"
           ></nz-card-meta>
         </nz-card>
 
         <!-- Feature Card 3: Admin Dashboard -->
-        <nz-card nzHoverable class="shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-200 rounded-xl">
+        <nz-card class="shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-200 rounded-xl"
+                 nzHoverable>
           <nz-card-meta
-            [nzTitle]="dashboardTitle"
             [nzDescription]="dashboardDescription"
+            [nzTitle]="dashboardTitle"
           ></nz-card-meta>
         </nz-card>
       </div>
@@ -95,7 +103,7 @@
       <!-- Định nghĩa ng-template riêng cho từng card -->
       <ng-template #authTitle>
         <div class="flex items-center gap-3">
-          <span nz-icon nzType="safety-certificate" class="text-3xl text-blue-600"></span>
+          <span class="text-3xl text-blue-600" nz-icon nzType="safety-certificate"></span>
           <span class="text-2xl font-bold text-blue-600">Authentication & Security</span>
         </div>
       </ng-template>
@@ -112,7 +120,7 @@
 
       <ng-template #paymentTitle>
         <div class="flex items-center gap-3">
-          <span nz-icon nzType="credit-card" class="text-3xl text-indigo-600"></span>
+          <span class="text-3xl text-indigo-600" nz-icon nzType="credit-card"></span>
           <span class="text-2xl font-bold text-indigo-600">Payments & Subscriptions</span>
         </div>
       </ng-template>
@@ -131,7 +139,7 @@
 
       <ng-template #dashboardTitle>
         <div class="flex items-center gap-3">
-          <span nz-icon nzType="dashboard" class="text-3xl text-purple-600"></span>
+          <span class="text-3xl text-purple-600" nz-icon nzType="dashboard"></span>
           <span class="text-2xl font-bold text-purple-600">Admin Dashboard</span>
         </div>
       </ng-template>
@@ -155,7 +163,11 @@
       <p class="text-xl md:text-2xl mb-10 opacity-90">
         Start building today with the best Subscription SaaS.
       </p>
-      <button nz-button nzType="primary" nzSize="large" class="h-14 px-12 text-lg font-medium shadow-2xl hover:shadow-3xl transition-all bg-white text-blue-600 hover:bg-gray-100">
+      <button
+        class="h-14 px-12 text-lg font-medium shadow-2xl hover:shadow-3xl transition-all bg-white text-blue-600 hover:bg-gray-100"
+        nz-button
+        nzSize="large" nzType="primary"
+        routerLink="/auth/register">
         Get Started Now
       </button>
     </div>

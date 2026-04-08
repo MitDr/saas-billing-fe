@@ -18,7 +18,7 @@ export class EntitlementService {
     return this.api.post<Entitlement>(`/admin/entitlements`, request).pipe(
       catchError(error => {
         console.error('Create entitlement error:', error);
-        return throwError(() => new Error('Tạo entitlement thất bại'));
+        return throwError(() => new Error('Create entitlement failed'));
       })
     );
   }
@@ -58,7 +58,7 @@ export class EntitlementService {
     return this.api.get<Entitlement>(`/admin/entitlements/${id}`).pipe(
       catchError(error => {
         console.error('Get entitlement error:', error);
-        return throwError(() => new Error('Không thể lấy entitlement'));
+        return throwError(() => new Error('Cannot get entitlement'));
       })
     );
   }
@@ -67,7 +67,7 @@ export class EntitlementService {
     return this.api.put<Entitlement>(`/admin/entitlements/${id}`, updateEntitlement).pipe(
       catchError(error => {
         console.error('Update entitlement error:', error);
-        return throwError(() => new Error('Cập nhật entitlement thất bại'));
+        return throwError(() => new Error('Update entitlement failed'));
       })
     );
   }
@@ -76,7 +76,7 @@ export class EntitlementService {
     return this.api.deletes<void>(`/admin/entitlements`, ids).pipe(
       catchError(error => {
         console.error('Bulk delete error:', error);
-        return throwError(() => new Error('Xóa hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk delete failed'));
       })
     );
   }
@@ -85,7 +85,7 @@ export class EntitlementService {
     return this.api.post<void>(`/admin/entitlements/softDelete`, softDeleteRequest).pipe(
       catchError(error => {
         console.error('Bulk soft delete error:', error);
-        return throwError(() => new Error('Xóa mềm hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk soft delete failed'));
       })
     );
   }
@@ -94,7 +94,7 @@ export class EntitlementService {
     return this.api.delete<void>(`/admin/entitlements/${id}`).pipe(
       catchError(error => {
         console.error('Delete entitlement error:', error);
-        return throwError(() => new Error('Xóa entitlement thất bại'));
+        return throwError(() => new Error('Delete entitlement failed'));
       })
     );
   }

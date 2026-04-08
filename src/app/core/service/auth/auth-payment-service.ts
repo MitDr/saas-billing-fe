@@ -1,7 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {ApiClientService} from '../api-client-service';
 import {Observable, throwError} from 'rxjs';
-import {Payment} from '../../interface/entity/payment';
 import {catchError} from 'rxjs/operators';
 import {ListData} from '../../interface/list-data';
 import {HttpParams} from '@angular/common/http';
@@ -11,17 +10,17 @@ import {AuthPaymentRequest} from '../../interface/request/auth/auth-payment-requ
 @Injectable({
   providedIn: 'root'
 })
-export class AuthPaymentService{
+export class AuthPaymentService {
   api = inject(ApiClientService)
 
   createPayment(paymentRequest: AuthPaymentRequest): Observable<AuthPayment> {
     return this.api.post<AuthPayment>('/auth/payments', paymentRequest).pipe(
       catchError(error => {
         console.error('Create payment error:', error);
-        return throwError(() => new Error('Tạo payment thất bại'));
+        return throwError(() => new Error('Create payment failed'));
       })
     );
-}
+  }
 
   getPayments(
     page: number = 1,
@@ -45,7 +44,7 @@ export class AuthPaymentService{
     return this.api.get<AuthPayment>(`/auth/payments/${id}`).pipe(
       catchError(error => {
         console.error('Get payment error:', error);
-        return throwError(() => new Error('Không thể lấy payment'));
+        return throwError(() => new Error('Cannot get payment'));
       })
     );
   }
@@ -54,7 +53,7 @@ export class AuthPaymentService{
     return this.api.put<AuthPayment>(`/auth/payments/${id}`, updatedPayment).pipe(
       catchError(error => {
         console.error('Update payment error:', error);
-        return throwError(() => new Error('Cập nhật payment thất bại'));
+        return throwError(() => new Error('Update payment failed'));
       })
     );
   }
@@ -63,7 +62,7 @@ export class AuthPaymentService{
     return this.api.deletes<void>(`/auth/payments`, ids).pipe(
       catchError(error => {
         console.error('Bulk delete error:', error);
-        return throwError(() => new Error('Xóa hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk delete failed'));
       })
     );
   }
@@ -72,7 +71,7 @@ export class AuthPaymentService{
     return this.api.delete<void>(`/auth/payments/${id}`).pipe(
       catchError(error => {
         console.error('Delete payment error:', error);
-        return throwError(() => new Error('Xóa payment thất bại'));
+        return throwError(() => new Error('Delete payment failed'));
       })
     );
   }

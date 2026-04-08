@@ -17,7 +17,7 @@ export class AuthInvoiceService {
     return this.api.post<AuthInvoice>('/auth/invoices', request).pipe(
       catchError(error => {
         console.error('Create invoice error:', error);
-        return throwError(() => new Error('Tạo invoice thất bại'));
+        return throwError(() => new Error('Create invoice failed'));
       })
     );
   }
@@ -65,7 +65,7 @@ export class AuthInvoiceService {
     return this.api.get<AuthInvoice>(`/auth/invoices/${id}`).pipe(
       catchError(error => {
         console.error('Get invoice error:', error);
-        return throwError(() => new Error('Không thể lấy invoice'));
+        return throwError(() => new Error('Cannot get invoice'));
       })
     );
   }
@@ -75,7 +75,7 @@ export class AuthInvoiceService {
     return this.api.put<AuthInvoice>(`/auth/invoices/${id}`, updatedInvoice).pipe(
       catchError(error => {
         console.error('Update invoice error:', error);
-        return throwError(() => new Error('Cập nhật invoice thất bại'));
+        return throwError(() => new Error('Update invoice failed'));
       })
     );
   }
@@ -84,7 +84,7 @@ export class AuthInvoiceService {
     return this.api.deletes<void>(`/auth/invoices`, ids).pipe(
       catchError(error => {
         console.error('Bulk delete error:', error);
-        return throwError(() => new Error('Xóa hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk delete failed'));
       })
     );
   }
@@ -93,7 +93,7 @@ export class AuthInvoiceService {
     return this.api.delete<void>(`/auth/invoices/${id}`).pipe(
       catchError(error => {
         console.error('Delete invoice error:', error);
-        return throwError(() => new Error('Xóa invoice thất bại'));
+        return throwError(() => new Error('Delete invoice failed'));
       })
     );
   }

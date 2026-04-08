@@ -26,8 +26,10 @@
           </div>
         </nz-descriptions-item>
         <nz-descriptions-item nzTitle="Amout">
-          {{ price().price }}
+          {{ formatAmount() }}
         </nz-descriptions-item>
+
+
         <nz-descriptions-item nzTitle="Currency">
           <div class="flex items-center gap-3">
             @switch (price().currency) {
@@ -36,18 +38,6 @@
               }
               @case ('VND') {
                 <nz-tag class="font-momo" nzColor="red">{{ price().currency }}</nz-tag>
-              }
-            }
-          </div>
-        </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="Scheme">
-          <div class="flex items-center gap-3">
-            @switch (price().scheme) {
-              @case ('FLAT_RATE') {
-                <nz-tag class="font-momo" nzColor="green">Flat-rate</nz-tag>
-              }
-              @case ('PER_UNIT') {
-                <nz-tag class="font-momo" nzColor="blue">Per-unit</nz-tag>
               }
             }
           </div>
@@ -121,7 +111,7 @@
         <button (click)="onDelete()" class="!inline-flex !items-center"
                 nz-button nzDanger>
           <span nz-icon nzType="delete"></span>
-          Delete Tenant
+          Delete Price
         </button>
 
         <!--        @if (tenant().stripeAccountId) {-->

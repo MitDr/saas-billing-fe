@@ -48,7 +48,7 @@ export class WebhookLogService {
     return this.api.get<WebhookLog>(`/admin/webhook-logs/${id}`).pipe(
       catchError(error => {
         console.error('Get webhook log error:', error);
-        return throwError(() => new Error('Không thể lấy webhook log'));
+        return throwError(() => new Error('Cannot get webhook log'));
       })
     );
   }
@@ -57,7 +57,7 @@ export class WebhookLogService {
     return this.api.put<WebhookLog>(`/admin/webhook-logs/${id}`, updatedWebhookLog).pipe(
       catchError(error => {
         console.error('Update webhook log error:', error);
-        return throwError(() => new Error('Cập nhật webhook log thất bại'));
+        return throwError(() => new Error('Update webhook log failed'));
       })
     );
   }
@@ -66,7 +66,7 @@ export class WebhookLogService {
     return this.api.deletes<void>(`/admin/webhook-logs`, ids).pipe(
       catchError(error => {
         console.error('Bulk delete error:', error);
-        return throwError(() => new Error('Xóa hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk delete failed'));
       })
     );
   }
@@ -75,7 +75,7 @@ export class WebhookLogService {
     return this.api.delete<void>(`/admin/webhook-logs/${id}`).pipe(
       catchError(error => {
         console.error('Delete webhook log error:', error);
-        return throwError(() => new Error('Xóa webhookg log thất bại'));
+        return throwError(() => new Error('Delete webhookg log failed'));
       })
     );
   }

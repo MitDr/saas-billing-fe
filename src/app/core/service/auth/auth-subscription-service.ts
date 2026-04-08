@@ -18,7 +18,7 @@ export class AuthSubscriptionService {
     return this.api.post<AuthSubscription>('/auth/subscriptions', request).pipe(
       catchError(error => {
         console.error('Create subscription error:', error);
-        return throwError(() => new Error('Tạo subscription thất bại'));
+        return throwError(() => new Error('Create subscription failed'));
       })
     );
   }
@@ -58,7 +58,7 @@ export class AuthSubscriptionService {
     return this.api.get<ListData<AuthSubscription>>(`/auth/subscriptions/cancelable/subscriber-id/${subscriberId}`).pipe(
       catchError(error => {
         console.error('Get subscriptions error:', error);
-        return throwError(() => new Error('Không thể lấy subscriptions'));
+        return throwError(() => new Error('Cannot get subscriptions'));
       })
     )
   }
@@ -67,7 +67,7 @@ export class AuthSubscriptionService {
     return this.api.get<ListData<AuthSubscription>>(`/auth/subscriptions/renewable/subscriber-id/${subscriberId}`).pipe(
       catchError(error => {
         console.error('Get subscriptions error:', error);
-        return throwError(() => new Error('Không thể lấy subscriptions'));
+        return throwError(() => new Error('Cannot get subscriptions'));
       })
     )
   }
@@ -76,7 +76,7 @@ export class AuthSubscriptionService {
     return this.api.get<ListData<AuthSubscription>>(`/auth/subscriptions/reactivatable/subscriber-id/${subscriberId}`).pipe(
       catchError(error => {
         console.error('Get subscriptions error:', error);
-        return throwError(() => new Error('Không thể lấy subscriptions'));
+        return throwError(() => new Error('Cannot get subscriptions'));
       })
     )
   }
@@ -117,7 +117,7 @@ export class AuthSubscriptionService {
     return this.api.get<AuthSubscription>(`/auth/subscriptions/${id}`).pipe(
       catchError(error => {
         console.error('Get subscription error:', error);
-        return throwError(() => new Error('Không thể lấy subscription'));
+        return throwError(() => new Error('Cannot get subscription'));
       })
     );
   }
@@ -126,7 +126,7 @@ export class AuthSubscriptionService {
     return this.api.put<AuthSubscription>(`/auth/subscriptions/${id}`, updatedSubscription).pipe(
       catchError(error => {
         console.error('Update subscription error:', error);
-        return throwError(() => new Error('Cập nhật subscription thất bại'));
+        return throwError(() => new Error('Update subscription failed'));
       })
     );
   }
@@ -135,7 +135,7 @@ export class AuthSubscriptionService {
     return this.api.deletes<void>(`/auth/subscriptions`, ids).pipe(
       catchError(error => {
         console.error('Bulk delete error:', error);
-        return throwError(() => new Error('Xóa hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk delete failed'));
       })
     );
   }
@@ -144,7 +144,7 @@ export class AuthSubscriptionService {
     return this.api.post<void>(`/auth/subscriptions/softDelete`, softDeleteRequest).pipe(
       catchError(error => {
         console.error('Bulk soft delete error:', error);
-        return throwError(() => new Error('Xóa mềm hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk soft delete failed'));
       })
     );
   }
@@ -153,7 +153,7 @@ export class AuthSubscriptionService {
     return this.api.delete<void>(`/auth/subscriptions/${id}`).pipe(
       catchError(error => {
         console.error('Delete subscription error:', error);
-        return throwError(() => new Error('Xóa subscription thất bại'));
+        return throwError(() => new Error('Delete subscription failed'));
       })
     );
   }

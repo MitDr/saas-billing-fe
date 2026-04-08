@@ -113,13 +113,13 @@ export class AiDoc implements OnInit {
     //   next: (event) => {
     //     if (event.type === 4) { // HttpResponse
     //       this.uploadLoading.set(false);
-    //       this.message.success('Upload thành công');
+    //       this.message.success('Upload successfully');
     //       this.loadFiles();
     //     }
     //   },
     //   error: (err) => {
     //     this.uploadLoading.set(false);
-    //     this.message.error('Upload thất bại');
+    //     this.message.error('Upload failed');
     //   }
     // });
   };

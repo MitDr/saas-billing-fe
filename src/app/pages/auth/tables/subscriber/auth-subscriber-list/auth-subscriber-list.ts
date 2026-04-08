@@ -1,16 +1,9 @@
 import {Component, inject, Signal, signal} from '@angular/core';
 import {ListData} from '../../../../../core/interface/list-data';
-import {Subscriber} from '../../../../../core/interface/entity/subscriber';
-import {
-  AUTH_SUBSCRIBER_ROUTE_CONSTANT,
-  SUBSCRIBER_ROUTE_CONSTANT
-} from '../../../../../core/constant/subscriber/subscriber-list-constant';
-import {SubscriberService} from '../../../../../core/service/subscriber-service';
+import {AUTH_SUBSCRIBER_ROUTE_CONSTANT} from '../../../../../core/constant/subscriber/subscriber-list-constant';
 import {AuthSubscriber} from '../../../../../core/interface/entity/auth/auth-subscriber';
 import {AuthSubscriberService} from '../../../../../core/service/auth/auth-subscriber-service';
 import {ColumnConfig} from '../../../../../core/interface/column-config';
-import {SOFTDELETEOPTIONS} from '../../../../admin/tables/tenant/tenant-list/tenant-list';
-import {SubscriberRequest} from '../../../../../core/interface/request/subscriber-request';
 import {AuthGenericListComponent} from '../../../../../core/generic/base-auth-list-component';
 import {AuthSubscriberRequest} from '../../../../../core/interface/request/auth/auth-subscriber-request';
 import {EditableDataTable} from '../../../../../shell/components/generic/editable-data-table/editable-data-table';
@@ -51,9 +44,9 @@ export class AuthSubscriberList extends AuthGenericListComponent<AuthSubscriber,
   checked = false;
   createRoute = '/app/tables/subscribers/create'
   subscriberListRouting = AUTH_SUBSCRIBER_ROUTE_CONSTANT;
-  private subscriberService = inject(AuthSubscriberService);
   isCreateModalOpen = signal(false);
   isSubmitting = false;
+  private subscriberService = inject(AuthSubscriberService);
   private fb = inject(NonNullableFormBuilder)
   subscriberForm = this.fb.group({
     name: ['', [Validators.required]],
@@ -99,6 +92,45 @@ export class AuthSubscriberList extends AuthGenericListComponent<AuthSubscriber,
     }
   }
 
+  onSubmitted() {
+    this.isSubmitting = true;
+    console.log(this.subscriberForm.value)
+    if (this.subscriberForm.valid) {
+      const payload: AuthSubscriberRequest = {
+        name: this.subscriberForm.value.name!,
+        email: this.subscriberForm.value.email!,
+      }
+
+      console.log(payload);
+      this.subscriberService.createSubscriber(payload).subscribe({
+        next: (response) => {
+          this.isSubmitting = false;
+          this.message.success('Create subscriber successfully');
+          this.subscriberForm.reset();
+          // this.router.navigate(['/app/tables/subscribers']);
+        },
+        error: (err) => {
+          this.isSubmitting = false;
+          console.error('Create subscriber failed:', err);
+          this.message.error('Create subscriber failed:');
+        }
+      })
+    }
+  }
+
+  openCreateModal() {
+    this.isCreateModalOpen.set(true);
+  }
+
+  onConfirmModal() {
+    this.isCreateModalOpen.set(false);
+    this.reloadData()
+  }
+
+  onCloseModal() {
+    this.isCreateModalOpen.set(false);
+  }
+
   protected loadData(
     page: number,
     size: number,
@@ -112,7 +144,7 @@ export class AuthSubscriberList extends AuthGenericListComponent<AuthSubscriber,
         this.loading.set(false);
       },
       error: () => {
-        this.message.error('Không thể tải danh sách subscribers');
+        this.message.error('Cannot load subscribers');
         this.loading.set(false);
       }
     });
@@ -124,43 +156,5 @@ export class AuthSubscriberList extends AuthGenericListComponent<AuthSubscriber,
       email: updatedSubscriber.email,
     }
     return result;
-  }
-
-  onSubmitted() {
-    console.log(this.subscriberForm.value)
-    if (this.subscriberForm.valid) {
-      const payload: AuthSubscriberRequest = {
-        name: this.subscriberForm.value.name!,
-        email: this.subscriberForm.value.email!,
-      }
-
-      console.log(payload);
-      this.subscriberService.createSubscriber(payload).subscribe({
-        next: (response) => {
-          this.isSubmitting = false;
-          this.message.success('Tạo subscription thành công');
-          this.subscriberForm.reset();
-          // this.router.navigate(['/app/tables/subscribers']);
-        },
-        error: (err) => {
-          this.isSubmitting = false;
-          console.error('Create subscriber failed:', err);
-          this.message.error('Tạo subscriber thất bại');
-        }
-      })
-    }
-  }
-
-  openCreateModal() {
-    this.isCreateModalOpen.set(true);
-  }
-
-  onConfirmModal(){
-    this.isCreateModalOpen.set(false);
-    this.reloadData()
-  }
-
-  onCloseModal(){
-    this.isCreateModalOpen.set(false);
   }
 }

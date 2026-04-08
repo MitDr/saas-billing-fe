@@ -53,7 +53,7 @@ export class AuthTenantService {
     return this.api.post<AuthTenant>(`/auth/tenants/refresh-api-key`).pipe(
       catchError(error => {
         console.error('Refresh API key error:', error);
-        return throwError(() => new Error('Refresh API key thất bại'));
+        return throwError(() => new Error('Refresh API key failed'));
       })
     );
   }

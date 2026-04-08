@@ -11,6 +11,7 @@ import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzCardComponent, NzCardMetaComponent} from 'ng-zorro-antd/card';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzModalComponent, NzModalContentDirective} from 'ng-zorro-antd/modal';
+import {NzInputNumberComponent} from 'ng-zorro-antd/input-number';
 
 @Component({
   selector: 'app-payout-reuse-form',
@@ -31,7 +32,8 @@ import {NzModalComponent, NzModalContentDirective} from 'ng-zorro-antd/modal';
     NzCardMetaComponent,
     NzIconDirective,
     NzModalComponent,
-    NzModalContentDirective
+    NzModalContentDirective,
+    NzInputNumberComponent
   ],
   templateUrl: './payout-reuse-form.html',
   styleUrl: './payout-reuse-form.css',
@@ -122,7 +124,7 @@ export class PayoutReuseForm {
           control.updateValueAndValidity({onlySelf: true});
         }
       });
-      this.message.warning('Vui lòng kiểm tra lại thông tin!');
+      this.message.warning('Please double-check the information!');
     }
   }
 }

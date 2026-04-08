@@ -1,11 +1,8 @@
 import {Component, inject, Signal, signal} from '@angular/core';
 import {ListData} from '../../../../../core/interface/list-data';
-import {WebhookEndpoint} from '../../../../../core/interface/entity/webhook-endpoint';
 import {
-  AUTH_WEBHOOK_ENDPOINT_ROUTE_CONSTANT,
-  WEBHOOK_ENDPOINT_ROUTE_CONSTANT
+  AUTH_WEBHOOK_ENDPOINT_ROUTE_CONSTANT
 } from '../../../../../core/constant/webhook-endpoint/webhook-endpoint-list-constant';
-import {WebhookEndpointService} from '../../../../../core/service/webhook-endpoint-service';
 import {AuthGenericListComponent} from '../../../../../core/generic/base-auth-list-component';
 import {AuthWebhookEndpoint} from '../../../../../core/interface/entity/auth/auth-webhook-endpoint';
 import {AuthWebhookEndpointRequest} from '../../../../../core/interface/request/auth/auth-webhook-endpoint-request';
@@ -14,7 +11,6 @@ import {ColumnConfig} from '../../../../../core/interface/column-config';
 import {
   WEBHOOKENDPOINTSTATUSOPTION
 } from '../../../../admin/tables/webhook-endpoint/webhook-endpoint-list/webhook-endpoint-list';
-import {WebhookEndpointRequest} from '../../../../../core/interface/request/webhook-endpoint-request';
 import {EditableDataTable} from '../../../../../shell/components/generic/editable-data-table/editable-data-table';
 import {FormsModule, NonNullableFormBuilder, Validators} from '@angular/forms';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
@@ -29,7 +25,6 @@ import {Breadcrumb} from '../../../../../shell/components/generic/breadcrumb/bre
 import {
   WebhookEndpointReuseForm
 } from '../../../../../shell/components/form/admin/webhook-endpoint-reuse-form/webhook-endpoint-reuse-form';
-import {NzMessageService} from 'ng-zorro-antd/message';
 import {
   AuthWebhookEndpointReuseForm
 } from '../../../../../shell/components/form/auth/auth-webhook-endpoint-reuse-form/auth-webhook-endpoint-reuse-form';
@@ -63,9 +58,9 @@ export class AuthWebhookEndpointList extends AuthGenericListComponent<AuthWebhoo
   checked = false;
   createRoute = '/app/tables/webhook-endpoints/create'
   webhookListRouting = AUTH_WEBHOOK_ENDPOINT_ROUTE_CONSTANT;
-  private webhookEndpointService = inject(AuthWebhookEndpointService);
   isCreateModalOpen = signal(false);
   isSubmitting = false;
+  private webhookEndpointService = inject(AuthWebhookEndpointService);
   private fb = inject(NonNullableFormBuilder)
   webhookEndpointForm = this.fb.group({
     status: ['', [Validators.required, Validators.pattern('ACTIVE|DISABLED')]],
@@ -105,33 +100,6 @@ export class AuthWebhookEndpointList extends AuthGenericListComponent<AuthWebhoo
     }
   }
 
-  protected loadData(
-    page: number,
-    size: number,
-    search?: string,
-    sort?: string
-  ): void {
-    this.loading.set(true);
-    this.webhookEndpointService.getWebhookEndpoints(page, size, search).subscribe({
-      next: (response) => {
-        this.webhookEndpointPage.set(response);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.message.error('Không thể tải danh sách webhook endpoints');
-        this.loading.set(false);
-      }
-    });
-  }
-
-  protected mapToUpdatePayload(updateWebhookEndpoint: AuthWebhookEndpoint): AuthWebhookEndpointRequest {
-    const result: AuthWebhookEndpointRequest = {
-      url: updateWebhookEndpoint.url,
-      status: updateWebhookEndpoint.status,
-    }
-    return result;
-  }
-
   onSubmitted() {
     console.log(this.webhookEndpointForm.value)
 
@@ -146,14 +114,14 @@ export class AuthWebhookEndpointList extends AuthGenericListComponent<AuthWebhoo
       this.webhookEndpointService.createWebhookEndpoint(payload).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Tạo endpoint thành công');
+          this.message.success('Create endpoint successfully');
           this.webhookEndpointForm.reset();
           // this.router.navigate(['/app/tables/webhook-endpoints']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Create endpoint failed:', err);
-          this.message.error('Tạo endpoint thất bại');
+          this.message.error('Create endpoint failed');
         }
       })
     }
@@ -163,12 +131,39 @@ export class AuthWebhookEndpointList extends AuthGenericListComponent<AuthWebhoo
     this.isCreateModalOpen.set(true);
   }
 
-  onConfirmModal(){
+  onConfirmModal() {
     this.isCreateModalOpen.set(false);
     this.reloadData()
   }
 
-  onCloseModal(){
+  onCloseModal() {
     this.isCreateModalOpen.set(false);
+  }
+
+  protected loadData(
+    page: number,
+    size: number,
+    search?: string,
+    sort?: string
+  ): void {
+    this.loading.set(true);
+    this.webhookEndpointService.getWebhookEndpoints(page, size, search).subscribe({
+      next: (response) => {
+        this.webhookEndpointPage.set(response);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.message.error('Cannot load webhook endpoints');
+        this.loading.set(false);
+      }
+    });
+  }
+
+  protected mapToUpdatePayload(updateWebhookEndpoint: AuthWebhookEndpoint): AuthWebhookEndpointRequest {
+    const result: AuthWebhookEndpointRequest = {
+      url: updateWebhookEndpoint.url,
+      status: updateWebhookEndpoint.status,
+    }
+    return result;
   }
 }

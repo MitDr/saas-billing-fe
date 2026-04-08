@@ -46,9 +46,9 @@ export class AuthFeatureCard {
 
   onDelete() {
     this.modalService.confirm({
-      nzTitle: 'Xác nhận xóa',
-      nzContent: `Xóa Feature #${this.feature().id} ?`,
-      nzOkText: 'Xóa',
+      nzTitle: 'Confirm Delete',
+      nzContent: `Delete Feature #${this.feature().id} ?`,
+      nzOkText: 'Delete',
       nzOkDanger: true,
       nzOnOk: () => {
         this.deleteButton.emit(this.feature().id);
@@ -75,7 +75,6 @@ export class AuthFeatureCard {
       description: feature.description,
       code: feature.code,
       status: feature.status,
-      // tenantId: feature.tenant.id
     }
     if (feature.plans.length > 0) {
       result.plans = feature.plans

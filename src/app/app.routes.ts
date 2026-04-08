@@ -115,22 +115,28 @@ import {AuthTenantDetail} from './pages/auth/tenant/auth-tenant/auth-tenant-deta
 import {Faq} from './pages/public/faq/faq';
 import {Portal} from './pages/portal/portal/portal';
 import {AuthPlanEdit} from './pages/auth/tables/plan/auth-plan-edit/auth-plan-edit';
-import { AiDoc } from "./pages/admin/ai-doc/ai-doc/ai-doc";
+import {AiDoc} from "./pages/admin/ai-doc/ai-doc/ai-doc";
+import {adminGuard, authGuard, authRedirectGuard} from './core/auth/guard/auth-guard';
+import {PageNotFound} from './pages/public/page-not-found/page-not-found';
+import {PageSuccessful} from './pages/public/page-successful/page-successful';
+import {PageFailed} from './pages/public/page-failed/page-failed';
 
 export const routes: Routes = [
   {
     path: '',
     component: PublicLayout,
+    pathMatch: "full",
     children: [
       {
         path: '',
-        component: Home
+        component: Home,
+        canActivate: [authRedirectGuard]
       },
-      {
-        path: 'faq',
-        component: Faq
-      }
     ]
+  },
+  {
+    path: 'faq',
+    component: Faq
   },
   {
     path: 'portal',
@@ -153,7 +159,7 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: DashboardLayout,
-    // canActivate: [adminGuard],
+    canActivate: [adminGuard],
     children: [
       {
         path: 'dashboard',
@@ -414,7 +420,7 @@ export const routes: Routes = [
   {
     path: 'app',
     component: DashboardAuthLayout,
-    // canActivate: [authGuard],
+    canActivate: [authGuard],
     children: [
       {
         path: 'dashboard',
@@ -581,7 +587,20 @@ export const routes: Routes = [
         component: AuthWebhookLogDetail
       }
     ]
+  },
+  {
+    path: "success",
+    component: PageSuccessful
+  },
+  {
+    path: "failed",
+    component: PageFailed
+  },
+  {
+    path: "**",
+    component: PageNotFound
   }
+
   // {
   //   path: 'dashboard',
   //   component: DashboardLayout,

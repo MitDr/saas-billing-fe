@@ -201,7 +201,7 @@ export class TenantList {
         this.loading.set(false);
       },
       error: () => {
-        this.message.error('Không thể tải danh sách tenants');
+        this.message.error('Cannot load tenants');
         this.loading.set(false);
       }
     });

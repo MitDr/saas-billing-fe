@@ -13,6 +13,7 @@ import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzInputDirective, NzInputWrapperComponent} from 'ng-zorro-antd/input';
 import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
 import {RouterLink} from '@angular/router';
+import {CURRENCYOPTIONS} from '../../../../admin/tables/price/price-list/price-list';
 
 @Component({
   selector: 'app-auth-payment-list',
@@ -44,8 +45,9 @@ export class AuthPaymentList extends AuthGenericListComponent<AuthPayment, AuthP
   override getColumns(): ColumnConfig<AuthPayment>[] {
     return [
       {key: 'id', title: 'Id', type: 'text', editable: false},
-      {key: 'amount', title: 'Amount', type: "text", editable: true},
-      {key: 'status', title: 'Status', type: 'select', editable: true, options: PAYMENTSTATUSOPTION},
+      {key: 'amount', title: 'Amount', type: "price", editable: false},
+      {key: 'status', title: 'Status', type: 'select', editable: false, options: PAYMENTSTATUSOPTION},
+      {key: 'currency', title: 'Currency', editable: false, type: 'select', options: CURRENCYOPTIONS},
       // {key: 'paymentIntentId', title: 'Intent Id', type: "text", editable: true},
       // {key: 'chargeId', title: 'Charge Id', type: 'text', editable: true},
       // {key: 'balanceTransactionId', title: 'B.Transaction Id', type: 'text', editable: true},
@@ -58,7 +60,7 @@ export class AuthPaymentList extends AuthGenericListComponent<AuthPayment, AuthP
         editable: false,
         formatUUID: true
       },
-      {key: 'availableOn', title: 'Available On', type: 'date-time', editable: true, dateFormat: 'dd-MM-yyyy'},
+      {key: 'availableOn', title: 'Available On', type: 'date-time', editable: false, dateFormat: 'dd-MM-yyyy'},
     ];
   }
 
@@ -96,7 +98,7 @@ export class AuthPaymentList extends AuthGenericListComponent<AuthPayment, AuthP
         this.loading.set(false);
       },
       error: () => {
-        this.message.error('Không thể tải danh sách payments');
+        this.message.error('Cannot load payments');
         this.loading.set(false);
       }
     });
@@ -109,22 +111,6 @@ export class AuthPaymentList extends AuthGenericListComponent<AuthPayment, AuthP
       status: updatePayment.status,
       metadata: updatePayment.metadata
     };
-
-    // if (updatePayment.paymentIntentId) {
-    //   result.paymentIntentId = updatePayment.paymentIntentId;
-    // }
-    //
-    // if (updatePayment.chargeId) {
-    //   result.chargeId = updatePayment.chargeId;
-    // }
-    //
-    // if (updatePayment.balanceTransactionId) {
-    //   result.balanceTransactionId = updatePayment.balanceTransactionId;
-    // }
-    //
-    // if (updatePayment.paymentMethod) {
-    //   result.paymentMethod = updatePayment.paymentMethod;
-    // }
 
     if (updatePayment.availableOn) {
       result.availableOn = updatePayment.availableOn;

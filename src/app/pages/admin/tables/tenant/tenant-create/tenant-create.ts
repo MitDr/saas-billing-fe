@@ -53,7 +53,7 @@ export class TenantCreate implements OnInit {
       },
       error: (err) => {
         console.error('Load users failed:', err);
-        this.message.error('Không tải được danh sách user');
+        this.message.error('Cannot load user');
       }
     });
   }
@@ -79,14 +79,14 @@ export class TenantCreate implements OnInit {
       this.tenantService.createTenant(payload).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Tạo tenant thành công');
+          this.message.success('Create tenant successfully');
           this.tenantForm.reset();
           this.router.navigate(['/admin/tables/tenants']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Create tenant failed:', err);
-          this.message.error('Tạo tenant thất bại');
+          this.message.error('Create tenant failed');
         }
       })
     }

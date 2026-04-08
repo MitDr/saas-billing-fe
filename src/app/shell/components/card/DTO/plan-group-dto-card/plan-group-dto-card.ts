@@ -32,9 +32,9 @@ export class PlanGroupDtoCard {
 
   onPlanGroupRemove() {
     this.modalService.confirm({
-      nzTitle: 'Xác nhận xóa',
-      nzContent: `Xóa plan group #${this.planGroup().id} ?`,
-      nzOkText: 'Xóa',
+      nzTitle: 'Confirm Delete',
+      nzContent: `Delete plan group #${this.planGroup().id} ?`,
+      nzOkText: 'Delete',
       nzOkDanger: true,
       nzOnOk: () => {
         this.featureRemove.emit(this.planGroup().id);

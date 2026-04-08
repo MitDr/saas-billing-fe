@@ -87,13 +87,13 @@ export class AuthWebhookEndpointDetail {
     this.webhookEndpointService.update(request, this.webhookEndpoint()?.id!).subscribe({
       next: (response) => {
         this.isSubmitting = false;
-        this.message.success('Update endpoint thành công');
+        this.message.success('Update endpoint successfully');
         // this.router.navigate(['/admin/tables/webhook-endpoints']);
       },
       error: (err) => {
         this.isSubmitting = false;
         console.error('Update endpoint failed:', err);
-        this.message.error('Update endpoint thất bại');
+        this.message.error('Update endpoint failed');
       }
     })
   }

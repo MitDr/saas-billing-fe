@@ -6,7 +6,6 @@ import {AuthPaymentService} from '../../../../../core/service/auth/auth-payment-
 import {NzBreadCrumbComponent, NzBreadCrumbItemComponent} from 'ng-zorro-antd/breadcrumb';
 import {NzPageHeaderComponent} from 'ng-zorro-antd/page-header';
 import {NzSpinComponent} from 'ng-zorro-antd/spin';
-import {PaymentCard} from '../../../../../shell/components/card/payment/payment-card/payment-card';
 import {AuthPaymentCard} from '../../../../../shell/components/card/auth/auth-payment-card/auth-payment-card';
 import {NzModalModule} from 'ng-zorro-antd/modal';
 
@@ -17,7 +16,6 @@ import {NzModalModule} from 'ng-zorro-antd/modal';
     NzBreadCrumbItemComponent,
     NzPageHeaderComponent,
     NzSpinComponent,
-    PaymentCard,
     RouterLink,
     AuthPaymentCard,
     NzModalModule,

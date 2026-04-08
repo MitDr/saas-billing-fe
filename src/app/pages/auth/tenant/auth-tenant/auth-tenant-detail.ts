@@ -151,7 +151,7 @@ export class AuthTenantDetail {
       this.tenantService.createTenant(payload).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Tạo tenant thành công');
+          this.message.success('Create tenant successfully');
           this.tenantForm.reset();
 
           setTimeout(() => {
@@ -161,7 +161,7 @@ export class AuthTenantDetail {
         error: (err) => {
           this.isSubmitting = false;
           console.error('Create tenant failed:', err);
-          this.message.error('Tạo tenant thất bại');
+          this.message.error('Create tenant failed');
         }
       })
     }
@@ -209,9 +209,6 @@ export class AuthTenantDetail {
           this.tenantEditForm.reset();
 
           this.tenant.set(response);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 1000); // optional: delay để user thấy message
         },
         error: (err) => {
           this.isSubmitting = false;

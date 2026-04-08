@@ -70,7 +70,7 @@ export class PlanCreate implements OnInit {
       },
       error: (err) => {
         console.error('Load tenants failed:', err);
-        this.message.error('Không tải được danh sách tenant');
+        this.message.error('Cannot load tenant');
       }
     });
   }
@@ -84,7 +84,7 @@ export class PlanCreate implements OnInit {
       },
       error: (err) => {
         console.error('Load plan groups failed:', err);
-        this.message.error('Không tải được danh sách plan groups');
+        this.message.error('Cannot load plan groups');
       }
     });
   }
@@ -98,7 +98,7 @@ export class PlanCreate implements OnInit {
       },
       error: (err) => {
         console.error('Load features failed:', err);
-        this.message.error('Không tải được danh sách features');
+        this.message.error('Cannot load features');
       }
     });
   }
@@ -112,7 +112,7 @@ export class PlanCreate implements OnInit {
       },
       error: (err) => {
         console.error('Load prices failed:', err);
-        this.message.error('Không tải được danh sách price');
+        this.message.error('Cannot load price');
       }
     });
   }
@@ -146,14 +146,14 @@ export class PlanCreate implements OnInit {
       this.planService.createPlan(payload).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Tạo plan thành công');
+          this.message.success('Create plan successfully');
           this.planForm.reset();
           this.router.navigate(['/admin/tables/plans']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Create plan failed:', err);
-          this.message.error('Tạo plan thất bại');
+          this.message.error('Create plan failed');
         }
       })
     }

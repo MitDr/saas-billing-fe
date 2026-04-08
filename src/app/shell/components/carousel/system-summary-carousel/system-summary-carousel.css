@@ -1,11 +1,11 @@
 :host ::ng-deep nz-carousel {
-  height: auto !important; /* Xóa chiều cao cố định nếu có */
+  height: auto !important; /* Delete chiều cao cố định nếu có */
   overflow: hidden;
 }
 
 :host ::ng-deep .slick-slide {
   height: auto !important; /* Đảm bảo slide không cố định chiều cao */
-  padding: 0 !important; /* Xóa padding thừa */
+  padding: 0 !important; /* Delete padding thừa */
   margin: 0 !important;
 }
 

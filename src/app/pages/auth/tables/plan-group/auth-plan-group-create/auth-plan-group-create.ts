@@ -1,19 +1,11 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {NzModalModule} from 'ng-zorro-antd/modal';
-import {Tenant} from '../../../../../core/interface/entity/tenant';
-import {Plan} from '../../../../../core/interface/entity/plan';
-import {
-  AUTH_PLAN_GROUP_ROUTE_CONSTANT
-} from '../../../../../core/constant/plan-group/plan-group-list-constant';
+import {AUTH_PLAN_GROUP_ROUTE_CONSTANT} from '../../../../../core/constant/plan-group/plan-group-list-constant';
 import {Router} from '@angular/router';
-import {TenantService} from '../../../../../core/service/tenant-service';
-import {PlanService} from '../../../../../core/service/plan-service';
-import {PlanGroupService} from '../../../../../core/service/plan-group-service';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NonNullableFormBuilder, Validators} from '@angular/forms';
 import {AuthPlanGroupService} from '../../../../../core/service/auth/auth-plan-group-service';
 import {AuthPlanService} from '../../../../../core/service/auth/auth-plan-service';
-import {PlanGroupRequest} from '../../../../../core/interface/request/plan-group-request';
 import {AuthPlanGroupRequest} from '../../../../../core/interface/request/auth/auth-plan-group-request';
 import {AuthPlan} from '../../../../../core/interface/entity/auth/auth-plan';
 import {Breadcrumb} from '../../../../../shell/components/generic/breadcrumb/breadcrumb';
@@ -65,7 +57,7 @@ export class AuthPlanGroupCreate implements OnInit {
       },
       error: (err) => {
         console.error('Load tenants failed:', err);
-        this.message.error('Không tải được danh sách tenant');
+        this.message.error('Cannot load tenant');
       }
     });
   }
@@ -93,14 +85,14 @@ export class AuthPlanGroupCreate implements OnInit {
       this.planGroupService.createPlanGroup(payload).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Tạo invoice thành công');
+          this.message.success('Create invoice successfully');
           this.planGroupForm.reset();
           this.router.navigate(['/app/tables/plan-groups']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Create plan group failed:', err);
-          this.message.error('Tạo plan group thất bại');
+          this.message.error('Create plan group failed');
         }
       })
     }

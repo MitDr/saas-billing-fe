@@ -18,7 +18,7 @@ export class PaymentService {
     return this.api.post<Payment>('/admin/payments', paymentRequest).pipe(
       catchError(error => {
         console.error('Create payment error:', error);
-        return throwError(() => new Error('Tạo payment thất bại'));
+        return throwError(() => new Error('Create payment failed'));
       })
     );
   }
@@ -58,7 +58,7 @@ export class PaymentService {
     return this.api.get<Payment>(`/admin/payments/${id}`).pipe(
       catchError(error => {
         console.error('Get payment error:', error);
-        return throwError(() => new Error('Không thể lấy payment'));
+        return throwError(() => new Error('Cannot get payment'));
       })
     );
   }
@@ -67,7 +67,7 @@ export class PaymentService {
     return this.api.put<Payment>(`/admin/payments/${id}`, updatedPayment).pipe(
       catchError(error => {
         console.error('Update payment error:', error);
-        return throwError(() => new Error('Cập nhật payment thất bại'));
+        return throwError(() => new Error('Update payment failed'));
       })
     );
   }
@@ -76,7 +76,7 @@ export class PaymentService {
     return this.api.deletes<void>(`/admin/payments`, ids).pipe(
       catchError(error => {
         console.error('Bulk delete error:', error);
-        return throwError(() => new Error('Xóa hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk delete failed'));
       })
     );
   }
@@ -85,7 +85,7 @@ export class PaymentService {
     return this.api.post<void>(`/admin/payments/softDelete`, softDeleteRequest).pipe(
       catchError(error => {
         console.error('Bulk soft delete error:', error);
-        return throwError(() => new Error('Xóa mềm hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk soft delete failed'));
       })
     );
   }
@@ -94,7 +94,7 @@ export class PaymentService {
     return this.api.delete<void>(`/admin/payments/${id}`).pipe(
       catchError(error => {
         console.error('Delete payment error:', error);
-        return throwError(() => new Error('Xóa payment thất bại'));
+        return throwError(() => new Error('Delete payment failed'));
       })
     );
   }

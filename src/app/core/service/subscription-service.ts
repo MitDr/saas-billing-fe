@@ -18,7 +18,7 @@ export class SubscriptionService {
     return this.api.post<Subscription>('/admin/subscriptions', request).pipe(
       catchError(error => {
         console.error('Create subscription error:', error);
-        return throwError(() => new Error('Tạo subscription thất bại'));
+        return throwError(() => new Error('Create subscription failed'));
       })
     );
   }
@@ -90,7 +90,7 @@ export class SubscriptionService {
     return this.api.get<Subscription>(`/admin/subscriptions/${id}`).pipe(
       catchError(error => {
         console.error('Get subscription error:', error);
-        return throwError(() => new Error('Không thể lấy subscription'));
+        return throwError(() => new Error('Cannot get subscription'));
       })
     );
   }
@@ -99,7 +99,7 @@ export class SubscriptionService {
     return this.api.put<Subscription>(`/admin/subscriptions/${id}`, updatedSubscription).pipe(
       catchError(error => {
         console.error('Update subscription error:', error);
-        return throwError(() => new Error('Cập nhật subscription thất bại'));
+        return throwError(() => new Error('Update subscription failed'));
       })
     );
   }
@@ -108,7 +108,7 @@ export class SubscriptionService {
     return this.api.deletes<void>(`/admin/subscriptions`, ids).pipe(
       catchError(error => {
         console.error('Bulk delete error:', error);
-        return throwError(() => new Error('Xóa hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk delete failed'));
       })
     );
   }
@@ -117,7 +117,7 @@ export class SubscriptionService {
     return this.api.post<void>(`/admin/subscriptions/softDelete`, softDeleteRequest).pipe(
       catchError(error => {
         console.error('Bulk soft delete error:', error);
-        return throwError(() => new Error('Xóa mềm hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk soft delete failed'));
       })
     );
   }
@@ -126,7 +126,7 @@ export class SubscriptionService {
     return this.api.delete<void>(`/admin/subscriptions/${id}`).pipe(
       catchError(error => {
         console.error('Delete subscription error:', error);
-        return throwError(() => new Error('Xóa subscription thất bại'));
+        return throwError(() => new Error('Delete subscription failed'));
       })
     );
   }

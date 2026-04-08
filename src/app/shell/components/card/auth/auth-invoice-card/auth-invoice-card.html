@@ -31,7 +31,7 @@
           </div>
         </nz-descriptions-item>
         <nz-descriptions-item nzTitle="Invoice Amount">
-          {{ invoice().amount }}
+          {{ formatAmount() }}
         </nz-descriptions-item>
         <nz-descriptions-item nzTitle="Currency">
           <div class="flex items-center gap-3">
@@ -85,7 +85,7 @@
           {{ invoice().billingPeriodEnd }}
         </nz-descriptions-item>
         <nz-descriptions-item nzTitle="Amount USD">
-          {{ invoice().amountUsd }}
+          {{ formatAmountUSD() }}
         </nz-descriptions-item>
         <nz-descriptions-item nzTitle="Exchange Rate">
           {{ invoice().exchangeRate }}
@@ -101,13 +101,6 @@
         </nz-descriptions-item>
       </nz-descriptions>
       <!-- Actions -->
-      <div class="mt-8 flex flex-wrap gap-3">
-        <button (click)="onDelete()" class="!inline-flex !items-center"
-                nz-button nzDanger>
-          <span nz-icon nzType="delete"></span>
-          Delete Tenant
-        </button>
-      </div>
       @if (invoice().subscription) {
         <div class="mt-10">
           <h3 class="text-xl font-semibold mb-6 flex items-center gap-3">
@@ -115,7 +108,8 @@
             Subscription of this Invoice (#{{ invoice().subscription.id }})
           </h3>
           <div class="grid grid-cols-1 gap-6">
-            <app-auth-subscription-dto-card [subscription]="invoice().subscription"></app-auth-subscription-dto-card>
+            <app-auth-subscription-dto-card [subscription]="invoice().subscription"
+                                            [numberOfColumn]="1"></app-auth-subscription-dto-card>
           </div>
         </div>
       } @else {
@@ -131,7 +125,8 @@
             Subscriber of this Invoice ({{ invoice().subscriber.name }})
           </h3>
           <div class="grid grid-cols-1 gap-6">
-            <app-auth-subscriber-dto-card [subscriber]="invoice().subscriber"></app-auth-subscriber-dto-card>
+            <app-auth-subscriber-dto-card [subscriber]="invoice().subscriber"
+                                          [numberOfColumn]="1"></app-auth-subscriber-dto-card>
           </div>
         </div>
       } @else {

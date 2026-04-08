@@ -30,9 +30,9 @@ export class UserDtoCard {
 
   onRemoveUser() {
     this.modalService.confirm({
-      nzTitle: 'Xác nhận xóa',
-      nzContent: `Xóa Entitlement #${this.user().id} ?`,
-      nzOkText: 'Xóa',
+      nzTitle: 'Confirm Delete',
+      nzContent: `Delete Entitlement #${this.user().id} ?`,
+      nzOkText: 'Delete',
       nzOkDanger: true,
       nzOnOk: () => {
         this.userRemove.emit(this.user().id);

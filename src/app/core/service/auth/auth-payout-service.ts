@@ -1,6 +1,5 @@
 import {inject, Injectable} from '@angular/core';
 import {ApiClientService} from '../api-client-service';
-import {PayoutRequest} from '../../interface/request/payout-request';
 import {Observable, throwError} from 'rxjs';
 import {Payout} from '../../interface/entity/payout';
 import {catchError} from 'rxjs/operators';
@@ -12,14 +11,14 @@ import {AuthPayout} from '../../interface/entity/auth/auth-payout';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthPayoutService{
+export class AuthPayoutService {
   api = inject(ApiClientService);
 
   createPayout(payload: AuthPayoutRequest): Observable<AuthPayout> {
     return this.api.post<AuthPayout>('/auth/payouts', payload).pipe(
       catchError(error => {
         console.error('Create payout error:', error);
-        return throwError(() => new Error('Không thể tạo payout'));
+        return throwError(() => new Error('Cannot Create payout'));
       })
     );
   }
@@ -81,7 +80,7 @@ export class AuthPayoutService{
     return this.api.get<AuthPayout>(`/auth/payouts/${id}`).pipe(
       catchError(error => {
         console.error('Get payout error:', error);
-        return throwError(() => new Error('Không thể lấy payout'));
+        return throwError(() => new Error('Cannot get payout'));
       })
     );
   }
@@ -90,7 +89,7 @@ export class AuthPayoutService{
     return this.api.put<Payout>(`/auth/payouts/${id}`, updatedPayout).pipe(
       catchError(error => {
         console.error('Update payout error:', error);
-        return throwError(() => new Error('Cập nhật payout thất bại'));
+        return throwError(() => new Error('Update payout failed'));
       })
     );
   }
@@ -99,7 +98,7 @@ export class AuthPayoutService{
     return this.api.deletes<void>(`/auth/payouts`, ids).pipe(
       catchError(error => {
         console.error('Bulk delete error:', error);
-        return throwError(() => new Error('Xóa hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk delete failed'));
       })
     );
   }
@@ -108,7 +107,7 @@ export class AuthPayoutService{
     return this.api.delete<void>(`/auth/payouts/${id}`).pipe(
       catchError(error => {
         console.error('Delete payout error:', error);
-        return throwError(() => new Error('Xóa payout thất bại'));
+        return throwError(() => new Error('Delete payout failed'));
       })
     );
   }

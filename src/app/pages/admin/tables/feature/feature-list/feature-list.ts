@@ -106,7 +106,7 @@ export class FeatureList extends GenericListComponent<Feature, FeatureRequest> {
         this.loading.set(false);
       },
       error: () => {
-        this.message.error('Không thể tải danh sách prices');
+        this.message.error('Cannot load prices');
         this.loading.set(false);
       }
     });

@@ -54,14 +54,14 @@
   (nzOnCancel)="isTenantModalOpen.set(false)"
   (nzOnOk)="isTenantModalOpen.set(false)"
   [nzVisible]="isTenantModalOpen()"
-  nzCancelText="Đóng"
-  nzOkText="Xác nhận"
-  nzTitle="Chọn Tenant"
+  nzCancelText="Close"
+  nzOkText="Confirm"
+  nzTitle="Choose Tenant"
 >
   <ng-template nzModalContent>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
       @if (availableTenants().length === 0) {
-        <p class="text-center text-gray-500 py-10">Không có tenant nào để chọn</p>
+        <p class="text-center text-gray-500 py-10">There are no tenants to choose</p>
       } @else {
         @for (tenant of availableTenants(); track tenant.id) {
           <nz-card nzHoverable (click)="selectTenant(tenant)">

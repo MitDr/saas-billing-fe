@@ -26,10 +26,10 @@
       <input autocomplete="new-password" formControlName="checkPassword" id="checkPassword" nz-input type="password"/>
       <ng-template #checkPasswordErrorTpl let-control>
         @if (control.errors?.['required']) {
-          Vui lòng xác nhận password!
+          Please confirm password!
         }
         @if (control.errors?.['confirm']) {
-          Hai password không khớp nhau!
+          The passwords do not match!
         }
       </ng-template>
     </nz-form-control>
@@ -38,7 +38,7 @@
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="role" nzRequired>Role</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Role là bắt buộc!">
-      <nz-select formControlName="role" nzPlaceHolder="Chọn role">
+      <nz-select formControlName="role" nzPlaceHolder="Choose role">
         @for (opt of options; track opt.value) {
           <nz-option [nzLabel]="opt.label" [nzValue]="opt.value"></nz-option>
         }

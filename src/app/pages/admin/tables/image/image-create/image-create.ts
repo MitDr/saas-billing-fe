@@ -54,7 +54,7 @@ export class ImageCreate implements OnInit {
       },
       error: (err) => {
         console.error('Load tenants failed:', err);
-        this.message.error('Không tải được danh sách tenant');
+        this.message.error('Cannot load tenant');
       }
     });
   }
@@ -72,14 +72,14 @@ export class ImageCreate implements OnInit {
       this.imageService.createImage(payload).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Tạo image thành công');
+          this.message.success('Create image successfully');
           this.imageForm.reset();
           this.router.navigate(['/admin/tables/images']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Create image failed:', err);
-          this.message.error('Tạo image thất bại');
+          this.message.error('Create image failed');
         }
       })
     }

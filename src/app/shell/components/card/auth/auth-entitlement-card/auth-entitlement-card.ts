@@ -1,5 +1,4 @@
 import {Component, inject, input, output} from '@angular/core';
-import {Entitlement} from '../../../../../core/interface/entity/entitlement';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {FeatureDtoCard} from '../../DTO/feature-dto-card/feature-dto-card';
@@ -44,9 +43,9 @@ export class AuthEntitlementCard {
 
   onDelete() {
     this.modalService.confirm({
-      nzTitle: 'Xác nhận xóa',
-      nzContent: `Xóa Entitlement #${this.entitlement().id} ?`,
-      nzOkText: 'Xóa',
+      nzTitle: 'Confirm delete',
+      nzContent: `Delete Entitlement #${this.entitlement().id} ?`,
+      nzOkText: 'Delete',
       nzOkDanger: true,
       nzOnOk: () => {
         this.deleteButton.emit(this.entitlement().id);

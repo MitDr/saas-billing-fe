@@ -74,7 +74,7 @@ export class ApiClientService {
           return this.handle401Error<T>(method, endpoint, body, params);
         }
 
-        this.message.error(err.error?.message || 'Có lỗi xảy ra');
+        this.message.error(err.error?.message || 'Something has happened');
 
         return throwError(() => err);
       })

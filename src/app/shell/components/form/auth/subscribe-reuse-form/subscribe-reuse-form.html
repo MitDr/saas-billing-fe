@@ -8,7 +8,8 @@
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="numberOfCycle" nzRequired>Num of cycle</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Number of cycle is required">
-      <input formControlName="numberOfCycle" id="numberOfCycle" nz-input placeholder="Number of cycle..." type="number"/>
+      <input formControlName="numberOfCycle" id="numberOfCycle" nz-input placeholder="Number of cycle..."
+             type="number"/>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
@@ -108,14 +109,14 @@
   (nzOnCancel)="isPriceModalOpen.set(false)"
   (nzOnOk)="isPriceModalOpen.set(false)"
   [nzVisible]="isPriceModalOpen()"
-  nzCancelText="Đóng"
-  nzOkText="Xác nhận"
-  nzTitle="Chọn Price"
+  nzCancelText="Close"
+  nzOkText="Confirm"
+  nzTitle="Choose Price"
 >
   <ng-template nzModalContent>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
       @if (availablePrice().length === 0) {
-        <p class="text-center text-gray-500 py-10">Không có price nào để chọn</p>
+        <p class="text-center text-gray-500 py-10">There are no prices to choose</p>
       } @else {
         @for (price of availablePrice(); track price.id) {
           <nz-card nzHoverable (click)="selectPrice(price)">
@@ -133,14 +134,14 @@
   (nzOnCancel)="isSubscriberModalOpen.set(false)"
   (nzOnOk)="isSubscriberModalOpen.set(false)"
   [nzVisible]="isSubscriberModalOpen()"
-  nzCancelText="Đóng"
-  nzOkText="Xác nhận"
-  nzTitle="Chọn Subscriber"
+  nzCancelText="Close"
+  nzOkText="Confirm"
+  nzTitle="Choose Subscriber"
 >
   <ng-template nzModalContent>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
       @if (availableSubscriber().length === 0) {
-        <p class="text-center text-gray-500 py-10">Không có subscriber nào để chọn</p>
+        <p class="text-center text-gray-500 py-10">There are no subscribers to choose</p>
       } @else {
         @for (sub of availableSubscriber(); track sub.id) {
           <nz-card nzHoverable (click)="selectSubscriber(sub)">

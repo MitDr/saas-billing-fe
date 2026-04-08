@@ -13,6 +13,7 @@
     @if (subscriber(); as sub) {
       <app-auth-subscriber-card
         [subscriber]="sub"
+        (updateSubscriber)="onUpdateSubscriber($event)"
         (load)="loadSubscriber($event)"
         (deleteButton)="onDelete($event)"
         (portal)="onOpenPortal($event)">

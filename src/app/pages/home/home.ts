@@ -1,10 +1,9 @@
-import {Routes} from '@angular/router';
-import {Welcome} from '../welcome/welcome';
 import {Component} from '@angular/core';
 import {NzHeaderComponent} from 'ng-zorro-antd/layout';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzCardComponent, NzCardMetaComponent} from 'ng-zorro-antd/card';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -13,7 +12,8 @@ import {NzCardComponent, NzCardMetaComponent} from 'ng-zorro-antd/card';
     NzButtonComponent,
     NzIconDirective,
     NzCardMetaComponent,
-    NzCardComponent
+    NzCardComponent,
+    RouterLink
   ],
   templateUrl: './home.html',
   styleUrl: './home.css'

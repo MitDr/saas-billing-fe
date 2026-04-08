@@ -110,7 +110,7 @@ export class SubscribeReuseForm {
           control.updateValueAndValidity({onlySelf: true});
         }
       });
-      this.message.warning('Vui lòng kiểm tra lại thông tin!');
+      this.message.warning('Please double-check the information!');
     }
   }
 
@@ -161,12 +161,12 @@ export class SubscribeReuseForm {
         const prices = response.content || []
         this.availablePrice.set(prices);
         if (prices.length === 0) {
-          this.message.info('Subscriber này không có Price nào có thể subscribe');
+          this.message.info('This subscriber does not have any subscriptions subscribe');
         }
       },
       error: (err) => {
         console.error('Load Price failed:', err);
-        this.message.error('Không tải được danh sách price');
+        this.message.error('Cannot load price');
       }
     })
   }

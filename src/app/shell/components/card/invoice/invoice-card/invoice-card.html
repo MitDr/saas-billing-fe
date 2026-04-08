@@ -36,7 +36,7 @@
           </div>
         </nz-descriptions-item>
         <nz-descriptions-item nzTitle="Invoice Amount">
-          {{ invoice().amount }}
+          {{ formatAmount() }}
         </nz-descriptions-item>
         <nz-descriptions-item nzTitle="Currency">
           <div class="flex items-center gap-3">
@@ -90,7 +90,7 @@
           {{ invoice().billingPeriodEnd }}
         </nz-descriptions-item>
         <nz-descriptions-item nzTitle="Amount USD">
-          {{ invoice().amountUsd }}
+          {{ formatAmountUsd() }}
         </nz-descriptions-item>
         <nz-descriptions-item nzTitle="Exchange Rate">
           {{ invoice().exchangeRate }}

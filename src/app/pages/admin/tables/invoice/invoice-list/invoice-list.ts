@@ -46,7 +46,7 @@ export class InvoiceList extends GenericListComponent<Invoice, InvoiceRequest> {
     return [
       {key: 'id', title: 'Id', editable: false, type: 'text'},
       {key: 'invoiceNumber', title: 'Number', editable: false, type: "text", formatUUID: true},
-      {key: 'amount', title: 'Amount', editable: true, type: "text"},
+      {key: 'amount', title: 'Amount', editable: true, type: "price"},
       {key: 'currency', title: 'Currency', editable: true, type: 'select', options: CURRENCYOPTION},
       {key: 'status', title: 'Status', editable: true, type: 'select', options: INVOICESTATUSOPTION},
       {key: 'paidDate', title: 'Paid Date', editable: true, type: 'date-time', dateFormat: 'dd-MM-yyyy'},
@@ -109,7 +109,7 @@ export class InvoiceList extends GenericListComponent<Invoice, InvoiceRequest> {
         this.loading.set(false);
       },
       error: () => {
-        this.message.error('Không thể tải danh sách invoice');
+        this.message.error('Cannot load invoice');
         this.loading.set(false);
       }
     });

@@ -18,7 +18,7 @@ export class SubscriberService {
     return this.api.post<Subscriber>('/admin/subscribers', request).pipe(
       catchError(error => {
         console.error('Create subscriber error:', error);
-        return throwError(() => new Error('Tạo subscriber thất bại'));
+        return throwError(() => new Error('Create subscriber failed'));
       })
     );
   }
@@ -90,7 +90,7 @@ export class SubscriberService {
     return this.api.get<Subscriber>(`/admin/subscribers/${id}`).pipe(
       catchError(error => {
         console.error('Get subscriber error:', error);
-        return throwError(() => new Error('Không thể lấy subscriber'));
+        return throwError(() => new Error('Cannot get subscriber'));
       })
     );
   }
@@ -99,7 +99,7 @@ export class SubscriberService {
     return this.api.put<Subscriber>(`/admin/subscribers/${id}`, updatedSubscriber).pipe(
       catchError(error => {
         console.error('Update subscriber error:', error);
-        return throwError(() => new Error('Cập nhật subscriber thất bại'));
+        return throwError(() => new Error('Update subscriber failed'));
       })
     );
   }
@@ -108,7 +108,7 @@ export class SubscriberService {
     return this.api.deletes<void>(`/admin/subscribers`, ids).pipe(
       catchError(error => {
         console.error('Bulk delete error:', error);
-        return throwError(() => new Error('Xóa hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk delete failed'));
       })
     );
   }
@@ -117,7 +117,7 @@ export class SubscriberService {
     return this.api.post<void>(`/admin/subscribers/softDelete`, softDeleteRequest).pipe(
       catchError(error => {
         console.error('Bulk soft delete error:', error);
-        return throwError(() => new Error('Xóa mềm hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk soft delete failed'));
       })
     );
   }
@@ -126,7 +126,7 @@ export class SubscriberService {
     return this.api.delete<void>(`/admin/subscribers/${id}`).pipe(
       catchError(error => {
         console.error('Delete subscriber error:', error);
-        return throwError(() => new Error('Xóa subscriber thất bại'));
+        return throwError(() => new Error('Delete subscriber failed'));
       })
     );
   }

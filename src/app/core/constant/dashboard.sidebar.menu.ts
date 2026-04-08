@@ -1,6 +1,6 @@
 import {MenuItem} from '../interface/MenuItem';
 
-export const ADMIN_SIDEBAR_MENU: MenuItem[] =[
+export const ADMIN_SIDEBAR_MENU: MenuItem[] = [
   {
     title: 'Dashboard',
     icon: 'dashboard',
@@ -108,7 +108,7 @@ export const APP_MENU: MenuItem[] = [
   },
   {
     title: 'Check',
-    icon: 'container',
+    icon: 'check-circle',
     path: '/app/entitlement-check',
   },
   {

@@ -1,18 +1,12 @@
 import {Component, inject, signal} from '@angular/core';
 import {ListData} from '../../../../../core/interface/list-data';
-import {Invoice} from '../../../../../core/interface/entity/invoice';
-import {
-  AUTH_INVOICE_ROUTE_CONSTANT,
-} from '../../../../../core/constant/invoice/invoice-list-constant';
-import {InvoiceService} from '../../../../../core/service/invoice-service';
+import {AUTH_INVOICE_ROUTE_CONSTANT,} from '../../../../../core/constant/invoice/invoice-list-constant';
 import {AuthInvoice} from '../../../../../core/interface/entity/auth/auth-invoice';
 import {AuthInvoiceService} from '../../../../../core/service/auth/auth-invoice-service';
 import {AuthGenericListComponent} from '../../../../../core/generic/base-auth-list-component';
 import {AuthInvoiceRequest} from '../../../../../core/interface/request/auth/auth-invoice-request';
 import {ColumnConfig} from '../../../../../core/interface/column-config';
-import {SOFTDELETEOPTIONS} from '../../../../admin/tables/tenant/tenant-list/tenant-list';
 import {CURRENCYOPTION, INVOICESTATUSOPTION} from '../../../../admin/tables/invoice/invoice-list/invoice-list';
-import {InvoiceRequest} from '../../../../../core/interface/request/invoice-request';
 import {EditableDataTable} from '../../../../../shell/components/generic/editable-data-table/editable-data-table';
 import {FormsModule} from '@angular/forms';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
@@ -35,7 +29,7 @@ import {RouterLink} from '@angular/router';
   templateUrl: './auth-invoice-list.html',
   styleUrl: './auth-invoice-list.css',
 })
-export class AuthInvoiceList extends AuthGenericListComponent<AuthInvoice, AuthInvoiceRequest>{
+export class AuthInvoiceList extends AuthGenericListComponent<AuthInvoice, AuthInvoiceRequest> {
   invoicePage = signal<ListData<AuthInvoice> | null>(null);
   checked = false;
   createRoute = '/app/tables/invoices/create'
@@ -50,12 +44,18 @@ export class AuthInvoiceList extends AuthGenericListComponent<AuthInvoice, AuthI
     return [
       {key: 'id', title: 'Id', editable: false, type: 'text'},
       {key: 'invoiceNumber', title: 'Number', editable: false, type: "text", formatUUID: true},
-      {key: 'amount', title: 'Amount', editable: true, type: "text"},
-      {key: 'currency', title: 'Currency', editable: true, type: 'select', options: CURRENCYOPTION},
-      {key: 'status', title: 'Status', editable: true, type: 'select', options: INVOICESTATUSOPTION},
-      {key: 'paidDate', title: 'Paid Date', editable: true, type: 'date-time', dateFormat: 'dd-MM-yyyy'},
-      {key: 'billingPeriodEnd', title: 'Period End', editable: true, type: "date-time", dateFormat: 'dd-MM-yyyy'},
-      {key: 'billingPeriodStart', title: 'Period Start', editable: true, type: 'date-time', dateFormat: 'dd-MM-yyyy'},
+      {key: 'amount', title: 'Amount', editable: false, type: "price"},
+      {key: 'currency', title: 'Currency', editable: false, type: 'select', options: CURRENCYOPTION},
+      {key: 'status', title: 'Status', editable: false, type: 'select', options: INVOICESTATUSOPTION},
+      {key: 'paidDate', title: 'Paid Date', editable: false, type: 'date-time', dateFormat: 'dd-MM-yyyy'},
+      {key: 'billingPeriodEnd', title: 'Period End', editable: false, type: "date-time", dateFormat: 'dd-MM-yyyy'},
+      {
+        key: 'billingPeriodStart',
+        title: 'Period Start',
+        editable: true,
+        type: 'date-time',
+        dateFormat: 'dd-MM-yyyy'
+      },
       // {key: 'amountUsd', title: 'Amount USD', editable: true, type: "text"},
       // {key: 'exchangeRate', title: 'Exchange Rate', editable: true, type: 'text'},
     ];
@@ -96,7 +96,7 @@ export class AuthInvoiceList extends AuthGenericListComponent<AuthInvoice, AuthI
         this.loading.set(false);
       },
       error: () => {
-        this.message.error('Không thể tải danh sách invoice');
+        this.message.error('Cannot load invoice');
         this.loading.set(false);
       }
     });

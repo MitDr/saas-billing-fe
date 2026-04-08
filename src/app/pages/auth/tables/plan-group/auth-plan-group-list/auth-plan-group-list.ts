@@ -3,15 +3,9 @@ import {AuthGenericListComponent} from '../../../../../core/generic/base-auth-li
 import {AuthPlanGroup} from '../../../../../core/interface/entity/auth/auth-plan-group';
 import {AuthPlanGroupRequest} from '../../../../../core/interface/request/auth/auth-plan-group-request';
 import {ListData} from '../../../../../core/interface/list-data';
-import {PlanGroup} from '../../../../../core/interface/entity/plan-group';
-import {
-  AUTH_PLAN_GROUP_ROUTE_CONSTANT,
-  PLAN_GROUP_ROUTE_CONSTANT
-} from '../../../../../core/constant/plan-group/plan-group-list-constant';
-import {PlanGroupService} from '../../../../../core/service/plan-group-service';
+import {AUTH_PLAN_GROUP_ROUTE_CONSTANT} from '../../../../../core/constant/plan-group/plan-group-list-constant';
 import {AuthPlanGroupService} from '../../../../../core/service/auth/auth-plan-group-service';
 import {ColumnConfig} from '../../../../../core/interface/column-config';
-import {PlanGroupRequest} from '../../../../../core/interface/request/plan-group-request';
 import {EditableDataTable} from '../../../../../shell/components/generic/editable-data-table/editable-data-table';
 import {FormsModule} from '@angular/forms';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
@@ -88,7 +82,7 @@ export class AuthPlanGroupList extends AuthGenericListComponent<AuthPlanGroup, A
         this.loading.set(false);
       },
       error: () => {
-        this.message.error('Không thể tải danh sách plan-groups');
+        this.message.error('Cannot get plan-groups');
         this.loading.set(false);
       }
     });

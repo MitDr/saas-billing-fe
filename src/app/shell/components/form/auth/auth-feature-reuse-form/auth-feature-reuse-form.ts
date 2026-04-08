@@ -15,7 +15,7 @@ import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
 import {NzTagComponent} from 'ng-zorro-antd/tag';
 
 @Component({
-  selector: 'app-auth-feature-reuse-form',
+  selector: ' app-auth-feature-reuse-form',
   imports: [
     NzButtonComponent,
     NzCardComponent,
@@ -120,7 +120,7 @@ export class AuthFeatureReuseForm {
           control.updateValueAndValidity({onlySelf: true});
         }
       });
-      this.message.warning('Vui lòng kiểm tra lại thông tin!');
+      this.message.warning('Please double-check the information!');
     }
   }
 }

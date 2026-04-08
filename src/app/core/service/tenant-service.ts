@@ -18,7 +18,7 @@ export class TenantService {
     return this.api.post<Tenant>(`/admin/tenants`, request).pipe(
       catchError(error => {
         console.error('Create tenant error:', error);
-        return throwError(() => new Error('Tạo tenant thất bại'));
+        return throwError(() => new Error('Create tenant failed'));
       })
     );
   }
@@ -61,7 +61,7 @@ export class TenantService {
         }),
         catchError(error => {
           console.error('Get tenants error', error);
-          return throwError(() => new Error('Không thể lấy danh sách tenant'))
+          return throwError(() => new Error('Cannot get danh sách tenant'))
         })
       )
   }
@@ -70,7 +70,7 @@ export class TenantService {
     return this.api.get<Tenant>(`/admin/tenants/${id}`).pipe(
       catchError(error => {
         console.error('Get tenant error:', error);
-        return throwError(() => new Error('Không thể lấy tenant'));
+        return throwError(() => new Error('Cannot get tenant'));
       })
     );
   }
@@ -79,7 +79,7 @@ export class TenantService {
     return this.api.put<Tenant>(`/admin/tenants/${id}`, updateTenant).pipe(
       catchError(error => {
         console.error('Update tenant error:', error);
-        return throwError(() => new Error('Cập nhật tenant thất bại'));
+        return throwError(() => new Error('Update tenant failed'));
       })
     );
   }
@@ -88,7 +88,7 @@ export class TenantService {
     return this.api.delete<void>(`/admin/tenants/${id}`).pipe(
       catchError(error => {
         console.error('delete tenant error:', error);
-        return throwError(() => new Error('Xóa tenant thất bại'));
+        return throwError(() => new Error('Delete tenant failed'));
       })
     )
   }
@@ -98,7 +98,7 @@ export class TenantService {
     return this.api.deletes<void>(`/admin/tenants`, ids).pipe(
       catchError(error => {
         console.error('Bulk delete error:', error);
-        return throwError(() => new Error('Xóa hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk delete failed'));
       })
     );
   }
@@ -107,7 +107,7 @@ export class TenantService {
     return this.api.post<void>(`/admin/tenants/softDelete`, softDeleteRequest).pipe(
       catchError(error => {
         console.error('Bulk soft delete error:', error);
-        return throwError(() => new Error('Xóa mềm hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk soft delete failed'));
       })
     );
   }
@@ -116,7 +116,7 @@ export class TenantService {
     return this.api.post<Tenant>(`/admin/tenants/refresh-api-key/${id}`).pipe(
       catchError(error => {
         console.error('Refresh API key error:', error);
-        return throwError(() => new Error('Refresh API key thất bại'));
+        return throwError(() => new Error('Refresh API key failed'));
       })
     );
   }

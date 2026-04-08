@@ -64,7 +64,7 @@ export class CancelSubscriptionReuseForm {
           control.updateValueAndValidity({onlySelf: true});
         }
       });
-      this.message.warning('Vui lòng kiểm tra lại thông tin!');
+      this.message.warning('Please double-check the information!');
     }
   }
 
@@ -92,12 +92,12 @@ export class CancelSubscriptionReuseForm {
         const subscriptions = response.content || []
         this.availableSubscription.set(subscriptions);
         if (subscriptions.length === 0) {
-          this.message.info('Subscriber này không có subscription nào có thể cancel');
+          this.message.info('This subscriber does not have any subscriptions to cancel');
         }
       },
       error: (err) => {
         console.error('Load cancelable subscriptions failed:', err);
-        this.message.error('Không tải được danh sách subscription');
+        this.message.error('Cannot load subscription');
       }
     });
   }

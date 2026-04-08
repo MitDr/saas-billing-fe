@@ -53,7 +53,6 @@ export class PriceEdit implements OnInit {
   priceForm = this.fb.group({
     price: [null as number | null, [Validators.required]],
     currency: ['', [Validators.required, Validators.pattern('USD|VND')]],
-    scheme: ['', [Validators.required, Validators.pattern('FLAT_RATE|PER_UNIT')]],
     cycle: ['', [Validators.required, Validators.pattern('MONTH|DAY|WEEK|YEAR')]],
     status: ['', [Validators.required, Validators.pattern('ACTIVE|DEACTIVATED|CANCEL')]],
     cycleCount: [null as number | null, Validators.required],
@@ -75,10 +74,15 @@ export class PriceEdit implements OnInit {
     effect(() => {
       const currentPrice = this.price();
       if (currentPrice) {
+        let displayPrice = currentPrice.price;
+
+        if (currentPrice.currency === 'USD' && currentPrice.price != null) {
+          displayPrice = currentPrice.price / 100;
+        }
+
         this.priceForm.patchValue({
-          price: currentPrice?.price!,
+          price: displayPrice,
           currency: currentPrice.currency as 'USD' | 'VND',
-          scheme: currentPrice.scheme as 'FLAT_RATE' | 'PER_UNIT',
           cycle: currentPrice.cycle as 'DAY' | 'WEEK' | 'MONTH' | 'YEAR',
           status: currentPrice.status as 'ACTIVE' | 'DEACTIVATED' | 'CANCEL',
           cycleCount: currentPrice.cycleCount!,
@@ -126,7 +130,7 @@ export class PriceEdit implements OnInit {
       },
       error: (err) => {
         console.error('Load tenants failed:', err);
-        this.message.error('Không tải được danh sách tenant');
+        this.message.error('Cannot load tenant');
       }
     });
   }
@@ -141,7 +145,7 @@ export class PriceEdit implements OnInit {
       },
       error: (err) => {
         console.error('Load tenants failed:', err);
-        this.message.error('Không tải được danh sách tenant');
+        this.message.error('Cannot load tenant');
       }
     });
   }
@@ -170,7 +174,6 @@ export class PriceEdit implements OnInit {
       const payload: PriceRequest = {
         price: this.priceForm.value.price!,
         currency: this.priceForm.value.currency as 'USD' | 'VND',
-        scheme: this.priceForm.value.scheme as 'FLAT_RATE' | 'PER_UNIT',
         cycle: this.priceForm.value.cycle as 'DAY' | 'WEEK' | 'MONTH' | 'YEAR',
         status: this.priceForm.value.status as 'ACTIVE' | 'DEACTIVATED' | 'CANCEL',
         cycleCount: this.priceForm.value.cycleCount!,
@@ -181,6 +184,11 @@ export class PriceEdit implements OnInit {
         tenantId: this.priceForm.value.tenantId!
       }
 
+      if (this.priceForm.value.currency === 'USD' && typeof this.priceForm.value.price === 'number') {
+        const price = Math.round(this.priceForm.value.price * 100);
+        Object.assign(payload, {price})
+      }
+
       const planId = this.priceForm.value.planId! as number;
       if (planId) {
         Object.assign(payload, {planId});
@@ -189,14 +197,14 @@ export class PriceEdit implements OnInit {
       this.priceService.update(payload, this.price()?.id!).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Update price thành công');
+          this.message.success('Update price successfully');
           this.priceForm.reset();
           this.router.navigate(['/admin/tables/prices']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Update price failed:', err);
-          this.message.error('Update price thất bại');
+          this.message.error('Update price failed');
         }
       })
     }

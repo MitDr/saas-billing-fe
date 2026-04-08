@@ -113,7 +113,7 @@
 
   <!--  &lt;!&ndash; Creator: Button mở modal + preview &ndash;&gt;-->
   <!--  <nz-form-item>-->
-  <!--    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Người tạo (Creator)</nz-form-label>-->
+  <!--    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Người Create (Creator)</nz-form-label>-->
   <!--    <nz-form-control [nzSm]="14" [nzXs]="24">-->
   <!--      <button (click)="openCreatorModal()" nz-button nzType="default" type="button">-->
   <!--        <span nz-icon nzType="user-add"></span> Chọn Creator-->
@@ -125,7 +125,7 @@
   <!--            nzTitle="{{ creator.username }}"-->
   <!--            nzDescription="{{ creator.email }} • {{ creator.role || 'User' }}"-->
   <!--          ></nz-card-meta>-->
-  <!--          <button nz-button nzType="link" nzDanger (click)="clearCreator()">Xóa lựa chọn</button>-->
+  <!--          <button nz-button nzType="link" nzDanger (click)="clearCreator()">Delete lựa chọn</button>-->
   <!--        </nz-card>-->
   <!--      } @else {-->
   <!--        <p class="text-gray-500 mt-2">Chưa chọn creator</p>-->
@@ -152,7 +152,7 @@
   <!--          </nz-tag>-->
   <!--        }-->
   <!--        @if (selectedUsers().length === 0) {-->
-  <!--          <p class="text-gray-500">Chưa chọn user nào</p>-->
+  <!--          <p class="text-gray-500">No user is chosen</p>-->
   <!--        }-->
   <!--      </div>-->
   <!--      <p class="text-xs text-gray-500 mt-1">-->
@@ -204,10 +204,10 @@
   <!--            nzType="text"-->
   <!--            nzShape="circle"-->
   <!--            nz-popconfirm-->
-  <!--            nzPopconfirmTitle="Tạo lại API Key mới? Key cũ sẽ vô hiệu hóa."-->
+  <!--            nzPopconfirmTitle="Create lại API Key mới? Key cũ sẽ vô hiệu hóa."-->
   <!--            (nzOnConfirm)="refreshApiKey()"-->
   <!--            nz-tooltip-->
-  <!--            nzTooltipTitle="Tạo lại API Key"-->
+  <!--            nzTooltipTitle="Create lại API Key"-->
   <!--          >-->
   <!--            <span nz-icon nzType="sync" class="text-orange-600"></span>-->
   <!--          </button>-->
@@ -236,14 +236,14 @@
   (nzOnCancel)="isTenantModalOpen.set(false)"
   (nzOnOk)="isTenantModalOpen.set(false)"
   [nzVisible]="isTenantModalOpen()"
-  nzCancelText="Đóng"
-  nzOkText="Xác nhận"
-  nzTitle="Chọn Tenant"
+  nzCancelText="Close"
+  nzOkText="Confirm"
+  nzTitle="Choose Tenant"
 >
   <ng-template nzModalContent>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
       @if (availableTenants().length === 0) {
-        <p class="text-center text-gray-500 py-10">Không có tenant nào để chọn</p>
+        <p class="text-center text-gray-500 py-10">There are no tenants to choose</p>
       } @else {
         @for (tenant of availableTenants(); track tenant.id) {
           <nz-card nzHoverable (click)="selectTenant(tenant)">
@@ -261,14 +261,14 @@
   (nzOnCancel)="isFeatureModalOpen.set(false)"
   (nzOnOk)="isFeatureModalOpen.set(false)"
   [nzVisible]="isFeatureModalOpen()"
-  nzCancelText="Đóng"
-  nzOkText="Xác nhận"
-  nzTitle="Chọn Feature"
+  nzCancelText="Close"
+  nzOkText="Confirm"
+  nzTitle="Choose Features"
 >
   <ng-template nzModalContent>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
       @if (availableFeatures().length === 0) {
-        <p class="text-center text-gray-500 py-10">Không có feature nào để chọn</p>
+        <p class="text-center text-gray-500 py-10">There are no features to choose</p>
       } @else {
         @for (feat of availableFeatures(); track feat.id) {
           <nz-card nzHoverable (click)="selectFeature(feat)">
@@ -286,14 +286,14 @@
   (nzOnCancel)="isSubscriptionModalOpen.set(false)"
   (nzOnOk)="isSubscriptionModalOpen.set(false)"
   [nzVisible]="isSubscriptionModalOpen()"
-  nzCancelText="Đóng"
-  nzOkText="Xác nhận"
-  nzTitle="Chọn Subscription"
+  nzCancelText="Close"
+  nzOkText="Confirm"
+  nzTitle="Choose Subscription"
 >
   <ng-template nzModalContent>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
       @if (availableSubscription().length === 0) {
-        <p class="text-center text-gray-500 py-10">Không có subscription nào để chọn</p>
+        <p class="text-center text-gray-500 py-10">There are no subscriptions to choose</p>
       } @else {
         @for (sub of availableSubscription(); track sub.id) {
           <nz-card nzHoverable (click)="selectSubscription(sub)">
@@ -314,16 +314,16 @@
 <!--  (nzOnCancel)="isUsersModalOpen.set(false)"-->
 <!--  (nzOnOk)="isUsersModalOpen.set(false)"-->
 <!--  [nzVisible]="isUsersModalOpen()"-->
-<!--  nzCancelText="Đóng"-->
-<!--  nzOkText="Xác nhận"-->
-<!--  nzTitle="Chọn Users để Gán"-->
+<!--  nzCancelText="Close"-->
+<!--  nzOkText="Confirm"-->
+<!--  nzTitle="Chọn Users"-->
 <!--&gt;-->
 <!--  <ng-template nzModalContent>-->
 <!--    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto p-4">-->
 <!--      @if (availableUsers().length === 0) {-->
 <!--        <div class="col-span-full text-center py-10 text-gray-500">-->
 <!--          <nz-icon nzType="usergroup-delete" class="text-5xl mb-4"></nz-icon>-->
-<!--          <p class="text-lg">Không có user nào để chọn</p>-->
+<!--          <p class="text-lg">There are no users to choose</p>-->
 <!--          <p class="text-sm mt-2">Có thể chưa có user trong hệ thống hoặc đang tải dữ liệu.</p>-->
 <!--        </div>-->
 <!--      } @else {-->

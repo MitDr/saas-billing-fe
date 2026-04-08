@@ -26,7 +26,7 @@ import {PAYMENT_ROUTE_CONSTANT} from '../../../../../core/constant/payment/payme
   templateUrl: './payment-create.html',
   styleUrl: './payment-create.css',
 })
-export class PaymentCreate implements OnInit{
+export class PaymentCreate implements OnInit {
   availableTenant = signal<Tenant[]>([]);
   availableInvoice = signal<Invoice[]>([]);
   route = PAYMENT_ROUTE_CONSTANT;
@@ -66,7 +66,7 @@ export class PaymentCreate implements OnInit{
       },
       error: (err) => {
         console.error('Load tenants failed:', err);
-        this.message.error('Không tải được danh sách tenant');
+        this.message.error('Cannot load tenant');
       }
     });
   }
@@ -81,7 +81,7 @@ export class PaymentCreate implements OnInit{
       },
       error: (err) => {
         console.error('Load invoices failed:', err);
-        this.message.error('Không tải được danh sách invoices');
+        this.message.error('Cannot load invoices');
       }
     });
   }
@@ -131,6 +131,11 @@ export class PaymentCreate implements OnInit{
         const paymentMethod = this.paymentForm.value.invoiceId as number;
         Object.assign(payload, {paymentMethod})
       }
+
+      if (this.paymentForm.value.currency === 'USD' && typeof this.paymentForm.value.amount === 'number') {
+        const amount = Math.round(this.paymentForm.value.amount * 100);
+        Object.assign(payload, {amount})
+      }
       if (Object.keys(metadataObject).length === 0) {
         delete payload.metadata;
       }
@@ -146,14 +151,14 @@ export class PaymentCreate implements OnInit{
       this.paymentService.createPayment(payload).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Tạo payment thành công');
+          this.message.success('Create payment successfully');
           this.paymentForm.reset();
           this.router.navigate(['/admin/tables/payments']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Create payment failed:', err);
-          this.message.error('Tạo payment thất bại');
+          this.message.error('Create payment failed');
         }
       })
     }

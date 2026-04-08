@@ -18,5 +18,4 @@ import {NzTagComponent} from 'ng-zorro-antd/tag';
 export class SubscriberDtoCard {
   subscriber = input.required<SubscriberDTO>();
   numberOfColumn = input<number>(2);
-  
 }

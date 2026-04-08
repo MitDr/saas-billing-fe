@@ -60,7 +60,7 @@ export class ApiPortalService {
 
       catchError(err => {
 
-        this.message.error(err.error?.message || 'Có lỗi xảy ra');
+        this.message.error(err.error?.message || 'Something has happened');
 
         return throwError(() => err);
       })

@@ -32,9 +32,9 @@ export class ImageCard {
 
   onDelete() {
     this.modalService.confirm({
-      nzTitle: 'Xác nhận xóa',
-      nzContent: `Xóa Image #${this.image().id} ?`,
-      nzOkText: 'Xóa',
+      nzTitle: 'Confirm Delete',
+      nzContent: `Delete Image #${this.image().id} ?`,
+      nzOkText: 'Delete',
       nzOkDanger: true,
       nzOnOk: () => {
         this.deleteButton.emit(this.image().id);

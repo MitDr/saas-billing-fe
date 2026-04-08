@@ -1,18 +1,12 @@
 import {Component, inject, Signal, signal} from '@angular/core';
 import {ListData} from '../../../../../core/interface/list-data';
-import {Payout} from '../../../../../core/interface/entity/payout';
 import {AuthPayout} from '../../../../../core/interface/entity/auth/auth-payout';
-import {
-  AUTH_PAYOUT_ROUTE_CONSTANT,
-  PAYOUT_ROUTE_CONSTANT
-} from '../../../../../core/constant/payout/payout-list-constant';
-import {PayoutService} from '../../../../../core/service/payout-service';
+import {AUTH_PAYOUT_ROUTE_CONSTANT} from '../../../../../core/constant/payout/payout-list-constant';
 import {AuthPayoutService} from '../../../../../core/service/auth/auth-payout-service';
 import {ColumnConfig} from '../../../../../core/interface/column-config';
 import {CURRENCYOPTIONS} from '../../../../admin/tables/price/price-list/price-list';
 import {PAYOUTSTATUSOPTION} from '../../../../admin/tables/payout/payout-list/payout-list';
 import {AuthGenericListComponent} from '../../../../../core/generic/base-auth-list-component';
-import {PayoutRequest} from '../../../../../core/interface/request/payout-request';
 import {AuthPayoutRequest} from '../../../../../core/interface/request/auth/auth-payout-request';
 import {EditableDataTable} from '../../../../../shell/components/generic/editable-data-table/editable-data-table';
 import {FormsModule, NonNullableFormBuilder, Validators} from '@angular/forms';
@@ -52,9 +46,9 @@ export class AuthPayoutList extends AuthGenericListComponent<AuthPayout, AuthPay
   checked = false;
   createRoute = '/app/tables/payouts/create'
   payoutListRouting = AUTH_PAYOUT_ROUTE_CONSTANT;
-  private payoutService = inject(AuthPayoutService)
   isCreateModalOpen = signal(false);
   isSubmitting = false;
+  private payoutService = inject(AuthPayoutService)
   private fb = inject(NonNullableFormBuilder)
   payoutForm = this.fb.group({
     amount: [null, [Validators.required]],
@@ -94,43 +88,16 @@ export class AuthPayoutList extends AuthGenericListComponent<AuthPayout, AuthPay
     }
   }
 
-  protected loadData(
-    page: number,
-    size: number,
-    search?: string,
-    sort?: string
-  ): void {
-    this.loading.set(true);
-    this.payoutService.getPayouts(page, size, search).subscribe({
-      next: (response) => {
-        this.payoutPage.set(response);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.message.error('Không thể tải danh sách payouts');
-        this.loading.set(false);
-      }
-    });
-  }
-
-  protected mapToUpdatePayload(updatePayout: AuthPayout): AuthPayoutRequest {
-    const result: AuthPayoutRequest = {
-      amount: updatePayout.amount,
-      currency: updatePayout.currency,
-    }
-    return result;
-  }
-
   openCreateModal() {
     this.isCreateModalOpen.set(true);
   }
 
-  onConfirmModal(){
+  onConfirmModal() {
     this.isCreateModalOpen.set(false);
     this.reloadData()
   }
 
-  onCloseModal(){
+  onCloseModal() {
     this.isCreateModalOpen.set(false);
   }
 
@@ -147,16 +114,43 @@ export class AuthPayoutList extends AuthGenericListComponent<AuthPayout, AuthPay
       this.payoutService.createPayout(payload).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Tạo payout thành công');
+          this.message.success('Create payout successfully');
           this.payoutForm.reset();
           // this.router.navigate(['/admin/tables/payouts']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Create payout failed:', err);
-          this.message.error('Tạo payout thất bại');
+          this.message.error('Create payout failed');
         }
       })
     }
+  }
+
+  protected loadData(
+    page: number,
+    size: number,
+    search?: string,
+    sort?: string
+  ): void {
+    this.loading.set(true);
+    this.payoutService.getPayouts(page, size, search).subscribe({
+      next: (response) => {
+        this.payoutPage.set(response);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.message.error('Cannot load payouts');
+        this.loading.set(false);
+      }
+    });
+  }
+
+  protected mapToUpdatePayload(updatePayout: AuthPayout): AuthPayoutRequest {
+    const result: AuthPayoutRequest = {
+      amount: updatePayout.amount,
+      currency: updatePayout.currency,
+    }
+    return result;
   }
 }

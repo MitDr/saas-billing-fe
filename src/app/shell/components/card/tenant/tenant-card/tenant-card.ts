@@ -47,16 +47,16 @@ export class TenantCard {
 // Hàm copy
   copyApiKey(key: string): void {
     if (!key) {
-      this.message.error('Không có API Key để copy');
+      this.message.error('There are no API Keys to copy');
       return;
     }
 
     navigator.clipboard.writeText(key)
       .then(() => {
-        this.message.success('API Key đã được copy vào clipboard!');
+        this.message.success('API Key has been copied to clipboard!');
       })
       .catch(() => {
-        this.message.error('Không thể copy, vui lòng thử lại');
+        this.message.error('Cannot copy, Please try again later!');
       });
   }
 
@@ -73,9 +73,9 @@ export class TenantCard {
 
   onDelete() {
     this.modalService.confirm({
-      nzTitle: 'Xác nhận xóa',
-      nzContent: `Xóa tenant #${this.tenant().id} ?`,
-      nzOkText: 'Xóa',
+      nzTitle: 'Confirm Delete',
+      nzContent: `Delete tenant #${this.tenant().id} ?`,
+      nzOkText: 'Delete',
       nzOkDanger: true,
       nzOnOk: () => {
         this.deleteButton.emit(this.tenant().id);

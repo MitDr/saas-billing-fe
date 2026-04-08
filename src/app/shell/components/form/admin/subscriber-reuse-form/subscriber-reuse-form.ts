@@ -51,16 +51,19 @@ export class SubscriberReuseForm {
     });
   }
 
-  get name(){
+  get name() {
     return this.formGroup()?.get('name')
   }
-  get email(){
+
+  get email() {
     return this.formGroup()?.get('email')
   }
-  get customerId(){
+
+  get customerId() {
     return this.formGroup()?.get('customerId')
   }
-  get tenantId(){
+
+  get tenantId() {
     return this.formGroup()?.get('tenantId')
   }
 
@@ -90,7 +93,7 @@ export class SubscriberReuseForm {
           control.updateValueAndValidity({onlySelf: true});
         }
       });
-      this.message.warning('Vui lòng kiểm tra lại thông tin!');
+      this.message.warning('Please double-check the information!');
     }
   }
 }

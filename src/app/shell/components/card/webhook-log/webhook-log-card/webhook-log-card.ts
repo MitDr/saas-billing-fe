@@ -62,9 +62,9 @@ export class WebhookLogCard {
 
   onDelete() {
     this.modalService.confirm({
-      nzTitle: 'Xác nhận xóa',
-      nzContent: `Xóa webhook log #${this.webhookLog().id} ?`,
-      nzOkText: 'Xóa',
+      nzTitle: 'Confirm Delete',
+      nzContent: `Delete webhook log #${this.webhookLog().id} ?`,
+      nzOkText: 'Delete',
       nzOkDanger: true,
       nzOnOk: () => {
         this.deleteButton.emit(this.webhookLog().id);

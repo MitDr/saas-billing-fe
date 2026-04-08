@@ -7,6 +7,7 @@ import {NzCardComponent} from 'ng-zorro-antd/card';
 import {NzDescriptionsComponent, NzDescriptionsItemComponent} from 'ng-zorro-antd/descriptions';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzTagComponent} from 'ng-zorro-antd/tag';
+import {currencyDecimals} from '../../../payment/payment-card/payment-card';
 
 @Component({
   selector: 'app-auth-price-dto-card',
@@ -32,13 +33,33 @@ export class AuthPriceDtoCard {
 
   onRemovePrice() {
     this.modalService.confirm({
-      nzTitle: 'Xác nhận xóa',
-      nzContent: `Xóa price #${this.price().id} ?`,
-      nzOkText: 'Xóa',
+      nzTitle: 'Confirm Delete',
+      nzContent: `Delete price #${this.price().id} ?`,
+      nzOkText: 'Delete',
       nzOkDanger: true,
       nzOnOk: () => {
         this.priceRemove.emit(this.price().id);
       }
     });
+  }
+
+  formatAmount(): string {
+    const price = this.price();
+    if (!price || price.price == null) return '—';
+
+    const amount = Number(price.price);
+    if (isNaN(amount)) return String(price.price);
+
+    const currency = price.currency ?? 'USD';
+    const decimals = currencyDecimals[currency.toUpperCase()] ?? 2;
+
+    const majorAmount = amount / Math.pow(10, decimals);
+
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: currency.toUpperCase(),
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    }).format(majorAmount);
   }
 }

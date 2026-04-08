@@ -36,7 +36,7 @@ import {RouterLink} from '@angular/router';
   templateUrl: './feature-auth-list.html',
   styleUrl: './feature-auth-list.css',
 })
-export class FeatureAuthList extends AuthGenericListComponent<AuthFeature, AuthFeatureRequest>{
+export class FeatureAuthList extends AuthGenericListComponent<AuthFeature, AuthFeatureRequest> {
   featurePage = signal<ListData<AuthFeature> | null>(null);
   checked = false;
   createRoute = '/app/tables/features/create'
@@ -103,7 +103,7 @@ export class FeatureAuthList extends AuthGenericListComponent<AuthFeature, AuthF
         this.loading.set(false);
       },
       error: () => {
-        this.message.error('Không thể tải danh sách features');
+        this.message.error('Cannot load features');
         this.loading.set(false);
       }
     });

@@ -55,9 +55,9 @@ export class AuthPlanCard {
 
   onDelete() {
     this.modalService.confirm({
-      nzTitle: 'Xác nhận xóa',
-      nzContent: `Xóa plan #${this.plan().id} ?`,
-      nzOkText: 'Xóa',
+      nzTitle: 'Confirm Delete',
+      nzContent: `Delete plan #${this.plan().id} ?`,
+      nzOkText: 'Delete',
       nzOkDanger: true,
       nzOnOk: () => {
         this.deleteButton.emit(this.plan().id);
@@ -66,7 +66,7 @@ export class AuthPlanCard {
   }
 
   onPriceRemove(id: number) {
-    this.planService.update(this.removePriceAndMapPlanToPlanRequest(this.plan(), id), this.plan().id).subscribe({
+    this.planService.updatePlan(this.plan().id, this.removePriceAndMapPlanToPlanRequest(this.plan(), id)).subscribe({
       next: () => {
         this.message.success('Updated successfully');
         this.load.emit(this.plan().id);
@@ -79,14 +79,16 @@ export class AuthPlanCard {
   }
 
   onFeatureRemove(id: number) {
-    this.planService.update(this.removeFeatureAndMapPlanToPlanRequest(this.plan(), id), this.plan().id).subscribe({
+    const request = this.removeFeatureAndMapPlanToPlanRequest(this.plan(), id);
+
+    this.planService.updatePlan(this.plan().id, request).subscribe({
       next: () => {
         this.message.success('Updated successfully');
         this.load.emit(this.plan().id);
       },
-      error: () => {
+      error: (err) => {
+        console.error('Update error:', err);
         this.message.error('Update failed');
-        this.load.emit(this.plan().id);
       }
     });
   }
@@ -95,11 +97,16 @@ export class AuthPlanCard {
     const result: AuthPlanRequest = {
       name: plan.name,
       status: plan.status,
+      planGroupId: plan.planGroup.id
     }
     if (plan.prices.length > 0) {
       result.prices = plan.prices
         .filter(price => price.id !== id)
         .map(price => price.id);
+    }
+    const planGroupId = this.plan()?.planGroup.id as number;
+    if (planGroupId) {
+      Object.assign(result, {planGroupId});
     }
     if (plan.features.length > 0) {
       result.features = plan.features.map(feature => feature.id);
@@ -114,6 +121,10 @@ export class AuthPlanCard {
     }
     if (plan.prices.length > 0) {
       result.prices = plan.prices.map(price => price.id)
+    }
+    const planGroupId = this.plan()?.planGroup.id as number;
+    if (planGroupId) {
+      Object.assign(result, {planGroupId});
     }
     if (plan.features.length > 0) {
       result.features = plan.features

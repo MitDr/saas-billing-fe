@@ -17,7 +17,7 @@ export class PlanGroupService {
     return this.api.post('/admin/plan-groups', request).pipe(
       catchError(error => {
         console.error('create plan group error:', error);
-        return throwError(() => new Error('Không tạo lấy plan group'));
+        return throwError(() => new Error('Cannot get plan group'));
       })
     );
   }
@@ -79,7 +79,7 @@ export class PlanGroupService {
     return this.api.get<PlanGroup>(`/admin/plan-groups/${id}`).pipe(
       catchError(error => {
         console.error('Get plan group error:', error);
-        return throwError(() => new Error('Không thể lấy plan group'));
+        return throwError(() => new Error('Cannot get plan group'));
       })
     );
   }
@@ -89,7 +89,7 @@ export class PlanGroupService {
     return this.api.put<PlanGroup>(`/admin/plan-groups/${id}`, updatedPlanGroup).pipe(
       catchError(error => {
         console.error('Update plan group error:', error);
-        return throwError(() => new Error('Cập nhật plan group thất bại'));
+        return throwError(() => new Error('Update plan group failed'));
       })
     );
   }
@@ -98,7 +98,7 @@ export class PlanGroupService {
     return this.api.deletes<void>(`/admin/plan-groups`, ids).pipe(
       catchError(error => {
         console.error('Bulk delete error:', error);
-        return throwError(() => new Error('Xóa hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk delete failed'));
       })
     );
   }
@@ -107,7 +107,7 @@ export class PlanGroupService {
     return this.api.delete<void>(`/admin/plan-groups/${id}`).pipe(
       catchError(error => {
         console.error('Delete feature error:', error);
-        return throwError(() => new Error('Xóa feature thất bại'));
+        return throwError(() => new Error('Delete feature failed'));
       })
     );
   }

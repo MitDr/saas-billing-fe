@@ -102,7 +102,7 @@ export class ImageEdit implements OnInit {
       },
       error: (err) => {
         console.error('Load tenants failed:', err);
-        this.message.error('Không tải được danh sách tenant');
+        this.message.error('Cannot load tenant');
       }
     });
   }
@@ -127,14 +127,14 @@ export class ImageEdit implements OnInit {
       this.imageService.update(payload, this.image()?.id!).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Update image thành công');
+          this.message.success('Update image successfully');
           this.imageForm.reset();
           this.router.navigate(['/admin/tables/images']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Update image failed:', err);
-          this.message.error('Update image thất bại');
+          this.message.error('Update image failed');
         }
       })
     }

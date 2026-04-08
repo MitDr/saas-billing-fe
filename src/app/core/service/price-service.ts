@@ -18,7 +18,7 @@ export class PriceService {
     return this.api.post<Price>('/admin/prices', request).pipe(
       catchError(error => {
         console.error('Create price error:', error);
-        return throwError(() => new Error('Tạo price thất bại'));
+        return throwError(() => new Error('Create price failed'));
       })
     );
   }
@@ -38,7 +38,7 @@ export class PriceService {
   //       }),
   //       catchError(error => {
   //         console.error('Get prices error:', error);
-  //         return throwError(() => new Error('Không thể lấy danh sách prices'));
+  //         return throwError(() => new Error('Cannot get danh sách prices'));
   //       })
   //     )
   // }
@@ -48,7 +48,7 @@ export class PriceService {
     return this.api.put<Price>(`/admin/prices/${id}`, updatedPrice).pipe(
       catchError(error => {
         console.error('Update price error:', error);
-        return throwError(() => new Error('Cập nhật price thất bại'));
+        return throwError(() => new Error('Update price failed'));
       })
     );
   }
@@ -120,7 +120,7 @@ export class PriceService {
     return this.api.get<Price>(`/admin/prices/${id}`).pipe(
       catchError(error => {
         console.error('Get price error:', error);
-        return throwError(() => new Error('Không thể lấy price'));
+        return throwError(() => new Error('Cannot get price'));
       })
     );
   }
@@ -130,7 +130,7 @@ export class PriceService {
     return this.api.deletes<void>(`/admin/prices`, ids).pipe(
       catchError(error => {
         console.error('Bulk delete error:', error);
-        return throwError(() => new Error('Xóa hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk delete failed'));
       })
     );
   }
@@ -139,7 +139,7 @@ export class PriceService {
     return this.api.post<void>(`/admin/prices/softDelete`, softDeleteRequest).pipe(
       catchError(error => {
         console.error('Bulk soft delete error:', error);
-        return throwError(() => new Error('Xóa mềm hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk soft delete failed'));
       })
     );
   }
@@ -148,7 +148,7 @@ export class PriceService {
     return this.api.delete<void>(`/admin/prices/${id}`).pipe(
       catchError(error => {
         console.error('Delete price error:', error);
-        return throwError(() => new Error('Xóa price thất bại'));
+        return throwError(() => new Error('Delete price failed'));
       })
     );
   }

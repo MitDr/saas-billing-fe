@@ -9,6 +9,7 @@ import {NzSpinComponent} from 'ng-zorro-antd/spin';
 import {SubscriberCard} from '../../../../../shell/components/card/subscriber/subscriber-card/subscriber-card';
 import {AuthSubscriberCard} from '../../../../../shell/components/card/auth/auth-subscriber-card/auth-subscriber-card';
 import {NzModalModule} from 'ng-zorro-antd/modal';
+import {AuthSubscriberRequest} from '../../../../../core/interface/request/auth/auth-subscriber-request';
 
 @Component({
   selector: 'app-auth-subscriber-detail',
@@ -78,6 +79,20 @@ export class AuthSubscriberDetail {
       next: (response) => {
         this.loading.set(false);
         window.location.href = response;
+      },
+      error: (err) => {
+        this.loading.set(false);
+        console.error(err);
+      }
+    })
+  }
+
+  onUpdateSubscriber(request: AuthSubscriberRequest) {
+    this.loading.set(true);
+    this.subscriberService.update(request, this.subscriber()?.id!).subscribe({
+      next: (response) => {
+        this.loading.set(false);
+        this.subscriber.set(response)
       },
       error: (err) => {
         this.loading.set(false);

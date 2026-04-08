@@ -1,7 +1,6 @@
 import {Component, effect, inject, input, output, signal} from '@angular/core';
 import {OptionInterface} from '../../../../../core/interface/option-interface';
 import {FormGroup, NonNullableFormBuilder, ReactiveFormsModule} from '@angular/forms';
-import {Plan} from '../../../../../core/interface/entity/plan';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {AuthPlan} from '../../../../../core/interface/entity/auth/auth-plan';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
@@ -12,6 +11,7 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzInputDirective} from 'ng-zorro-antd/input';
 import {NzModalComponent, NzModalContentDirective} from 'ng-zorro-antd/modal';
 import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
+import {NzInputNumberComponent} from 'ng-zorro-antd/input-number';
 
 @Component({
   selector: 'app-auth-price-reuse-form',
@@ -31,7 +31,8 @@ import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
     NzOptionComponent,
     NzRowDirective,
     NzSelectComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NzInputNumberComponent
   ],
   templateUrl: './auth-price-reuse-form.html',
   styleUrl: './auth-price-reuse-form.css',
@@ -40,11 +41,6 @@ export class AuthPriceReuseForm {
   currencyOption: OptionInterface[] = [
     {label: 'USD', value: 'USD'},
     {label: 'VND', value: 'VND'},
-  ];
-
-  schemeOption: OptionInterface[] = [
-    {label: 'Flat-rate', value: 'FLAT_RATE'},
-    {label: 'Per-unit', value: 'PER_UNIT'},
   ];
 
   statusOption: OptionInterface[] = [
@@ -124,6 +120,10 @@ export class AuthPriceReuseForm {
     return this.formGroup().get('planId')
   }
 
+  get currencyValue(): string {
+    return this.currency?.value || 'USD';
+  }
+
   openPlanModal() {
     this.isPlansModalOpen.set(true);
   }
@@ -150,7 +150,7 @@ export class AuthPriceReuseForm {
           control.updateValueAndValidity({onlySelf: true});
         }
       });
-      this.message.warning('Vui lòng kiểm tra lại thông tin!');
+      this.message.warning('Please double-check the information!');
     }
   }
 

@@ -21,6 +21,7 @@ import {NzCardComponent, NzCardMetaComponent} from 'ng-zorro-antd/card';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NgForOf} from '@angular/common';
 import {NzModalComponent, NzModalContentDirective} from 'ng-zorro-antd/modal';
+import {NzInputNumberComponent} from 'ng-zorro-antd/input-number';
 
 @Component({
   selector: 'app-payment-reuse-form',
@@ -43,7 +44,8 @@ import {NzModalComponent, NzModalContentDirective} from 'ng-zorro-antd/modal';
     NzIconDirective,
     NgForOf,
     NzModalComponent,
-    NzModalContentDirective
+    NzModalContentDirective,
+    NzInputNumberComponent
   ],
   templateUrl: './payment-reuse-form.html',
   styleUrl: './payment-reuse-form.css',
@@ -187,7 +189,7 @@ export class PaymentReuseForm {
           control.updateValueAndValidity({onlySelf: true});
         }
       });
-      this.message.warning('Vui lòng kiểm tra lại thông tin!');
+      this.message.warning('Please double-check the information!');
     }
   }
 

@@ -103,7 +103,7 @@ export class PlanList extends GenericListComponent<Plan, PlanRequest> {
         this.loading.set(false);
       },
       error: () => {
-        this.message.error('Không thể tải danh sách plans');
+        this.message.error('Cannot load plans');
         this.loading.set(false);
       }
     });

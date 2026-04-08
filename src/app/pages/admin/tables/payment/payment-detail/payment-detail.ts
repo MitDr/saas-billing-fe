@@ -3,22 +3,22 @@ import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {PaymentService} from '../../../../../core/service/payment-service';
 import {Payment} from '../../../../../core/interface/entity/payment';
-import {EntitlementCard} from '../../../../../shell/components/card/entitlement/entitlement-card/entitlement-card';
 import {NzBreadCrumbComponent, NzBreadCrumbItemComponent} from 'ng-zorro-antd/breadcrumb';
 import {NzPageHeaderComponent} from 'ng-zorro-antd/page-header';
 import {NzSpinComponent} from 'ng-zorro-antd/spin';
 import {PaymentCard} from '../../../../../shell/components/card/payment/payment-card/payment-card';
+import {NzModalModule} from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-payment-detail',
   imports: [
-    EntitlementCard,
     NzBreadCrumbComponent,
     NzBreadCrumbItemComponent,
     NzPageHeaderComponent,
     NzSpinComponent,
     RouterLink,
-    PaymentCard
+    PaymentCard,
+    NzModalModule,
   ],
   templateUrl: './payment-detail.html',
   styleUrl: './payment-detail.css',

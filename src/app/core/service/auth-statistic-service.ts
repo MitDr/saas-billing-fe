@@ -1,13 +1,11 @@
-import {inject, Inject, Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {ApiClientService} from './api-client-service';
 import {Observable, throwError} from 'rxjs';
-import {SystemSummary} from '../interface/response/statistic/system-summary';
 import {catchError} from 'rxjs/operators';
 import {RevenueSummary} from '../interface/response/statistic/revenue-summary';
 import {SubscriptionSummary} from '../interface/response/statistic/subscription-overview';
 import {MrrResponse} from '../interface/response/statistic/mmr-response';
 import {HttpParams} from '@angular/common/http';
-import {TopTenantResponse} from '../interface/response/statistic/top-tenant-response';
 import {SuccessRateResponse} from '../interface/response/statistic/success-rate-response';
 import {ChurnRateResponse} from '../interface/response/statistic/churn-rate-response';
 import {ExpectedRenewal} from '../interface/response/statistic/expected-renewal';
@@ -15,14 +13,14 @@ import {ExpectedRenewal} from '../interface/response/statistic/expected-renewal'
 @Injectable({
   providedIn: 'root'
 })
-export class AuthStatisticService{
+export class AuthStatisticService {
   api = inject(ApiClientService)
 
   getRevenueSummary(): Observable<RevenueSummary> {
     return this.api.get<RevenueSummary>('/auth/analytics/tenant/revenue/summary').pipe(
       catchError(error => {
         console.error('Get revenue summary error:', error);
-        return throwError(() => new Error('Không thể lấy thông tin thống kê doanh thu'));
+        return throwError(() => new Error('Cannot get thông tin thống kê doanh thu'));
       })
     )
   }
@@ -31,7 +29,7 @@ export class AuthStatisticService{
     return this.api.get<SubscriptionSummary>('/auth/analytics/tenant/subscription/summary').pipe(
       catchError(error => {
         console.error('Get subscription summary error:', error);
-        return throwError(() => new Error('Không thể lấy thông tin thống kê doanh thu'));
+        return throwError(() => new Error('Cannot get thông tin thống kê doanh thu'));
       })
     )
   }
@@ -43,7 +41,7 @@ export class AuthStatisticService{
     return this.api.get<MrrResponse[]>(`/auth/analytics/tenant/invoice/mmr/${month}`).pipe(
       catchError(error => {
         console.error('Get mrr revenues error:', error);
-        return throwError(() => new Error('Không thể lấy thông tin thống kê doanh thu'));
+        return throwError(() => new Error('Cannot get thông tin thống kê doanh thu'));
       })
     )
   }
@@ -52,7 +50,7 @@ export class AuthStatisticService{
     return this.api.get<SuccessRateResponse>('/auth/analytics/tenant/invoice/success-rate').pipe(
       catchError(error => {
         console.error('Get success rate error:', error);
-        return throwError(() => new Error('Không thể lấy thông tin thống kê doanh thu'));
+        return throwError(() => new Error('Cannot get thông tin thống kê doanh thu'));
       })
     )
   }
@@ -64,7 +62,7 @@ export class AuthStatisticService{
     return this.api.get<ChurnRateResponse>('/auth/analytics/tenant/subscriptions/churn-rate', params).pipe(
       catchError(error => {
         console.error('Get churn rate error:', error);
-        return throwError(() => new Error('Không thể lấy thông tin thống kê doanh thu'));
+        return throwError(() => new Error('Cannot get thông tin thống kê doanh thu'));
       })
     )
   }
@@ -76,7 +74,7 @@ export class AuthStatisticService{
     return this.api.get<ExpectedRenewal[]>('/auth/analytics/tenant/subscriptions/upcoming-renewals', params).pipe(
       catchError(error => {
         console.error('Get upcoming renewal error:', error);
-        return throwError(() => new Error('Không thể lấy thông tin thống kê doanh thu'));
+        return throwError(() => new Error('Cannot get thông tin thống kê doanh thu'));
       })
     )
   }

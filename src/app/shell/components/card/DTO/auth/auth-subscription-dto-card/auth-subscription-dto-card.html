@@ -32,6 +32,13 @@
         <nz-descriptions-item nzTitle="End Modified">
           {{ subscription().endDate }}
         </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Trial">
+          @if (subscription().trial) {
+            <nz-tag nzColor="red">True</nz-tag>
+          } @else {
+            <nz-tag nzColor="green">False</nz-tag>
+          }
+        </nz-descriptions-item>
       </nz-descriptions>
     </div>
   </div>

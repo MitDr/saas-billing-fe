@@ -38,9 +38,9 @@ export class AuthUserDtoCard {
 
   onRemoveUser() {
     this.modalService.confirm({
-      nzTitle: 'Xác nhận xóa',
-      nzContent: `Xóa User #${this.userInfo().id} ?`,
-      nzOkText: 'Xóa',
+      nzTitle: 'Confirm Delete',
+      nzContent: `Delete User #${this.userInfo().id} ?`,
+      nzOkText: 'Delete',
       nzOkDanger: true,
       nzOnOk: () => {
         this.userRemove.emit(this.userInfo().email);

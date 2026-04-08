@@ -23,7 +23,7 @@ export class AuthPriceService {
     return this.api.post<AuthPrice>('/auth/prices', request).pipe(
       catchError(error => {
         console.error('Create price error:', error);
-        return throwError(() => new Error('Tạo price thất bại'));
+        return throwError(() => new Error('Create price failed'));
       })
     );
   }
@@ -33,7 +33,7 @@ export class AuthPriceService {
     return this.api.put<Price>(`/auth/prices/${id}`, updatedPrice).pipe(
       catchError(error => {
         console.error('Update price error:', error);
-        return throwError(() => new Error('Cập nhật price thất bại'));
+        return throwError(() => new Error('Update price failed'));
       })
     );
   }
@@ -105,7 +105,7 @@ export class AuthPriceService {
     return this.api.get<AuthPrice>(`/auth/prices/${id}`).pipe(
       catchError(error => {
         console.error('Get price error:', error);
-        return throwError(() => new Error('Không thể lấy price'));
+        return throwError(() => new Error('Cannot get price'));
       })
     );
   }
@@ -115,7 +115,7 @@ export class AuthPriceService {
     return this.api.deletes<void>(`/auth/prices`, ids).pipe(
       catchError(error => {
         console.error('Bulk delete error:', error);
-        return throwError(() => new Error('Xóa hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk delete failed'));
       })
     );
   }
@@ -124,7 +124,7 @@ export class AuthPriceService {
     return this.api.post<void>(`/auth/prices/softDelete`, softDeleteRequest).pipe(
       catchError(error => {
         console.error('Bulk soft delete error:', error);
-        return throwError(() => new Error('Xóa mềm hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk soft delete failed'));
       })
     );
   }
@@ -133,7 +133,7 @@ export class AuthPriceService {
     return this.api.delete<void>(`/auth/prices/${id}`).pipe(
       catchError(error => {
         console.error('Delete price error:', error);
-        return throwError(() => new Error('Xóa price thất bại'));
+        return throwError(() => new Error('Delete price failed'));
       })
     );
   }

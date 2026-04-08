@@ -69,7 +69,7 @@ export class EntitlementCheck implements OnInit {
 
   checkEntitlements() {
     if (!this.canCheck()) {
-      this.message.warning('Vui lòng chọn ít nhất 1 subscriber và 1 feature');
+      this.message.warning('Please choose at least one subscriber and one feature');
       return;
     }
 
@@ -83,12 +83,12 @@ export class EntitlementCheck implements OnInit {
     this.entitlementService.checkPolicies(request).subscribe({
       next: (policy) => {
         this.policy.set(policy);
-        this.message.success('Kiểm tra entitlement thành công');
+        this.message.success('Check entitlement successfully');
         this.checking.set(false);
       },
       error: (err) => {
         console.error('Check policies error:', err);
-        this.message.error('Kiểm tra entitlement thất bại');
+        this.message.error('Check entitlement failed');
         this.checking.set(false);
       }
     });
@@ -141,7 +141,7 @@ export class EntitlementCheck implements OnInit {
       },
       error: (err) => {
         console.error('Load features failed:', err);
-        this.message.error('Không tải được danh sách features');
+        this.message.error('Cannot load features');
       }
     });
   }
@@ -153,8 +153,8 @@ export class EntitlementCheck implements OnInit {
         this.availableSubscriber.set(subscribers);
       },
       error: (err) => {
-        console.error('Load subscriber failed:', err);
-        this.message.error('Không tải được danh sách subscriber');
+        console.error('Load subscribers failed:', err);
+        this.message.error('Cannot load subscribers');
       }
     });
   }

@@ -120,7 +120,7 @@ export class AuthPlanList extends AuthGenericListComponent<AuthPlan, AuthPlanReq
         this.loading.set(false);
       },
       error: () => {
-        this.message.error('Không thể tải danh sách plans');
+        this.message.error('Cannot load plans');
         this.loading.set(false);
       }
     });

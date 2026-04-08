@@ -11,6 +11,7 @@ import {PlanDtoCard} from '../../DTO/plan-dto-card/plan-dto-card';
 import {TenantDtoCard} from '../../DTO/tenant-dto-card/tenant-dto-card';
 import {AuthPlanDtoCard} from '../../DTO/auth/auth-plan-dto-card/auth-plan-dto-card';
 import {RouterLink} from '@angular/router';
+import {currencyDecimals} from '../../payment/payment-card/payment-card';
 
 @Component({
   selector: 'app-auth-price-card',
@@ -40,13 +41,33 @@ export class AuthPriceCard {
 
   onDelete() {
     this.modalService.confirm({
-      nzTitle: 'Xác nhận xóa',
-      nzContent: `Xóa Price #${this.price().id} ?`,
-      nzOkText: 'Xóa',
+      nzTitle: 'Confirm',
+      nzContent: `Delete Price #${this.price().id} ?`,
+      nzOkText: 'Delete',
       nzOkDanger: true,
       nzOnOk: () => {
         this.deleteButton.emit(this.price().id);
       }
     });
+  }
+
+  formatAmount(): string {
+    const price = this.price();
+    if (!price || price.price == null) return '—';
+
+    const amount = Number(price.price);
+    if (isNaN(amount)) return String(price.price);
+
+    const currency = price.currency ?? 'USD';
+    const decimals = currencyDecimals[currency.toUpperCase()] ?? 2;
+
+    const majorAmount = amount / Math.pow(10, decimals);
+
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: currency.toUpperCase(),
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    }).format(majorAmount);
   }
 }

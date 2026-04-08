@@ -17,7 +17,7 @@ export class PayoutService {
     return this.api.post<Payout>('/admin/payouts', payload).pipe(
       catchError(error => {
         console.error('Create payout error:', error);
-        return throwError(() => new Error('Không thể tạo payout'));
+        return throwError(() => new Error('Cannot Create payout'));
       })
     );
   }
@@ -79,7 +79,7 @@ export class PayoutService {
     return this.api.get<Payout>(`/admin/payouts/${id}`).pipe(
       catchError(error => {
         console.error('Get payout error:', error);
-        return throwError(() => new Error('Không thể lấy payout'));
+        return throwError(() => new Error('Cannot get payout'));
       })
     );
   }
@@ -88,7 +88,7 @@ export class PayoutService {
     return this.api.put<Payout>(`/admin/payouts/${id}`, updatedPayout).pipe(
       catchError(error => {
         console.error('Update payout error:', error);
-        return throwError(() => new Error('Cập nhật payout thất bại'));
+        return throwError(() => new Error('Update payout failed'));
       })
     );
   }
@@ -97,7 +97,7 @@ export class PayoutService {
     return this.api.deletes<void>(`/admin/payouts`, ids).pipe(
       catchError(error => {
         console.error('Bulk delete error:', error);
-        return throwError(() => new Error('Xóa hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk delete failed'));
       })
     );
   }
@@ -106,7 +106,7 @@ export class PayoutService {
     return this.api.delete<void>(`/admin/payouts/${id}`).pipe(
       catchError(error => {
         console.error('Delete payout error:', error);
-        return throwError(() => new Error('Xóa payout thất bại'));
+        return throwError(() => new Error('Delete payout failed'));
       })
     );
   }

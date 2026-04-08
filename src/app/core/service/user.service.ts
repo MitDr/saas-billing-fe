@@ -17,7 +17,7 @@ export class UserService {
     return this.api.post<User>('/admin/users', userRequest).pipe(
       catchError(error => {
         console.error('Create user error:', error);
-        return throwError(() => new Error('Không thể tạo user'));
+        return throwError(() => new Error('Cannot Create user'));
       })
     )
   }
@@ -55,7 +55,7 @@ export class UserService {
         }),
         catchError(error => {
           console.error('Get users error', error);
-          return throwError(() => new Error('Không thể lấy danh sách users'))
+          return throwError(() => new Error('Cannot get danh sách users'))
         })
       )
   }
@@ -64,15 +64,16 @@ export class UserService {
     return this.api.get<User>(`/admin/users/${id}`).pipe(
       catchError(error => {
         console.error('Get user error:', error);
-        return throwError(() => new Error('Không thể lấy user'));
+        return throwError(() => new Error('Cannot get user'));
       })
     );
   }
+
   update(updatedUser: UserRequest, id: number): Observable<User> {
     return this.api.put<User>(`/admin/users/${id}`, updatedUser).pipe(
       catchError(error => {
         console.error('Update user error:', error);
-        return throwError(() => new Error('Cập nhật user thất bại'));
+        return throwError(() => new Error('Update user failed'));
       })
     );
   }
@@ -81,7 +82,7 @@ export class UserService {
     return this.api.deletes<void>(`/admin/users`, ids).pipe(
       catchError(error => {
         console.error('Bulk delete error:', error);
-        return throwError(() => new Error('Xóa hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk delete failed'));
       })
     );
   }
@@ -90,7 +91,7 @@ export class UserService {
     return this.api.delete<void>(`/admin/users/${id}`).pipe(
       catchError(error => {
         console.error('Delete user error:', error);
-        return throwError(() => new Error('Xóa user thất bại'));
+        return throwError(() => new Error('Delete user failed'));
       })
     );
   }

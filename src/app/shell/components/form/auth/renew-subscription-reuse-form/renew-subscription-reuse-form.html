@@ -61,14 +61,14 @@
   (nzOnCancel)="isSubscriptionModalOpen.set(false)"
   (nzOnOk)="isSubscriptionModalOpen.set(false)"
   [nzVisible]="isSubscriptionModalOpen()"
-  nzCancelText="Đóng"
-  nzOkText="Xác nhận"
-  nzTitle="Chọn Subscription"
+  nzCancelText="Close"
+  nzOkText="Confirm"
+  nzTitle="Choose Subscription"
 >
   <ng-template nzModalContent>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
       @if (availableSubscription().length === 0) {
-        <p class="text-center text-gray-500 py-10">Không có subscription nào để chọn</p>
+        <p class="text-center text-gray-500 py-10">There are no subscriptions to choose</p>
       } @else {
         @for (sub of availableSubscription(); track sub.id) {
           <nz-card nzHoverable (click)="selectSubscription(sub)">
@@ -86,14 +86,14 @@
   (nzOnCancel)="isSubscriberModalOpen.set(false)"
   (nzOnOk)="isSubscriberModalOpen.set(false)"
   [nzVisible]="isSubscriberModalOpen()"
-  nzCancelText="Đóng"
-  nzOkText="Xác nhận"
-  nzTitle="Chọn Subscriber"
+  nzCancelText="Close"
+  nzOkText="Confirm"
+  nzTitle="Choose Subscriber"
 >
   <ng-template nzModalContent>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
       @if (availableSubscriber().length === 0) {
-        <p class="text-center text-gray-500 py-10">Không có subscriber nào để chọn</p>
+        <p class="text-center text-gray-500 py-10">There are no subscribers to choose</p>
       } @else {
         @for (sub of availableSubscriber(); track sub.id) {
           <nz-card nzHoverable (click)="selectSubscriber(sub)">

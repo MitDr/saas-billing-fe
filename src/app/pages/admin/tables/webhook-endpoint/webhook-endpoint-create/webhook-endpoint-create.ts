@@ -52,7 +52,7 @@ export class WebhookEndpointCreate implements OnInit {
       },
       error: (err) => {
         console.error('Load tenants failed:', err);
-        this.message.error('Không tải được danh sách tenant');
+        this.message.error('Cannot load tenant');
       }
     });
   }
@@ -72,14 +72,14 @@ export class WebhookEndpointCreate implements OnInit {
       this.webhookEndpointService.createWebhookEndpoint(payload).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Tạo endpoint thành công');
+          this.message.success('Create endpoint successfully');
           this.webhookEndpointForm.reset();
           this.router.navigate(['/admin/tables/webhook-endpoints']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Create endpoint failed:', err);
-          this.message.error('Tạo endpoint thất bại');
+          this.message.error('Create endpoint failed');
         }
       })
     }

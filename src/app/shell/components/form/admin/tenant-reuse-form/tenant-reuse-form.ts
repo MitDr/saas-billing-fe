@@ -143,7 +143,7 @@ export class TenantReuseForm {
     this.users?.setValue(this.selectedUsers().map(u => u.id));
   }
 
-  // Xóa user đã chọn từ preview
+  // Delete user đã chọn từ preview
   removeSelectedUser(userId: number) {
     this.selectedUsers.set(this.selectedUsers().filter(u => u.id !== userId));
     this.users?.setValue(this.selectedUsers().map(u => u.id));
@@ -158,12 +158,12 @@ export class TenantReuseForm {
 
   copyApiKey(key: string): void {
     if (!key) {
-      this.message.error('Không có API Key để copy');
+      this.message.error('There are no API Keys to copy');
       return;
     }
     navigator.clipboard.writeText(key)
-      .then(() => this.message.success('API Key đã copy!'))
-      .catch(() => this.message.error('Copy thất bại'));
+      .then(() => this.message.success('API Key copied!'))
+      .catch(() => this.message.error('Copy failed'));
   }
 
   refreshApiKey(): void {
@@ -185,7 +185,7 @@ export class TenantReuseForm {
           control.updateValueAndValidity({onlySelf: true});
         }
       });
-      this.message.warning('Vui lòng kiểm tra lại thông tin!');
+      this.message.warning('Please double-check the information!');
     }
   }
 }

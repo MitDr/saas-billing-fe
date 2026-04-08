@@ -13,10 +13,10 @@
   (sizeChange)="onSizeChange($event)"
   [columns]="getColumns()"
   [data]="payoutPage()"
+  [editable]="false"
   [loading]="loading()"
   [routes]="payoutListRouting"
   [showBulkDelete]="true"
-  [editable]="false"
   [showSoftDelete]="false"
   entityName="payout(s)"
   viewRoute="/app/tables/payouts/">
@@ -29,7 +29,7 @@
         (ngModelChange)="onSearchChange($event)"
         [ngModel]="search()"
         nz-input
-        placeholder="Search entitlement..."
+        placeholder="Search Payout..."
       />
     </nz-input-wrapper>
 

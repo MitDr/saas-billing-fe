@@ -40,9 +40,9 @@ export class WebhookEndpointCard {
 
   onDelete() {
     this.modalService.confirm({
-      nzTitle: 'Xác nhận xóa',
-      nzContent: `Xóa webhook endpont #${this.webhookEndpoint().id} ?`,
-      nzOkText: 'Xóa',
+      nzTitle: 'Confirm Delete',
+      nzContent: `Delete webhook endpont #${this.webhookEndpoint().id} ?`,
+      nzOkText: 'Delete',
       nzOkDanger: true,
       nzOnOk: () => {
         this.deleteButton.emit(this.webhookEndpoint().id);

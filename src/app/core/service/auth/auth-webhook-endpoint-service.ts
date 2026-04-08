@@ -1,8 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {ApiClientService} from '../api-client-service';
-import {WebhookEndpointRequest} from '../../interface/request/webhook-endpoint-request';
 import {Observable, throwError} from 'rxjs';
-import {WebhookEndpoint} from '../../interface/entity/webhook-endpoint';
 import {catchError} from 'rxjs/operators';
 import {ListData} from '../../interface/list-data';
 import {HttpParams} from '@angular/common/http';
@@ -12,14 +10,14 @@ import {AuthWebhookEndpoint} from '../../interface/entity/auth/auth-webhook-endp
 @Injectable({
   providedIn: 'root'
 })
-export class AuthWebhookEndpointService{
+export class AuthWebhookEndpointService {
   api = inject(ApiClientService);
 
   createWebhookEndpoint(createWebhookEndpoint: AuthWebhookEndpointRequest): Observable<AuthWebhookEndpoint> {
     return this.api.post<AuthWebhookEndpoint>('/auth/webhook-endpoints', createWebhookEndpoint).pipe(
       catchError(error => {
         console.error('Create webhook endpoint error:', error);
-        return throwError(() => new Error('Tạo webhook endpoint thất bại'));
+        return throwError(() => new Error('Create webhook endpoint failed'));
       })
     );
   }
@@ -54,7 +52,7 @@ export class AuthWebhookEndpointService{
     return this.api.get<AuthWebhookEndpoint>(`/auth/webhook-endpoints/${id}`).pipe(
       catchError(error => {
         console.error('Get webhook endpoint error:', error);
-        return throwError(() => new Error('Không thể lấy webhook endpoint'));
+        return throwError(() => new Error('Cannot get webhook endpoint'));
       })
     );
   }
@@ -63,7 +61,7 @@ export class AuthWebhookEndpointService{
     return this.api.put<AuthWebhookEndpoint>(`/auth/webhook-endpoints/${id}`, updateWebhookEndpoint).pipe(
       catchError(error => {
         console.error('Update user error:', error);
-        return throwError(() => new Error('Cập nhật user thất bại'));
+        return throwError(() => new Error('Update user failed'));
       })
     );
   }
@@ -72,7 +70,7 @@ export class AuthWebhookEndpointService{
     return this.api.deletes<void>(`/auth/webhook-endpoints`, ids).pipe(
       catchError(error => {
         console.error('Bulk delete error:', error);
-        return throwError(() => new Error('Xóa hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk delete failed'));
       })
     );
   }
@@ -81,7 +79,7 @@ export class AuthWebhookEndpointService{
     return this.api.delete<void>(`/auth/webhook-endpoints/${id}`).pipe(
       catchError(error => {
         console.error('Delete webhook endpoint error:', error);
-        return throwError(() => new Error('Xóa webhook endpoint thất bại'));
+        return throwError(() => new Error('Delete webhook endpoint failed'));
       })
     );
   }

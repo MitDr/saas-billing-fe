@@ -8,7 +8,7 @@ import {NzTagComponent} from 'ng-zorro-antd/tag';
 import {NzPopconfirmDirective} from 'ng-zorro-antd/popconfirm';
 import {NzInputDirective} from 'ng-zorro-antd/input';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
-import {DatePipe, formatDate, NgTemplateOutlet} from '@angular/common';
+import {CurrencyPipe, DatePipe, formatDate, NgTemplateOutlet} from '@angular/common';
 import {Breadcrumb} from '../breadcrumb/breadcrumb';
 import {BreadCrumbInterface} from '../../../../core/interface/bread-crumb-interface';
 import {RouterLink} from '@angular/router';
@@ -46,12 +46,13 @@ import {NzCheckboxComponent} from 'ng-zorro-antd/checkbox';
     NzIconDirective,
     NzCardComponent,
     NzCheckboxComponent,
-    NzCardMetaComponent
+    NzCardMetaComponent,
+    CurrencyPipe,
   ],
   templateUrl: './editable-data-table.html',
   styleUrl: './editable-data-table.css',
 })
-export class EditableDataTable<T extends { id: number }> {
+export class EditableDataTable<T extends { id: number; currency?: string; }> {
   // Inputs
   data = input.required<ListData<T> | null>();
   columns = input.required<ColumnConfig<T>[]>();
@@ -62,13 +63,13 @@ export class EditableDataTable<T extends { id: number }> {
   showSoftDelete = input<boolean>(true);
   routes = input<BreadCrumbInterface[]>();
   viewRoute = input.required<string>();
-  entityName = input<string>('thưc thể');
+  entityName = input<string>('Entity(s)');
   pageChange = output<number>();
   sizeChange = output<number>();
 
   // Trong SubscriptionReuseForm (hoặc component table chứa bulk action)
   isBulkDeleteModalOpen = signal(false);
-  selectedBulkSoftDeleteMode = signal<boolean | null>(null); // null = chưa chọn, true = xóa mềm, false = khôi phục
+  selectedBulkSoftDeleteMode = signal<boolean | null>(null);
   editable = input<boolean>(true);
   // Computed lấy mảng thật
   tableData = computed(() => this.data()?.content ?? []);
@@ -94,7 +95,13 @@ export class EditableDataTable<T extends { id: number }> {
   someChecked = computed(() => this.data()?.content.some(item => this.setOfCheckedId().has(item.id)) && !this.allChecked());
   editing = computed(() => Object.values(this.editCache()).some(c => c.edit));
   modalService = inject(NzModalService);
+  // ====================== THÊM VÀO CLASS ======================
+  currencyDecimals: { [code: string]: number } = {
+    'USD': 2,
+    'VND': 0
+  };
   protected readonly Date = Date;
+  protected readonly Number = Number;
 
   constructor() {
     effect(() => {
@@ -137,12 +144,27 @@ export class EditableDataTable<T extends { id: number }> {
     this.editCache.set(cache);
   }
 
+  // onBulkDelete(): void {
+  //   this.bulkDelete.emit(Array.from(this.setOfCheckedId()));
+  // }
+
+  // getNestedValue(obj: any, path: string): any {
+  //   return path.split('.').reduce((o, k) => (o || {})[k], obj);
+  // }
+
   cancelEdit(id: number): void {
     const cache = {...this.editCache()};
     const original = this.data()?.content.find(item => item.id === id)!;
     cache[id] = {edit: false, data: {...original}};
     this.editCache.set(cache);
   }
+
+  // getNestedValue(obj: any, path: string): any {
+  //   return path.split('.').reduce((acc, key) => {
+  //     if (acc == null) return undefined;
+  //     return acc[key];
+  //   }, obj);
+  // }
 
   saveEdit(id: number): void {
     const cache = this.editCache();
@@ -152,25 +174,10 @@ export class EditableDataTable<T extends { id: number }> {
     this.saveRow.emit(transformedRow as T);  // ← emit ra ngoài
   }
 
-  // onBulkDelete(): void {
-  //   this.bulkDelete.emit(Array.from(this.setOfCheckedId()));
-  // }
-
-  // getNestedValue(obj: any, path: string): any {
-  //   return path.split('.').reduce((o, k) => (o || {})[k], obj);
-  // }
-
   getNestedValue(obj: any, path?: string): any {
     if (!path) return obj; // Nếu path undefined, trả obj gốc (hoặc item[col.key])
     return path.split('.').reduce((o, k) => (o || {})[k], obj);
   }
-
-  // getNestedValue(obj: any, path: string): any {
-  //   return path.split('.').reduce((acc, key) => {
-  //     if (acc == null) return undefined;
-  //     return acc[key];
-  //   }, obj);
-  // }
 
   getOptionLabel(col: ColumnConfig<T>, value: any): string {
     if (!col.options) return value?.toString() || 'N/A';
@@ -186,9 +193,9 @@ export class EditableDataTable<T extends { id: number }> {
 
   showConfirm(): void {
     this.modalService.confirm({
-      nzTitle: 'Xác nhận xóa',
-      nzContent: `Xóa ${this.setOfCheckedId().size} ${this.entityName()} ?`,
-      nzOkText: 'Xóa',
+      nzTitle: 'Confirm Delete',
+      nzContent: `Delete ${this.setOfCheckedId().size} ${this.entityName()} ?`,
+      nzOkText: 'Delete',
       nzOkDanger: true,
       nzOnOk: () => {
         // set.delete(id);
@@ -200,9 +207,9 @@ export class EditableDataTable<T extends { id: number }> {
 
   softDelete(): void {
     this.modalService.confirm({
-      nzTitle: 'Xác nhận xóa mềm',
-      nzContent: `Xóa ${this.setOfCheckedId().size} ${this.entityName()} ?`,
-      nzOkText: 'Xóa',
+      nzTitle: 'Confirm Soft Delete',
+      nzContent: `Delete ${this.setOfCheckedId().size} ${this.entityName()} ?`,
+      nzOkText: 'Delete',
       nzOkDanger: true,
       nzOnOk: () => {
         // set.delete(id);
@@ -267,6 +274,52 @@ export class EditableDataTable<T extends { id: number }> {
     this.isBulkDeleteModalOpen.set(false);
     this.selectedBulkSoftDeleteMode.set(null);
   }
+
+  formatCurrency(value: any, currencyCode: string = 'USD'): string {
+    if (value == null || value === '') return '—';
+
+    const amount = Number(value);
+    if (isNaN(amount)) return String(value);
+
+    const decimals = this.currencyDecimals[currencyCode.toUpperCase()] ?? 2;
+
+    const majorAmount = amount / Math.pow(10, decimals);
+
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: currencyCode.toUpperCase(),
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    }).format(majorAmount);
+  }
+
+  toMajorUnit(amount: any, currency: string = 'USD'): number {
+    if (amount == null) return 0;
+    const decimals = this.currencyDecimals[currency.toUpperCase()] ?? 2;
+    return Number(amount) / Math.pow(10, decimals);
+  }
+
+  toMinorUnit(amount: any, currency: string = 'USD'): number {
+    if (amount == null) return 0;
+    const decimals = this.currencyDecimals[currency.toUpperCase()] ?? 2;
+    return Math.round(Number(amount) * Math.pow(10, decimals));
+  }
+
+  updatePriceInCache(
+    id: number,
+    key: keyof any | string | number | symbol,
+    majorValue: any,
+    currency: string
+  ): void {
+    const cache = {...this.editCache()};
+    const rowData = cache[id].data as any;
+
+    const keyStr = String(key);
+    rowData[keyStr] = this.toMinorUnit(majorValue, currency);
+
+    this.editCache.set(cache);
+  }
+
 
   private formatDate(date: Date): string {
     const pad = (n: number) => n < 10 ? '0' + n : n;

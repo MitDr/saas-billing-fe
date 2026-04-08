@@ -7,7 +7,6 @@ import {SubscriberService} from '../../../../../core/service/subscriber-service'
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NonNullableFormBuilder, Validators} from '@angular/forms';
 import {Breadcrumb} from '../../../../../shell/components/generic/breadcrumb/breadcrumb';
-import {FeatureReuseForm} from '../../../../../shell/components/form/admin/feature-reuse-form/feature-reuse-form';
 import {
   SubscriberReuseForm
 } from '../../../../../shell/components/form/admin/subscriber-reuse-form/subscriber-reuse-form';
@@ -52,7 +51,7 @@ export class SubscriberCreate implements OnInit {
       },
       error: (err) => {
         console.error('Load tenants failed:', err);
-        this.message.error('Không tải được danh sách tenant');
+        this.message.error('Cannot load tenant');
       }
     });
   }
@@ -75,14 +74,14 @@ export class SubscriberCreate implements OnInit {
       this.subscriberService.createSubscriber(payload).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Tạo subscription thành công');
+          this.message.success('Create subscription successfully');
           this.subscriberForm.reset();
           this.router.navigate(['/admin/tables/subscribers']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Create subscriber failed:', err);
-          this.message.error('Tạo subscriber thất bại');
+          this.message.error('Create subscriber failed');
         }
       })
 

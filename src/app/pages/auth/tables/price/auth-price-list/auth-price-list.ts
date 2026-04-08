@@ -7,12 +7,7 @@ import {Price} from '../../../../../core/interface/entity/price';
 import {AUTH_PRICE_ROUTE_CONSTANT} from '../../../../../core/constant/price/price-list-constant';
 import {AuthPriceService} from '../../../../../core/service/auth/auth-price-service';
 import {ColumnConfig} from '../../../../../core/interface/column-config';
-import {
-  CURRENCYOPTIONS,
-  CYCLEOPTIONS,
-  PRICESTATUSOPTIONS,
-  SCHEMEOPTIONS
-} from '../../../../admin/tables/price/price-list/price-list';
+import {CURRENCYOPTIONS, CYCLEOPTIONS, PRICESTATUSOPTIONS,} from '../../../../admin/tables/price/price-list/price-list';
 import {EditableDataTable} from '../../../../../shell/components/generic/editable-data-table/editable-data-table';
 import {FormsModule} from '@angular/forms';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
@@ -50,9 +45,8 @@ export class AuthPriceList extends AuthGenericListComponent<AuthPrice, AuthPrice
   getColumns(): ColumnConfig<AuthPrice>[] {
     return [
       {key: 'id', title: 'Id', editable: false},
-      {key: 'price', title: 'Price', editable: true, type: 'text'},
+      {key: 'price', title: 'Price', editable: true, type: 'price'},
       {key: 'currency', title: 'Currency', editable: true, type: 'select', options: CURRENCYOPTIONS},
-      {key: 'scheme', title: 'Scheme', editable: true, type: 'select', options: SCHEMEOPTIONS},
       {key: 'cycle', title: 'Cycle', editable: true, type: 'select', options: CYCLEOPTIONS},
       {key: 'status', title: 'Status', editable: true, type: 'select', options: PRICESTATUSOPTIONS},
       {key: 'maxUnit', title: 'Max Unit', editable: true, type: "number"},
@@ -95,18 +89,16 @@ export class AuthPriceList extends AuthGenericListComponent<AuthPrice, AuthPrice
         this.loading.set(false);
       },
       error: () => {
-        this.message.error('Không thể tải danh sách prices');
+        this.message.error('Cannot load prices');
         this.loading.set(false);
       }
     });
   }
 
-  // Implement mapToUpdatePayload
   protected mapToUpdatePayload(price: AuthPrice): AuthPriceRequest {
     const result: AuthPriceRequest = {
       price: price.price,
       currency: price.currency,
-      scheme: price.scheme,
       cycle: price.cycle,
       status: price.status,
       maxUnit: price.maxUnit,
@@ -118,7 +110,6 @@ export class AuthPriceList extends AuthGenericListComponent<AuthPrice, AuthPrice
     if (price.plan) {
       result.planId = price.plan.id;
     }
-    console.log(result);
     return result;
   }
 }

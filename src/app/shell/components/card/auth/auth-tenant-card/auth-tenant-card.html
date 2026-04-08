@@ -44,7 +44,7 @@
                 nz-button
                 nz-popconfirm
                 nz-tooltip
-                nzPopconfirmTitle="Bạn có chắc muốn tạo lại API Key mới? API Key cũ sẽ không còn hiệu lực."
+                nzPopconfirmTitle="Do you want to create new API Key? Old API Key will be revoked."
                 nzShape="circle"
                 nzTooltipTitle="Refresh / Regenerate API Key"
                 nzType="text"
@@ -177,7 +177,7 @@
   <ng-template nzModalContent>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
       @if (tenant().users.length === 0) {
-        <p class="text-center text-gray-500 py-10">Không có user nào để chọn</p>
+        <p class="text-center text-gray-500 py-10">There are no users to choose</p>
       } @else {
         @for (user of tenant().users; track user.id) {
           <nz-card nzHoverable (click)="selectCreator(user)">

@@ -76,8 +76,14 @@ export class InvoiceEdit implements OnInit {
     effect(() => {
       const currentInvoice = this.invoice();
       if (currentInvoice) {
+        let displayAmount = currentInvoice.amount;
+
+        if (currentInvoice.currency === 'USD' && currentInvoice.amount != null) {
+          displayAmount = currentInvoice.amount / 100;
+        }
+
         this.invoiceForm.patchValue({
-          amount: currentInvoice.amount,
+          amount: displayAmount,
           currency: currentInvoice.currency,
           status: currentInvoice.status,
           paidDate: currentInvoice.paidDate,
@@ -127,7 +133,7 @@ export class InvoiceEdit implements OnInit {
       },
       error: (err) => {
         console.error('Load tenants failed:', err);
-        this.message.error('Không tải được danh sách tenant');
+        this.message.error('Cannot load tenant');
       }
     });
   }
@@ -140,7 +146,7 @@ export class InvoiceEdit implements OnInit {
       },
       error: (err) => {
         console.error('Load subscription failed:', err);
-        this.message.error('Không tải được danh sách subscription');
+        this.message.error('Cannot load subscription');
       }
     });
   }
@@ -153,7 +159,7 @@ export class InvoiceEdit implements OnInit {
       },
       error: (err) => {
         console.error('Load subscribers failed:', err);
-        this.message.error('Không tải được danh sách subscribers');
+        this.message.error('Cannot load subscribers');
       }
     });
   }
@@ -214,6 +220,11 @@ export class InvoiceEdit implements OnInit {
         metadata: metadataObject,
       };
 
+      if (this.invoiceForm.value.currency === 'USD' && typeof this.invoiceForm.value.amount === 'number') {
+        const amount = Math.round(this.invoiceForm.value.amount * 100);
+        Object.assign(payload, {amount})
+      }
+
       if (Object.keys(metadataObject).length === 0) {
         delete payload.metadata;
       }
@@ -229,14 +240,14 @@ export class InvoiceEdit implements OnInit {
       this.invoiceService.update(payload, this.invoice()?.id!).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Update invoice thành công');
+          this.message.success('Update invoice successfully');
           this.invoiceForm.reset();
           this.router.navigate(['/admin/tables/invoices']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Update invoice failed:', err);
-          this.message.error('Update invoice thất bại');
+          this.message.error('Update invoice failed');
         }
       })
     }

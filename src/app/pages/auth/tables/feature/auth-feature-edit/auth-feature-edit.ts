@@ -110,7 +110,7 @@ export class AuthFeatureEdit implements OnInit {
       },
       error: (err) => {
         console.error('Load tenants failed:', err);
-        this.message.error('Không tải được danh sách tenant');
+        this.message.error('Cannot load tenant');
       }
     });
   }
@@ -145,14 +145,14 @@ export class AuthFeatureEdit implements OnInit {
       this.featureService.update(payload, this.feature()?.id!).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Update feature thành công');
+          this.message.success('Update feature successfully');
           this.featureForm.reset();
           this.router.navigate(['/app/tables/features']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Update feature failed:', err);
-          this.message.error('update feature thất bại');
+          this.message.error('update feature failed');
         }
       })
     }

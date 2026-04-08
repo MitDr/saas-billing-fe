@@ -170,7 +170,7 @@ export class PlanEdit implements OnInit {
       },
       error: (err) => {
         console.error('Load tenants failed:', err);
-        this.message.error('Không tải được danh sách tenant');
+        this.message.error('Cannot load tenant');
       }
     });
   }
@@ -184,7 +184,7 @@ export class PlanEdit implements OnInit {
       },
       error: (err) => {
         console.error('Load plan groups failed:', err);
-        this.message.error('Không tải được danh sách plan groups');
+        this.message.error('Cannot load plan groups');
       }
     });
   }
@@ -198,7 +198,7 @@ export class PlanEdit implements OnInit {
       },
       error: (err) => {
         console.error('Load features failed:', err);
-        this.message.error('Không tải được danh sách features');
+        this.message.error('Cannot load features');
       }
     });
   }
@@ -212,7 +212,7 @@ export class PlanEdit implements OnInit {
       },
       error: (err) => {
         console.error('Load prices failed:', err);
-        this.message.error('Không tải được danh sách price');
+        this.message.error('Cannot load price');
       }
     });
   }
@@ -246,14 +246,14 @@ export class PlanEdit implements OnInit {
       this.planService.update(payload, this.plan()?.id!).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Update plan thành công');
+          this.message.success('Update plan successfully');
           this.planForm.reset();
           this.router.navigate(['/admin/tables/plans']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Update plan failed:', err);
-          this.message.error('Update plan thất bại');
+          this.message.error('Update plan failed');
         }
       })
     }

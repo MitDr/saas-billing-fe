@@ -11,7 +11,6 @@ import {Payment} from '../../../../../core/interface/entity/payment';
 import {NzModalModule} from 'ng-zorro-antd/modal';
 import {PaymentService} from '../../../../../core/service/payment-service';
 import {Breadcrumb} from '../../../../../shell/components/generic/breadcrumb/breadcrumb';
-import {InvoiceReuseForm} from '../../../../../shell/components/form/admin/invoice-reuse-form/invoice-reuse-form';
 import {NzBreadCrumbComponent, NzBreadCrumbItemComponent} from 'ng-zorro-antd/breadcrumb';
 import {NzPageHeaderComponent} from 'ng-zorro-antd/page-header';
 import {NzSpinComponent} from 'ng-zorro-antd/spin';
@@ -76,24 +75,35 @@ export class PaymentEdit implements OnInit {
       }
     });
     effect(() => {
-      const currentInvoice = this.payment();
-      if (currentInvoice) {
-        console.log(currentInvoice)
+      const currentPayment = this.payment();
+      if (currentPayment) {
+        let displayAmount = currentPayment.amount;
+
+        if (currentPayment.currency === 'USD' && currentPayment.amount != null) {
+          displayAmount = currentPayment.amount / 100;
+        }
+
         this.paymentForm.patchValue({
-          amount: currentInvoice.amount,
-          currency: currentInvoice.currency,
-          status: currentInvoice.status,
-          paymentIntentId: currentInvoice.paymentIntentId,
-          chargeId: currentInvoice.chargeId,
-          balanceTransactionId: currentInvoice.balanceTransactionId,
-          paymentMethod: currentInvoice.paymentMethod,
-          availableOn: this.parseDate(currentInvoice.availableOn),
+          amount: displayAmount,
+          currency: currentPayment.currency,
+          status: currentPayment.status,
+          paymentIntentId: currentPayment.paymentIntentId,
+          chargeId: currentPayment.chargeId,
+          balanceTransactionId: currentPayment.balanceTransactionId,
+          paymentMethod: currentPayment.paymentMethod,
+          availableOn: this.parseDate(currentPayment.availableOn),
           // metadata: currentInvoice.metadata
         });
-        this.patchMetadata(currentInvoice.metadata);
-        this.getTenant(currentInvoice?.tenant.id);
-        if (currentInvoice?.invoice) {
-          this.getInvoice(currentInvoice?.invoice?.id!);
+        this.patchMetadata(currentPayment.metadata);
+        this.getTenant(currentPayment?.tenant.id);
+        if (currentPayment?.invoice) {
+          this.getInvoice(currentPayment?.invoice?.id!);
+        }
+        if (this.initInvoice() && this.initTenant()) {
+          this.paymentForm.patchValue({
+            tenantId: this.initTenant()?.id,
+            invoiceId: this.initInvoice()?.id
+          })
         }
       }
     });
@@ -163,6 +173,11 @@ export class PaymentEdit implements OnInit {
         const paymentMethod = this.paymentForm.value.invoiceId as number;
         Object.assign(payload, {paymentMethod})
       }
+      if (this.paymentForm.value.currency === 'USD' && typeof this.paymentForm.value.amount === 'number') {
+        const amount = Math.round(this.paymentForm.value.amount * 100);
+        Object.assign(payload, {amount})
+      }
+
       if (Object.keys(metadataObject).length === 0) {
         delete payload.metadata;
       }
@@ -178,14 +193,14 @@ export class PaymentEdit implements OnInit {
       this.paymentService.update(payload, this.payment()?.id!).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Update payment thành công');
+          this.message.success('Update payment successfully');
           this.paymentForm.reset();
           this.router.navigate(['/admin/tables/payments']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Update payment failed:', err);
-          this.message.error('Update payment thất bại');
+          this.message.error('Update payment failed');
         }
       })
     }
@@ -199,7 +214,7 @@ export class PaymentEdit implements OnInit {
       },
       error: (err) => {
         console.error('Load tenants failed:', err);
-        this.message.error('Không tải được danh sách tenant');
+        this.message.error('Cannot load tenant');
       }
     });
   }
@@ -212,7 +227,7 @@ export class PaymentEdit implements OnInit {
       },
       error: (err) => {
         console.error('Load invoices failed:', err);
-        this.message.error('Không tải được danh sách invoice');
+        this.message.error('Cannot load invoice');
       }
     });
   }

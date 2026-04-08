@@ -18,7 +18,7 @@ export class FeatureService {
     return this.api.post<Feature>('/admin/features', request).pipe(
       catchError(error => {
         console.error('Create feature error:', error);
-        return throwError(() => new Error('Tạo feature thất bại'));
+        return throwError(() => new Error('Create feature failed'));
       })
     );
   }
@@ -90,7 +90,7 @@ export class FeatureService {
     return this.api.get<Feature>(`/admin/features/${id}`).pipe(
       catchError(error => {
         console.error('Get feature error:', error);
-        return throwError(() => new Error('Không thể lấy feature'));
+        return throwError(() => new Error('Cannot get feature'));
       })
     );
   }
@@ -99,7 +99,7 @@ export class FeatureService {
     return this.api.put<Feature>(`/admin/features/${id}`, updatedFeature).pipe(
       catchError(error => {
         console.error('Update feature error:', error);
-        return throwError(() => new Error('Cập nhật feature thất bại'));
+        return throwError(() => new Error('Update feature failed'));
       })
     );
   }
@@ -108,7 +108,7 @@ export class FeatureService {
     return this.api.deletes<void>(`/admin/features`, ids).pipe(
       catchError(error => {
         console.error('Bulk delete error:', error);
-        return throwError(() => new Error('Xóa hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk delete failed'));
       })
     );
   }
@@ -117,7 +117,7 @@ export class FeatureService {
     return this.api.post<void>(`/admin/features/softDelete`, softDeleteRequest).pipe(
       catchError(error => {
         console.error('Bulk soft delete error:', error);
-        return throwError(() => new Error('Xóa mềm hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk soft delete failed'));
       })
     );
   }
@@ -126,7 +126,7 @@ export class FeatureService {
     return this.api.delete<void>(`/admin/features/${id}`).pipe(
       catchError(error => {
         console.error('Delete feature error:', error);
-        return throwError(() => new Error('Xóa feature thất bại'));
+        return throwError(() => new Error('Delete feature failed'));
       })
     );
   }

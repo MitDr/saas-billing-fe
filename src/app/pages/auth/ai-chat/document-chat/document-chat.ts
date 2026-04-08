@@ -62,14 +62,14 @@ export class DocumentChat {
 
   clearHistory() {
     this.modal.confirm({
-      nzTitle: 'Xóa lịch sử chat?',
-      nzContent: 'Toàn bộ cuộc trò chuyện sẽ bị xóa vĩnh viễn.',
-      nzOkText: 'Xóa',
+      nzTitle: 'Delete chat history?',
+      nzContent: 'This conversation will be delete permanently',
+      nzOkText: 'Delete',
       nzOkDanger: true,
       nzOnOk: () => {
         this.messages.set([]);
         localStorage.removeItem(this.STORAGE_KEY);
-        this.message.success('Đã xóa lịch sử chat');
+        this.message.success('Deleted chat history');
       }
     });
   }
@@ -77,7 +77,7 @@ export class DocumentChat {
   askQuestion() {
     const q = this.query().trim();
     if (!q) {
-      this.message.warning('Vui lòng nhập câu hỏi');
+      this.message.warning('Please type in a question');
       return;
     }
 
@@ -114,7 +114,7 @@ export class DocumentChat {
 
   copyAnswer(content: string) {
     navigator.clipboard.writeText(content).then(() => {
-      this.message.success('Đã sao chép câu trả lời');
+      this.message.success('Copied answer');
     });
   }
 

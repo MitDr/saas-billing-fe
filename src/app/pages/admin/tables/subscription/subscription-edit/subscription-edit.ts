@@ -144,7 +144,7 @@ export class SubscriptionEdit implements OnInit {
       },
       error: (err) => {
         console.error('Load tenants failed:', err);
-        this.message.error('Không tải được danh sách tenant');
+        this.message.error('Cannot load tenant');
       }
     });
   }
@@ -157,7 +157,7 @@ export class SubscriptionEdit implements OnInit {
       },
       error: (err) => {
         console.error('Load prices failed:', err);
-        this.message.error('Không tải được danh sách prices');
+        this.message.error('Cannot load prices');
       }
     });
   }
@@ -170,7 +170,7 @@ export class SubscriptionEdit implements OnInit {
       },
       error: (err) => {
         console.error('Load invoices failed:', err);
-        this.message.error('Không tải được danh sách invoice');
+        this.message.error('Cannot load invoice');
       }
     });
   }
@@ -183,7 +183,7 @@ export class SubscriptionEdit implements OnInit {
       },
       error: (err) => {
         console.error('Load subscers failed:', err);
-        this.message.error('Không tải được danh sách subscriber');
+        this.message.error('Cannot load subscriber');
       }
     });
   }
@@ -300,14 +300,14 @@ export class SubscriptionEdit implements OnInit {
       this.subscriptionService.update(payload, this.subscription()?.id!).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Update subscription thành công');
+          this.message.success('Update subscription successfully');
           this.subscriptionForm.reset();
           this.router.navigate(['/admin/tables/subscriptions']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Update subscription failed:', err);
-          this.message.error('Update subscription thất bại');
+          this.message.error('Update subscription failed');
         }
       })
     }

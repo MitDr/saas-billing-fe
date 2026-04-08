@@ -93,7 +93,7 @@ export class WebhookEndpointList extends GenericListComponent<WebhookEndpoint, W
         this.loading.set(false);
       },
       error: () => {
-        this.message.error('Không thể tải danh sách webhook endpoints');
+        this.message.error('Cannot load webhook endpoints');
         this.loading.set(false);
       }
     });

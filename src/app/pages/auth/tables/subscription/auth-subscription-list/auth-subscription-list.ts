@@ -39,7 +39,7 @@ import {RouterLink} from '@angular/router';
   templateUrl: './auth-subscription-list.html',
   styleUrl: './auth-subscription-list.css',
 })
-export class AuthSubscriptionList extends AuthGenericListComponent<AuthSubscription, AuthSubscriptionRequest>{
+export class AuthSubscriptionList extends AuthGenericListComponent<AuthSubscription, AuthSubscriptionRequest> {
   subscriptionPage = signal<ListData<AuthSubscription> | null>(null);
   checked = false;
   createRoute = '/app/tables/subscriptions/create'
@@ -102,7 +102,7 @@ export class AuthSubscriptionList extends AuthGenericListComponent<AuthSubscript
         this.loading.set(false);
       },
       error: () => {
-        this.message.error('Không thể tải danh sách subscriptions');
+        this.message.error('Cannot load subscriptions');
         this.loading.set(false);
       }
     });

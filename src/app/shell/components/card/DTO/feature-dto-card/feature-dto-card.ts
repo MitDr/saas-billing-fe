@@ -32,9 +32,9 @@ export class FeatureDtoCard {
 
   onRemoveFeature() {
     this.modalService.confirm({
-      nzTitle: 'Xác nhận xóa',
-      nzContent: `Xóa feature #${this.feature().id} ?`,
-      nzOkText: 'Xóa',
+      nzTitle: 'Confirm Delete',
+      nzContent: `Delete feature #${this.feature().id} ?`,
+      nzOkText: 'Delete',
       nzOkDanger: true,
       nzOnOk: () => {
         this.featureRemove.emit(this.feature().id);

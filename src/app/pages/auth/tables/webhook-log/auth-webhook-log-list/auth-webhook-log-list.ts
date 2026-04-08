@@ -88,7 +88,7 @@ export class AuthWebhookLogList extends AuthGenericListComponent<AuthWebhookLog,
         this.loading.set(false);
       },
       error: () => {
-        this.message.error('Không thể tải danh sách webhook-logs');
+        this.message.error('Cannot load webhook-logs');
         this.loading.set(false);
       }
     });

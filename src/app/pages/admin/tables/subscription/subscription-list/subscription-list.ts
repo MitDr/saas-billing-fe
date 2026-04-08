@@ -109,7 +109,7 @@ export class SubscriptionList extends GenericListComponent<Subscription, Subscri
         this.loading.set(false);
       },
       error: () => {
-        this.message.error('Không thể tải danh sách subscriptions');
+        this.message.error('Cannot load subscriptions');
         this.loading.set(false);
       }
     });

@@ -55,7 +55,6 @@ export class AuthPriceDetail {
   }
 
   onDelete(id: number) {
-    // console.log(id);
     this.loading.set(true);
     this.priceService.deletePrice(id).subscribe({
       next: (response) => {

@@ -59,13 +59,15 @@ export class WebhookEndpointReuseForm {
     });
   }
 
-  get url(){
+  get url() {
     return this.formGroup()?.get('url')
   }
-  get status(){
+
+  get status() {
     return this.formGroup()?.get('status')
   }
-  get tenantId(){
+
+  get tenantId() {
     return this.formGroup()?.get('tenantId')
   }
 
@@ -95,7 +97,7 @@ export class WebhookEndpointReuseForm {
           control.updateValueAndValidity({onlySelf: true});
         }
       });
-      this.message.warning('Vui lòng kiểm tra lại thông tin!');
+      this.message.warning('Please double-check the information!');
     }
   }
 }

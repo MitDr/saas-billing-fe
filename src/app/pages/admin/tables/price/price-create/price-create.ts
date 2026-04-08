@@ -43,7 +43,6 @@ export class PriceCreate implements OnInit {
   priceForm = this.fb.group({
     price: [null, [Validators.required]],
     currency: ['', [Validators.required, Validators.pattern('USD|VND')]],
-    scheme: ['', [Validators.required, Validators.pattern('FLAT_RATE|PER_UNIT')]],
     cycle: ['', [Validators.required, Validators.pattern('MONTH|DAY|WEEK|YEAR')]],
     status: ['', [Validators.required, Validators.pattern('ACTIVE|DEACTIVATED|CANCEL')]],
     cycleCount: [null, Validators.required],
@@ -70,7 +69,7 @@ export class PriceCreate implements OnInit {
       },
       error: (err) => {
         console.error('Load tenants failed:', err);
-        this.message.error('Không tải được danh sách tenant');
+        this.message.error('Cannot load tenant');
       }
     });
   }
@@ -84,8 +83,8 @@ export class PriceCreate implements OnInit {
         // console.log('Loaded tenant for modal:', users.length, users);
       },
       error: (err) => {
-        console.error('Load tenants failed:', err);
-        this.message.error('Không tải được danh sách tenant');
+        console.error('Load plans failed', err);
+        this.message.error('Cannot load plans');
       }
     });
   }
@@ -98,7 +97,6 @@ export class PriceCreate implements OnInit {
       const payload: PriceRequest = {
         price: this.priceForm.value.price!,
         currency: this.priceForm.value.currency as 'USD' | 'VND',
-        scheme: this.priceForm.value.scheme as 'FLAT_RATE' | 'PER_UNIT',
         cycle: this.priceForm.value.cycle as 'DAY' | 'WEEK' | 'MONTH' | 'YEAR',
         status: this.priceForm.value.status as 'ACTIVE' | 'DEACTIVATED' | 'CANCEL',
         cycleCount: this.priceForm.value.cycleCount!,
@@ -109,22 +107,27 @@ export class PriceCreate implements OnInit {
         tenantId: this.priceForm.value.tenantId!
       }
 
-      const plan = this.priceForm.value.planId! as number;
-      if (plan) {
-        Object.assign(payload, {plan});
+      if (this.priceForm.value.currency === 'USD' && typeof this.priceForm.value.price === 'number') {
+        const price = Math.round(this.priceForm.value.price * 100);
+        Object.assign(payload, {price})
+      }
+
+      const planId = this.priceForm.value.planId! as number;
+      if (planId) {
+        Object.assign(payload, {planId});
       }
       console.log(payload)
       this.priceService.createPrice(payload).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Tạo price thành công');
+          this.message.success('Create price successfully');
           this.priceForm.reset();
           this.router.navigate(['/admin/tables/prices']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Create price failed:', err);
-          this.message.error('Tạo price thất bại');
+          this.message.error('Create price failed');
         }
       })
     }

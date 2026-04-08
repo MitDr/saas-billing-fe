@@ -17,6 +17,25 @@ export const authGuard: CanActivateFn = () => {
   );
 };
 
+export const authRedirectGuard: CanActivateFn = () => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+
+  return authService.currentUser$.pipe(
+    take(1),
+    map(user => {
+      if (user) {
+        if (user.role === 'ADMIN') {
+          return router.createUrlTree(['/admin/dashboard']);
+        } else if (user.role === 'USER') {
+          return router.createUrlTree(['/app/dashboard']);   // hoặc '/dashboard' tùy bạn
+        }
+      }
+      return true;
+    })
+  );
+};
+
 export const adminGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);

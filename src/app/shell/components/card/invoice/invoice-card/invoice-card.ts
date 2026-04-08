@@ -15,6 +15,7 @@ import {NzTooltipDirective} from 'ng-zorro-antd/tooltip';
 import {RouterLink} from '@angular/router';
 import {NzModalModule, NzModalService} from 'ng-zorro-antd/modal';
 import {JsonPipe, KeyValuePipe, NgForOf} from '@angular/common';
+import {currencyDecimals} from '../../payment/payment-card/payment-card';
 
 @Component({
   selector: 'app-invoice-card',
@@ -71,24 +72,24 @@ export class InvoiceCard {
 
   copyInvoiceNumber(key: string): void {
     if (!key) {
-      this.message.error('Không có API Key để copy');
+      this.message.error('There are no API Keys to copy');
       return;
     }
 
     navigator.clipboard.writeText(key)
       .then(() => {
-        this.message.success('API Key đã được copy vào clipboard!');
+        this.message.success('API Key has been copied to clipboard!');
       })
       .catch(() => {
-        this.message.error('Không thể copy, vui lòng thử lại');
+        this.message.error('Cannot copy, Please try again later!');
       });
   }
 
   onDelete(): void {
     this.modalService.confirm({
-      nzTitle: 'Xác nhận xóa',
-      nzContent: `Xóa Invoice ${this.invoice().invoiceNumber} ?`,
-      nzOkText: 'Xóa',
+      nzTitle: 'Confirm Delete',
+      nzContent: `Delete Invoice ${this.invoice().invoiceNumber} ?`,
+      nzOkText: 'Delete',
       nzOkDanger: true,
       nzOnOk: () => {
         this.deleteButton.emit(this.invoice().id);
@@ -96,5 +97,43 @@ export class InvoiceCard {
     });
   }
 
+  formatAmount(): string {
+    const invoice = this.invoice();
+    if (!invoice || invoice.amount == null) return '—';
 
+    const amount = Number(invoice.amount);
+    if (isNaN(amount)) return String(invoice.amount);
+
+    const currency = invoice.currency ?? 'USD';
+    const decimals = currencyDecimals[currency.toUpperCase()] ?? 2;
+
+    const majorAmount = amount / Math.pow(10, decimals);
+
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: currency.toUpperCase(),
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    }).format(majorAmount);
+  }
+
+  formatAmountUsd(): string {
+    const invoice = this.invoice();
+    if (!invoice || invoice.amountUsd == null) return '—';
+
+    const amount = Number(invoice.amountUsd);
+    if (isNaN(amount)) return String(invoice.amountUsd);
+
+    const currency = 'USD';
+    const decimals = currencyDecimals[currency.toUpperCase()] ?? 2;
+
+    const majorAmount = amount / Math.pow(10, decimals);
+
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: currency.toUpperCase(),
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    }).format(majorAmount);
+  }
 }

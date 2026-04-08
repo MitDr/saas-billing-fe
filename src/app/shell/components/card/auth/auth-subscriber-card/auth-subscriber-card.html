@@ -36,7 +36,7 @@
 
       <!-- Actions -->
       <div class="mt-8 flex flex-wrap gap-3">
-        <button [routerLink]="['/app/tables/subscribers', subscriber().id, 'edit']"
+        <button (click)="openUpdateModal()"
                 class="!inline-flex !items-center" nz-button
                 nzType="primary">
           <span nz-icon nzType="edit"></span>
@@ -85,3 +85,26 @@
     </div>
   </div>
 </nz-card>
+
+<nz-modal
+  (nzOnCancel)="onCloseModal()"
+  (nzOnOk)="onConfirmModal()"
+  [nzVisible]="isUpdateModalOpen()"
+  nzCancelText="Close"
+  nzOkText="Complete"
+  nzTitle="Update Subscriber"
+>
+  <ng-template nzModalContent>
+    <div class="page-container">
+      <h1 class="text-2xl font-semibold mb-6">Update Subscriber</h1>
+
+      <app-auth-subscriber-reuse-form
+        (submitted)="onConfirmModal()"
+        [formGroup]="subscriberForm"
+        [isEditMode]="false"
+        [isLoading]="isSubmitting"
+        [submitLabel]="'Update'"
+      ></app-auth-subscriber-reuse-form>
+    </div>
+  </ng-template>
+</nz-modal>

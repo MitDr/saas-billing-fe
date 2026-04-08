@@ -63,7 +63,7 @@ export class UserEdit {
           role: currentUser.role,
         });
 
-        // Xóa validator cho password ở edit mode
+        // Delete validator cho password ở edit mode
         this.userForm.get('password')?.clearValidators();
         this.userForm.get('checkPassword')?.clearValidators();
         this.userForm.updateValueAndValidity();

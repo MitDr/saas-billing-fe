@@ -2,7 +2,6 @@ import {Component, inject, input, output} from '@angular/core';
 import {NzModalComponent, NzModalService} from 'ng-zorro-antd/modal';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {AuthPayment} from '../../../../../core/interface/entity/auth/auth-payment';
-import {InvoiceDtoCard} from '../../DTO/invoice-dto-card/invoice-dto-card';
 import {JsonPipe} from '@angular/common';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzCardComponent} from 'ng-zorro-antd/card';
@@ -12,11 +11,11 @@ import {NzTagComponent} from 'ng-zorro-antd/tag';
 import {TenantDtoCard} from '../../DTO/tenant-dto-card/tenant-dto-card';
 import {AuthInvoiceDtoCard} from '../../DTO/auth/auth-invoice-dto-card/auth-invoice-dto-card';
 import {RouterLink} from '@angular/router';
+import {currencyDecimals} from '../../payment/payment-card/payment-card';
 
 @Component({
   selector: 'app-auth-payment-card',
   imports: [
-    InvoiceDtoCard,
     JsonPipe,
     NzButtonComponent,
     NzCardComponent,
@@ -58,13 +57,33 @@ export class AuthPaymentCard {
 
   onDelete() {
     this.modalService.confirm({
-      nzTitle: 'Xác nhận xóa',
-      nzContent: `Xóa Payment #${this.payment().id} ?`,
-      nzOkText: 'Xóa',
+      nzTitle: 'Confirm delete',
+      nzContent: `Delete Payment #${this.payment().id} ?`,
+      nzOkText: 'Delete',
       nzOkDanger: true,
       nzOnOk: () => {
         this.deleteButton.emit(this.payment().id);
       }
     });
+  }
+
+  formatAmount(): string {
+    const payment = this.payment();
+    if (!payment || payment.amount == null) return '—';
+
+    const amount = Number(payment.amount);
+    if (isNaN(amount)) return String(payment.amount);
+
+    const currency = payment.currency ?? 'USD';
+    const decimals = currencyDecimals[currency.toUpperCase()] ?? 2;
+
+    const majorAmount = amount / Math.pow(10, decimals);
+
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: currency.toUpperCase(),
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    }).format(majorAmount);
   }
 }

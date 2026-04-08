@@ -234,7 +234,7 @@ export class PriceList extends GenericListComponent<Price, PriceRequest> {
   //       this.loading.set(false);
   //     },
   //     error: () => {
-  //       this.message.error('Không thể tải danh sách prices');
+  //       this.message.error('Cannot load prices');
   //       this.loading.set(false);
   //     }
   //   });
@@ -275,9 +275,8 @@ export class PriceList extends GenericListComponent<Price, PriceRequest> {
   getColumns(): ColumnConfig<Price>[] {
     return [
       {key: 'id', title: 'Id', editable: false},
-      {key: 'price', title: 'Price', editable: true, type: 'text'},
+      {key: 'price', title: 'Price', editable: true, type: 'price'},
       {key: 'currency', title: 'Currency', editable: true, type: 'select', options: CURRENCYOPTIONS},
-      {key: 'scheme', title: 'Scheme', editable: true, type: 'select', options: SCHEMEOPTIONS},
       {key: 'cycle', title: 'Cycle', editable: true, type: 'select', options: CYCLEOPTIONS},
       {key: 'status', title: 'Status', editable: true, type: 'select', options: PRICESTATUSOPTIONS},
       {key: 'maxUnit', title: 'Max Unit', editable: true, type: "text"},
@@ -336,7 +335,7 @@ export class PriceList extends GenericListComponent<Price, PriceRequest> {
         this.loading.set(false);
       },
       error: () => {
-        this.message.error('Không thể tải danh sách prices');
+        this.message.error('Cannot load prices');
         this.loading.set(false);
       }
     });
@@ -347,7 +346,6 @@ export class PriceList extends GenericListComponent<Price, PriceRequest> {
     const result: PriceRequest = {
       price: price.price,
       currency: price.currency,
-      scheme: price.scheme,
       cycle: price.cycle,
       status: price.status,
       maxUnit: price.maxUnit,
@@ -376,10 +374,6 @@ export const CYCLEOPTIONS = [
   {label: 'Day', value: 'DAY', color: 'red'},
   {label: 'Week', value: 'WEEK', color: 'blue'},
   {label: 'Year', value: 'YEAR', color: 'yellow'}
-]
-export const SCHEMEOPTIONS = [
-  {label: 'Flat-rate', value: 'FLAT_RATE', color: 'green'},
-  {label: 'Per-unit', value: 'PER_UNIT', color: 'blue'},
 ]
 export const CURRENCYOPTIONS = [
   {label: 'Usd', value: 'USD', color: 'green'},

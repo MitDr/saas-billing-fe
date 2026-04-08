@@ -10,9 +10,6 @@ import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {NonNullableFormBuilder, Validators} from '@angular/forms';
 import {Plan} from '../../../../../core/interface/entity/plan';
 import {Breadcrumb} from '../../../../../shell/components/generic/breadcrumb/breadcrumb';
-import {
-  EntitlementReuseForm
-} from '../../../../../shell/components/form/admin/entitlement-reuse-form/entitlement-reuse-form';
 import {NzBreadCrumbComponent, NzBreadCrumbItemComponent} from 'ng-zorro-antd/breadcrumb';
 import {NzPageHeaderComponent} from 'ng-zorro-antd/page-header';
 import {NzSpinComponent} from 'ng-zorro-antd/spin';
@@ -118,7 +115,7 @@ export class FeatureEdit implements OnInit {
       },
       error: (err) => {
         console.error('Load tenants failed:', err);
-        this.message.error('Không tải được danh sách tenant');
+        this.message.error('Cannot load tenant');
       }
     });
   }
@@ -133,7 +130,7 @@ export class FeatureEdit implements OnInit {
       },
       error: (err) => {
         console.error('Load tenants failed:', err);
-        this.message.error('Không tải được danh sách tenant');
+        this.message.error('Cannot load tenant');
       }
     });
   }
@@ -177,14 +174,14 @@ export class FeatureEdit implements OnInit {
       this.featureService.update(payload, this.feature()?.id!).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Update feature thành công');
+          this.message.success('Update feature successfully');
           this.featureForm.reset();
           this.router.navigate(['/admin/tables/features']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Update feature failed:', err);
-          this.message.error('update feature thất bại');
+          this.message.error('update feature failed');
         }
       })
     }

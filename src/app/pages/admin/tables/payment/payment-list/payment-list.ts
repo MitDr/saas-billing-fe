@@ -13,6 +13,7 @@ import {GenericListComponent} from '../../../../../core/generic/base-list-compon
 import {NzInputDirective, NzInputWrapperComponent} from 'ng-zorro-antd/input';
 import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {CURRENCYOPTIONS} from '../../price/price-list/price-list';
 
 @Component({
   selector: 'app-payment-list',
@@ -44,7 +45,8 @@ export class PaymentList extends GenericListComponent<Payment, PaymentRequest> {
   override getColumns(): ColumnConfig<Payment>[] {
     return [
       {key: 'id', title: 'Id', type: 'text', editable: false},
-      {key: 'amount', title: 'Amount', type: "text", editable: true},
+      {key: 'amount', title: 'Amount', type: "price", editable: true},
+      {key: 'currency', title: 'Currency', editable: true, type: 'select', options: CURRENCYOPTIONS},
       {key: 'status', title: 'Status', type: 'select', editable: true, options: PAYMENTSTATUSOPTION},
       {key: 'paymentIntentId', title: 'Intent Id', type: "text", editable: true},
       // {key: 'chargeId', title: 'Charge Id', type: 'text', editable: true},
@@ -112,7 +114,7 @@ export class PaymentList extends GenericListComponent<Payment, PaymentRequest> {
         this.loading.set(false);
       },
       error: () => {
-        this.message.error('Không thể tải danh sách payments');
+        this.message.error('Cannot load payments');
         this.loading.set(false);
       }
     });

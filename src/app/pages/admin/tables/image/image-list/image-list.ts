@@ -102,7 +102,7 @@ export class ImageList extends GenericListComponent<Image, ImageRequest> {
         this.loading.set(false);
       },
       error: () => {
-        this.message.error('Không thể tải danh sách images');
+        this.message.error('Cannot load images');
         this.loading.set(false);
       }
     });

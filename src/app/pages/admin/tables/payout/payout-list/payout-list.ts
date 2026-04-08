@@ -44,7 +44,7 @@ export class PayoutList extends GenericListComponent<Payout, PayoutRequest> {
   override getColumns(): ColumnConfig<Payout>[] {
     return [
       {key: 'id', title: 'Id', editable: false},
-      {key: 'amount', title: 'Amount', editable: true, type: "text"},
+      {key: 'amount', title: 'Amount', editable: true, type: "price"},
       {key: 'currency', title: 'Currency', type: 'select', editable: true, options: CURRENCYOPTIONS},
       // {key: 'stripeTransferId', title: 'TransferId', editable: true, type: "text"},
       {key: 'stripePayoutId', title: 'PayoutId', editable: true, type: 'text'},
@@ -94,7 +94,7 @@ export class PayoutList extends GenericListComponent<Payout, PayoutRequest> {
         this.loading.set(false);
       },
       error: () => {
-        this.message.error('Không thể tải danh sách payouts');
+        this.message.error('Cannot load payouts');
         this.loading.set(false);
       }
     });

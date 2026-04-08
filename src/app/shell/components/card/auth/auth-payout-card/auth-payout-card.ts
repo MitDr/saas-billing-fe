@@ -37,9 +37,9 @@ export class AuthPayoutCard {
 
   onDelete() {
     this.modalService.confirm({
-      nzTitle: 'Xác nhận xóa',
-      nzContent: `Xóa payout #${this.payout().id} ?`,
-      nzOkText: 'Xóa',
+      nzTitle: 'Confirm delete',
+      nzContent: `Delete payout #${this.payout().id} ?`,
+      nzOkText: 'Delete',
       nzOkDanger: true,
       nzOnOk: () => {
         this.deleteButton.emit(this.payout().id);

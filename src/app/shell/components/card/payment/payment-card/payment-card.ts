@@ -1,5 +1,5 @@
 import {Component, inject, input, output} from '@angular/core';
-import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzModalComponent, NzModalService} from 'ng-zorro-antd/modal';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {Payment} from '../../../../../core/interface/entity/payment';
 import {NzCardComponent} from 'ng-zorro-antd/card';
@@ -10,7 +10,6 @@ import {NzDescriptionsComponent, NzDescriptionsItemComponent} from 'ng-zorro-ant
 import {RouterLink} from '@angular/router';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {JsonPipe, KeyValuePipe} from '@angular/common';
-import {InvoiceCard} from '../../invoice/invoice-card/invoice-card';
 import {InvoiceDtoCard} from '../../DTO/invoice-dto-card/invoice-dto-card';
 
 @Component({
@@ -25,18 +24,20 @@ import {InvoiceDtoCard} from '../../DTO/invoice-dto-card/invoice-dto-card';
     RouterLink,
     NzButtonComponent,
     KeyValuePipe,
-    InvoiceCard,
     InvoiceDtoCard,
-    JsonPipe
+    JsonPipe,
+    NzModalComponent
   ],
   templateUrl: './payment-card.html',
   styleUrl: './payment-card.css',
 })
 export class PaymentCard {
+
   payment = input.required<Payment>()
   // tenantService = inject(TenantService);
   deleteButton = output<number>();
   modalService = inject(NzModalService);
+
   // load = output<number>();
   private message = inject(NzMessageService);
 
@@ -58,13 +59,38 @@ export class PaymentCard {
 
   onDelete() {
     this.modalService.confirm({
-      nzTitle: 'Xác nhận xóa',
-      nzContent: `Xóa Payment #${this.payment().id} ?`,
-      nzOkText: 'Xóa',
+      nzTitle: 'Confirm Delete',
+      nzContent: `Delete Payment #${this.payment().id} ?`,
+      nzOkText: 'Delete',
       nzOkDanger: true,
       nzOnOk: () => {
         this.deleteButton.emit(this.payment().id);
       }
     });
   }
+
+  formatAmount(): string {
+    const payment = this.payment();
+    if (!payment || payment.amount == null) return '—';
+
+    const amount = Number(payment.amount);
+    if (isNaN(amount)) return String(payment.amount);
+
+    const currency = payment.currency ?? 'USD';
+    const decimals = currencyDecimals[currency.toUpperCase()] ?? 2;
+
+    const majorAmount = amount / Math.pow(10, decimals);
+
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: currency.toUpperCase(),
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    }).format(majorAmount);
+  }
 }
+
+export const currencyDecimals: { [code: string]: number } = {
+  'USD': 2,
+  'VND': 0
+};

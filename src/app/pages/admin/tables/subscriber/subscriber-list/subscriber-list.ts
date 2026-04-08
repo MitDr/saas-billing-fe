@@ -106,7 +106,7 @@ export class SubscriberList extends GenericListComponent<Subscriber, SubscriberR
         this.loading.set(false);
       },
       error: () => {
-        this.message.error('Không thể tải danh sách subscribers');
+        this.message.error('Cannot load subscribers');
         this.loading.set(false);
       }
     });

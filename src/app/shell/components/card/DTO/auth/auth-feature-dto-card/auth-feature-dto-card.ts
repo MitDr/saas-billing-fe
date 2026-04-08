@@ -31,13 +31,19 @@ export class AuthFeatureDtoCard {
   private message = inject(NzMessageService);
 
   onRemoveFeature() {
+    const currentFeature = this.feature();
+    if (!currentFeature || !currentFeature.id) {
+      console.warn('Feature is null or has no id');
+      return;
+    }
+
     this.modalService.confirm({
-      nzTitle: 'Xác nhận xóa',
-      nzContent: `Xóa feature #${this.feature().id} ?`,
-      nzOkText: 'Xóa',
+      nzTitle: 'Confirm Delete',
+      nzContent: `Delete feature #${currentFeature.id} ?`,
+      nzOkText: 'Delete',
       nzOkDanger: true,
       nzOnOk: () => {
-        this.featureRemove.emit(this.feature().id);
+        this.featureRemove.emit(currentFeature.id);
       }
     });
   }

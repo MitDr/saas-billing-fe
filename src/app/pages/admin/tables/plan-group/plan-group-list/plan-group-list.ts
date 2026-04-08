@@ -92,7 +92,7 @@ export class PlanGroupList extends GenericListComponent<PlanGroup, PlanGroupRequ
         this.loading.set(false);
       },
       error: () => {
-        this.message.error('Không thể tải danh sách plan-groups');
+        this.message.error('Cannot load plan-groups');
         this.loading.set(false);
       }
     });

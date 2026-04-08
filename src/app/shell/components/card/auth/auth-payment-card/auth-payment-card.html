@@ -32,7 +32,7 @@
           </div>
         </nz-descriptions-item>
         <nz-descriptions-item nzTitle="Amount">
-          {{ payment().amount }}
+          {{ formatAmount() }}
         </nz-descriptions-item>
 
         <nz-descriptions-item nzTitle="Currency">
@@ -82,16 +82,6 @@
           <pre>{{ metadataObject | json }}</pre>
         </nz-descriptions-item>
       </nz-descriptions>
-
-      <!-- Actions -->
-      <div class="mt-8 flex flex-wrap gap-3">
-        <button (click)="onDelete()" class="!inline-flex !items-center"
-                nz-button nzDanger>
-          <span nz-icon nzType="delete"></span>
-          Delete Tenant
-        </button>
-      </div>
-
       <!--      Phần Invoice-->
       @if (payment().invoice) {
         <div class="mt-10">

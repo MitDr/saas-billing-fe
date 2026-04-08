@@ -18,7 +18,7 @@ export class InvoiceService {
     return this.api.post<Invoice>('/admin/invoices', request).pipe(
       catchError(error => {
         console.error('Create invoice error:', error);
-        return throwError(() => new Error('Tạo invoice thất bại'));
+        return throwError(() => new Error('Create invoice failed'));
       })
     );
   }
@@ -90,7 +90,7 @@ export class InvoiceService {
     return this.api.get<Invoice>(`/admin/invoices/${id}`).pipe(
       catchError(error => {
         console.error('Get invoice error:', error);
-        return throwError(() => new Error('Không thể lấy invoice'));
+        return throwError(() => new Error('Cannot get invoice'));
       })
     );
   }
@@ -100,7 +100,7 @@ export class InvoiceService {
     return this.api.put<Invoice>(`/admin/invoices/${id}`, updatedInvoice).pipe(
       catchError(error => {
         console.error('Update invoice error:', error);
-        return throwError(() => new Error('Cập nhật invoice thất bại'));
+        return throwError(() => new Error('Update invoice failed'));
       })
     );
   }
@@ -109,7 +109,7 @@ export class InvoiceService {
     return this.api.deletes<void>(`/admin/invoices`, ids).pipe(
       catchError(error => {
         console.error('Bulk delete error:', error);
-        return throwError(() => new Error('Xóa hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk delete failed'));
       })
     );
   }
@@ -118,7 +118,7 @@ export class InvoiceService {
     return this.api.post<void>(`/admin/invoices/softDelete`, softDeleteRequest).pipe(
       catchError(error => {
         console.error('Bulk soft delete error:', error);
-        return throwError(() => new Error('Xóa mềm hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk soft delete failed'));
       })
     );
   }
@@ -127,7 +127,7 @@ export class InvoiceService {
     return this.api.delete<void>(`/admin/invoices/${id}`).pipe(
       catchError(error => {
         console.error('Delete invoice error:', error);
-        return throwError(() => new Error('Xóa invoice thất bại'));
+        return throwError(() => new Error('Delete invoice failed'));
       })
     );
   }

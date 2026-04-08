@@ -39,10 +39,11 @@ export class AuthWebhookEndpointReuseForm {
   submitted = output<void>();
   private message = inject(NzMessageService);
 
-  get url(){
+  get url() {
     return this.formGroup()?.get('url')
   }
-  get status(){
+
+  get status() {
     return this.formGroup()?.get('status')
   }
 
@@ -57,7 +58,7 @@ export class AuthWebhookEndpointReuseForm {
           control.updateValueAndValidity({onlySelf: true});
         }
       });
-      this.message.warning('Vui lòng kiểm tra lại thông tin!');
+      this.message.warning('Please double-check the information!');
     }
   }
 }

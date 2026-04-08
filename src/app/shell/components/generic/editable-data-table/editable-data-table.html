@@ -20,7 +20,7 @@
         (click)="openBulkDeleteModal()"
       >
         <span nz-icon nzType="delete"></span>
-        Xử lý xóa mềm / khôi phục ({{ setOfCheckedId().size }})
+        Soft Delete/Restore ({{ setOfCheckedId().size }})
       </button>
 
       <!--      <button-->
@@ -113,6 +113,15 @@
                   @case ('number') {
                     <input nz-input type="number" [(ngModel)]="editCache()[item.id].data[col.key]"/>
                   }
+                  @case ('price') {
+                    <input
+                      nz-input
+                      type="number"
+                      step="0.01"
+                      [ngModel]="toMajorUnit( (editCache()[item.id].data)[col.key], (item)['currency'] ?? 'USD' )"
+                      (ngModelChange)="updatePriceInCache(item.id, col.key, $event, (item )['currency'] ?? 'USD')"
+                    />
+                  }
                   @case ('select') {
                     <nz-select [(ngModel)]="editCache()[item.id].data[col.key]">
                       @for (opt of col.options; track opt.value) {
@@ -127,7 +136,7 @@
                         [(ngModel)]="editCache()[item.id].data[col.key]"
                         [nzFormat]="'dd-MM-yyyy HH:mm:ss'"
                         nzAllowClear
-                        nzPlaceHolder="Chọn ngày"
+                        nzPlaceHolder="Select Date"
                       ></nz-date-picker>
                     </div>
                   }
@@ -172,6 +181,9 @@
                     <!--                  }-->
                 } @else if (col.type === 'date-time' && col.dateFormat) {
                   {{ formatDateString(item[col.key], col.dateFormat) }}
+                } @else if (col.type === 'price') {
+                  @let currencyCode = item['currency'] ?? 'USD';
+                  {{ formatCurrency(item[col.key], currencyCode) }}
                 } @else {
                   {{ item[col.key] }}
                 }
@@ -217,14 +229,14 @@
   (nzOnOk)="confirmBulkAction()"
   [nzOkDisabled]="selectedBulkSoftDeleteMode() === null"
   [nzVisible]="isBulkDeleteModalOpen()"
-  nzCancelText="Đóng"
-  nzOkText="Xác nhận"
-  nzTitle="Chọn hành động cho {{ setOfCheckedId().size }} {{ entityName() }}"
+  nzCancelText="Close"
+  nzOkText="Confirm"
+  nzTitle="Select action for {{ setOfCheckedId().size }} {{ entityName() }}"
 >
   <ng-template nzModalContent>
     <div class="p-4">
       <p class="text-lg font-medium mb-6">
-        Bạn muốn thực hiện hành động nào với {{ setOfCheckedId().size }} mục đã chọn?
+        What do you want to do with {{ setOfCheckedId().size }} selected?
       </p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -243,11 +255,11 @@
             nz-checkbox
           ></label>
 
-          <nz-card-meta nzTitle="Khôi phục (hiện lại)">
+          <nz-card-meta nzTitle="Restore">
             <ng-template nzDescription>
               <div class="text-sm text-gray-600">
-                Các mục sẽ bị ẩn khỏi hệ thống nhưng vẫn có thể khôi phục sau.<br/>
-                Dữ liệu không bị xóa vĩnh viễn.
+                These will be hidden from the system but they can be restore later.<br/>
+                Data will not be deleted permanently.
               </div>
             </ng-template>
           </nz-card-meta>
@@ -256,13 +268,13 @@
           <!--              Khôi phục (hiện lại)-->
           <!--            </nz-card-meta-title>-->
           <!--            <nz-card-meta-description>-->
-          <!--              Các mục đang bị xóa mềm sẽ được khôi phục trạng thái active.-->
+          <!--              Các mục đang bị Delete mềm sẽ được khôi phục trạng thái active.-->
           <!--              Không ảnh hưởng đến dữ liệu gốc.-->
           <!--            </nz-card-meta-description>-->
           <!--          </nz-card-meta>-->
         </nz-card>
 
-        <!-- Card Xóa mềm -->
+        <!-- Card Delete mềm -->
         <nz-card
           (click)="selectedBulkSoftDeleteMode.set(true)"
           [class.border-2]="selectedBulkSoftDeleteMode() === true"
@@ -278,11 +290,11 @@
           ></label>
 
 
-          <nz-card-meta nzTitle="Xóa mềm (ẩn tạm thời)">
+          <nz-card-meta nzTitle="Soft delete">
             <ng-template nzDescription>
               <div class="text-sm text-gray-600">
-                Các mục sẽ bị ẩn khỏi hệ thống nhưng vẫn có thể khôi phục sau.<br/>
-                Dữ liệu không bị xóa vĩnh viễn.
+                These will be hidden from the system but they can be restore later.<br/>
+                Data will not be deleted permanently.
               </div>
             </ng-template>
           </nz-card-meta>

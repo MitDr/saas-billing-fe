@@ -17,7 +17,7 @@ export class ImageService {
     return this.api.post<Image>('/admin/images', request).pipe(
       catchError(error => {
         console.error('Create image error:', error);
-        return throwError(() => new Error('Tạo image thất bại'));
+        return throwError(() => new Error('Create image failed'));
       })
     );
   }
@@ -53,7 +53,7 @@ export class ImageService {
     return this.api.get<Image>(`/admin/images/${id}`).pipe(
       catchError(error => {
         console.error('Get image error:', error);
-        return throwError(() => new Error('Không thể lấy image'));
+        return throwError(() => new Error('Cannot get image'));
       })
     );
   }
@@ -62,7 +62,7 @@ export class ImageService {
     return this.api.put<Image>(`/admin/images/${id}`, updatedImage).pipe(
       catchError(error => {
         console.error('Update image error:', error);
-        return throwError(() => new Error('Cập nhật image thất bại'));
+        return throwError(() => new Error('Update image failed'));
       })
     );
   }
@@ -71,7 +71,7 @@ export class ImageService {
     return this.api.deletes<void>(`/admin/images`, ids).pipe(
       catchError(error => {
         console.error('Bulk delete error:', error);
-        return throwError(() => new Error('Xóa hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk delete failed'));
       })
     );
   }
@@ -80,7 +80,7 @@ export class ImageService {
     return this.api.delete<void>(`/admin/images/${id}`).pipe(
       catchError(error => {
         console.error('Delete image error:', error);
-        return throwError(() => new Error('Xóa image thất bại'));
+        return throwError(() => new Error('Delete image failed'));
       })
     );
   }

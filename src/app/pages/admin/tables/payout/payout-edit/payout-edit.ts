@@ -69,8 +69,14 @@ export class PayoutEdit implements OnInit {
     effect(() => {
       const currentInvoice = this.payout();
       if (currentInvoice) {
+        let displayAmount = currentInvoice.amount;
+
+        if (currentInvoice.currency === 'USD' && currentInvoice.amount != null) {
+          displayAmount = currentInvoice.amount / 100;
+        }
+
         this.payoutForm.patchValue({
-          amount: currentInvoice.amount,
+          amount: displayAmount,
           currency: currentInvoice.currency,
           status: currentInvoice.status,
           stripeTransferId: currentInvoice.stripeTransferId,
@@ -105,7 +111,7 @@ export class PayoutEdit implements OnInit {
       },
       error: (err) => {
         console.error('Load tenants failed:', err);
-        this.message.error('Không tải được danh sách tenant');
+        this.message.error('Cannot load tenant');
       }
     });
   }
@@ -135,6 +141,11 @@ export class PayoutEdit implements OnInit {
         tenantId: this.payoutForm.value.tenantId!
       }
 
+      if (this.payoutForm.value.currency === 'USD' && typeof this.payoutForm.value.amount === 'number') {
+        const amount = Math.round(this.payoutForm.value.amount * 100);
+        Object.assign(payload, {amount})
+      }
+
       if (this.payoutForm.value.stripePayoutId) {
         const stripePayoutId = this.payoutForm.value.stripePayoutId as string;
         Object.assign(payload, {stripePayoutId})
@@ -151,14 +162,14 @@ export class PayoutEdit implements OnInit {
       this.payoutService.update(payload, this.payout()?.id!).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Update payout thành công');
+          this.message.success('Update payout successfully');
           this.payoutForm.reset();
           this.router.navigate(['/admin/tables/payouts']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Update payout failed:', err);
-          this.message.error('Update payout thất bại');
+          this.message.error('Update payout failed');
         }
       })
     }

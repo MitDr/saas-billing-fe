@@ -105,7 +105,7 @@ export class AuthPlanGroupEdit implements OnInit {
       },
       error: (err) => {
         console.error('Load tenants failed:', err);
-        this.message.error('Không tải được danh sách tenant');
+        this.message.error('Cannot load tenant');
       }
     });
   }
@@ -143,14 +143,14 @@ export class AuthPlanGroupEdit implements OnInit {
       this.planGroupService.update(payload, this.planGroup()?.id!).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Update invoice thành công');
+          this.message.success('Update plan group successfully');
           this.planGroupForm.reset();
           this.router.navigate(['/app/tables/plan-groups']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Update plan group failed:', err);
-          this.message.error('Update plan group thất bại');
+          this.message.error('Update plan group failed');
         }
       })
     }

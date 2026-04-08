@@ -53,8 +53,8 @@ export class AuthFeatureCreate implements OnInit {
         this.availablePlans.set(plans);
       },
       error: (err) => {
-        console.error('Load tenants failed:', err);
-        this.message.error('Không tải được danh sách tenant');
+        console.error('Load plans failed:', err);
+        this.message.error('Cannot load plans');
       }
     });
   }
@@ -82,14 +82,14 @@ export class AuthFeatureCreate implements OnInit {
       this.featureService.createFeature(payload).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Tạo tenant thành công');
+          this.message.success('Create tenant successfully');
           this.featureForm.reset();
           this.router.navigate(['/app/tables/features']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Create feature failed:', err);
-          this.message.error('Tạo feature thất bại');
+          this.message.error('Creat feature failed');
         }
       })
     }

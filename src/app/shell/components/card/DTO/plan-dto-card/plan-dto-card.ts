@@ -38,9 +38,9 @@ export class PlanDtoCard {
 
   onRemovePlan() {
     this.modalService.confirm({
-      nzTitle: 'Xác nhận xóa',
-      nzContent: `Xóa Plan #${this.plan().id} ?`,
-      nzOkText: 'Xóa',
+      nzTitle: 'Confirm Delete',
+      nzContent: `Delete Plan #${this.plan().id} ?`,
+      nzOkText: 'Delete',
       nzOkDanger: true,
       nzOnOk: () => {
         this.planRemove.emit(this.plan().id);

@@ -1,7 +1,6 @@
 export interface PriceRequest {
   price: number,
   currency: 'USD' | 'VND',
-  scheme: "FLAT_RATE" | 'PER_UNIT',
   cycle: "MONTH" | 'DAY' | 'WEEK' | 'YEAR',
   status: "ACTIVE" | 'DEACTIVATED' | 'CANCEL',
   maxUnit: number,

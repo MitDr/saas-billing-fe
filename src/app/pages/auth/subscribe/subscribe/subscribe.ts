@@ -87,7 +87,7 @@ export class Subscribe implements OnInit {
       },
       error: (err) => {
         console.error('Load subscriber failed:', err);
-        this.message.error('Không tải được danh sách subscriber');
+        this.message.error('Cannot load subscriber');
       }
     });
   }

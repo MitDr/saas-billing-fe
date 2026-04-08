@@ -70,7 +70,7 @@ export class EntitlementCreate implements OnInit {
       },
       error: (err) => {
         console.error('Load tenants failed:', err);
-        this.message.error('Không tải được danh sách tenant');
+        this.message.error('Cannot load tenant');
       }
     });
   }
@@ -85,7 +85,7 @@ export class EntitlementCreate implements OnInit {
       },
       error: (err) => {
         console.error('Load features failed:', err);
-        this.message.error('Không tải được danh sách features');
+        this.message.error('Cannot load features');
       }
     });
   }
@@ -100,7 +100,7 @@ export class EntitlementCreate implements OnInit {
       },
       error: (err) => {
         console.error('Load subscription failed:', err);
-        this.message.error('Không tải được danh sách subscription');
+        this.message.error('Cannot load subscription');
       }
     });
   }
@@ -124,14 +124,14 @@ export class EntitlementCreate implements OnInit {
       this.entitlementService.createEntitlement(payload).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Tạo entitlement thành công');
+          this.message.success('Create entitlement successfully');
           this.entitlementForm.reset();
           this.router.navigate(['/admin/tables/entitlements']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Create entitlement failed:', err);
-          this.message.error('Tạo entitlement thất bại');
+          this.message.error('Create entitlement failed');
         }
       })
     }

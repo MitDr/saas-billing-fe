@@ -89,7 +89,7 @@ export class UserList extends GenericListComponent<User, UserRequest> {
         this.loading.set(false);
       },
       error: () => {
-        this.message.error('Không thể tải danh sách users');
+        this.message.error('Cannot load users');
         this.loading.set(false);
       }
     });

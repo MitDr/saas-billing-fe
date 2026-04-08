@@ -69,7 +69,7 @@ export class RenewSubscriptionReuseForm {
           control.updateValueAndValidity({onlySelf: true});
         }
       });
-      this.message.warning('Vui lòng kiểm tra lại thông tin!');
+      this.message.warning('Please double-check the information!');
     }
   }
 
@@ -97,12 +97,12 @@ export class RenewSubscriptionReuseForm {
         const subscriptions = response.content || []
         this.availableSubscription.set(subscriptions);
         if (subscriptions.length === 0) {
-          this.message.info('Subscriber này không có subscription nào có thể renew');
+          this.message.info('This subscriber does not have any subscriptions renew');
         }
       },
       error: (err) => {
         console.error('Load renewable subscriptions failed:', err);
-        this.message.error('Không tải được danh sách subscription');
+        this.message.error('Cannot load subscription');
       }
     });
   }

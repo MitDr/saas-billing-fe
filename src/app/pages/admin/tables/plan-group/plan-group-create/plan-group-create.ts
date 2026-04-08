@@ -61,7 +61,7 @@ export class PlanGroupCreate implements OnInit {
       },
       error: (err) => {
         console.error('Load tenants failed:', err);
-        this.message.error('Không tải được danh sách tenant');
+        this.message.error('Cannot load tenant');
       }
     });
   }
@@ -76,7 +76,7 @@ export class PlanGroupCreate implements OnInit {
       },
       error: (err) => {
         console.error('Load tenants failed:', err);
-        this.message.error('Không tải được danh sách tenant');
+        this.message.error('Cannot load tenant');
       }
     });
   }
@@ -105,14 +105,14 @@ export class PlanGroupCreate implements OnInit {
       this.planGroupService.createPlanGroup(payload).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Tạo invoice thành công');
+          this.message.success('Create invoice successfully');
           this.planGroupForm.reset();
           this.router.navigate(['/admin/tables/plan-groups']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Create plan group failed:', err);
-          this.message.error('Tạo plan group thất bại');
+          this.message.error('Create plan group failed');
         }
       })
     }

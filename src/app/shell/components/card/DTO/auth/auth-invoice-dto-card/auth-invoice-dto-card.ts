@@ -8,6 +8,7 @@ import {NzDescriptionsComponent, NzDescriptionsItemComponent} from 'ng-zorro-ant
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzTagComponent} from 'ng-zorro-antd/tag';
 import {NzTooltipDirective} from 'ng-zorro-antd/tooltip';
+import {currencyDecimals} from '../../../payment/payment-card/payment-card';
 
 @Component({
   selector: 'app-auth-invoice-dto-card',
@@ -35,9 +36,9 @@ export class AuthInvoiceDtoCard {
 
   onRemoveInvoice() {
     this.modalService.confirm({
-      nzTitle: 'Xác nhận xóa',
-      nzContent: `Xóa Invoice #${this.invoice().id} ?`,
-      nzOkText: 'Xóa',
+      nzTitle: 'Confirm delete',
+      nzContent: `Delete Invoice #${this.invoice().id} ?`,
+      nzOkText: 'Delete',
       nzOkDanger: true,
       nzOnOk: () => {
         this.planRemove.emit(this.invoice().id);
@@ -54,16 +55,36 @@ export class AuthInvoiceDtoCard {
 
   copyInvoiceNumber(key: string): void {
     if (!key) {
-      this.message.error('Không có API Key để copy');
+      this.message.error('There is no invoice number');
       return;
     }
 
     navigator.clipboard.writeText(key)
       .then(() => {
-        this.message.success('API Key đã được copy vào clipboard!');
+        this.message.success('Invoice number has been copied to clipboard');
       })
       .catch(() => {
-        this.message.error('Không thể copy, vui lòng thử lại');
+        this.message.error('Cannot copy, please try again later');
       });
+  }
+
+  formatAmount(): string {
+    const invoice = this.invoice();
+    if (!invoice || invoice.amount == null) return '—';
+
+    const amount = Number(invoice.amount);
+    if (isNaN(amount)) return String(invoice.amount);
+
+    const currency = invoice.currency ?? 'USD';
+    const decimals = currencyDecimals[currency.toUpperCase()] ?? 2;
+
+    const majorAmount = amount / Math.pow(10, decimals);
+
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: currency.toUpperCase(),
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    }).format(majorAmount);
   }
 }

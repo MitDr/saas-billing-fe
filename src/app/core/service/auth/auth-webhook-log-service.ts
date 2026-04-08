@@ -5,14 +5,13 @@ import {ListData} from '../../interface/list-data';
 import {WebhookLog} from '../../interface/entity/webhook-log';
 import {HttpParams} from '@angular/common/http';
 import {catchError} from 'rxjs/operators';
-import {WebhookLogRequest} from '../../interface/request/webhook-log-request';
 import {AuthWebhookLog} from '../../interface/entity/auth/auth-webhook-log';
 import {AuthWebhookLogRequest} from '../../interface/request/auth/auth-webhook-log-request';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthWebhookLogService{
+export class AuthWebhookLogService {
   api = inject(ApiClientService);
 
   getWebhookLogs(
@@ -50,7 +49,7 @@ export class AuthWebhookLogService{
     return this.api.get<AuthWebhookLog>(`/auth/webhook-logs/${id}`).pipe(
       catchError(error => {
         console.error('Get webhook log error:', error);
-        return throwError(() => new Error('Không thể lấy webhook log'));
+        return throwError(() => new Error('Cannot get webhook log'));
       })
     );
   }
@@ -59,7 +58,7 @@ export class AuthWebhookLogService{
     return this.api.put<WebhookLog>(`/auth/webhook-logs/${id}`, updatedWebhookLog).pipe(
       catchError(error => {
         console.error('Update webhook log error:', error);
-        return throwError(() => new Error('Cập nhật webhook log thất bại'));
+        return throwError(() => new Error('Update webhook log failed'));
       })
     );
   }
@@ -68,7 +67,7 @@ export class AuthWebhookLogService{
     return this.api.deletes<void>(`/auth/webhook-logs`, ids).pipe(
       catchError(error => {
         console.error('Bulk delete error:', error);
-        return throwError(() => new Error('Xóa hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk delete failed'));
       })
     );
   }
@@ -77,7 +76,7 @@ export class AuthWebhookLogService{
     return this.api.delete<void>(`/auth/webhook-logs/${id}`).pipe(
       catchError(error => {
         console.error('Delete webhook log error:', error);
-        return throwError(() => new Error('Xóa webhookg log thất bại'));
+        return throwError(() => new Error('Delete webhookg log failed'));
       })
     );
   }

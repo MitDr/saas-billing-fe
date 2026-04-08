@@ -92,7 +92,7 @@ export class TenantEdit implements OnInit {
       },
       error: (err) => {
         console.error('Load users failed:', err);
-        // this.message.error('Không tải được danh sách user');
+        // this.message.error('Cannot load user');
       }
     });
   }
@@ -132,14 +132,14 @@ export class TenantEdit implements OnInit {
       this.tenantService.updateTenant(payload, this.tenant()?.id!).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Update tenant thành công');
+          this.message.success('Update tenant successfully');
           this.tenantForm.reset();
           this.loadTenant(this.tenant()?.id!);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Create tenant failed:', err);
-          // this.message.error('Tạo tenant thất bại');
+          // this.message.error('Create tenant failed');
         }
       })
     }

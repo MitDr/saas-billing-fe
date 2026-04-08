@@ -18,7 +18,7 @@ export class PlanService {
     return this.api.post<Plan>(`/admin/plans`, request).pipe(
       catchError(error => {
         console.error('Create plans error:', error);
-        return throwError(() => new Error('Tạo plans thất bại'));
+        return throwError(() => new Error('Create plans failed'));
       })
     );
   }
@@ -90,7 +90,7 @@ export class PlanService {
     return this.api.get<Plan>(`/admin/plans/${id}`).pipe(
       catchError(error => {
         console.error('Get plan error:', error);
-        return throwError(() => new Error('Không thể lấy plan'));
+        return throwError(() => new Error('Cannot get plan'));
       })
     );
   }
@@ -100,7 +100,7 @@ export class PlanService {
     return this.api.put<Plan>(`/admin/plans/${id}`, updatedPlan).pipe(
       catchError(error => {
         console.error('Update plans error:', error);
-        return throwError(() => new Error('Cập nhật plans thất bại'));
+        return throwError(() => new Error('Update plans failed'));
       })
     );
   }
@@ -109,7 +109,7 @@ export class PlanService {
     return this.api.deletes<void>(`/admin/plans`, ids).pipe(
       catchError(error => {
         console.error('Bulk delete error:', error);
-        return throwError(() => new Error('Xóa hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk delete failed'));
       })
     );
   }
@@ -118,7 +118,7 @@ export class PlanService {
     return this.api.post<void>(`/admin/plans/softDelete`, softDeleteRequest).pipe(
       catchError(error => {
         console.error('Bulk soft delete error:', error);
-        return throwError(() => new Error('Xóa mềm hàng loạt thất bại'));
+        return throwError(() => new Error('Bulk soft delete failed'));
       })
     );
   }
@@ -127,7 +127,7 @@ export class PlanService {
     return this.api.delete<void>(`/admin/plans/${id}`).pipe(
       catchError(error => {
         console.error('Delete plans error:', error);
-        return throwError(() => new Error('Xóa plans thất bại'));
+        return throwError(() => new Error('Delete plans failed'));
       })
     );
   }

@@ -74,7 +74,7 @@ export class InvoiceCreate implements OnInit {
       },
       error: (err) => {
         console.error('Load tenants failed:', err);
-        this.message.error('Không tải được danh sách tenant');
+        this.message.error('Cannot load tenant');
       }
     });
   }
@@ -89,7 +89,7 @@ export class InvoiceCreate implements OnInit {
       },
       error: (err) => {
         console.error('Load subscription failed:', err);
-        this.message.error('Không tải được danh sách subscription');
+        this.message.error('Cannot load subscription');
       }
     });
   }
@@ -104,7 +104,7 @@ export class InvoiceCreate implements OnInit {
       },
       error: (err) => {
         console.error('Load subscriber failed:', err);
-        this.message.error('Không tải được danh sách subscriber');
+        this.message.error('Cannot load subscriber');
       }
     });
   }
@@ -141,6 +141,11 @@ export class InvoiceCreate implements OnInit {
         metadata: metadataObject,
       };
 
+      if (this.invoiceForm.value.currency === 'USD' && typeof this.invoiceForm.value.amount === 'number') {
+        const amount = Math.round(this.invoiceForm.value.amount * 100);
+        Object.assign(payload, {amount})
+      }
+
       if (Object.keys(metadataObject).length === 0) {
         delete payload.metadata;
       }
@@ -152,18 +157,17 @@ export class InvoiceCreate implements OnInit {
         }
       }
 
-      console.log(payload)
       this.invoiceService.createInvoice(payload).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.message.success('Tạo invoice thành công');
+          this.message.success('Create invoice successfully');
           this.invoiceForm.reset();
           this.router.navigate(['/admin/tables/invoices']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Create invoice failed:', err);
-          this.message.error('Tạo invoice thất bại');
+          this.message.error('Create invoice failed');
         }
       })
     }
