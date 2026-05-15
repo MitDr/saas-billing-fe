@@ -1,7 +1,6 @@
 import {Component, effect, inject, signal} from '@angular/core';
 import {NzCardComponent} from 'ng-zorro-antd/card';
 import {RouterModule} from '@angular/router';
-import {StatisticService} from '../../../core/service/statistic-service';
 import {AuthStatisticService} from '../../../core/service/auth-statistic-service';
 import {RevenueSummary} from '../../../core/interface/response/statistic/revenue-summary';
 import {SubscriptionSummary} from '../../../core/interface/response/statistic/subscription-overview';
@@ -9,7 +8,6 @@ import {MrrResponse} from '../../../core/interface/response/statistic/mmr-respon
 import {SuccessRateResponse} from '../../../core/interface/response/statistic/success-rate-response';
 import {ChurnRateResponse} from '../../../core/interface/response/statistic/churn-rate-response';
 import {ExpectedRenewal} from '../../../core/interface/response/statistic/expected-renewal';
-import {PRICE_ROUTE_CONSTANT} from '../../../core/constant/price/price-list-constant';
 import {ChurnRateChart} from '../../../shell/components/chart/churn-rate-chart/churn-rate-chart';
 import {ExpectedRenewalTable} from '../../../shell/components/table/expected-renewal-table/expected-renewal-table';
 import {MrrChart} from '../../../shell/components/chart/mrr-chart/mrr-chart';
@@ -115,6 +113,11 @@ export class AuthDashboard {
     })
   }
 
+  onRenewalDaysChange(newDays: number) {
+    this.renewalDays.set(newDays);
+    this.loadExpectedRenewal();
+  }
+
   private getSubscriptionSummary() {
     this.statisticService.getSubscriptionSummary().subscribe({
       next: (res) => {
@@ -166,6 +169,7 @@ export class AuthDashboard {
     if (days < 1 || !days) return;
     this.statisticService.getUpcomingRenewal(days).subscribe({
       next: (res) => {
+        console.log(res)
         this.expectedRenewals.set(res)
       },
       error: (err) => {

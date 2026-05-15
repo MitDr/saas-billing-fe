@@ -113,6 +113,15 @@
             <span nz-icon nzType="user"></span>
             Change Owner
           </button>
+          <button
+            (click)="onInviteUsers()"
+            nz-button
+            nzType="default"
+            class="!inline-flex !items-center"
+          >
+            <span nz-icon nzType="user-add"></span>
+            Invite Users
+          </button>
           <button (click)="onEdit()" class="!inline-flex !items-center"
                   nz-button nzType="default">
             <span nz-icon nzType="edit"></span>
@@ -187,6 +196,53 @@
             ></nz-card-meta>
           </nz-card>
         }
+      }
+    </div>
+  </ng-template>
+</nz-modal>
+<nz-modal
+  (nzOnCancel)="isInviteModalOpen.set(false)"
+  (nzOnOk)="sendInvites()"
+  [nzOkDisabled]="inviteEmails().length === 0"
+  [nzVisible]="isInviteModalOpen()"
+  nzCancelText="Cancel"
+  nzOkText="Send Invites"
+  nzTitle="Invite Users to Tenant"
+>
+  <ng-template nzModalContent>
+    <div class="space-y-4">
+      <div class="flex gap-2">
+        <input
+          (keyup.enter)="addInviteEmail()"
+          [(ngModel)]="inviteInput"
+          class="flex-1"
+          nz-input
+          placeholder="Input Email and Add"
+        />
+        <button (click)="addInviteEmail()" nz-button nzType="primary">
+          Add
+        </button>
+      </div>
+
+      @if (inviteEmails().length > 0) {
+        <div class="bg-gray-50 p-4 rounded-lg min-h-[120px]">
+          <p class="text-sm font-medium mb-3">Emails to invite ({{ inviteEmails().length }})</p>
+          <div class="flex flex-wrap gap-2">
+            @for (email of inviteEmails(); track email) {
+              <nz-tag
+                nzClosable
+                (nzOnClose)="removeInviteEmail(email)"
+                class="text-sm"
+              >
+                {{ email }}
+              </nz-tag>
+            }
+          </div>
+        </div>
+      } @else {
+        <div class="text-center py-8 text-gray-500 border border-dashed rounded-lg">
+          No emails selected
+        </div>
       }
     </div>
   </ng-template>

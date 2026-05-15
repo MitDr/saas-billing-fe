@@ -23,8 +23,6 @@ export class MrrChart {
   chartOptions = computed<EChartsOption>(() => {
     const mrrData = this.data() ?? [];
 
-    console.log('MRR Chart - Data received:', mrrData); // Debug
-
     if (mrrData.length === 0) {
       return {
         title: {text: 'No MRR data available', left: 'center', top: 'center'},
@@ -34,23 +32,31 @@ export class MrrChart {
       };
     }
 
+    const formatUSD = (value: number) =>
+      new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(value);
+
     const sortedData = [...mrrData].reverse();
 
     const months = sortedData.map(d => d.month);
-    const values = sortedData.map(d => parseFloat(d.mrr) || 0);
+    const values = sortedData.map(d => (parseFloat(d.mrr) || 0) / 100);
 
     return {
       tooltip: {
         trigger: 'axis',
-        formatter: (params: any) => {  // Dùng any tạm thời để tránh lỗi union phức tạp
+        formatter: (params: any) => {
           if (!params || params.length === 0) return '';
 
           const item = params[0];
           const value = item.value as number | undefined;
 
-          if (value === undefined || value === null) return item.name;
+          if (value == null) return item.name;
 
-          return `${item.name}<br/>MRR: $${value.toFixed(2)}`;
+          return `${item.name}<br/>MRR: ${formatUSD(value)}`;
         }
       },
       grid: {
@@ -88,7 +94,7 @@ export class MrrChart {
           position: 'top',
           formatter: (params: any) => {
             const value = params.value as number | undefined;
-            return value !== undefined && value !== null ? `$${value.toFixed(2)}` : '';
+            return value != null ? formatUSD(value) : '';
           },
           fontSize: 12
         }

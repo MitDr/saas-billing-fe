@@ -120,6 +120,7 @@ import {adminGuard, authGuard, authRedirectGuard} from './core/auth/guard/auth-g
 import {PageNotFound} from './pages/public/page-not-found/page-not-found';
 import {PageSuccessful} from './pages/public/page-successful/page-successful';
 import {PageFailed} from './pages/public/page-failed/page-failed';
+import {Document} from './pages/public/document/document';
 
 export const routes: Routes = [
   {
@@ -587,6 +588,10 @@ export const routes: Routes = [
         component: AuthWebhookLogDetail
       }
     ]
+  },
+  {
+    path: "docs",
+    component: Document
   },
   {
     path: "success",

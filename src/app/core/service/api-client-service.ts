@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 import {Injectable} from '@angular/core';
 import {ApiResponse, AuthUser, LoginResponse} from '../model/api-model';
 import {catchError} from 'rxjs/operators';
+import {environment} from '../../../env/enviroment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ import {catchError} from 'rxjs/operators';
 export class ApiClientService {
 
   // private baseUrl =
-  private baseUrl = 'http://localhost:8080/api/v1';
+  private baseUrl = environment.apiUrl + '/api/v1';
   private isRefreshing = false;
   private refreshTokenSubject = new BehaviorSubject<string | null>(null);
   private http: HttpClient;

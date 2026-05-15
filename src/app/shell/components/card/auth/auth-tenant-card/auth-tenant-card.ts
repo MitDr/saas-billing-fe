@@ -18,6 +18,9 @@ import {AuthSubscriberReuseForm} from '../../../form/auth/auth-subscriber-reuse-
 import {AuthTenantReuseForm} from '../../../form/auth/auth-tenant-reuse-form/auth-tenant-reuse-form';
 import {AuthUserDtoCard, AuthUserDtoCardInterface} from '../../DTO/auth/auth-user-dto-card/auth-user-dto-card';
 import {AuthService} from '../../../../../core/service/auth-service';
+import {InviteUserRequest} from '../../../../../core/interface/request/auth/invite-user-request';
+import {FormsModule} from '@angular/forms';
+import {NzInputDirective} from 'ng-zorro-antd/input';
 
 @Component({
   selector: 'app-auth-tenant-card',
@@ -38,12 +41,20 @@ import {AuthService} from '../../../../../core/service/auth-service';
     NzModalContentDirective,
     AuthSubscriberReuseForm,
     AuthTenantReuseForm,
-    AuthUserDtoCard
+    AuthUserDtoCard,
+    FormsModule,
+    NzInputDirective
   ],
   templateUrl: './auth-tenant-card.html',
   styleUrl: './auth-tenant-card.css',
 })
 export class AuthTenantCard {
+
+  isInviteModalOpen = signal(false);
+  inviteEmails = signal<string[]>([]);
+  inviteInput = signal<string>('');
+  inviteUsers = output<InviteUserRequest>();
+
   authService = inject(AuthService);
   tenant = input.required<AuthTenant>();
   isCreator = input.required<boolean>();
@@ -131,5 +142,52 @@ export class AuthTenantCard {
       user,
       creator: this.authService.currentUserID === this.tenant().creator.id
     };
+  }
+
+  onInviteUsers() {
+    this.inviteEmails.set([]);
+    this.inviteInput.set('');
+    this.isInviteModalOpen.set(true);
+  }
+
+  // Thêm email từ input
+  addInviteEmail() {
+    const email = this.inviteInput().trim();
+    if (!email) return;
+
+    // Validate email đơn giản
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      this.message.error('Email is invalid');
+      return;
+    }
+
+    if (this.inviteEmails().includes(email)) {
+      this.message.warning('Email has already been added');
+      return;
+    }
+
+    this.inviteEmails.update(list => [...list, email]);
+    this.inviteInput.set('');
+  }
+
+  removeInviteEmail(email: string) {
+    this.inviteEmails.update(list => list.filter(e => e !== email));
+  }
+
+  sendInvites() {
+    if (this.inviteEmails().length === 0) {
+      this.message.warning('At least one email is required');
+      return;
+    }
+
+    const payload: InviteUserRequest = {
+      emails: this.inviteEmails()
+    };
+
+    this.inviteUsers.emit(payload);
+
+    this.isInviteModalOpen.set(false);
+    this.inviteEmails.set([]);
   }
 }

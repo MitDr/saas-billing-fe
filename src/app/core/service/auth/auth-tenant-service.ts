@@ -6,6 +6,7 @@ import {catchError} from 'rxjs/operators';
 import {AuthTenantRequest} from '../../interface/request/auth/auth-tenant-request';
 import {ChangeOwnerRequest} from '../../interface/request/auth/change-owner-request';
 import {RemoveUserRequest} from '../../../pages/auth/tenant/auth-tenant/auth-tenant-detail';
+import {InviteUserRequest} from '../../interface/request/auth/invite-user-request';
 
 @Injectable({
   providedIn: 'root'
@@ -90,6 +91,15 @@ export class AuthTenantService {
       catchError(error => {
         console.error('Cannot remove user', error);
         return throwError(() => new Error('Cannot remove user'));
+      })
+    )
+  }
+
+  inviteUsersToTenant(request: InviteUserRequest): Observable<AuthTenant> {
+    return this.api.post<AuthTenant>('/auth/tenants/add-users', request).pipe(
+      catchError(error => {
+        console.error('Cannot add user', error);
+        return throwError(() => new Error('Cannot add user'));
       })
     )
   }

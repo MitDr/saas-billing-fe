@@ -15,7 +15,7 @@
       <nz-statistic
         [nzPrefix]="'$'"
         [nzSuffix]="'USD'"
-        [nzValue]="totalAmount()"
+        [nzValue]="formattedTotalAmount()"
         nzTitle="Expected Amount"
       >
         <ng-template nzPrefix>
@@ -53,8 +53,8 @@
           <tr>
             <td>{{ item.subscriberName }}</td>
             <td>{{ item.planName }}</td>
-            <td>{{ item.renewalDate | date:'dd/MM/yyyy HH:mm' }}</td>
-            <td>{{ item.expectedAmountUsd | currency:'USD':'symbol':'1.0-0' }}</td>
+            <td>{{ formatDateString(item.renewalDate, 'dd-MM-yyyy') }}</td>
+            <td>{{ item.expectedAmountUsd / 100 | currency:'USD':'symbol':'1.0-2' }}</td>
             <td>
               <nz-tag [nzColor]="item.autoRenew ? 'success' : 'warning'">
                 {{ item.autoRenew ? 'Yes' : 'No' }}

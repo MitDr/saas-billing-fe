@@ -7,8 +7,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
           <nz-card class="shadow-sm" nzHoverable>
             <nz-statistic
-              [nzPrefix]="'$'"
-              [nzValue]="revenueSummary()?.totalRevenue ?? 0"
+              [nzValue]="(((revenueSummary()?.totalRevenue ?? 0) / 100) | currency:'USD':'symbol':'1.0-0')!"
               nzTitle="Total Revenue"
             >
               <ng-template nzPrefix>
@@ -19,8 +18,7 @@
 
           <nz-card class="shadow-sm" nzHoverable>
             <nz-statistic
-              [nzPrefix]="'$'"
-              [nzValue]="revenueSummary()?.revenueThisMonth ?? 0"
+              [nzValue]="(((revenueSummary()?.revenueThisMonth ?? 0) / 100) | currency:'USD':'symbol':'1.0-0')!"
               nzTitle="Revenue This Month"
             >
               <ng-template nzPrefix>
@@ -36,8 +34,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
           <nz-card class="shadow-sm" nzHoverable>
             <nz-statistic
-              [nzPrefix]="'$'"
-              [nzValue]="revenueSummary()?.revenueLastMonth ?? 0"
+              [nzValue]="(((revenueSummary()?.revenueLastMonth ?? 0) / 100) | currency:'USD':'symbol':'1.0-0')!"
               nzTitle="Revenue Last Month"
             >
               <ng-template nzPrefix>
@@ -48,8 +45,7 @@
 
           <nz-card class="shadow-sm" nzHoverable>
             <nz-statistic
-              [nzPrefix]="'$'"
-              [nzValue]="revenueSummary()?.expectedRecurringRevenue ?? 0"
+              [nzValue]="(((revenueSummary()?.expectedRecurringRevenue ?? 0) / 100) | currency:'USD':'symbol':'1.0-0')!"
               nzTitle="Expected Recurring Revenue"
             >
               <ng-template nzPrefix>

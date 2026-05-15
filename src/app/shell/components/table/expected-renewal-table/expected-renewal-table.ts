@@ -5,7 +5,7 @@ import {NzSpinComponent} from 'ng-zorro-antd/spin';
 import {NzStatisticComponent} from 'ng-zorro-antd/statistic';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzTableComponent} from 'ng-zorro-antd/table';
-import {CurrencyPipe, DatePipe} from '@angular/common';
+import {CurrencyPipe, DatePipe, formatDate} from '@angular/common';
 import {NzTagComponent} from 'ng-zorro-antd/tag';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {RouterLink} from '@angular/router';
@@ -32,6 +32,7 @@ export class ExpectedRenewalTable {
   loading = input<boolean>(false);
   num = input.required<number>();
 
+
   // Phân trang client-side
   pageIndex = signal(1);
   pageSize = signal(5);
@@ -48,7 +49,14 @@ export class ExpectedRenewalTable {
 
   // Tổng amount
   totalAmount = computed(() => {
-    return this.data().reduce((sum, item) => sum + (item.expectedAmountUsd || 0), 0);
+    return this.data().reduce((sum, item) => {
+      const amountInUsd = (item.expectedAmountUsd || 0) / 100;
+      return sum + amountInUsd;
+    }, 0);
+  });
+
+  formattedTotalAmount = computed(() => {
+    return this.totalAmount().toFixed(2);
   });
 
   // Sự kiện thay đổi page
@@ -59,6 +67,27 @@ export class ExpectedRenewalTable {
   // Sự kiện thay đổi size
   onPageSizeChange(size: number) {
     this.pageSize.set(size);
-    this.pageIndex.set(1); // Reset về trang 1 khi đổi size
+    this.pageIndex.set(1);
+  }
+
+  formatDateString(dateStr: unknown, format: string): string {
+    if (!dateStr || typeof dateStr !== 'string') return '';
+
+    const [datePart, timePart] = dateStr.split(' ');
+    if (!datePart || !timePart) return '';
+
+    const [day, month, year] = datePart.split('-');
+    const [hour, minute, second] = timePart.split(':');
+
+    const date = new Date(
+      Number(year),
+      Number(month) - 1,
+      Number(day),
+      Number(hour),
+      Number(minute),
+      Number(second)
+    );
+
+    return formatDate(date, format, 'en-US');
   }
 }

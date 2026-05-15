@@ -5,6 +5,7 @@ import {NzCarouselComponent, NzCarouselContentDirective} from 'ng-zorro-antd/car
 import {NzCardComponent} from 'ng-zorro-antd/card';
 import {NzStatisticComponent} from 'ng-zorro-antd/statistic';
 import {RevenueSummary} from '../../../../core/interface/response/statistic/revenue-summary';
+import {CurrencyPipe} from '@angular/common';
 
 @Component({
   selector: 'app-revenue-summary-carousel',
@@ -14,7 +15,8 @@ import {RevenueSummary} from '../../../../core/interface/response/statistic/reve
     NzCarouselComponent,
     NzCarouselContentDirective,
     NzCardComponent,
-    NzStatisticComponent
+    NzStatisticComponent,
+    CurrencyPipe
   ],
   templateUrl: './revenue-summary-carousel.html',
   styleUrl: './revenue-summary-carousel.css',

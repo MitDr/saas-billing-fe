@@ -131,12 +131,12 @@
       <nz-input-number
         (ngModelChange)="loadExpectedRenewal()"
         [(ngModel)]="renewalDays"
-        [nzMax]="90"
-        [nzMin]="7"
+        [nzMax]="1825"
+        [nzMin]="30"
         [nzPrecision]="0"
         [nzStep]="7"
         class="w-24"
-        nzPlaceHolder="Ngày"
+        nzPlaceHolder="days"
       ></nz-input-number>
       <span class="text-sm text-gray-600">days</span>
     </div>

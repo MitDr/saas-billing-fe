@@ -152,9 +152,15 @@ export class Subscribe implements OnInit {
 
       this.subscribeService.subscribe(payload).subscribe({
         next: value => {
-          this.message.success('Redirecting to payment...');
+          if (value) {
+            this.message.success('Redirecting to payment...');
 
-          window.location.assign(value);
+            window.location.assign(value);
+          } else if (value === '') {
+            this.subscribeForm.reset();
+            this.message.success('Create new Trial Subscription successfully');
+
+          }
           //Redirect to payment gateway
         },
         error: err => {

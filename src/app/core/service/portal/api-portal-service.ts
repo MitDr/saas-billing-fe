@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 import {map, Observable, throwError} from "rxjs";
 import {catchError} from 'rxjs/operators';
 import {ApiResponse} from '../../model/api-model';
+import {environment} from '../../../../env/enviroment';
 
 export interface PortalUser {
   subscriberId: string;
@@ -15,7 +16,7 @@ export interface PortalUser {
   providedIn: 'root'
 })
 export class ApiPortalService {
-  private baseUrl = 'http://localhost:8080';
+  private baseUrl = environment.apiUrl;
   private http: HttpClient;
 
   constructor(

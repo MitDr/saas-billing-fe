@@ -12,7 +12,8 @@
           (refreshApi)="onRefreshToken()"
           (leaveTenant)="leaveTenant()"
           (removeUser)="onRemoveUser($event)"
-          (accountLink)='updateAccountLink()'>
+          (accountLink)='updateAccountLink()'
+          (inviteUsers)="onAddUsers($event)">
         </app-auth-tenant-card>
       } @else {
         <div class="text-center py-16">

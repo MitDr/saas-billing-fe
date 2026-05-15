@@ -16,6 +16,7 @@ import {ChangeOwnerRequest} from '../../../../core/interface/request/auth/change
 import {
   AuthSubscriberReuseForm
 } from '../../../../shell/components/form/auth/auth-subscriber-reuse-form/auth-subscriber-reuse-form';
+import {InviteUserRequest} from '../../../../core/interface/request/auth/invite-user-request';
 
 export interface RemoveUserRequest {
   emails: string[]
@@ -173,6 +174,21 @@ export class AuthTenantDetail {
       next: (response) => {
         this.tenant.set(null);
         this.message.success('Delete tenant successfully');
+        this.loading.set(false);
+      },
+      error: (err) => {
+        this.loading.set(false);
+        console.error(err);
+      }
+    });
+  }
+
+  onAddUsers(request: InviteUserRequest) {
+    this.loading.set(true);
+    this.tenantService.inviteUsersToTenant(request).subscribe({
+      next: (response) => {
+        this.tenant.set(response);
+        this.message.success('Invite users successfully');
         this.loading.set(false);
       },
       error: (err) => {

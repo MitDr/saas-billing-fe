@@ -25,7 +25,7 @@
         <div class="p-4">
           <nz-card class="shadow-sm" nzHoverable>
             @if (data(); as d) {
-              <nz-statistic [nzValue]="d.successRate + '%'" nzTitle="Success Rate">
+              <nz-statistic [nzValue]="d.successRate.toFixed(3) + '%'" nzTitle="Success Rate">
                 <ng-template nzPrefix>
                   <span class="text-green-600" nz-icon nzType="check-circle"></span>
                 </ng-template>

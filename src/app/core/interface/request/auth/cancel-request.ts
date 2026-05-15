@@ -1,4 +1,4 @@
 export interface CancelRequest {
-  "subscriptionId": 1,
-  "subscriberId": 1
+  "subscriptionId": number,
+  "subscriberId": number
 }

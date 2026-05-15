@@ -1,16 +1,16 @@
 <form (ngSubmit)="onSubmit()" [formGroup]="formGroup()" nz-form>
   <!-- Tenant Name -->
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>Tên Tenant</nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Tên tenant từ 3-50 ký tự">
-      <input formControlName="name" id="name" nz-input placeholder="Ví dụ: Công ty ABC Tenant"/>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>Tenant Name</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Tenant name must have at least 3 characters">
+      <input formControlName="name" id="name" nz-input placeholder="Example: ABC Tenant"/>
     </nz-form-control>
   </nz-form-item>
 
   <!-- Email -->
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="email" nzRequired>Email liên hệ</nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Email không hợp lệ">
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="email" nzRequired>Email</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Email is invalid">
       <input formControlName="email" id="email" nz-input placeholder="email@tenant.com"/>
     </nz-form-control>
   </nz-form-item>
