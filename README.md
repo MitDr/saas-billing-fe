@@ -1,59 +1,202 @@
-# SaasBillingFe
+# SaaS Billing Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.4.
+Frontend interface for a multi-tenant SaaS Billing & Subscription Management platform.
 
-## Development server
+This project provides the user interface for managing subscriptions, billing, invoices, plans, entitlements, and AI-powered support features.
 
-To start a local development server, run:
+---
 
-```bash
+# Overview
+
+The frontend application was developed to simulate a real-world SaaS management system with modern UI/UX design and responsive dashboard interfaces.
+
+The system supports:
+
+* Subscription management
+* Billing & invoice tracking
+* Plan management
+* Entitlement visualization
+* AI chatbot support
+* Admin dashboard
+* Documentation system
+
+---
+
+# Screenshots
+
+## Dashboard
+
+comming soon...
+
+---
+
+## Subscription Management
+
+coming soon...
+
+---
+
+## Billing & Invoices
+
+coming soon...
+
+---
+
+## Plan Management
+
+coming soon...
+---
+
+## AI Support Chatbot
+
+coming soon...
+---
+
+## Documentation
+
+coming soon...
+---
+
+# Features
+
+## Modern Dashboard UI
+
+* Clean and responsive interface
+* Real-time statistics visualization
+* Easy navigation experience
+
+---
+
+## Subscription Management
+
+* View active subscriptions
+* Upgrade or downgrade plans
+* Manage billing cycles
+
+---
+
+## Billing & Invoices
+
+* Invoice history tracking
+* Payment status visualization
+* Billing detail management
+
+---
+
+## Entitlement Management
+
+* Feature limitation display
+* Plan-based access management
+* Dynamic UI rendering based on permissions
+
+---
+
+## AI Chatbot Integration
+
+* Documentation question answering
+* AI-powered support assistant
+* Context-aware responses
+
+---
+
+# Tech Stack
+
+| Technology  | Purpose              |
+| ----------- | -------------------- |
+| Angular     | Frontend framework   |
+| TailwindCSS | Styling              |
+| NG-ZORRO    | UI components        |
+| TypeScript  | Application logic    |
+| RxJS        | Reactive programming |
+
+---
+
+# Project Structure
+
+```text id="tgjt7x"
+src/
+│
+├── app/
+│   ├── core/
+│   ├── layouts/
+│   ├── pages/
+│   ├── shells/
+│   └── components/
+│
+└── env/
+```
+
+---
+
+# Run Locally
+
+## Install Dependencies
+
+```bash id="c2i7vd"
+npm install
+```
+
+---
+
+## Start Development Server
+
+```bash id="sww99t"
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+## Build Production
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
+```bash id="j5utw7"
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
+# Environment Configuration
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
+```env id="8icckg"
+API_BASE_URL=
+AI_SERVICE_URL=
 ```
 
-## Running end-to-end tests
+---
 
-For end-to-end (e2e) testing, run:
+# UI Design Goals
 
-```bash
-ng e2e
-```
+* Simple and modern SaaS interface
+* Responsive layout
+* Reusable component architecture
+* Easy scalability and maintainability
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
+# Highlights
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+* Responsive SaaS dashboard UI
+* Multi-tenant frontend architecture
+* AI chatbot integration
+* Subscription & billing visualization
+* Modern component-based design
+
+---
+
+# Backend Repository
+
+Backend services are implemented separately using Spring Boot and Python FastAPI.
+
+---
+
+# Author
+
+Long Tran
+Graduation Project - 2026
+
+---
+
+# Final Notes
+
+This was the first project i wrote with angular!
+
+This repository contains the frontend implementation of the SaaS Billing Platform graduation project.
